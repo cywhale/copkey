@@ -1,0 +1,117 @@
+
+# **MORPHOLOGY OF THE CALANOIDA**
+
+Unless otherwise mentioned, all morphological terms here follow Huy and Boxshall (1991).  The following description is mainly based on *Calanus sinicus*, the dominant calanoid species in the China seas.
+
+The calanoid copepods in general are small in size; mostly the body length is under 3 mm, frequently it may be less than 1 mm, and occasionally up to or slightly over 10 mm in some genera.  The body of calanoids consists of the prosome (the anterior part, including cephalosome and thorax) and urosome (the posterior part) which are separated by an articulation between the 5th or the last pedigerous somite of thorax and the genital somite of urosome (<a class="fbox" href="img/text-fig001.jpg" data-alt="" />text-fig. 1</a>).
+
+## **Prosome**
+
+The prosome contains cephalosome and thorax.  The cephalosome, or head, is formed by the fusion of the five cephalic somites and the first thoracic somite.  Each somite in the cephalosome bears a pair of appendages on its ventral surface.  These appendages, from front backward, are: antennule, antenna, mandible, maxillule, maxilla, and maxilliped.  Among these appendages, antennule, maxilla, and maxilliped are uniramous (branchless) and antenna, mandible, and maxillule are biramous (two branches).  Basically a biramous appendage is composed of a proximal uniramous protopod (2-segmented, the proximal segment, coxa and the distal segment, basis) and a pair of distal biramous rami (the lateral branch, exopod and the medial branch, endopod).  On the front of cephalosome there is a median projection between the antennules, the rostrum, which is divided distally into a pair of rostral filaments.  The thorax has seven somites, including the first six pedigerous (leg carrying) somites and the last limbless somite.  The 1st pair of these legs is the maxilliped, the next five pairs are the 1st to 5th swimming legs.  The 5th swimming legs may be absent in females of some genera and usually exhibit distinct sexual dimorphism.  The first pedigerous somite is incorporated with the cephalosome and the last and limbless somite forms the first somite in urosome.  Further fusion of thoracic somites sometimes may reduce the prosome from six to five or four segments.
+
+## **Urosome**
+
+The urosome is 5-segmented, including the 7th thoracic somite or the genital somite (first urosomite) and the anal somite (last urosomite).  In female the genital somite is fused with the following urosomite to form the genital double somite, resulting in the difference of the number of segmentation between male and female of the same species.  Additional fusion of urosomites may reduce the urosome to 3 or 2 segments.  The urosomites are free of appendages; a pair of setiferous appendages, the caudal rami, is attached to the posterior surface of anal somite.
+
+## **Structure of appendages**
+
+Antennule (<a class="fbox" href="img/text-fig001.jpg" data-alt="" />text-fig. 1</a>) is 25-segmented in female, 24-segmented and not geniculate in male, bearing seta and aesthetasc (a simple sensory filament) on the segments.  Segments 8 and 9 are partially fused.  Aesthetasc is present on all segments except on segments 21 and 24.
+
+Antenna (<a class="fbox" href="img/text-fig003.jpg" data-alt="" />text-fig. 3</a>) has 2-segmented protopod, coxa (with 1 seta) and basis (with 2 setae). The biramous rami contains a 7-segmented exopod, with setation formula: 2, 2, 1, 1, 1, 1, 4 and a 2-segmented endopod with bilobular distal segment, having setation formula 2, 8 (medial lobe)+8 (terminal lobe).
+
+Mandible (<a class="fbox" href="img/text-fig004.jpg" data-alt="" />text-fig. 4</a>) is formed by a proximal large gnathobase (coxa), and a distal palp.  The gnathobase bears several teeth on its medial margin.  The palp is composed of the basis (with 4 setae), 2-segmented endopod, with 4 and 10 setae, and 5-segmented exopod, with setation formula: 1, 1, 1, 1, 2.
+
+Maxillule (<a class="fbox" href="img/text-fig005.jpg" data-alt="" />text-fig. 5</a>) is the most complicate cephalic appendage.  Its protopod is 3-segmented and consists of a well-developed praecoxal arthrite with 9 spines on medial margin, 4 setae on posterior surface and 1 seta on anterior surface; coxa with 4 setae on endite (medial lobular structure) and 8 setae on epipodite (lateral lobular structure); basis with exite (lateral lobular structure) bearing 1 seta, and proximal and distal endites, each of which carries 4 setae.  The praecoxal arthrite and endites of coxa (one) and basis (two) are also named the first to fourth inner lobes in literature.  Endopod is 3-segmented with setation formula: 4, 4, 7.  One-segmented exopod carries 11 setae.
+
+Maxilla (<a class="fbox" href="img/text-fig006.jpg" data-alt="" />text-fig. 6</a>) is comprised of precoxa, coxa, basis, and 3-segmented endopod.  The segmentation is not distinct.  Precoxa and coxa are partially fused; each of the proximal and distal precoxal endites and proximal and distal coxal endites bears, respectively, 5, 3, 3, 3 setae, coxal epipodite is represented by a seta; basis bears 4 setae.  Setation formula for endopodal segments is 2, 2, 2.[to be verified]
+
+Maxilliped (<a class="fbox" href="img/text-fig007.jpg" data-alt="" />text-fig. 7</a>) is the first thoracic leg.  It comprises syncoxa (fusion of precoxa and coxa, with a setation formula of 1, 2, 4, 4), basis (with 3 setae), and 6-segmented endopod with setation formula 2, 4, 4, 3, 3+1, 4.  The first endopodal segment is partially fused with the basis.
+
+The swimming leg (<a class="fbox" href="img/text-fig008.jpg" data-alt="" /><a class="fbox" href="img/text-fig008.jpg" data-alt="" />text-fig. 8</a></a> [to be amended to include <a class="fbox" href="img/text-fig008.jpg" data-alt="" /><a class="fbox" href="img/text-fig008.jpg" data-alt="" />text-fig. 8</a></a>f]) is typically composed of a uniramous 2-segmented protopod, including coxa (the proximal segment) and basis (the distal segment), and a distal pair (biramous) of 3-segmented rami, the exopod (lateral branch) and the endopod (medial branch).  The medial margin of coxa in swimming leg 5 is armed with more than 16 compacted teeth in the genus *Calanus*.  The spine (in Romanic) and seta (in Arabic) formula of the swimming legs 1-5 is as follows:
+
+<br />
+
+<table id="morpo_tab">
+  <tr>
+    <td></td>
+    <td>Coxa</td>
+    <td>Basis</td>
+    <td>  Exopod  </td>
+    <td>  Endopod</td>
+    <td>Figure</td>
+  </tr>
+  <tr>
+    <td>Leg 1</td>
+    <td>0-1</td>
+    <td>0-1</td>
+    <td>I-1; I-1; II-I-4</td>
+    <td>0-1; 0-2; 1-2-3 </td>
+    <td>(<a class="fbox" href="img/text-fig008.jpg" data-alt="" />text-fig. 8</a>a)</td>
+  </tr>
+  <tr>
+    <td>Leg 2 </td>
+    <td>0-1</td>
+    <td>I-0</td>
+    <td>I-1; I-1; II-I-5</td>
+    <td>0-1; 0-2; 2-2-4 </td>
+    <td>(<a class="fbox" href="img/text-fig008.jpg" data-alt="" />text-fig. 8</a>b)</td>
+  </tr>
+  <tr>
+    <td>Leg 3 </td>
+    <td>0-1</td>
+    <td>I-0</td>
+    <td>I-1; I-1; II-I-5</td>
+    <td>0-1; 0-2; 2-2-4 </td>
+    <td>(<a class="fbox" href="img/text-fig008.jpg" data-alt="" />text-fig. 8</a>c)</td>
+  </tr>
+  <tr>
+    <td>Leg 4</td>
+    <td>0-1</td>
+    <td>I-0</td>
+    <td>I-1; I-1; II-I-5</td>
+    <td>0-1; 0-2; 2-2-3 </td>
+    <td>(<a class="fbox" href="img/text-fig008.jpg" data-alt="" />text-fig. 8</a>d)</td>
+  </tr>
+  <tr>
+    <td>Leg 5 (♀)</td>
+    <td>0-0</td>
+    <td>I-0</td>
+    <td>I-0; I-1; II-I-4</td>
+    <td>0-1; 0-1; 1-2-2 </td>
+    <td>(<a class="fbox" href="img/text-fig008.jpg" data-alt="" />text-fig. 8</a>e)</td>
+  </tr>
+  <tr>
+    <td>Leg 5 (♂)</td>
+    <td>0-0</td>
+    <td>I-0</td>
+    <td>I-0; I-0; II-I-0</td>
+    <td>0-1; 0-1; 2-2-2 </td>
+    <td>(<a class="fbox" href="img/text-fig008.jpg" data-alt="" />text-fig. 8</a>f)</td>
+  </tr>
+</table>
+
+<br />
+
+## **Morphological variations**
+
+The front profile of head is usually smooth and rounded, a median structure, such as a sharp dorsal median spine, is present in a number of genera, e.g., *Gaetanus *(<a class="fbox" href="img/text-fig009.jpg" data-alt="" />text-fig. 9</a>), or a keel-shaped chitinous crest in some genera, e.g.,* Scolecocalanus* (<a class="fbox" href="img/text-fig010.jpg" data-alt="" />text-fig. 10</a>).  The lateral sides of the cephalosome usually are slightly convex in contour, in some genera, especially those of the Pontellidae, e.g., *Pontella *(<a class="fbox" href="img/text-fig011.jpg" data-alt="" />text-fig. 11</a>), a lateral hook may present on each side of the head.  The structure of rostrum and its filaments also vary significantly, e.g. singly pointed in *Gaetanus* (<a class="fbox" href="img/text-fig012.jpg" data-alt="" />text-fig. 12</a>), stout with 2 sausage-like filaments in *Bathycalanus *(<a class="fbox" href="img/text-fig013.jpg" data-alt="" />text-fig. 13</a>), shallow plate with 2 digitiform filaments in *Pseudoamallothrix *(<a class="fbox" href="img/text-fig014.jpg" data-alt="" />text-fig. 14</a>), lingular, terminal margin with 2 short pointed processes in *Racovitzanus *(<a class="fbox" href="img/text-fig015.jpg" data-alt="" />text-fig. 15</a>), bifurcate, short, and solid in *Parvocalanus* (<a class="fbox" href="img/text-fig016.jpg" data-alt="" />text-fig. 16</a>), etc.
+
+Appendages of the cephalosome also show some degrees of morphological variations.
+
+Antennule: Setae are unusually plumose, e.g., *Pontellina* (<a class="fbox" href="img/text-fig017.jpg" data-alt="" />text-fig. 17</a>), or long, e.g., *Paraeuchaeta* (<a class="fbox" href="img/text-fig018.jpg" data-alt="" />text-fig. 18</a>).  One of the antennules is geniculate in male, e.g., *Centropages* (<a class="fbox" href="img/text-fig019.jpg" data-alt="" />text-fig. 19</a>).
+
+Antenna: Basis is generally separated from exopod and endopod, but in some genera it is fused with segment 1 of endopod, forming an allobasis, e.g., in *Acartia *(<a class="fbox" href="img/text-fig020.jpg" data-alt="" /><a class="fbox" href="img/text-fig020.jpg" data-alt="" />text-fig. 20</a></a>).  Exopod and endopod are usually subequal in length, but in some genera, mostly of the Aetideidae, exopod is 2 times or more as long as endopod, e.g., *Euchirella *(<a class="fbox" href="img/text-fig021.jpg" data-alt="" />text-fig. 21</a>); in other genera endopod may be 2 times or more as long as exopod, e.g., *Acartia* (<a class="fbox" href="img/text-fig020.jpg" data-alt="" /><a class="fbox" href="img/text-fig020.jpg" data-alt="" />text-fig. 20</a></a>). Number of segments in exopod varies, generally from 6 to 8, but 3-segmented in *Acartiella* (<a class="fbox" href="img/text-fig022.jpg" data-alt="" />text-fig. 22</a>).
+
+Mandible: General appearance and number of teeth are variable in gnathobase, for example, it may transform to an elongate rod-like structure in *Pseudaugaptilus* (<a class="fbox" href="img/text-fig023.jpg" data-alt="" />text-fig. 23</a>), number of teeth may reduce to 2 large teeth with a small tooth in between in *Centraugaptilus* (<a class="fbox" href="img/text-fig024.jpg" data-alt="" />text-fig. 24</a>).  Exopod is usually inserted terminally on basis, but at mid-length in *Eucalanus* (<a class="fbox" href="img/text-fig025.jpg" data-alt="" />text-fig. 25</a>).
+
+Maxillule: Reduction and transformation of segmentation of maxillule are seen in a large number of genera.  Apparent change is noted in the genus *Augaptilus*, having the appendage reduced to a 3-segmented rod (text fig. 26); in *Arietellus* (<a class="fbox" href="img/text-fig027.jpg" data-alt="" />text-fig. 27</a>), exopod is overwhelmingly developed, being the largest part of the maxillule while endopod is reduced to a small bulb-like structure.  Missing some parts of the appendage occurs frequently, e.g., in *Tortanus*, basis, exopod and endopod are completely absent (<a class="fbox" href="img/text-fig028.jpg" data-alt="" />text-fig. 28</a>); in *Subeucalanus,* coxal endite disappears (<a class="fbox" href="img/text-fig029.jpg" data-alt="" />text-fig. 29</a>).  Sometimes setae transform into spines, e.g., in *Mesorhabdus* one seta of the precoxal arthrite modifies to form a strong and large spine (<a class="fbox" href="img/text-fig030.jpg" data-alt="" />text-fig. 30</a>).
+
+Maxilla: Morphological modification exhibits significantly in the characteristics of setae of various components of the appendage.  Some setae of basis or endopod transform into spines, e.g. *Hemirhabdus* (<a class="fbox" href="img/text-fig031.jpg" data-alt="" />text-fig. 31</a>); endopod is ending in a fortified claw, e.g., *Onchocalanus* (<a class="fbox" href="img/text-fig032.jpg" data-alt="" />text-fig. 32</a>); setae of endopod are similar to worm or brush, e.g. *Onchocalanus *(<a class="fbox" href="img/text-fig033.jpg" data-alt="" />text-fig. 33</a>); or some endites are missing, e.g. *Hemirhabdus* (<a class="fbox" href="img/text-fig034.jpg" data-alt="" />text-fig. 34</a>).
+
+Maxilliped: Some setae of maxilliped are armed with shield-like structure, e.g., *Centraugaptilus* (<a class="fbox" href="img/text-fig035.jpg" data-alt="" />text-fig. 35</a>).  In some genera of the Scolecitrichidae, e.g., *Scaphocalanus* (<a class="fbox" href="img/text-fig036.jpg" data-alt="" />text-fig. 36</a>), the seta of middle endite of coxa has mushroom-like terminal; significant reduction including segmentation and armature occurs in the genera of the Acartiidae, e.g., *Acartiella* (<a class="fbox" href="img/text-fig037.jpg" data-alt="" />text-fig. 37</a>) and Tortanidae, e.g., *Tortanus* (<a class="fbox" href="img/text-fig038.jpg" data-alt="" />text-fig. 38</a>).
+
+Legs 1-4 in general have 3-segmented endopod and exopod; but the segmentation may be reduced to 2 (e.g., *Labidocera*) or 1 (*Macandrewella*) in endopod and to 2 (e.g., *Euchirella*) in exopod of leg 1; to 2 (e.g., *Valdiviella*) or 1 (e.g.,*Chiridiella*) in endopod of leg 2; and to 2 (e.g. *Tortanus*) in endopod of legs 3 and 4.
+
+Leg 5 is the most variable among all legs and is sexually dimorphic.  In females, leg 5 varies from biramous and similar to legs 1-4 (e.g., *Calanus*) to a single knob-like structure (e.g., *Bestiolina*, <a class="fbox" href="img/text-fig039.jpg" data-alt="" />text-fig. 39</a>) or entirely absent (e.g., *Scolecithrix*).  Different degrees of variation are present: biramous but with different number of segments: 3-segmented exopod and 2-segmented endopod (e.g.,*Lucicutia*), 2-segmented (e.g., *Euaugaptilus*) or 1-segmented (e.g., *Acartiella*) in both exopod and endopod.  In genera with uniramous leg 5, the number of segments may vary from 5 (e.g., *Nullosetigera*, <a class="fbox" href="img/text-fig040.jpg" data-alt="" />text-fig. 40</a>), to 4 (e.g., *Pseudodiaptomus*, <a class="fbox" href="img/text-fig041.jpg" data-alt="" />text-fig. 41</a>), 3 (e.g., *Arietellus*, <a class="fbox" href="img/text-fig042.jpg" data-alt="" />text-fig. 42</a>), 2 (e.g., *Paracalanus*, <a class="fbox" href="img/text-fig043.jpg" data-alt="" />text-fig. 43</a>) or 1 (e.g., *Paraugaptilus*, <a class="fbox" href="img/text-fig044.jpg" data-alt="" />text-fig. 44</a>).
+
+Variation in leg 5 is much more pronounced in male than in female.  Rarely leg 5 of male is nearly identical to leg 5 of female (e.g., *Euaugaptilus*, <a class="fbox" href="img/text-fig045.jpg" data-alt="" />text-fig. 45</a>).  Sometimes one leg is similar to leg 5 of female and the other leg is modified slightly (e.g., *Calanus*, <a class="fbox" href="img/text-fig046.jpg" data-alt="" />text-fig. 46</a>) or greatly forming a chela (e.g., *Centropages*, <a class="fbox" href="img/text-fig047.jpg" data-alt="" />text-fig. 47</a>).  Sometimes both legs 5 are about the same size and biramous with 3-segmented exopod and endopod but different slightly in form (e.g., *Mesorhabdus*, <a class="fbox" href="img/text-fig048.jpg" data-alt="" />text-fig. 48</a>).  In some genera legs 5 may be biramous but are totally different in form from leg 5 of female of the same species (e.g., *Scaphocalanus*, <a class="fbox" href="img/text-fig049.jpg" data-alt="" />text-fig. 49</a>).  In other genera, one leg is biramous and the other leg is uniramous (e.g., *Temoropia*, <a class="fbox" href="img/text-fig050.jpg" data-alt="" />text-fig. 50</a>), uniramous on both legs (e.g., *Eucalanus*, <a class="fbox" href="img/text-fig051.jpg" data-alt="" />text-fig. 51</a>), or uniramous on one side and absent on the other (e.g., *Subeucalanus*, <a class="fbox" href="img/text-fig052.jpg" data-alt="" />text-fig. 52</a>)

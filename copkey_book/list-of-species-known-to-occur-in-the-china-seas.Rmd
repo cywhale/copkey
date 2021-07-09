@@ -1,0 +1,7881 @@
+
+# **LIST OF SPECIES KNOWN TO OCCUR IN THE CHINA SEAS**
+
+<caption>
+(BS: Bohai Sea; ES: East China Sea; ET: east of Taiwan, SS: South China Sea; TS: Taiwan Strait; YS: Yellow Sea); b: brackish; e: estuary; i: inshore; o: oceanic; A: abyssopelagic; B: bathlypelagic; Bn: benthic; E: epipelagic; Hb: hyperbenthic; M: mesopelagic)
+</caption><br>
+
+**ACARTIIDAE** 
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Acanthacartia*) *bifilosa* (Giesbrecht, 1881)</td>
+    <td>0.67-1.25</td>
+    <td>0.67-1.25</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Acanthacartia*) *bilobata* Abraham, 1970</td>
+    <td>0.95-1.10</td>
+    <td>0.90-0.95</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Acanthacartia*) *fossae* Gurney, 1927</td>
+    <td>1.03-1.40</td>
+    <td>0.91-1.30</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Acanthacartia*) *sinjiensi* Mori, 1940</td>
+    <td>0.86-1.10</td>
+    <td>0.80-1.03</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>b,i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Acanthacartia*) *tsuensis* Ito, 1956</td>
+    <td>0.89-1.00</td>
+    <td>0.80-0.90</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i,b</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Acanthacartia*) *tumida* Willey, 1920</td>
+    <td>2.00-2.70</td>
+    <td>1.80-2.10</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Acartia*) *danae* Giesbrecht, 1889</td>
+    <td>0.90-1.34</td>
+    <td>0.70-1.10</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i,o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Acartia*) *negligens* Dana, 1849</td>
+    <td>0.80-1.10</td>
+    <td>0.90-1.10</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Acartiura*) *clausi* Giesbrecht, 1889</td>
+    <td>0.70-1.47</td>
+    <td>0.68-1.31</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i,e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Acartiura*) *hongi* Soh & Suh, 2000</td>
+    <td>0.80-1.19</td>
+    <td>0.70-1.04</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>b,i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Acartiura*) *hudsonica* Pinhey, 1926</td>
+    <td>0.74-1.32</td>
+    <td>0.71-1.07</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>i,b</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Acartiura*) *longiremis* (Lilljeborg, 1853)</td>
+    <td>080-1.40</td>
+    <td>0.66-1.18</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i,o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Acartiura*) *omorii* Bradford, 1976</td>
+    <td>0.90-1.30</td>
+    <td>0.80-1.20</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Euacartia*) *forticrusa* Soh, Moon, Park, Bun & Venmathi Maran, 2013</td>
+    <td>0.79-0.88</td>
+    <td>0.69-0.80</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i,e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Euacartia*) *sarojus* Madhupratap & Haridas, 1994</td>
+    <td>0.85-0.94</td>
+    <td>0.70-0.83</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Euacartia*) *southwelli* Sewell, 1914</td>
+    <td>0.73-0.84</td>
+    <td>0.68-0.75</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Odontacartia*) *amboinensis* Carl, 1907</td>
+    <td>1.33-1.42</td>
+    <td>1.29-1.33</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Odontacartia*) *bispinosa* Carl, 1907</td>
+    <td>1.20-1.60</td>
+    <td>1.17-1.40</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>e,i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Odontacartia*) *erythraea* Giesbrecht, 1889</td>
+    <td>1.10-1.50</td>
+    <td>1.00-1.40</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i,o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Odontacartia*) *japonica* Mori, 1940</td>
+    <td>1.30-1.65</td>
+    <td>1.19-1.36</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Odontacartia*) *ohtsukai* Ueda & Bucklin, 2006</td>
+    <td>1.06-1.51</td>
+    <td>0.95-1.33</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Odontacartia*) *pacifica* Steuer, 1915</td>
+    <td>1.00-1.51</td>
+    <td>0.95-1.33</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartia* (*Odontacartia*) *spinicauda* Giesbrecht, 1889</td>
+    <td>1.25-1.55</td>
+    <td>1.16-1.32</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acartiella* *sinensis* Shen & Lee, 1963</td>
+    <td>1.22-1.40</td>
+    <td>1.00-1.23</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i,e,o</td>
+    <td>E</td>
+  </tr>
+<table><br>
+
+
+**AETIDEIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Aetideopsis* *armatus* (Boeck, 1872)</td>
+    <td>2.80-4.50</td>
+    <td>2.90-4.00</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Aetideopsis* *retusa* Grice & Hulsemann, 1967</td>
+    <td>1.98-2.80</td>
+    <td>2.25-2.70</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Aetideus* *acutus* Farran, 1929</td>
+    <td>1.42-1.80</td>
+    <td>1.22-1.98</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Aetideus* *armatus* (Boeck, 1872)</td>
+    <td>1.33-2.25</td>
+    <td>1.25-2.10</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Aetideus* *bradyi* Scott A., 1909</td>
+    <td>1.38-2.07</td>
+    <td>1.00-1.50</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Aetideus* *divergens* Bradford, 1971</td>
+    <td>1.69-1.90</td>
+    <td>1.25-1.43</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Aetideus* *giesbrechti* Cleve, 1904</td>
+    <td>1.50-2.20</td>
+    <td>1.10-1.70</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Aetideus* *truncatus* Bradford, 1971</td>
+    <td>1.60-1.80</td>
+    <td>1.45</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Bradyetes* *pacificus* Ohtsuka, Boxshall & Shimomura, 2005</td>
+    <td>1.96-2.98</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Bradyidius* *angustus* (Tanaka, 1957)</td>
+    <td>unknown</td>
+    <td>1.32-1.57</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Bradydius* *armatus* (Vanhöffen, 1897)</td>
+    <td>1.70-2.70</td>
+    <td>1.50-2.20</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Bradyidius* *similis* (Sars G.O., 1902)</td>
+    <td>2.54-3.24</td>
+    <td>2.40-2.771</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/Bn</td>
+  </tr>
+  <tr>
+    <td>*Chiridiella* *macrodactyla* Sars G.O., 1907</td>
+    <td>2.35-3.00</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Chiridiella* *pacifica* Brodsky, 1950</td>
+    <td>2.50-3.10</td>
+    <td>2.85</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Chiridius* *gracilis* Farran, 1908</td>
+    <td>2.08-3.50</td>
+    <td>1.96-2.65</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Chiridius* *molestus* Tanaka, 1957</td>
+    <td>2.10-2.72</td>
+    <td>1.80-2.16</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Chiridius* *pacificus* Brodsky, 1950</td>
+    <td>2.08-3.50</td>
+    <td>2.36-2.65</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Chirundina* *indica* Sewell, 1929</td>
+    <td>4.05-5.00</td>
+    <td>3.75-4.10</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Chirundina* *streetsii* Giesbrecht, 1895</td>
+    <td>3.60-6.00</td>
+    <td>3.40-5.20</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *amoena* Giesbrecht, 1888</td>
+    <td>2.70-4.10</td>
+    <td>2.90-3.85</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *bella* Giesbrecht, 1888</td>
+    <td>3.33-4.85</td>
+    <td>3.10-4.13</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *bitumida* With, 1915</td>
+    <td>4.70-7.10</td>
+    <td>4.80-6.10</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *curticauda* Giesbrecht, 1888</td>
+    <td>2.50-4.85</td>
+    <td>3.00-4.30</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *formosa* Vervoort, 1949</td>
+    <td>4.75-5.50</td>
+    <td>4.75-5.20</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *galeata* Giesbrecht, 1888</td>
+    <td>5.20-6.70</td>
+    <td>4.70-5.33</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *grandicornis* Wilson C.B., 1950</td>
+    <td>5.97-7.00</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *maxima* Wolfenden, 1905</td>
+    <td>5.84-8.20</td>
+    <td>5.84-7.35</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *messinensis* (Claus, 1863)</td>
+    <td>3.80-6.20</td>
+    <td>2.80-5.46</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *orientalis* Sewell, 1929</td>
+    <td>4.33-6.25</td>
+    <td>4.77</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *pseudopulchra* Park, 1976</td>
+    <td>3.18-4.40</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *pulchra* (Lubbock, 1856)</td>
+    <td>2.88-4.40</td>
+    <td>2.87-4.15</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *rostrata* (Claus, 1866)</td>
+    <td>2.00-4.07</td>
+    <td>2.50-3.10</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *speciosa* Grice & Hulsemann, 1968</td>
+    <td>4.32-5.10</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *splendens* Vervoort, 1963</td>
+    <td>3.40-5.20</td>
+    <td>3.37-3.76</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *truncata* Esterly, 1911</td>
+    <td>4.41-6.93</td>
+    <td>4.50-5.60</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *unispina* Park, 1968</td>
+    <td>4.03-4.89</td>
+    <td>3.85-3.89</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Euchirella* *venusta* Giesbrecht, 1888</td>
+    <td>4.25-5.06</td>
+    <td>2.50-4.16</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Farrania* *frigida* (Wolfenden, 1911)</td>
+    <td>2.25-3.00</td>
+    <td>2.34</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Farrania* *orba* (Tanaka, 1956)</td>
+    <td>3.56</td>
+    <td>3.01</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Gaetanus* *armiger* Giesbrecht, 1888</td>
+    <td>2.60-4.70</td>
+    <td>2.60-3.16</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Gaetanus* *brevicaudatus* (Sars G.O., 1907)</td>
+    <td>3.90-4.50</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Gaetanus* *brevicornis* Esterly, 1906</td>
+    <td>3.50-5.40</td>
+    <td>4.25</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Gaetanus* *brevispinus* (Sars G.O., 1900)</td>
+    <td>3.60-4.90</td>
+    <td>2.08-4.00</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Gaetanus* *kruppii* Giesbrecht, 1903</td>
+    <td>3.60-5.70</td>
+    <td>3.70-5.60</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Gaetanus* *latifrons* Sars G.O., 1905</td>
+    <td>3.75-5.40</td>
+    <td>3.30-4.24</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Gaetanus* *miles* Giesbrecht, 1888</td>
+    <td>3.00-5.20</td>
+    <td>3.00-3.55</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Gaetanus* *minispinus* Tanaka, 1969</td>
+    <td>5.15-5.60</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Gaetanus* *minor* Farran, 1905</td>
+    <td>2.09-3.73</td>
+    <td>2.00-3.16</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Gaetanus* *pileatus* Farran, 1903</td>
+    <td>4.90-6.70</td>
+    <td>4.44-5.08</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Gaetanus* *pungens* (Giesbrecht, 1895)</td>
+    <td>2.60-3.80</td>
+    <td>2.00-3.04</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Gaetanus* *secundus* Esterly, 1911</td>
+    <td>3.72-5.20</td>
+    <td>3.00-3.55</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>  
+  <tr>
+    <td>*Gaetanus* *tenuispinus* (Sars G.O., 1900)</td>
+    <td>2.02-4.00</td>
+    <td>1.82-3.43</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudochirella* *dubia* (Sars G.O., 1905)</td>
+    <td>4.80-6.10</td>
+    <td>4.00</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B/A</td>
+  </tr>
+  <tr>
+    <td>*Pseudochirella* *gibbera* Vervoort, 1949</td>
+    <td>5.50-6.17</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Pseudochirella* *notacantha* (Sars, G.O., 1925)</td>
+    <td>5.10-6.80</td>
+    <td>4.90-5.80</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Pseudochirella* *obesa* Sars G.O., 1920</td>
+    <td>5.00-6.20</td>
+    <td>5.76</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>MHb</td>
+  </tr>
+  <tr>
+    <td>*Pseudochirella* *obtusa* (Sars G.O., 1905)</td>
+    <td>4.70-7.00</td>
+    <td>4.83-5.50</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Pseudochirella* *scopularis* (Sars, G.O., 1905)</td>
+    <td>5.00-6.00</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M </td>
+  </tr>
+  <tr>
+    <td>*Undeuchaeta* *incisa* Esterly, 1911</td>
+    <td>5.36-6.66</td>
+    <td>4.08-5.58</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Undeuchaeta* *intermedia* Scott A., 1909</td>
+    <td>3.48-4.50</td>
+    <td>3.62-3.69</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Undeuchaeta* *major* Giesbrecht, 1888</td>
+    <td>4.15-6.50</td>
+    <td>3.90-5.50</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Undeuchaeta* *plumosa* (Lubbock, 1856)</td>
+    <td>3.00-4.65</td>
+    <td>2.80-3.93</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Valdiviella* *insignis* Farran, 1908</td>
+    <td>8.50-12.0</td>
+    <td>8.02-10.0</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Valdiviella* *oligarthra* Steuer, 1904</td>
+    <td>7.20-10.0</td>
+    <td>6.02-9.08</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+<table><br>
+
+
+ARIETELLIDAE
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Arietellus* *aculeatus* (Scott T., 1894)</td>
+    <td>3.45-5.01</td>
+    <td>3.60-4.62</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Arietellus* *armatus* Wolfenden, 1911</td>
+    <td>4.50-5.01</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Arietellus* *giesbrechti* Sars G.O., 1905</td>
+    <td>4.70-5.70</td>
+    <td>4.67-5.35</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Arietellus* *plumifer* Sars G.O., 1905</td>
+    <td>4.55-6.24</td>
+    <td>4.48-5.90</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Arietellus* *setosus* Giesbrecht, 1893</td>
+    <td>4.27-5.50</td>
+    <td>3.93-6.20</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Arietellus* *simplex* Sars G.O., 1905</td>
+    <td>4.75-6.95</td>
+    <td>4.85-6.20</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Arietellus* *tripartitus* Wilson C.B., 1950</td>
+    <td>4.00-4.76</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Metacalanus* *acutioperculum* Ohtsuka, 1984</td>
+    <td>0.73</td>
+    <td>0.63</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>Hb</td>
+  </tr>
+  <tr>
+    <td>*Metacalanus* *aurivillii* Cleve, 1901</td>
+    <td>0.53-0.65</td>
+    <td>0.50-0.69</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>e/o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Metacalanus* *curvirostris* Ohtsuka, 1985</td>
+    <td>1.19</td>
+    <td>0.89</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Paramisophria* *japonica* Ohtsuka, Fosshagen & Go, 1991</td>
+    <td>1.85-2.08</td>
+    <td>1.41-1.64</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>i</td>
+    <td>Bn</td>
+  </tr>
+  <tr>
+    <td>*Paramisophria* *koreana* Lim & Min, 2014</td>
+    <td>1.63</td>
+    <td>1.45-1.49</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>?</td>
+    <td>?</td>
+  </tr>
+  <tr>
+    <td>*Paramisophria* *platysoma* Ohtsuka & Mitsuzumi, 1990</td>
+    <td>1.08</td>
+    <td>1.03</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>i</td>
+    <td>Bn</td>
+  </tr>
+  <tr>
+    <td>*Paramisophria* *sinica* Lian & Qian, 1994</td>
+    <td>3.12-3.44</td>
+    <td>unknown</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>Bn</td>
+  </tr>
+  <tr>
+    <td>*Paramisophria* *sinjinensis* Lim & Min, 2014</td>
+    <td>unknown</td>
+    <td>1.41</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>?</td>
+    <td>?</td>
+  </tr>
+  <tr>
+    <td>*Paraugaptilus* *buchani* Wolfenden, 1904</td>
+    <td>3.00-3.63</td>
+    <td>2.85-3.25</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+<table><br>
+
+
+AUGAPTILIDAE
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Augaptilus* *anceps* Farran, 1908</td>
+    <td>3.57-3.75</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Augaptilus* *glaciallis* Sars G.O., 1900</td>
+    <td>4.03-5.90</td>
+    <td>3.20-5.19</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Augaptilus* *longicaudatus* (Claus, 1863)</td>
+    <td>2.04-5.09</td>
+    <td>3.20-4.80</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Augaptilus* *megalurus* Giesbrecht, 1889</td>
+    <td>4.26-6.10</td>
+    <td>4.00-5.00</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Augaptilus* *spinifrons* Sars G.O., 1907</td>
+    <td>3.00-3.85</td>
+    <td>3.10</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Centraugaptilus* *horridus* (Farran, 1908)</td>
+    <td>5.60-10.2</td>
+    <td>8.33-8.40</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Centraugaptilus* *porcellus* Johnson, 1936</td>
+    <td>5.40-6.20</td>
+    <td>5.75</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Centraugaptilus* *rattrayi* (Scott T., 1894)</td>
+    <td>4.70-6.18</td>
+    <td>4.80-5.81</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Euaugaptilus* *affinis* Sars G.O., 1920</td>
+    <td>5.40</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Euaugaptilus* *angustus* (Sars G.O., 1905)</td>
+    <td>5.76-7.90</td>
+    <td>5.12-5.48</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Euaugaptilus* *brodski* Hulsemann, 1967</td>
+    <td>3.95-6.83</td>
+    <td>3.33-5.90</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Euaugaptilus* *elongatus* (Sars G.O., 1905)</td>
+    <td>5.00-6.72</td>
+    <td>5.20-6.50</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Euaugaptilus* *facilis* (Farran, 1908)</td>
+    <td>4.00-5.91</td>
+    <td>3.96-5.00</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Euaugaptilus* *filigerus* (Claus, 1863)</td>
+    <td>4.50-7.64</td>
+    <td>4.00-5.76</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Euaugaptilus* *gracilis* (Sars G.O., 1905)</td>
+    <td>5.80-6.20</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Euaugaptilus* *hecticus* (Giesbrecht, 1893)</td>
+    <td>1.60-2.85</td>
+    <td>1.20-2.43</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euaugaptilus* *laticeps* (Sars G.O., 1905)</td>
+    <td>6.09-10.13</td>
+    <td>6.30-9.90</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Euaugaptilus* *longimanus* (Sars G.O., 1905)</td>
+    <td>4.30-9.50</td>
+    <td>5.72-6.30</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Euaugaptilus* *magnus* (Wolfenden, 1904)</td>
+    <td>6.50-8.90</td>
+    <td>6.96-8.80</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Euaugaptilus* *marginatus* Tanaka, 1964</td>
+    <td>1.66-2.26</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td>1</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euaugaptilus* *nodifrons* (Sars G.O., 1905)</td>
+    <td>5.10-9.50</td>
+    <td>4.80-8.40</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Euaugaptilus* *oblongus* (Sars G.O., 1905)</td>
+    <td>4.65-7.40</td>
+    <td>5.40-5.70</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Euaugaptilus* *palumboi* (Giesbrecht, 1889)</td>
+    <td>1.90-2.30</td>
+    <td>1.82-1.98</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Euaugaptilus* *rigidus* (Sars G.O., 1907)</td>
+    <td>4.30-5.50</td>
+    <td>4.30</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Haloptilus* *acutifrons* (Giesbrecht, 1893)</td>
+    <td>2.50-4.66</td>
+    <td>2.00-3.19</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Haloptilus* *austini* Grice, 1959</td>
+    <td>3.06-3.33</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Haloptilus* *bulliceps* Farran, 1926</td>
+    <td>3.30-3.69</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Haloptilus* *chierchiae* (Giesbrecht, 1889)</td>
+    <td>4.05-5.28</td>
+    <td>3.65-3.95</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Haloptilus* *fertilis* (Giesbrecht, 1893)</td>
+    <td>unknown</td>
+    <td>2.47-3.20</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Haloptilus* *fons* Farran, 1908</td>
+    <td>4.80-6.60</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Haloptilus* *longicirrus* Brodsky, 1950</td>
+    <td>2.00-3.77</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Haloptilus* *longicornis* (Claus, 1863)</td>
+    <td>1.72-2.63</td>
+    <td>1.16-1.37</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Haloptilus* *mucronatus* (Claus, 1863)</td>
+    <td>3.00-3.60</td>
+    <td>2.17-2.68</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Haloptilus* *ornatus* (Giesbrecht, 1893)</td>
+    <td>3.00-5.33</td>
+    <td>2.75-3.05</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/m</td>
+  </tr>
+  <tr>
+    <td>*Haloptilus* *oxycephalus* (Giesbrecht, 1889)</td>
+    <td>3.00-5.20</td>
+    <td>2.40-2.85</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Haloptilus* *paralongicirrus* Park, 1970</td>
+    <td>2.31-2.70</td>
+    <td>1.67-2.20</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Haloptilus* *plumosus* (Claus, 1863)</td>
+    <td>4.15-4.20</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Haloptilus* *spiniceps* (Giesbrecht, 1893)</td>
+    <td>3.20-5.45</td>
+    <td>2.55-2.81</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Haloptilus* *tenuis* Farran, 1908</td>
+    <td>4.40-4.62</td>
+    <td>3.50</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Pontoptilus* *muticus* Sars G.O., 1905</td>
+    <td>5.60-6.00</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Pontoptilus* *ovalis* Sars G.O., 1905</td>
+    <td>4.16-5.62</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Pseudaugaptilus* *orientalis* Tanaka, 1964</td>
+    <td>3.89</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/B</td>
+  </tr>
+  <tr>
+    <td>*Pseudhaloptilus* *eurygnathus* (Sars G.O., 1920)</td>
+    <td>4.60-5.90</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Pseudhaloptilus* *pacificus* (Johnson, M.W., 1936)</td>
+    <td>4.75-6.50</td>
+    <td>4.60</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+<table><br>
+
+
+BATHYPONTIIDAE
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Temorites* *brevis* G.O., 1900</td>
+    <td>1.52-2.12</td>
+    <td>1.05-1.94</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Temorites* *elongata* (G.O., 1905)</td>
+    <td>4.70-6.15</td>
+    <td>4.68-5.55</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Temorites* *longicornis* (Tanaka, 1965)</td>
+    <td>unknown</td>
+    <td>5.18</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Temorites* *minor* (Wolfenden, 1906)</td>
+    <td>2.50-2.80</td>
+    <td>2.30-2.51</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Temorites* *sarsi* (Grice & Hulsemann, 1967)</td>
+    <td>2.60-3.04</td>
+    <td>2.74-3.04</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Temorites* *similis* (Tanaka, 1965)</td>
+    <td>2.60-3.12</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Temorites* *spinifera* (Scott A., 1909)</td>
+    <td>3.30</td>
+    <td>2.60-3.00</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+<table><br>
+
+
+CALANIDAE
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Calanoides* *carinatus* (Krøyer, 1849)</td>
+    <td>1.70-4.00</td>
+    <td>2.06-3.60</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i,o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Calanoides* *philippiensis* Kitou & Tanaka, 1969</td>
+    <td>2.55-2.80</td>
+    <td>2.50-2.70</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Calanus* *jashnovi* Hulsemann, 1994</td>
+    <td>3.40-4.40</td>
+    <td>3.00-3.80</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Calanus* *sinicus* Brodsky, 1962</td>
+    <td>2.10-3.60</td>
+    <td>2.00-3.50</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i,o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Canthocalanus* *pauper* (Claus, 1863)</td>
+    <td>1.10-1.75</td>
+    <td>1.00-2.04</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Cosmocalanus* *caroli* (Giesbrecht, 1888)</td>
+    <td>1.97-2.14</td>
+    <td>1.50-1.85</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Cosmoclanlus* *darwini* (Lubbock, 1860)</td>
+    <td>1.60-2.58</td>
+    <td>1.60-2.35</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Mesocalanus* *lighti* (Bowman, 1955)</td>
+    <td>2.10-3.08</td>
+    <td>1.90-2.68</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Mesocalanus* *tenuicornis* (Dana, 1849)</td>
+    <td>1.50-3.40</td>
+    <td>1.50-3.40</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Nannocalanus* *minor* (Claus, 1863)</td>
+    <td>1.21-2.40</td>
+    <td>1.08-2.01</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Neocalanus* *cristatus* (Krøyer, 1848</td>
+    <td>7.60-10.40</td>
+    <td>6.76-9.60</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Neocalanus* *gracilis* (Dana, 1852)</td>
+    <td>1.80-4.44</td>
+    <td>1.60-3.40</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Neocalanus* *robustior* (Giesbrecht, 1888)</td>
+    <td>3.00-4.65</td>
+    <td>2.52-3.60</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Undinula* *vulgaris* (Dana, 1849)</td>
+    <td>1.80-3.25</td>
+    <td>2.00-3.23</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>I</td>
+    <td>E</td>
+  </tr>
+<table><br>
+
+
+**CANDACIIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *armata* Boeck, 1872</td>
+    <td>1.72-2.90</td>
+    <td>1.70-2.90</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *bipinnata* (Giesbrecht, 1889)</td>
+    <td>2.09-3.16</td>
+    <td>1.90-3.02</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *bispinosa*(Claus, 1863)</td>
+    <td>1.50-2.16</td>
+    <td>1.36-2.00</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *bradyi* Scott A., 1902</td>
+    <td>1.40-2.10</td>
+    <td>1.08-1.90</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *catula* (Giesbrecht, 1889)</td>
+    <td>1.32-1.70</td>
+    <td>1.30-1.62</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *columbiae* Campbell, 1929</td>
+    <td>3.70-4.60</td>
+    <td>3.20-4.50</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *curta* (Dana, 1849)</td>
+    <td>1.80-2.50</td>
+    <td>1.46-2.72</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *discaudata* Scott A., 1909</td>
+    <td>1.55-1.94</td>
+    <td>1.48-1.82</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i,o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *elongata* (Boeck, 1872)</td>
+    <td>1.97-3.50</td>
+    <td>3.04-3.80</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *ethiopica* (Dana, 1849)</td>
+    <td>1.93-3.03</td>
+    <td>1.96-2.93</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *guggenheimi* Grice & Jones, 1960</td>
+    <td>1.86-2.06</td>
+    <td>1.80-2.00</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *longimana* (Claus, 1863)</td>
+    <td>2.68-3.90</td>
+    <td>2.40-3.72</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *norvegica* (Boeck, 1865)</td>
+    <td>2.28-3.63</td>
+    <td>2.60-3.25</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *pachydactyla* (Dana, 1849)</td>
+    <td>1.60-3.40</td>
+    <td>1.50-3.20</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *simplex* (Giesbrecht, 1889)</td>
+    <td>1.48-2.35</td>
+    <td>1.54-2.20</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *tenuimana* (Giesbrecht, 1889)</td>
+    <td>1.90-2.40</td>
+    <td>2.00-2.25</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *truncata* (Dana, 1849)</td>
+    <td>1.50-2.32</td>
+    <td>1.60-2.42</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *tuberculata* Wolfenden, 1905</td>
+    <td>1.56-2.40</td>
+    <td>1.60-2.29</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>i?</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *varicans* (Giesbrecht, 1893)</td>
+    <td>1.98-2.55</td>
+    <td>1.91-2.45</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>E/m</td>
+  </tr>
+  <tr>
+    <td>*Candacia* *worthingtoni* Grice, 1981</td>
+    <td>1.50-2.40</td>
+    <td>1.70-1.90</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+<table><br>
+
+
+**CENTROPAGIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Centropages* *abdominalis* Sato, 1913</td>
+    <td>1.30-2.10</td>
+    <td>1.20-1.60</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Centropages* *bradyi* Wheeler, 1900</td>
+    <td>1.30-2.50</td>
+    <td>1.52-2.40</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Centropages* *brevifurcus* Shen & Lee, 1963</td>
+    <td>0.92-1.41</td>
+    <td>0.78-1.25</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Centropages* *calaninus* (Dana, 1849)</td>
+    <td>1.80-2.18</td>
+    <td>1.68-2.11</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Centropages* *dorsispinatus* Thompson & Scott, 1903</td>
+    <td>1.04-1.40</td>
+    <td>1.01-1.25</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Centropages* *elongatus* Giesbrecht, 1896</td>
+    <td>1.50-1.91</td>
+    <td>1.50-2.00</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Centropages* *furcatus* (Dana, 1849)</td>
+    <td>1.35-1.92</td>
+    <td>1.20-2.00</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Centropages* *gracilis* (Dana, 1849)</td>
+    <td>1.70-2.16</td>
+    <td>1.70-2.04</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Centropages* *longicornis* Mori, 1932</td>
+    <td>1.88-2.00</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Centropages* *orsini* Giesbrecht, 1889</td>
+    <td>1.20-1.70</td>
+    <td>1.11-1.54</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Centropages* *sinensis* Chen & Zhang, 1965</td>
+    <td>1.18-1.50</td>
+    <td>1.21-1.30</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Centropages* *tenuiremis* Thompson & Scott, 1903 nomen dubium</td>
+    <td>1.35-2.00</td>
+    <td>1.20-1.80</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Centropages* *violaceus* (Claus, 1863)</td>
+    <td>1.76-2.24</td>
+    <td>1.77-2.17</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Sinocalanus* *doerrii* (Brehm, 1909)</td>
+    <td>1.30-2.10</td>
+    <td>1.20-1.69</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Sinocalanus* *laevidactylus* Shen & Tai, 1964</td>
+    <td>1.20-1.40</td>
+    <td>1.20-1.30</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Sinocalanus* *sinensis* (Poppe, 1889)</td>
+    <td>1.47-2.06</td>
+    <td>1.10-1.96</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Sinocalanus* *solstitiali* Brehm, 1923</td>
+    <td>1.21-1.27</td>
+    <td>1.13-1.17</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Sinocalanus* *tenellus* (Kikuchi K., 1928)</td>
+    <td>1.25-1.48</td>
+    <td>1.20-1.40</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+<table><br>
+
+
+**CLAUSOCALANIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Clausocalanus* *arcuicornis* (Dana, 1849)</td>
+    <td>1.08-1.62</td>
+    <td>0.90-1.25</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Clausocalanus* *dubius* Brodsky, 1950</td>
+    <td>1.80</td>
+    <td>0.97-1.80</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Clausocalanus* *farrani* Sewell, 1929</td>
+    <td>1.04-1.26</td>
+    <td>0.87-0.99</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Clausocalanus* *furcatus* (Brady, 1883)</td>
+    <td>0.80-1.75</td>
+    <td>0.70-1.14</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Clausocalanus* *ingens* Frost & Fleminger, 1968</td>
+    <td>1.44-1.90</td>
+    <td>0.99-1.08</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Clausocalanus* *jobei* Frost & Fleminger, 1968</td>
+    <td>1.01-1.56</td>
+    <td>0.87-1.07</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Clausocalanus* *laticeps* Farran, 1929</td>
+    <td>1.25-1.67</td>
+    <td>1.01-1.10</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Clausocalanus* *lividus* Frost & Fleminger, 1968</td>
+    <td>1.22-1.98</td>
+    <td>1.09-1.45</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Clausocalanus* *mastigophorus* (Dana, 1863)1.17-1.94</td>
+    <td>1.17-1.94</td>
+    <td>1.05-1.50</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Clausocalanus* *minor* Sewell, 1929</td>
+    <td>0.94-1.32</td>
+    <td>0.79-1.06</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Clausocalanus* *parapergens* Frost & Fleminger, 1968</td>
+    <td>0.97-1.38</td>
+    <td>0.97-1.15</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Clausocalanus* *paululus* Farran, 1926</td>
+    <td>0.65-0.86</td>
+    <td>0.47-0.60</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Clausocalanus* *pergens* Farran, 1926</td>
+    <td>0.70-1.10</td>
+    <td>0.52-0.67</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Ctenocalanus* *vanus* Giesbrecht, 1888</td>
+    <td>0.81-1.70</td>
+    <td>1.08-1.95</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Microcalanus* *pusilus* Sars G.O., 1903</td>
+    <td>0.60-0.70</td>
+    <td>0.70</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Pseudocalanus* *minutus* (Krøyer, 1845)</td>
+    <td>1.00-2.14</td>
+    <td>0.85-1.62</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+<table><br>
+
+
+**EUCALANIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Eucalanus* *bungii* Giesbrecht, 1893</td>
+    <td>5.51-8.00</td>
+    <td>4.80-6.20</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Eucalanus* *californicus* Johnson, 1938</td>
+    <td>4.40-7.50</td>
+    <td>4.00-5.00</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Eucalanus* *elongatus* (Dana, 1848)</td>
+    <td>4.53-5.80</td>
+    <td>3.00-5.00</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/m</td>
+  </tr>
+  <tr>
+    <td>*Eucalanus* *hyalinus* (Claus, 1866)</td>
+    <td>5.10-7.10</td>
+    <td>4.26-6.25</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Pareucalanus* *attenuatus* (Dana, 1849)</td>
+    <td>3.00-730</td>
+    <td>2.75-6.04</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Pareucalanus* *langae* (Fleminger, 1973)</td>
+    <td>5.01-7.22</td>
+    <td>6.2-6.59</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Pareucalanus* *sewelli* (Fleminger, 1973)</td>
+    <td>3.65-6.10</td>
+    <td>2.89-4.58</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+<table><br>
+
+
+**EUCHAETIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Euchaeta* *acuta* Giesbrecht, 1893</td>
+    <td>3.40-4.70</td>
+    <td>3.20-4.80</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euchaeta* *concinna* Dana, 1849</td>
+    <td>2.10-3.75</td>
+    <td>2.24-3.10</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euchaeta* *indica* Wolfenden, 1905</td>
+    <td>2.21-3.00</td>
+    <td>2.21-2.92</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Euchaeta* *longicornis* Giesbrecht, 1888</td>
+    <td>2.54-3.32</td>
+    <td>2.52-2.88</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Euchaeta* *media* Giesbrecht, 1888</td>
+    <td>3.30-4.82</td>
+    <td>3.05-4.20</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euchaeta* *plana* Mori, 1937</td>
+    <td>2.58-3.50</td>
+    <td>2.75-3.16</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Euchaeta* *pubera* Sars G.O., 1907</td>
+    <td>2.86-4.41</td>
+    <td>3.43-3.69</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Euchaeta* *rimana* Bradford, 1974</td>
+    <td>2.80-4.30</td>
+    <td>2.80-4.10</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Euchaeta* *spinosa* Giesbrecht, 1893</td>
+    <td>5.18-7.21</td>
+    <td>5.22-6.90</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Euchaeta* *tenuis* Esterly, 1906</td>
+    <td>4.70-6.80</td>
+    <td>4.68-5.63</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *aequatorialis* Tanaka, 1958</td>
+    <td>4.80-5.61</td>
+    <td>4.60-4.90</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *barbata* (Brady, 1883)</td>
+    <td>6.00-12.0</td>
+    <td>6.10-10.00</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *biloba* Farran, 1929</td>
+    <td>5.25-6.75</td>
+    <td>4.66-5.66</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *bisinuata* (Sars G.O., 1907)</td>
+    <td>4.80-5.97</td>
+    <td>4.25-5.20</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *calva* Tanaka, 1958</td>
+    <td>7.25-8.40</td>
+    <td>6.67-7.90</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *comosa* Tanaka, 1958</td>
+    <td>7.80-10.0</td>
+    <td>7.50-8.80</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *confusa* Tanaka, 1958</td>
+    <td>6.60-7.93</td>
+    <td>6.00-7.00</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *elongata* (Esterly, 1913)</td>
+    <td>4.13-8.00</td>
+    <td>5.50-8.40</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *eminens* Tanaka & Omori, 1968</td>
+    <td>5.40-6.60</td>
+    <td>5.60</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B?</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *flava* (Giesbrecht, 1888)</td>
+    <td>3.20</td>
+    <td>unknown</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *gracilicauda* Scott A., 1909</td>
+    <td>5.78-7.90</td>
+    <td>6.20-6.50</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *gracilis* (Sars G.O., 1905)</td>
+    <td>5.80-7.04</td>
+    <td>5.05-6.50</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *hansenii* (With, 1915)</td>
+    <td>8.10-9.99</td>
+    <td>8.10-8.90</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *investigatoris* Sewell, 1929</td>
+    <td>5.80-7.00</td>
+    <td>5.40-6.50</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *kurilensis* Heptner, 1971</td>
+    <td>5.83-8.35</td>
+    <td>5.91-6.90</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *malayensis* Sewell, 1929</td>
+    <td>6.00-7.50</td>
+    <td>5.60-6.50</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *prudens* Tanaka & Omori, 1968</td>
+    <td>7.30-7.90</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *rubra* Brodsky, 1950</td>
+    <td>6.60-8.05</td>
+    <td>6.00-7.20</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *russelli* (Farran, 1936)</td>
+    <td>3.14-4.38</td>
+    <td>3.10-4.08</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>c/o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *sarsi* (Farran, 1908)</td>
+    <td>6.90-11.3</td>
+    <td>6.72-9.40</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *simplex* Tanaka, 1958</td>
+    <td>3.00-3.81</td>
+    <td>2.72-3.45</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>c/o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *tonsa* (Giesbrecht, 1895)</td>
+    <td>5.60-6.70</td>
+    <td>5.10-6.28</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *tuberculata* Scott A., 1909</td>
+    <td>5.73-7.42</td>
+    <td>5.43-6.18</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *tumidula* (Sars G.O., 1905)</td>
+    <td>3.30-4.90</td>
+    <td>3.88-4.65</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B/A</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *vorax* (Grice & Hulsemann, 1968)</td>
+    <td>6.41-7.78</td>
+    <td>6.66</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Paraeuchaeta* *weberi* Scott A., 1909</td>
+    <td>6.70-8.50</td>
+    <td>6.00-6.41</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+<table><br>
+
+
+**FOSSHAGENIIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Temporopia* *mayumbaensis* Scott T., 1894</td>
+    <td>0.56-1.24</td>
+    <td>0.84-0.99</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+<table><br>
+
+
+**HETERORHABDIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Disseta* *palumbii* Giesbrecht, 1889</td>
+    <td>5.70-8.60</td>
+    <td>5.10-7.80</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Disseta* *scopularis* (Brady, 1883)</td>
+    <td>8.66-11.0</td>
+    <td>8.00-10.00</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Hemirhabdus* *grimaldii* (Richard, 1893)</td>
+    <td>7.30-11.83</td>
+    <td>8.32-12.20</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *abyssalis* (Giesbrecht, 1889)</td>
+    <td>2.09-3.73</td>
+    <td>2.00-3.40</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *ankylocolus* Park, 2000</td>
+    <td>2.80-3.24</td>
+    <td>2.72-2.92</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *carribeanensis* Park, 1970</td>
+    <td>1.74-2.52</td>
+    <td>1.92-2.40</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *clausi* (Giesbrecht, 1889)</td>
+    <td>2.00-2.70</td>
+    <td>2.00-2.50</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *cohibilis* Park, 2000</td>
+    <td>2.80-3.60</td>
+    <td>2.68-3.32</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *confusibilis* Park, 2000</td>
+    <td>2.52-3.44</td>
+    <td>2.56-3.08</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M?</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *egregious* Heptner, 1972</td>
+    <td>2.24-3.40</td>
+    <td>2.28-3.70</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *fistulosus* Tanaka, 1964</td>
+    <td>3.39-3.95</td>
+    <td>3.40-3.85</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *habrosomus* Park, 2000</td>
+    <td>2.16-2.56</td>
+    <td>2.14-3.08</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>M?</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *insukae* Park, 2000</td>
+    <td>1.78-2.56</td>
+    <td>2.12-2.48</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *oikoumenikis* Park, 2000</td>
+    <td>2.60-3.52</td>
+    <td>2.40-3.28</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *pacificus* Brodsky, 1950</td>
+    <td>1.92-3.84</td>
+    <td>2.90-3.96</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *papilliger* (Claus, 1863)</td>
+    <td>1.60-2.66</td>
+    <td>1.60-2.65</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *prolatus* Park, 2000</td>
+    <td>1.68-2.14</td>
+    <td>1.36-2.14</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *quadrilobus* Park, 2000</td>
+    <td>2.88-3.84</td>
+    <td>2.48-3.68</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *spinifrons* (Claus, 1863)</td>
+    <td>2.86-4.20</td>
+    <td>2.20-3.84</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *spinosus* Bradford, 1971</td>
+    <td>3.09-4.40</td>
+    <td>2.88-3.80</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *subspinifrons* Tanaka, 1964</td>
+    <td>2.27-3.20</td>
+    <td>2.11-3.16</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *tanneri* (Giesbrecht, 1895)</td>
+    <td>3.08-4.90</td>
+    <td>3.00-4.25</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Heterorhabdus* *tuberculus* Park, 2000</td>
+    <td>2.24-2.84</td>
+    <td>2.24-2.68</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v </td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Heterostylites* *longicornis* (Giesbrecht, 1889)</td>
+    <td>2.30-4.30</td>
+    <td>2.56-4.30</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Heterostylites* *longioperculis* Park 2000</td>
+    <td>2.76-3.56</td>
+    <td>2.92-3.44</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Heterostylites* *major* (F. Dahl, 1894)</td>
+    <td>4.00-5.75</td>
+    <td>3.75-5.50</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Heterostylites* *submajor* Park 2000</td>
+    <td>4.75-5.50</td>
+    <td>4.56-8.08</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Mesorhabdus* *angustus* Sars G.O., 1907</td>
+    <td>5.80-8.75</td>
+    <td>6.60-8.50</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Mesorhabdus* *brevicaudatus* (Wolfenden, 1905)</td>
+    <td>3.15-4.24</td>
+    <td>3.37-3.88</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Mesorhabdus* *gracilis* Sars G.O., 1907</td>
+    <td>3.70-5.58</td>
+    <td>4.91</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Mesorhabdus* *poriphorus* Park, 2000</td>
+    <td>5.25-5.75</td>
+    <td>5.41-5.50</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Neorhabdus* *latus* (Sars, 1905)</td>
+    <td>6.75-8.91</td>
+    <td>7.16-8.08</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Paraheterorhabdus* *compactus* (Sars G.O., 1900)</td>
+    <td>2.23-3.50</td>
+    <td>1.93-3.60</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Paraheterorhabdus* *medianus* (Park, 1970)</td>
+    <td>2.48-2.88</td>
+    <td>2.60-2.84</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Paraheterorhabdus* *robustus* (Farran, 1908)</td>
+    <td>2.76-5.30</td>
+    <td>2.92-5.30</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Paraheterorhabdus* *vipera* (Sars G.O., 1900)</td>
+    <td>2.16-3.16</td>
+    <td>2.23-3.50</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E-B</td>
+  </tr>
+<table><br>
+
+
+**LUCICUTIIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *aurita* Cleve, 1904</td>
+    <td>7.30-9.30</td>
+    <td>7.10-8.40</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *bicornuta* Wolfenden, 1905</td>
+    <td>6.75-8.40</td>
+    <td>6.50-8.00</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *clausi* (Giesbrecht, 1889)</td>
+    <td>1.60-2.10</td>
+    <td>1.60-1.92</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E-B</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *curta* Farran, 1905</td>
+    <td>1.90-2.90</td>
+    <td>1.80-2.60</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *flavicornis* (Claus, 1863)</td>
+    <td>1.26-2.50</td>
+    <td>1.06-1.80</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E-B</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *gaussae* Grice, 1963</td>
+    <td>1.09-1.80</td>
+    <td>1.14-1.50</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *gemina* Farran, 1926</td>
+    <td>1.34-1.90</td>
+    <td>1.25-1.72</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *intermedia* Sars G.O., 1905</td>
+    <td>3.36-4.10</td>
+    <td>3.50-4.20</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *longiserrata* (Giesbrecht, 1889)</td>
+    <td>2.00-3.00</td>
+    <td>1.85-2.52</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *lucida* Farran, 1908</td>
+    <td>2.96-3.65</td>
+    <td>2.96-3.50</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *macrocera* Sars G.O., 1920</td>
+    <td>3.30-5.37</td>
+    <td>3.00-5.20</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *magna* Wolfenden, 1903</td>
+    <td>3.13-3.90</td>
+    <td>3.00-3.55</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *maxima* Steuer, 1904</td>
+    <td>7.80-9.65</td>
+    <td>7.70-9.00</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *oblonga* Brodsky, 1950</td>
+    <td>unknown</td>
+    <td>3.90-4.10</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *ovalis* (Giesbrecht, 1889)</td>
+    <td>1.26-2.00</td>
+    <td>1.20-1.85</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *pera* A. Scott, 1909</td>
+    <td>2.89-4.00</td>
+    <td>2.85-3.30</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *polaris* Brodsky, 1950</td>
+    <td>3.10-4.20</td>
+    <td>3.25-4.20</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>B/A</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *tenuicauda* Sars G.O., 1907</td>
+    <td>3.80</td>
+    <td>5.00</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Lucicutia* *wolfendeni* Sewell, 1932</td>
+    <td>5.96-9.80</td>
+    <td>5.50-8.30</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+<table><br>
+
+
+**MEGACALANIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Bathycalanus* *eximius* Markhaseva in Brodsky, Vyshkvartseva, Kos & Markhaseva, 1983</td>
+    <td>11.90-13.56</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>A</td>
+  </tr>
+  <tr>
+    <td>*Bathycalanus* *richardi* Sars G.O., 1905</td>
+    <td>8.25-12.0</td>
+    <td>6.00-10.0</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E-B</td>
+  </tr>
+  <tr>
+    <td>*Megacalanus* *princeps* Wolfenden, 1904</td>
+    <td>8.70-13.0</td>
+    <td>7.90-12.00</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+<table><br>
+
+
+**METRIDINIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Gaussia* *asymmetrica* Björnberg & Campaner, 1988</td>
+    <td>9.00-11.0</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B/M</td>
+  </tr>
+  <tr>
+    <td>*Gaussia* *princeps* (Scott T., 1894)</td>
+    <td>9.00-12.0</td>
+    <td>9.00-12.00</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Metridia* *asymmetricaa* Brodsky, 1950</td>
+    <td>3.22-4.20</td>
+    <td>3.00-3.90</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Metridia* *brevicauda* Giesbrecht, 1889</td>
+    <td>1.50-2.25</td>
+    <td>1.30-1.65</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Metridia* *curticauda* Giesbrecht, 1889</td>
+    <td>2.25-3.80</td>
+    <td>1.30-2.30</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Metridia* *macrura* Sars, G.O., 1905</td>
+    <td>7.22-10.5</td>
+    <td>7.03-9.60</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Metridia* *pacifica* Brodsky, 1950</td>
+    <td>2.40-3.45</td>
+    <td>1.65-2.60</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Metridia* *princeps* Giesbrecht, 1889</td>
+    <td>6.69-9.00</td>
+    <td>5.80-8.50</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Metridia* *venusta* Giesbrecht, 1889</td>
+    <td>2.65-3.30</td>
+    <td>2.43-2.82</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Pleuromamma* *abdominalis* (Lubbock, 1856)</td>
+    <td>2.09-4.50</td>
+    <td>2.00-4.30</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Pleuromamma* *borealis* Dahl F., 1893</td>
+    <td>1.67-2.50</td>
+    <td>1.44-2.25</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Pleuromamma* *gracilis* Claus, 1863</td>
+    <td>1.50-2.55</td>
+    <td>1.50-2.25</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Pleuromamma* *piseki* Farran, 1929</td>
+    <td>1.70-2.40</td>
+    <td>1.60-1.96</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Pleuromamma* *quadrungulata* (Dahl F., 1893)</td>
+    <td>3.00-5.00</td>
+    <td>3.06-4.45</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Pleuromamma* *robusta* (Dahl F., 1893)</td>
+    <td>2.20-4.70</td>
+    <td>2.10-4.00</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Pleuromamma* *scutullata* Brodsky, 1950</td>
+    <td>3.60-4.34</td>
+    <td>3.10-3.76</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Pleuromamma* *xiphias* (Giesbrecht, 1889)</td>
+    <td>3.25-5.87</td>
+    <td>3.94-6.42</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+<table><br>
+
+
+**NULLOSETIGERIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Nullosetigera* *aequalis* (Sars G.O., 1920)</td>
+    <td>3.00</td>
+    <td>2.90</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Nullosetigera* *auctiseta* Soh, Ohtsuka, Imabayashi & Suh, 1999</td>
+    <td>2.81-3.44</td>
+    <td>3.06-3.16</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Nullosetigera* *bidentata* (Brady, 1883)</td>
+    <td>2.00-3.60</td>
+    <td>2.00-3.00</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Nullosetigera* *helgae* (Farran, 1908)</td>
+    <td>2.13-2.90</td>
+    <td>2.03-2.80</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Nullosetigera* *impar* (Farran, 1908)</td>
+    <td>2.20-3.00</td>
+    <td>2.28-2.95</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Nullosetigera* *mutata* (Tanaka, 1964)</td>
+    <td>2.56-2.69</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+<table><br>
+
+
+**PARACALANIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Acrocalanus* *andersoni* Bowman, 1958</td>
+    <td>0.95-1.30</td>
+    <td>0.99-1.20</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acrocalanus* *gibber* Giesbrecht, 1888</td>
+    <td>0.74-1.28</td>
+    <td>0.85-1.40</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acrocalanus* *gracilis* Giesbrecht, 1888</td>
+    <td>0.80-1.80</td>
+    <td>0.80-1.36</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acrocalanus* *longicornis* Giesbrecht, 1888</td>
+    <td>0.94-1.55</td>
+    <td>0.90-1.40</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Acrocalanus* *monachus* Giesbrecht, 1888</td>
+    <td>0.88-1.10</td>
+    <td>0.79-0.98</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Bestiolina* *amoyensis* (Li & Huang, 1984)</td>
+    <td>0.85-1.01</td>
+    <td>0.87-0.92</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Bestiolina* *coreana* Moon, Lee & Soh, 2010</td>
+    <td>0.90-0.95</td>
+    <td>0.85-0.96</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Bestiolina* *similis* (Sewell, 1914)</td>
+    <td>0.72-1.00</td>
+    <td>0.70-0.90</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Bestiolina* *sinica* (Shen & Lee, 1966)</td>
+    <td>0.97-1.02</td>
+    <td>0.89-0.92</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Bestiolina* *zeylonica* (Andronov, 1972)</td>
+    <td>0.65-0.70</td>
+    <td>0.61</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>  
+  <tr>
+    <td>*Calocalanus* *contractus* Farran, 1926</td>
+    <td>0.57-0.84</td>
+    <td>0.45-0.55</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Calocalanus* *gracilis* Tanaka, 1956</td>
+    <td>0.60-0.70</td>
+    <td>0.57-0.60</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Calocalanus* *monospinus* Chen & Shen, 1974</td>
+    <td>0.65-0.80</td>
+    <td>0.53-0.58</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Calocalanus* *pavo* (Dana, 1852)</td>
+    <td>0.79-1.40</td>
+    <td>0.60-1.18</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Calocalanus* *pavoninus* Farran, 1936</td>
+    <td>0.60-0.97</td>
+    <td>0.50-0.60</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Calocalanus* *plumatus* Shmeleva, 1965</td>
+    <td>0.53-0.61</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Calocalanus* *plumulosus* (Claus, 1863)</td>
+    <td>0.87-1.30</td>
+    <td>0.65-0.90</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Calocalanus* *styliremis* Giesbrecht, 1888</td>
+    <td>0.50-0.95</td>
+    <td>0.45-0.60</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Delibus* *nudus* (Sewell, 1929)</td>
+    <td>0.40-0.70</td>
+    <td>0.42-0.52</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Mecynocera* *clausi* Thompson I.C., 1888</td>
+    <td>0.90-1.29</td>
+    <td>0.75-1.12</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Paracalanus* *aculeatus* Giesbrecht, 1888</td>
+    <td>0.78-1.36</td>
+    <td>0.71-1.36</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Paracalanus* *denudatus* Sewell, 1929</td>
+    <td>0.56-0.96</td>
+    <td>0.75</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Paracalanus* *gracilis* Chen & Zhang, 1965</td>
+    <td>0.75-0.94</td>
+    <td>unknown</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Paracalanus* *indicus* Wolfenden, 1905</td>
+    <td>0.70-1.30</td>
+    <td>0.74-1.40</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Paracalanus* *intermedius* Shen & Bai, 1956</td>
+    <td>0.88</td>
+    <td>0.78</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Paracalanus* *nanus* Sars G.O., 1925</td>
+    <td>0.50-0.77</td>
+    <td>0.50-0.60</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Paracalanus* *parvus* (Claus, 1863)</td>
+    <td>0.63-1.30</td>
+    <td>0.50-1.40</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Paracalanus* *serrulus* Shen & Lee, 1963</td>
+    <td>1.02-1.28</td>
+    <td>0.97-1.02</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Parvocalanus* *crassirostris* (Dahl F., 1894)</td>
+    <td>0.42-0.82</td>
+    <td>0.34-0.62</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Parvocalanus* *dubia* (Sewell, 1912)</td>
+    <td>0.74</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Parvocalanus* *elegans* Andronov, 1972</td>
+    <td>0.46-0.51</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Parvocalanus* *leei* Moon, Youn & Soh, 2014</td>
+    <td>0.75-0.92</td>
+    <td>0.49-0.69</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>  
+<table><br>
+
+
+**PHAENNIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Cephalophanes* *refulgens* Sars G.O., 1907</td>
+    <td>3.90-5.30</td>
+    <td>3.00-4.00</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Onchocalanus* *affinis* With, 1915</td>
+    <td>4.80-6.50</td>
+    <td>4.10-5.86</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Onchocalanus* *cristatus* (Wolfenden, 1904)</td>
+    <td>5.00-8.15</td>
+    <td>5.60-6.50</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Onchocalanus* *trigoniceps* Sars G.O., 1905</td>
+    <td>5.10-9.16</td>
+    <td>4.85-6.95</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Phaenna* *spinifera* Claus, 1863</td>
+    <td>1.44-3.02</td>
+    <td>1.80-2.50</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Xanthocalanus* *agilis* Giesbrecht, 1893</td>
+    <td>2.14-2.68</td>
+    <td>2.07-2.58</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Xanthocalanus* *dilatus* Grice, 1962</td>
+    <td>1.50-1.60</td>
+    <td>1.40</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Xanthocalanus* *multispinus* Chen & Zhang, 1975</td>
+    <td>1.85-1.95</td>
+    <td>unknown</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Xanthocalanus* *pulcher* Esterly, 1911</td>
+    <td>3.42</td>
+    <td>unknown</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+<table><br>
+
+
+**PONTELLIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Calanopia* *aurilivilli* Cleve, 1901</td>
+    <td>1.05-1.56</td>
+    <td>0.98-1.50</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Calanopia* *elliptica* (Dana, 1849)</td>
+    <td>1.40-2.10</td>
+    <td>1.40-1.90</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>e/i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Calanopia* *herdmani* Scott A., 1909</td>
+    <td>1.78-1.97</td>
+    <td>1.70-1.79</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Calanopia* *minor* Scott A., 1902</td>
+    <td>1.14-1.50</td>
+    <td>1.06-1.37</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Calanopia* *thompsoni* Scott A., 1909</td>
+    <td>1.78-2.62</td>
+    <td>1.60-2.52</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Ivellopsis* *denticauda* (Scott A., 1909)</td>
+    <td>2.83-3.30</td>
+    <td>2.54-3.26</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *acuta* (Dana, 1849)</td>
+    <td>2.30-4.20</td>
+    <td>2.29-3.32</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *acutifrons* (Dana, 1849)</td>
+    <td>3.15-4.70</td>
+    <td>3.28-4.56</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *bataviae* Scott A., 1909</td>
+    <td>1.96-2.38</td>
+    <td>1.70-2.00</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *churaumi* Hirabayashi, 2014</td>
+    <td>2.23-2.79</td>
+    <td>1.08-2.53</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *detruncata* (Dana, 1849)</td>
+    <td>2.25-4.10</td>
+    <td>2.15-4.00</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *diandra* Fleminger, 1967</td>
+    <td>2.57-3.49</td>
+    <td>2.51-3.25</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *euchaeta* Giesbrecht, 1889</td>
+    <td>1.80-3.15</td>
+    <td>1.58-2.90</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>e/i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *gallensis* Thompson & Scott., 1903</td>
+    <td>1.80-2.85</td>
+    <td>1.67-2.45</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *japonica* Mori, 1935</td>
+    <td>1.74-2.06</td>
+    <td>1.47-1.94</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *kroeyeri* (Brady, 1883)</td>
+    <td>1.90-2.75</td>
+    <td>1.95-2.36</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *laevidentata* (Brady, 1883)</td>
+    <td>1.60-2.36</td>
+    <td>1.64-1.72</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *minuta* Giesbrecht, 1889</td>
+    <td>1.76-2.30</td>
+    <td>1.36-1.83</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *orsinii* Giesbrecht, 1889</td>
+    <td>2.20</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *pavo* Giesbrecht, 1889</td>
+    <td>1.77-2.52</td>
+    <td>1.50-2.20</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *pectinata* Thompson & Scott, 1903</td>
+    <td>1.84-2.15</td>
+    <td>1.50-2.03</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *rotunda* Mori, 1929</td>
+    <td>1.16-2.66</td>
+    <td>1.16-2.50</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>e/i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Labidocera* *sinilobata* Shen & Lee, 1963</td>
+    <td>2.29-2.72</td>
+    <td>1.94-2.03</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>e/I</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontella* *alata* Scott A., 1909</td>
+    <td>3.58</td>
+    <td>3.45</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontella* *andersoni* Sewell, 1912</td>
+    <td>3.34-3.75</td>
+    <td>2.86-2.88</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontella* *chierchiae* Giesbrecht, 1889</td>
+    <td>3.19-3.58</td>
+    <td>2.59-3.11</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontella* *danae* Giesbrecht, 1889</td>
+    <td>2.70-5.00</td>
+    <td>2.74-4.60</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontella* *fera* Dana, 1849</td>
+    <td>2.00-3.33</td>
+    <td>2.33-3.10</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontella* *kieferi* Pesta, 1933</td>
+    <td>3.13-5.35</td>
+    <td>2.99-3.11</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontella* *labuanensis* Mulyadi, 1997</td>
+    <td>2.90-3.10</td>
+    <td>2.50-2.60</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontella* *latifurca* Chen & Zhang, 1965</td>
+    <td>2.83-3.72</td>
+    <td>2.70-2.94</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontella* *princeps* Dana, 1849</td>
+    <td>4.98-5.87</td>
+    <td>4.20-5.56</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontella* *securifer* Brady, 1883</td>
+    <td>3.60-4.63</td>
+    <td>3.20-4.63</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontella* *sinica* Chen & Zhang, 1965</td>
+    <td>5.20-5.87</td>
+    <td>4.35-5.50</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontella* *spinicauda* Mori, 1937</td>
+    <td>4.50-5.40</td>
+    <td>4.02-4.78</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontella* *spinipes* Giesbrecht, 1889</td>
+    <td>4.50-4.80</td>
+    <td>3.10-4.40</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontella* *tenuiremis* Giesbrecht, 1889</td>
+    <td>2.80</td>
+    <td>2.65-2.80</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontella* *tridactyla* Shen & Lee, 1963</td>
+    <td>2.14</td>
+    <td>2.08-2.50</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>e/i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontella* *valida* Dana, 1852</td>
+    <td>2.45-3.60</td>
+    <td>2.57-3.28</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontellina* *morii* Fleminger & Hulsemann, 1974</td>
+    <td>1.38-1.88</td>
+    <td>1.26-1.68</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontellina* *plumata* (Dana, 1849)</td>
+    <td>1.30-1.94</td>
+    <td>1.26-1.94</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Pontellopsis* *armata* (Giesbrecht, 1889)</td>
+    <td>2.00-2.75</td>
+    <td>1.90-2.59</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Pontellopsis* *herdmani* Thompson & Scott, 1903</td>
+    <td>1.90-2.32</td>
+    <td>1.76-2.00</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontellopsis* *inflatodigitata* Chen & Shen, 1974</td>
+    <td>1.60-2.04</td>
+    <td>1.50-1.70</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontellopsis* *krameri* (Giesbrecht, 1896)</td>
+    <td>1.86-2.95</td>
+    <td>1.60-2.20</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontellopsis* *laminata* Wilson C.B., 1950</td>
+    <td>1.91-2.32</td>
+    <td>1.86-2.02</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontellopsis* *macronyx* Scott A., 1909</td>
+    <td>1.68-2.10</td>
+    <td>1.55-1.80</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontellopsis* *perspicax* (Dana, 1849)</td>
+    <td>2.60-5.35</td>
+    <td>2.25-3.20</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontellopsis* *regalis* (Dana, 1849)</td>
+    <td>2.65-4.50</td>
+    <td>2.54-3.58</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontellopsis* *strenua* (Dana, 1849)</td>
+    <td>1.88-2.80</td>
+    <td>2.25-2.85</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontellopsis* *tenuicauda* (Giesbrecht, 1889)</td>
+    <td>1.55-2.30</td>
+    <td>1.35-1.74</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontellopsis* *villosa* Brady, 1883</td>
+    <td>1.95-3.00</td>
+    <td>1.80-2.83</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pontellopsis* *yamadae* Mori, 1937</td>
+    <td>2.24-2.87</td>
+    <td>2.05-2.50</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+<table><br>
+
+
+**PSEUDOCYCLOPIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Pseudocyclops* *lepidotus* Barr & Ohtsuka, 1989</td>
+    <td>0.90</td>
+    <td>0.73</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>i</td>
+    <td>Hb</td>
+  </tr>
+  <tr>
+    <td>*Pseudocyclops* *xiphophorus* Wells, 1967</td>
+    <td>0.63-0.76</td>
+    <td>0.63-0.73</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>Hb</td>
+  </tr>
+<table><br>
+
+
+**PSEUDODIAPTOMIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *annandalei* Sewell, 1919</td>
+    <td>1.05-1.38</td>
+    <td>0.94-1.13</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *bispinosus* Walter, 1984</td>
+    <td>1.15-1.30</td>
+    <td>0.94-1.10</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *bulbosus* (Shen & Tai, 1964)</td>
+    <td>1.33</td>
+    <td>0.89</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>b</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *forbesi* (Poppe & Richard, 1890)</td>
+    <td>1.15-1.40</td>
+    <td>1.06-1.20</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>b</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *galletti* (Rose, 1957)</td>
+    <td>1.20-1.30</td>
+    <td>1.00-1.10</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *incises* Shen & Lee, 1963</td>
+    <td>1.15</td>
+    <td>0.85</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>b</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *inflatus* Shen & Tai, 1964</td>
+    <td>unknown</td>
+    <td>1.02</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>b</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *inopinus* Burckhardt, 1913</td>
+    <td>1.10-2.20</td>
+    <td>0.90-1.85</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *ishigakiensis* Nishida, 1985</td>
+    <td>1.20-2.91</td>
+    <td>1.01-1.05</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *koreanus* Soh, Kwon, Lee & Yoon, 2012</td>
+    <td>1.30-1.50</td>
+    <td>1.10-1.20</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *marinus* Sato, 1913</td>
+    <td>1.21-1.45</td>
+    <td>0.85-1.20</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *nihonkaiensis* Hirakawa, 1983</td>
+    <td>1.08-1.30</td>
+    <td>0.85-1.28</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>  
+  <tr>
+    <td>*Pseudodiaptomus* *ornatus* (Rose, 1957)</td>
+    <td>2.10-2.32</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *pacificus* Walter, 1986</td>
+    <td>0.98-1.25</td>
+    <td>0.80-0.98</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *poplesia* (Shen, 1955)</td>
+    <td>2.00-2.56</td>
+    <td>1.50-1.80</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>b/i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *serricaudatus* (Scott T., 1894)</td>
+    <td>1.03-1.52</td>
+    <td>0.96-1.29</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *spatulatus* (Shen & Tai, 1964)</td>
+    <td>1.35</td>
+    <td>1.05</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Pseudodiaptomus* *trihamatus* Wright S., 1937</td>
+    <td>1.10-1.32</td>
+    <td>0.94-1.08</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+<table><br>
+
+
+**RHINCALANIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Rhincalanus* *gigas* Brady, 1883</td>
+    <td>7.20-10.0</td>
+    <td>6.90-7.20</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Rhincalanus* *nasutus* Giesbrecht, 1888</td>
+    <td>2.82-6.10</td>
+    <td>2.70-4.50</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Rhinclanuls* *rostrifrons* (Dana, 1849)</td>
+    <td>2.41-3.80</td>
+    <td>2.40-2.95</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+<table><br>
+
+
+**SCOLECITRIACHIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Amallothrix* *arcuata* (Sars G.O., 1920)</td>
+    <td>218-2.96</td>
+    <td>2.34-3.40</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Amallothrix* *curticauda* (Scott A., 1909)</td>
+    <td>5.70-6.00</td>
+    <td>4.70</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Amallothrix* *falcifer* (Farran, 1926)</td>
+    <td>1.80-2.20</td>
+    <td>1.98-2.81</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Amallothrix* *gracilis* (Sars G.O., 1905)</td>
+    <td>3.00-4.50</td>
+    <td>3.30-4.44</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Amallothrix* *robusta* (Scott T., 1894)</td>
+    <td>2.48-3.10</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>M?</td>
+  </tr>
+  <tr>
+    <td>*Amallothrix* *tenuiserrata* (Giesbrecht, 1893)</td>
+    <td>1.00-1.22</td>
+    <td>1.00-1.45</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Amallothrix* *timida* (Tanaka, 1962)</td>
+    <td>1.50-1.84</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>vl</td>
+    <td>o</td>
+    <td>M?</td>
+  </tr>
+  <tr>
+    <td>*Amallothrix* *tropica* (Grice, 1962)</td>
+    <td>1.13-1.30</td>
+    <td>unknown</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>?</td>
+  </tr>
+  <tr>
+    <td>*Amallothrix* *valens* (Farran, 1926)</td>
+    <td>2.28-2.74</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Amallothrix* *valida* (Farran, 1908)</td>
+    <td>2.10-4.50</td>
+    <td>4.00-5.35</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Archescolecithrix* *auropecten* (Giesbrecht, 1893)</td>
+    <td>1.90-2.75</td>
+    <td>1.95-2.43</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Bradfordiella* *fowleri* (Farran, 1926)</td>
+    <td>1.44-2.04</td>
+    <td>1.60-1.90</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Lophothrix* *frontalis* Giesbrecht, 1895</td>
+    <td>4.75-7.40</td>
+    <td>4.50-6.00</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Lophothrix* *latipes* (Scott T., 1894)</td>
+    <td>2.65-3.30</td>
+    <td>2.96-3.19</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Macandrewella* *cochinensis* Gopalakrishnan, 1973</td>
+    <td>3.00-3.15</td>
+    <td>2.90-2.95</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o?</td>
+    <td>?</td>
+  </tr>
+  <tr>
+    <td>*Macandrewella* *joanae* Scott A., 1909</td>
+    <td>3.60</td>
+    <td>3.40</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Macandrewella* *omorii* Ohtsuka, Nishida & Nakaguchi, 2002</td>
+    <td>3.32-3.54</td>
+    <td>3.38-4.05</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>?</td>
+    <td>?</td>
+  </tr>
+  <tr>
+    <td>*Macandrewella* *scotti* Sewell, 1929</td>
+    <td>3.20</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>?</td>
+    <td>?</td>
+  </tr>
+  <tr>
+    <td>*Macandrewella* *stygiana* Ohtsuka, Nishida & Nakaguchi, 2002</td>
+    <td>3.23-3.84</td>
+    <td>3.25-3.81</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>?</td>
+    <td>?</td>
+  </tr>
+  <tr>
+    <td>*Macandrewella* *tuberculata* Chen, 1987</td>
+    <td>3.40</td>
+    <td>3.40</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>?</td>
+    <td>?</td>
+  </tr>
+  <tr>
+    <td>*Mixtocalanus* *alter* (Farran, 1929)</td>
+    <td>1.98-2.76</td>
+    <td>2.30</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Pseudoamallothrix* *emarginata* (Farran, 1905)</td>
+    <td>2.50-5.60</td>
+    <td>3.60-4.25</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Pseudoamallothrix* *ovata* (Farran, 1905)</td>
+    <td>1.48-2.66</td>
+    <td>1.38-2.93</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Racovitzanus* *levis* Tanaka, 1961</td>
+    <td>1.80-2.00</td>
+    <td>1.67-1.75</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Scaphocalanus* *affinis* (Sars G.O., 1905)</td>
+    <td>3.60-5.40</td>
+    <td>2.80-5.00</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Scaphocalanus* *brevicornis* (Sars G.O., 1900)</td>
+    <td>1.90-2.66</td>
+    <td>1.90-3.40</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Scaphocalanus* *echinatus* (Farran, 1905)</td>
+    <td>1.60-2.56</td>
+    <td>1.26-2.36</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Scaphocalanus* *magnus* (Scott T., 1894)</td>
+    <td>3.55-5.60</td>
+    <td>4.02-5.28</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Scaphocalanus* *major* (Scott T., 1894)</td>
+    <td>2.20-3.16</td>
+    <td>1.80-3.30</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Scaphocalanus* *medius* (Sars G.O., 1907)</td>
+    <td>2.00-2.56</td>
+    <td>1.82</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Scolecithricella* *abyssalis* (Giesbrecht, 1888)</td>
+    <td>1.70-2.21</td>
+    <td>1.45-2.25</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Scolecithricella* *dentata* (Giesbrecht, 1893)</td>
+    <td>1.21-2.07</td>
+    <td>1.30-1.94</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Scolecithricella* *globulosa* Brodsky, 1950</td>
+    <td>1.65-2.16</td>
+    <td>2.10-2.28</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Scolecithricella* *longifurca* (Giesbrecht, 1888)</td>
+    <td>1.25-2.00</td>
+    <td>1.20-1.53</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Scolecithricella* *longispinosa* Chen & Zhang, 1965</td>
+    <td>1.02-1.20</td>
+    <td>0.86-1.20</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Scolecithricella* *marginata* (Giesbrecht, 1888)</td>
+    <td>1.00-1.05</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Scolecithricella* *minor* (Brady, 1883)</td>
+    <td>1.08-1.70</td>
+    <td>1.20-1.46</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Scolecithricella* *nicobarica* (Sewell, 1929)</td>
+    <td>1.08-1.50</td>
+    <td>1.04-1.50</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Scolecithricella* *vittata* (Giesbrecht, 1893)</td>
+    <td>1.48-2.00</td>
+    <td>1.60-2.00</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Scolecithrix* *bradyi* Giesbrecht, 1888</td>
+    <td>1.08-1.61</td>
+    <td>1.00-1.56</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Scolecithrix* *danae* (Lubbock, 1856)</td>
+    <td>1.80-2.52</td>
+    <td>1.65-2.44</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Scolecitrichopsis* *ctenopus* (Giesbrecht, 1888)</td>
+    <td>1.25-1.65</td>
+    <td>1.30-1.90</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Scolecocalanus* *spinifer* Wilson C.B., 1950</td>
+    <td>4.38</td>
+    <td>4.25</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Scottocalanus* *farrani* Scott A., 1909</td>
+    <td>3.50</td>
+    <td>3.50-3.54</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Scottocalanus* *helenae* (Lubbock, 1856)</td>
+    <td>3.18-4.40</td>
+    <td>3.80-4.81</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Scottocalanus* *persecans* (Giesbrecht, 1895)</td>
+    <td>3.70-5.76</td>
+    <td>4.30-5.30</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Scottocalanus* *rotundatus* Tanaka, 1961</td>
+    <td>4.00-4.07</td>
+    <td>4.38</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M?</td>
+  </tr>
+  <tr>
+    <td>*Scottocalanus* *securifrons* (Scott T., 1894)</td>
+    <td>3.38-4.90</td>
+    <td>3.79-5.33</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Scottocalanus* *sedatus* Farran, 1936</td>
+    <td>3.18-3.40</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Scottocalanus* *terranovae* Farran, 1929</td>
+    <td>3.60-3.90</td>
+    <td>3.60-4.20</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Scottocalanus* *thomasi* Scott A., 1909</td>
+    <td>4.95-6.08</td>
+    <td>5.48-6.00</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Scottocalanus* *thori* With, 1915</td>
+    <td>4.41-5.76</td>
+    <td>4.51-5.30</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+<table><br>
+
+
+**SPINOCALANIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Mimocalanus* *cultrifer* Farran, 1908</td>
+    <td>1.00-1.95</td>
+    <td>1.14</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E-B</td>
+  </tr>
+  <tr>
+    <td>*Monacilla* *gracilis* (Wolfenden, 1911)</td>
+    <td>1.80-2.25</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Monacilla* *typica* Sars G.O., 1905</td>
+    <td>1.95-2.50</td>
+    <td>1.59-2.30</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E-B</td>
+  </tr>
+  <tr>
+    <td>*Spinocalanus* *angusticeps* Sars G.O., 1920</td>
+    <td>1.98-2.50</td>
+    <td>1.59-1.76</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Spinocalanus* *horridus* Wolfenden, 1911</td>
+    <td>1.59-3.00</td>
+    <td>2.00-2.90</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>*Spinocalanus* *magnus* Wolfenden, 1904</td>
+    <td>1.87-3.10</td>
+    <td>1.80-2.43</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Spinocalanus* *oligospinosus* Park, 1970</td>
+    <td>1.20-1.50</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M/B</td>
+  </tr>
+  <tr>
+    <td>*Spinocalanus* *spinosus* Farran, 1908</td>
+    <td>1.37-2.40</td>
+    <td>1.90</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+  <tr>
+    <td>*Spinocalanus* *usitatus* Park, 1970</td>
+    <td>1.38-2.08</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>M</td>
+  </tr>
+<table><br>
+
+
+**STEPHIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Stephos* *pentacanthos* Chen & Zhang, 1965</td>
+    <td>unknown</td>
+    <td>0.75-0.80</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>Bn</td>
+  </tr>
+<table><br>
+
+
+**SUBEUCALANIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Subeucalans* *crassus* (Giesbrecht, 1888)</td>
+    <td>2.10-4.60</td>
+    <td>2.40-3.50</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Subeucalans* *dentatus* (Scott A., 1909)</td>
+    <td>2.25-2.60</td>
+    <td>1.15-1.20</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Subeucalans* *longiceps* (Matthews, 1925)</td>
+    <td>3.89-5.10</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Subeucalans* *monachus* (Giesbrecht, 1888)</td>
+    <td>1.81-2.84</td>
+    <td>1.86-2.60</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Subeucalans* *mucronatus* (Giesbrecht, 1888)</td>
+    <td>2.80-3.49</td>
+    <td>2.50-3.30</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Subeucalans* *pileatus* (Giesbrecht, 1888)</td>
+    <td>1.80-2.50</td>
+    <td>1.80-2.25</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Subeucalans* *subcrassus* (Giesbrecht, 1888)</td>
+    <td>1.84-2.92</td>
+    <td>1.67-2.74</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E/M</td>
+  </tr>
+  <tr>
+    <td>*Subeucalans* *subtenuis* (Giesbrecht, 1888)</td>
+    <td>1.80-3.53</td>
+    <td>2.48-3.08</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+<table><br>
+
+
+**TEMORIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Temora* *discaudata* Giesbrecht, 1889</td>
+    <td>1.11-2.05</td>
+    <td>1.50-1.97</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Temora* *longicornis* (Müller O.F., 1785)</td>
+    <td>0.80-1.66</td>
+    <td>0.82-1.65</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Temora* *stylifera* (Dana, 1849)</td>
+    <td>1.19-2.05</td>
+    <td>1.01-1.88</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Temora* *turbinata* (Dana, 1849)</td>
+    <td>0.95-1.70</td>
+    <td>0.89-1.56</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/o</td>
+    <td>E</td>
+  </tr>
+<table><br>
+
+
+**THARYBIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Neoscolecithrix* *japonica* Ohtsuka, Boxshall & Fosshagen, 2003 </td>
+    <td>3.23-3.33</td>
+    <td>3.31-3.41</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>o</td>
+    <td>Hb</td>
+  </tr>
+  <tr>
+    <td>*Neoscolecithrix* *koehleri* Canu, 1896</td>
+    <td>3.00-4.00</td>
+    <td>3.50-4.00</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Tharybis* *elongata* sp. nov. </td>
+    <td>3.91-0.94</td>
+    <td>0.96</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>I</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Undinella* *spinifer* Tanaka, 1960</td>
+    <td>2.78</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+<table><br>
+
+
+**TORTANIDAE**
+
+<br><table>
+  <tr>
+    <td>Taxon </td>
+    <td>♀size mm</td>
+    <td>♂size mm</td>
+    <td>BS</td>
+    <td>YS</td>
+    <td>ES</td>
+    <td>ET</td>
+    <td>TS</td>
+    <td>SS</td>
+    <td>i/o</td>
+    <td>depth</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Atortus*) *brevipes* Scott A., 1909</td>
+    <td>2.30</td>
+    <td>unknown</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Atotus*) *digitalis* Ohtsuka & Kimoto, 1989</td>
+    <td>2.74-2.84</td>
+    <td>1.82-1.96</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>i</td>
+    <td>Bn</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Atotus*) *erabuensis* Ohtsuka, Fukura & Go, 1987 </td>
+    <td>2.42-2.44</td>
+    <td>2.04-2.20</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>i</td>
+    <td>Bn</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Atotus*) *murrayi* Scott A., 1909</td>
+    <td>2.50-2.65</td>
+    <td>2.25</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Atotus*) *recticaudus* (Giesbrecht, 1889)</td>
+    <td>1.80-2.00</td>
+    <td>1/60-1.85</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Atotus*) *ryukyuensis* Ohtsuka & Kimoto, 1989</td>
+    <td>2.08-2.26</td>
+    <td>1.66-1.88</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Atotus*) *scaphus* Bowman, 1971</td>
+    <td>1.94-2.80</td>
+    <td>1.98-2.40</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Atotus*) *sinicus* Chen, 1983</td>
+    <td>1.57</td>
+    <td>1.46</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Atotus*) *taiwanicus* Chen & Hwang, 1999</td>
+    <td>2.00-2.10</td>
+    <td>1.40-1.75</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Atotus*) *tumidus* Chen, Hwang & Yin, 2004</td>
+    <td>2.65-2.75</td>
+    <td>2.25-2.40</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Atotus*) *vietnamicus* Nishida & Cho, 2005</td>
+    <td>2.12-2.22</td>
+    <td>1.82-1.95</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Eutortanus*) *derjugini* Smirnov, 1935</td>
+    <td>1.71-2.36</td>
+    <td>1.40-2.09</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Eutortanus*) *dextrilobatus* Chen & Zhang, 1965</td>
+    <td>1.54-2.25</td>
+    <td>1.53-2.05</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>b</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Eutortanus*) *sheni* Hulsemann, 1988</td>
+    <td>1.57</td>
+    <td>1.46</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Eutortanus*) *spinicaudatus* Shen & Bai, 1956</td>
+    <td>1.44-2.17</td>
+    <td>1.30-1.80</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Eutortanus*) *vermiculus* Shen, 1955</td>
+    <td>1.83-2.40</td>
+    <td>1.85-2.00</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i/e</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Tortanus*) *barbatus* (Brady, 1883)</td>
+    <td>1.32-2.10</td>
+    <td>1.05-1.12</td>
+    <td></td>
+    <td></td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Tortanus*) *forcipatus* (Giesbrecht, 1889)</td>
+    <td>1.09-2.00</td>
+    <td>0.94-1.17</td>
+    <td>v</td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>i</td>
+    <td>E</td>
+  </tr>
+  <tr>
+    <td>*Tortanus* (*Tortanus*) *gracilis* (Brady, 1883)</td>
+    <td>1.52-2.10</td>
+    <td>1.35-1.80</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td></td>
+    <td>v</td>
+    <td>v</td>
+    <td>o</td>
+    <td>E</td>
+  </tr>
+</table><br>

@@ -1,0 +1,118 @@
+
+# **INTRODUCTION** 
+
+Calanoid copepods are a well-recognized taxonomic group of Crustacea.  They were already placed, with one cyclopoid (*Scribella*) and five calanoid (*Acartia, Calanus, Candacia, Euchirus *(= *Euchaeta*)*, *and *Pontella*) genera, under a single taxonomic unit, the Calanidae, by Dana (1846).  Giesbrecht and Sars are the two early principal contributors to the taxonomy of Copepoda, including the Calanoida.
+
+Based on the location of the body articulation, Giesbrecht (1883) divided copepods into two groups, the Gymnopleoden and Podopleoden.  All copepods, characterized by an articulation between the fifth pedigerous (leg-bearing) somite and genital somite, separating the body into an anterior part (prosome) and a posterior part (urosome), were placed under the suborder Gymnoplea.  Podoplea contained all other copepods having this articulation located between the fourth and fifth pedigerous somites.  According to the structure of antennules in males, Giesbrecht further divided the Gymnoplea into two tribes, the Amphaskandria (males with both antennules similar) and Heterarthrandria (males with one of the antennules modified).
+
+Sars (1901-1903), on the other hand, suggested seven distinct types of copepods, *Calanus, Harpacticus, Cyclops, Notodelphys, Monstrilla, Caligus, *and *Lernaea*, respectively respresenting seven divisions (Suborders) of the Copepoda, i.e., Calanoida, Harpacticoida, Cyclopoida, Notodelphyoida, Monstrilloida, Caligoida, and Lernaeoida.  The Calanoida in Sars (1901-1903), corresponding to the Gymnoplea in Giesbrecht (1883), was divided into three sections: Amphascandria (both antennules in males are alike and only transformed slightly without any genicular structure, in the greater number of the genera the adult males are distinguished by a conspicuous transformation and great reduction in oral parts), Isokerandria (both antennules are without any conspicuous difference and oral part of much the same appearance in the two sexes), and Heterarthrandria (one of the antennules in male similar to that in female, the other peculiarly transformed into a powerful grasping organ).
+
+Modifications of classification within the Calanoida have then been proposed and were reviewed by Huy & Boxshall (1991).  In 1974, Andronov proposed the phylogenetic relationships of the higher taxa within the Order Calanoida, and included nine superfamilies: Augapatiloidea, Bathypontioidea, Centropagoidea, Eucalanoidea, Megacalanoidea, Platycopioidea, Pseudocyclopoidea, Pseudocalanoidea, and Riocalanoidea.  As the results of Andronov’s (1991) change of names of some superfamilies to conform with the International Code of Zoological Nomenclature and subsequently Boxshall and Halsey’s (2004) amendment, the Order Calanoida now consists of ten superfamilies and 43 families (30 families, highlighted in red color, present in the China seas ): **Order Calanoida Sars, 1903** (30; 105; 565)(= number of families, genera and species occurring in the China seas)
+
+1. **Superfamily Arietelloidea Sars, 1902 (changed from Augaptiloidea)** (24, 138)
+
+    - Family <span style="color:red">Arietellidae</span> Sars, 1902 (4; 16)
+
+    - Family <span style="color:red">Augaptilidae</span> Sars, 1902 (7; 44)
+
+    - Family Discoidae Gordejeva, 1975
+
+    - Family <span style="color:red">Heterorhabdidae</span> Sars, 1902 (7; 36)
+
+    - Family Hyperbionychidae Ohtskua, Roe et Boxshall, 1993
+
+    - Family <span style="color:red">Lucicutiidae</span> Sars, 1902 (1; 19)
+
+    - Family <span style="color:red">Metridinidae</span> Sars, 1902 (3; 17)
+
+    - Family <span style="color:red">Nullosetigeridae</span> Ohtsuka, Imabayashi et Suh, 1999 (1; 6)
+
+2. **Superfamily Bathypontioidea Brodsky, 1950** (1, 7)
+
+    - Family <span style="color:red">Bathypontiidae</span> Brodsky, 1950 (1; 7)
+
+3. **Superfamily Calanoidea Dana, 1846** (17, 48)
+
+    - Family <span style="color:red">Calanidae</span> Dana, 1846 (8; 14)
+
+    - Family <span style="color:red">Megacalanidae</span> Sewell, 1947 (2; 3)
+
+    - Family <span style="color:red">Paracalanidae</span> Giesbrecht, 1893 (7; 31)
+
+4. **Superfamily Clausocalanoidea Giesbrecht, 1893 (changed from Pseudocalanoidea)** (41, 186)
+
+    - Family <span style="color:red">Aetideidae</span> Giesbrecht, 1893 (12; 65)
+
+    - Family <span style="color:red">Clausocalanidae</span> Giesbrecht, 1893 (5; 18)
+
+    - Family Diaixidae Sars,1902
+
+    - Family <span style="color:red">Euchaetidae</span> Giesbrecht, 1893 (2; 36)
+
+    - Family Mesaiokeratidae Matthews, 1961
+
+    - Family <span style="color:red">Phaennidae</span> Sars, 1902 (4; 9)
+
+    - Family Pseudocyclopiidae Sars, 1902
+
+    - Family <span style="color:red">Scolecitrichidae</span> Giesbrecht, 1893 (14; 54)
+
+    - Family <span style="color:red">Stephidae</span> Sars, 1902 (1; 1)
+
+    - Family <span style="color:red">Tharybidae</span> Sars, 1902 (2; 3)
+
+5. **Superfamilly Diaptomoidea Baird, 1850 (changed from Centropagoidea)** (15, 157)
+
+    - Family <span style="color:red">Acartiidae</span> Sars, 1902 (2; 25)
+
+    - Family <span style="color:red">Candaciidae</span> Giesbrecht, 1893 (1; 20)
+
+    - Family <span style="color:red">Centropagidae</span> Giesbrecht, 1893 (2; 17)
+
+    - Family Diaptomidae Baird, 1850
+
+    - Family <span style="color:red">Fosshagenidae</span> Suárez-Morales et Iliffe, 1996 (1; 1)
+
+    - Family Parapontellidae Giesbrecht, 1893
+
+    - Family <span style="color:red">Pontellidae</span> Dana, 1853 (6; 53)
+
+    - Family <span style="color:red">Pseudodiaptomidae</span> Sars,1902 (1; 18)
+
+    - Family Sulcanidae Nicholls 1945
+
+    - Family <span style="color:red">Temoridae</span>, 1893 (1; 4)
+
+    - Family <span style="color:red">Tortanidae</span> Sars, 1902 (1; 19)
+
+6. **Superfamily Epacteriscoidea Fosshagen, 1973** (home to new families)
+
+    - Family Epacteriscidae Fosshagen, 1973
+
+    - Family Ridgewayiidae M.S.Wilson, 1958  (Now part of the Pseudocyclopidae)
+
+7. **Superfamily Eucalanoidea Giesbrecht, 1893** (4, 18)
+
+    - Family <span style="color:red">Eucalanidae</span> Giesbrecht, 1893 (2; 7)
+
+    - Family <span style="color:red">Rhincalanidae</span> Geletin, 1975 (1; 3)
+
+    - Family <span style="color:red">Subeucalanidae</span> Giesbrecht, 1893 (1, 8)
+
+8. **Superfamily Pseudocyclopoidea Giesbrecht, 1893** (1, 2)
+
+    - Family Boholinidae Fosshagen & Iliffe, 1989  (Now part of the Pseudocyclopidae)
+
+    - Family <span style="color:red">Pseudocyclopidae</span> Giesbrecht, 1893 (1; 2)
+
+9. **Superfamily Ryocalanoidea Andronov, 1974**
+
+    - Family Ryocalanidae Andronov, 1974
+
+10. **Superfamily Spinocalanidea Vervoort, 1951 (split from Pseudocalanoidea)** (3, 9)
+
+    - Family <span style="color:red">Spinocalanidae</span> Vervoort, 1951 (3; 9)
+
+Platycopioidea is now an independent order by itself.  Several changes at the family level have been reported.  Boholinidae and Ridgewayiidae are now part of the Pseudocyclopidae.  A new family, Kyphocalanidae, was established by Markhaseva & Schulz (2009).
+
+Calalnoid copepods are the dominant taxa in marine zooplankton and are often being the focal point in various biological and oceanographic studies, for which reliable species identification is required.  The present project aims to provide basic taxonomic information of the species of calanoid copepods occurring in the China seas, i.e., Bohai Sea, Yellow Sea, East China Sea, Taiwan Strait, South China Sea, and east of Taiwan.  The website, *[http://copepodes.obs-banyuls.fr/en](http://copepodes.obs-banyuls.fr/en)*, *managed by Razouls, C., F. de Bovée, J. Kouwenberg & N. Desreumaux (2005-2919)*, has been frequently consulted.

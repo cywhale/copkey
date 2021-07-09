@@ -1,0 +1,13 @@
+book_filename: "copbook"
+language:
+  ui:
+    chapter_name: ""
+delete_merged_file: true
+rmd_files: ["index.Rmd",
+            "introduction.Rmd",
+            "morphology-of-the-calanoida.Rmd",
+            "taxonomy-of-calanoida.Rmd",
+            "distribution.Rmd",
+            "list-of-species-known-to-occur-in-the-china-seas.Rmd",
+            "references.Rmd"
+           ]

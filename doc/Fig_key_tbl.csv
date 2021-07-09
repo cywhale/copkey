@@ -1,0 +1,231 @@
+Fig,Key,Taxon,Characters,Remarks
+1,1a ,Labidocera (siniloba),Female dorsal: head with 2 lenses,
+2,"1a, 2a",Cephalophanes (refulgens),Female dorsal: 2 large contiguous lenses on head,
+3,"3a, 6b",Labidocera (siniloba),Female P1: 2-segmented Ri,
+4,"3b, 6a",Pontella (securifer),Female P1: 3-segmented Ri,
+5,5a,Pleuromamma (xiphias),Female P3: 3-segmented Ri,
+6,5b,Acartiella (sinensis),Female P3: 2-segmented Ri,
+7,6c,Macandrewella (cochinensis),Female P1: 1-segmented Ri,
+8,7a,Pleuromamma (robusta),Female: dorsal/lateral,
+9,7a,Pleuromamma (robusta),Female: dorsal/lateral,
+10,8a,Metridia (asymmetrica),Female: P2Ri1 with an inner hook bent upward toward basis of the leg,
+11,9a,Gaussia (asymmetrica),Female: dorsal (anal somite with a backward directed process on each side),
+12,10a,Megacalanus (princeps),Female P1 basis with a reflexed hook on inner distal corner,
+13,11a,Pseudodiaptomus (serricaudatus),Female P3/4: Re3 with 2 outer spines,
+14,11b,Disseta (palumbii),Female P3: Re 3 with 3 outer spines,
+15,12a,Pseudodiaptomus (serricaudatus),Female P4: Re3 terminal spine with toothed outer margin,
+16,12b,Neocalanus (gracilis),Female P3: Re3 terminal spine with blade-like outer margin,
+17,12b,Calanus (sinicus),"Male P5: biramous, left leg variously modified",
+18,13a,Pseudodiaptomus (trihamatus),"Female P5: uniramous, 3 or 4-segmented",
+19,13a,Pseudodiaptomus (trihamatus),"Male P5: biramous, Ri 2 or 3-segmented; Ri rudimentary/absent",
+20,13b,Pontoptiluls (mucronatus),"Male P5: biramous, 3-segmented, highly similar to female P5","Sars 1924: pl. 91, fig. 5."
+21,13c,Sinocalanus (doerrii),Female P5: Re2 inner distal expansion forming long process,
+22,13c,Sinocalanus (doerrii),"Male P5: biramous, 2-segmented",
+23,"14a, 15a",Nannocalanus (minor),Female P5: coxa with toothed inner margin (less than 16 teeth),
+24,14b,Canthocalanus (pauper),Female P5: coxa with naked inner margin,
+25,15a,Nannocalanus (minor),"Male P5: Left leg, Re2 inner distal corner expanded, Re1/2 outer spine elongated; right leg Re3 with 2 inner setae",
+26,15b,Calanus (sinicus),Female P5: inner margin of coxa with >16 teeth,
+27,15b,Calanus (sinicus),"Male P5: left leg Re2 inner distal corner not expanded, Re1/2 outer spine short; right leg Re3 without inner setae",
+28,15c,Cosmocalanus (darwini),"Male P5: right leg similar to P1-4; left leg, Re highly modified & large, Ri rudimentary, 1-segmented",
+29,16a,Undinula (vulgaris),P2: Re2 with evaginated outer proximal margin,
+30,16a,Undinula (vulgaris),Left P5: prehensile,
+31,17a,Canthocalanus (pauper),P1: basis with distally directed seta on anterior surface to proximally thickened hook,
+32,17a,Canthocalanus (pauper),Male left P5: Ri with 2 setae,
+33,"18b, 19a",Neocalanus (gracilis),P2Re1 with recurved spine at outer distal corner,
+34,20b,Centropages (abdominalis),Male: right A1 (in lateral view of whole animal),
+35,"21b, 39a",Nullosetigera (auctiseta),"Female P5: uniramous (coxa, basis, 3-segmented exopod)",
+36,"21b, 39b, 40a ",Paraugaptilus (buchani),Female P5: uniramous,"Wolfenden 1904: pl.9, fig.45"
+37,"21b, 39b, 40b",Arietellus (tripartitus),Female P5: uniramous,
+38,22a,Euaugaptilus hecticus,"Female P5: biramous, 2-segmented",Bradford-Grieve 1999: fig. 24C
+39,23a,Lucicutia (aurita),Caudal rami: 3 times or more as long as wide,
+40,23b,Pseudhaloptilus (pacificus),Female P5: Re 3-segmented; Ri 1-segmented,"Tanaka 1964, fig. 218h"
+41,"23c, 24a",Centropages (gracilis),Female P5:Re2 inner distal corner forming a spinous process,
+42,24b,Hemirhabdus (grimaldi),Female P5: Re2 inner margin with a sabaer-like spine,
+43,"25a, 50a",Hemirhabdus (grimaldi),Left caudal ramus: one seta longer/stronger than other setae,
+44,26a,Disseta (palumbii),Mx1: Re about reaching distal end of Ri,
+45,26a,Disseta (palumbii),Mx2: without strong hooked setae,
+46,26b,Hemirhabdus (grimaldi),Mx1: Re reaching far beyond distal end of Ri,
+47,26b,Hemirhabdus (grimaldi),Mx2: with strong hooked setae,
+48,27a,Mesorhabdus (gracilis),Mx1: 1 seta of praecoxal arthrite transformed to a large spine,Park 2000: fig. 13e
+49,28a,Heterostylites (longicornis),Male P5: Re2 enlarged,Park 2000: fig. 25b
+50,28a,Heterostylites (longicornis),Female P5: Re2 with serrate distal margin,Park 2000: fig. 25a
+51,29a,Hemirhabdus (grimaldi),Mx2: deistal praecoxal endite absent,
+52,30a,Neorhabdus (latus),Mx2: 1 seta of each coxal endit strong/curved; setae of proximall coxal endit longer than setae of distal endite,Park 2000: fig. 35b
+53,"30b, 31a",Hemirhabdus (grimaldi),Mx2: no setae of coxal endites curaved; seta of proximal coxal endite shorter than setae of distal coxal endite. Basal endite with a large spine and a small seta,  
+54,31b,Heterorhabdus (spinifrons),Mx2: basal endite with 2 large spines,Park 2000: fig. 60g
+55,33a,Bathycalanus (richardi),Rostrum strong and sausage-like,
+56,33b,Pseudocyclops (ensiger),Rostrum undivided and strongly pointed,Ohtsuka et al. 1999: fig. 4C
+57,"35a, 60a",Augaptilus (longicaudatus),Mx1: reduced to a 3-segmented rod,
+58,36a,Euaugaptilus (magnus),"Md: gnathobase with many teeth, often cut obliquely",
+59,36b,Centraugaptilus (horridus),"Md: gnathobase elongated, with 2 thin curved teeth and a smaller tooth between them",
+60,"36b, 57a",Centraugaptilus,"Rostrum: strong, bifurcate, projecting forward",
+61,36b,Centraugaptilus (horridus),"Mxp: setae coiled, carrying special shields",
+62,38a,Pseudhaloptilus (orientalis),"Md: gnathobase a long rod, finely toothed at the tip",Tanaka 1964: fig. 216g
+63,38b,Haloptilus (longicornis),"Md: gnathobase with 2-4 (or more) teeth, dorsal tooth largest/far apart from other teetn",
+64,40a,Scutogerulus (boettgerschnackae),P1: Re3 with 1 outer spine,Ohtsuka/Boxshall 2004: fig. 4A
+65,42a,Metacalanus (acutioperculum),"Female P5: 2-segmented, seg. 2 with 1 terminal spine, 1 inner plumose seta near distal end, 1dorsal spine near distal margin",
+66,42b,Arietellus (plumifer),"Female P5:3-segmented, seg.3 (Re) with 1 distal spine; seg. 2 with an inner distal knob (Ri) with 2-3 setae",
+67,44a,Euaugaptilus (hecticus),"Male P5: both legs nearly equal, without pincer",
+68,46b,Temorites (elongata),"Male P5: both legs uniramous, 3 to 4-segmented",
+69,"47a, 177a",Centropages (tenuiremis),"Male P5: left leg similar to other legs; right leg, inner margin of Re2 extended, forming a pincer with Re3",
+70,47b,Pseudocyclops,"Male P5: highly asymmetrical. Right P5 with 1/2-segmented Re, Re2 bearing 2 strong curved apical claws and 2-3 armature elements; Ri 1-segmented, unarmed, lobate or hook-like. Left P5: Re 1-2-segmented, armed with numerous processes on distal margin, Ri 1-segmented, with up to 5 marginal setae",
+71,48a,Metacalanus (aurivilli),"Male P5: symmetrical, uniramous, 4/5-segmented both legs",
+72,52a,Heterostylites (longioperculis),"Male P5: right leg inner margin of basis expanded, not forming a process; left leg Re3 with an inner spine and a terminal pointed process",
+73,53a,Hemirhabdus (grimaldi),"Male RP5: inner margin of basis expanded, no process; LP5: Re3 with an inner spine and a terminal pointed process",
+74,54a,Neorhabdus (latus),"Male LP5: Re3 with a terminal spine; RP5: Re2 with a horizontal process, extending from middle of inner margin",Park 2000: fig. 188f
+75,55a,Mesorhabdus (angustus),"Male RP5: Re2 with an inner horizontal cylindrical process, often extending from distal end of inner margin; LP5Re3 with a terminal process",Park 2000:fi. 14J
+76,56a,Paraheterorhabdus (robustus),Mx2: basal endite with a large spine & a small seta,
+77,56b,Heterorhabdus (insukae),Mx2: basal endite with 2 large spines,
+78,57a,Centraugaptilus (horridus),"Mxp: terminal setae coiled, crooked-shaped, with special shields",
+79,58a,Pseaudaugaptilus (longiremis),"Male P5: Re smooth without spines/setae but a final point; Ri2 with 1 inner seta, Ri3 with 4 setae","Sars 1924: pl. 108, fig. 17"
+80,59a,Haloptilus (fertilus),Male P5: Re2 without inner point,"Giesbrecht 1892: pl. 27, fig. 36"
+81,59b,Augaptilus (longicornis),Mxp: with numerous shields on setae,"Wolfenden 1902: pl.3, fig. 12"
+82,59b,Augaptilus (anceps),"Male P5: Re2 with at least one inner point, sometimes small",Tanaka 1964: fig. 211k
+83,61a,Nullosetigera (bidentata),"Male P5: left Ri large, leaf form; right Ri lacking",
+84,"61b, 62a",Arietellus (setosus),Male P5: left Ri bilobed; borth Re not enlarged,
+85,"61b,62b",Paraugaptilus (buchani),"Male P5: biramous on both legs; left Ri not bilobed, Re last segment in both legs widely enlarged",
+86,62,Lucicutia (curta),Male P5: biramous on both legs; right P5: Re/Ri 2-segmented; left P5: Re/Ri 3-segmented,
+87,65a,Temorites (brevis),P3/4: Ri2 with 2 setae; Ri3 with 7 setae,"Vervoort 1957, fig. 105c"
+88,66a,Temoropia (mayumbaensis),"Female P5: biramous, Ri sometimes reduced to a spine",
+89,66a,Temoropia (mayumbaensis,"Male P5: Left P5 uniramous, rightP5 biramous, Ri reduced to an elongate spine, Re broad, inner distal corner of distal segment forming a lobular process armed with spinous serration on distal margin",
+90,67a,Chiridiella (brachydactyla),Male P5: biramous on both legs,"Tanaka 1957, fig. 36j"
+91,67b,Rhincalanus (rostrifrons),Male P5: right leg uniramous; left leg biramous,
+92,67b,Subeucalanus (subtenuis),Male P5: uniramous on one side; absent on other side,
+93,67b,Eucalanus (hyalinus),Male P5: uniramous on both legs,
+94,68a,Rhincalanus (rostrifrons),Some or all of pedigerous somites 2-4 & urosomite 1 with spines on posterior margin,
+95,69a,Subeucalanus (subtenuis),A2 Re1/2 fused,
+96,69a,Subeucalanus (subtenuis),Md: Re inserted terminally on basis,
+97,69a,Subeucalanus (subtenuis),"Mx1: with 3 inner lobes (praecoxal artahrite, coxal endite & one of the basal endites",
+98,69b,Eucalanus (hyalinus),Md: Re inserted at or beyond midlength on basis,
+99,69b,Eucalanus (hyalinus),"Mx1: Mx1 with 4 inner lobes (praecoxal, coxal, 2 basal)",
+100,70a,Eucalanus (hyalinus),"Md: basis with 1 or 3 setae, Re inserted beyond midlength on basis",
+101,70a,Eucalanus (hyalinus),Male P5: right leg extending to or beyond distal margin of left leg segment 2,
+102,70b,Pareucalanus (attenuatus),"Md: basis with 2 or 4 setae, Re inserted at midlength on basis",
+103,70b,Pareucalanus (attenuatus),Male P5: right leg not extending beyond distal margin of left leg segment 2,"Vervoort 1963, fig. 3g"
+104,72a,Paracalanus (nanus),P2-4: Re3 with teeth on outer margin ,
+105,72a,Calocalanus (contractus),"Female P5: uniramous on both legs, 3 to 4-segmented","C/Z 1974: Pl5,fig. 59"
+106,72a,Calocalanus (contractus),"Male P5: uniramous on bth legs, left leg 5-, right leg 4-segmented","C/Z 1974: Pl5,fig. 61"
+107,72a,Calocalanus (contractus),"Female: genital double somite swollen, projecting laterally","C/Z 1974: Pl5,fig. 56"
+108,72a,Calocalanus (contractus),"Male: anal somite well developed & swollen, usually longer than combined length of urosomites 2 & 3","C/Z 1974: Pl5,fig. 60"
+109,73a,Delibus (nudus),"P5 present on left leg only: female, 2-segmented","J. Corral Estrada 1970: pl. 20, fig. 9"
+110,73a,Delibus (nudus),"P5 present on left leg only: male, 5-segmented","J. Corral Estrada 1970: pl. 21, fig. 9"
+111,73b,Bestiolina (sinica),Female P5: rudimentary or knob-like,"Shen & Lee 1966, fig. 16"
+112,73b,Bestiolina (sinica),"Male P5: left leg elongate, right leg knob-like","Shen & Lee 1966, fig. 17"
+113,74a,Acrocalanus (gibber),"Male P5: only left leg present, uniramous",
+114,"74b, 75a",Paracalanus (parvus),Female P5: distal segment inner terminal seta equal or longer than the segment,
+115,74b,Paracalanus (parvus),Male P5: right leg 2-segmented; left leg 5-segmented,
+116,75b,Parvocalanus (crassirostris),"Rostrum: short, solid, bifurcate",
+117,75b,Parvocalanus (crassirostris),Female P5: terminal seta about half as long as its segment,"C/Z 1965: pl. 9, fig. 10"
+118,76a,Mecynocera (clalusi),Female P5: uniramous,"C/Z 1965: pl.8, fig. 8"
+119,77a,Monacilla (typica),"P2-4: posterior surface of rami (particularlyRi of P3,4) with numbers of spines",
+120,78a,Phaenna (spinifera),"Body wide, almost globular",
+121,81a,Monacilla (typica),"Rostrum: bifurcate, thick",
+122,82a,Scolecithrix (danae),Female: genital double somite projecting ventrally,
+123,82b,Bradyidius,Rostrum with 2 points,
+124,"83a, 155b",Scolecithrix (danae),Posterolateral corner of prosoma rounded in lateral view,
+125,83b,Macandrewella (cochinensis),"Posteroalteral corner of prosoma pointed or forminga hook-like process in lateral view , sometimes asymmetrical",
+126,86a,Spinocalanlus (spinosus),"Male P5: Re 3-segmented, ending in point; Ri styliform",Schulz 1989: fig. 43
+127,86b,Monacilla (typica),"Male P5: Re 2 or 3-segmented, not pointed; right Ri styliform; left Ri lamellate",Grice 1971 fig. 3B
+128,"87a, 88a",Xanthocalanus (agilis),Male P5: uniramous and on one side only,"Giesbrecht 1892: pl. 12, fig. 18"
+129,"87a, 88b,141d, 146b ",Bradyidius (angustus),"Male P5: with both legs, always uniramous, Ri, if present, often very shortened and tapering",Tanaka 1957: fig. 29i
+130,89a,Onchocalanus (trigoniceps),Rostrum: bifurcate plate,Park 1983: fig. 9f
+131,89a,Onchocalanus (trigoniceps),Mx2: ending in a strong claw,Park 1983: fig. 8a
+132,89a,Onchocalanus (trigoniceps),"Male P 5: left leg 5-segmented; riaght leg 3-segmeted, left leg at least 5 times length of right leg 5",Park 1983: fig. 9j
+133,91a,Scolecitricopsis (ctenopus),"Male P5: right leg biramous, Ri rudimentary, Re not extended beyond basis of left leg; left leg uniramous, inner marin of Re3 armed with long and dense setae","Giesbrechat 1892: pl. 13, fig. 36"
+134,91b,Pseudamallothrix (ovata),Rostrum: shallow plate equipped with 2 digitiform filaments,Park 1980: fig.19e
+135,93a,Xanthocalanus (agilis),"Mx2: without strong worm-like appendages, often with strong spiny hooked setae","Giesbrecht 1592: pl. 12, fig. 28"
+136,93b,Scolecithrix (danae),"Mx2: with worm-like appendages, without spiny hooked setae",Park 1983: fig. 2b
+137,"93b, 99a",Scolecithrix (danae),"Male P5: right leg uniramous; left leg biramous, squat and thick without terminal stylet",Park 1983: fig. 3c
+138,94a,Farrania (frigida),"Male P5:riaght leg longer than left, Re 3-segmented, Ri 1-segmented, small; left leg Re 3-segmented; Ri 1-segmented",Grice & Hulsemann 1967: fig. 14
+139,96a,Macandrewella (omorii),"Male P5: right leg 5, Re3 unusually bifurcate & held at right angle to Re2",
+140,97a,Scottocalanus (thomasi),Male P5: left leg distal part of Re2 forming a prehensile structure with Re3; right leg Ri usually reaching distal border of Re1,
+141,98a,Scolecitrichopsis (ctenopus),Male P5: right leg Re 2-segmented; Ri absent in both legs,
+142,101a,Amallothrix (valida),Male P5: left leg Ri 2-segmented,
+143,101b,Scolecithricella (nicobarica),Male P5: left leg Ri 1-segmented,
+144,102a,Scolecocalanus (spinifer),Head with crest,Wilson 1950: fig. 528
+145,103a,Scaphocalanus (echinatus),Male P5: right leg Re1 with a protrusion at inner distal corner,Park 1982: fig. 16e
+146,105a,Archescolecithrix (auropecten),"Male P5: right leg, Re3 distal border truncated; Ri > Re1",Rose 1942: fig. 44
+147,105b,Racovitzanus (levis),"Male P5: right leg, Re3 with tapering distal end; Ri = Re1",Tanaka 1961: fig. 125
+148,106a,Pseudoamallothrix (emarginata),"Male P5: extaremely slender, right Re1 > 2Re2+3, l/w ca 25/1",Bradford et al. 1983: fig. 46f
+149,108a,Farrania (frigida),Mx2: Ri with only ordinary setae,
+150,109a,Farrania (frigida),"Female P5: uniramous, 3-segmented, segment 3 with 3 terminal spine",
+151,109b,Bradfordiella (fowleri),"Female P5: 2-segmented, distal segment with 1 long outer seta and 1 short terminal seta","Farran 1926: pl. 8, fig. 3"
+152,110a,Tharybis (elongata),"Female P5: 2-segmented, usually with a short basis and a long Re.",File not found
+153,113a,Scolecithrix (bradyi),Female P5: rudimentary & asymmetrical,File can¡¦tbe open
+154,114a,Scolecocalanus (spinifer),"Female P5: right leg absent, left leg 1-segmented, with a long terminal spine, at least 2 times longer than its segment",Wilson 1950: fig. 530
+155,"114b,115a, 117a",Scolecithricella (minor),"Female P5: present on both legs, symmetrical, 1-segmented; plate-like, wide and flat, with 3 spines, inner longest, usually 2 times or more as long as apical spine, outer spine minut or asent",
+156,"114b,115a, 117b",Scaphocalanus (brevirostris),"Female P5: on both legs, more or less symmetrical, 1-segmented, elongate, l/s > 3, with 3 spines, inner spine usualy < 2x apical spine, outer spine small or absent",
+157,"115b, 118a",Scottocalanus (persecens),"Female P5: 2 segmented, terminal segment with 1 short terminal spine and 1 very long seta near inner distal corner and longer than 2 times of its segment",
+158,"115b, 119a",Pseudoamallothrix (emarginata),"Female P5, 2 segmented, distal segment with 1 long inner seta, 1 large apical spine usually shorter than inner seta",
+159,"115b, 120a",Racovitzanus (levis),"Rostrum: lingular, terminal maagin with 2 short pointed processes",Tanaka 1961: fig. 125d
+160,"115b, 121a",Archescolecithrix (auropectens),Rostrum: short with 2 long filaments,Rose 1942: fig. 45
+161,"115b,121b",Scolecithrix (valens),"Rostrum: long,bifurcated, with 2 filaments",Park 1970: fig. 168
+162,"115c, 122a",Onchocalanus (trigoniceps),Mx2: Ri typically 1   vermiform and 7 brush-like sensoriform filaments,"Park 1983, fig. 8a"
+163,"115c, 122a",Onchocalanus (trigoniceps),Female: P5 3-segmented surface highly ornamented with spinules,"Park 1983, fig. 8i"
+164,"115c, 123a",Xanthocalanus (agilis),"Female: P5: uniramous & 3-(rarely 4)segmented, terminal segment narrower, often shorter, than other segments, with 3-4 short spines, often bearing with spinules","Giesbrecht 1892, pl.12, fig. 33"
+165,"115c, 123b",Scolecitrichopsis (ctenopus),"Female: P5 uniramous & 3-segmented, segment 3 nearly as wide as and 0.8 times as long as segment 2, distal end extended forming a sharp pointed process  distal inner margin with a strong spine about 1.5 time as long as its segment",Grice 1962: fig. 14
+166,"115c, 123c, 124a",Mixtocalanus (alter),"Female P5: uniramous, 3-segmented, distal segment ending in 2 well developed spines",Park 1980: fog/ 22o
+167,"115c, 123c, 124b",Lophothrix (frontalis),"Female P5: uniramous, 3(or 4)-segmented, distal segment with 3 sometimes 4 well developed spines",
+168,"115c, 123c, 124c",Scaphocalanus (magnus),"Female P5: uniramous 3-segmented, distal 2 segments often fused, distal segment with 3 or 4 spines, ",
+169,"115c, 123c, 124d",Amallothrix (arcuata),"Female P5: uniramous 3-segmented, distal segment with 3 spines, inner spine longest, terminal spine usually less than 1/2 length of inner spine, surface sometimes with s pinules",
+170,125a,Clausocalanus (farrani),"P2/3: coxa, basis and Re broader than those of P4, basis with toothed distal margin enlarged likea calyx",
+171,126a,Ctenocalanus (vanus),P3/4: outer spine comb-shaped,Bradford 1972: fig. 17
+172,129a,Stephos (pacificus),"Female P5: slightly asymmetrical, terminal segment finger-like, distal end forming an extended pinted process",
+173,129b,Neoscolelcithrix (japonica),"Female P5: symmetrical, terminal segment with 1 outer, 1 inner, and 2 terminal spines",
+174,"129c, 175a",Undinella (spinifera),"Female  P5: symmetrical or asymmetrical (with right leg longer thane left leg), 2-segmented, distal segment usually longer than proximal segment, with at most 5 spines, one each at inner and outer margins, and others distally",Tanaka 1960: fig. 104h
+175,"130a,150a",Gaetanus (lataifrons),Head with a dorsal median spine,
+176,"132a, 153a",Pseudochirella (dubia),P4: inner margin of cox with spines,
+177,133a,Pseudocalanus (elongatus),Prosome: posterolateral corner s rouded or with anobtuse point,Frost 1989: fig. 10A
+178,136a,Aetideus (divergens),P1: Re with 2 outer spines,
+179,"136a, 158b",Aetideus (divergens),"Rostrum: thick, the 2 points separated down to the base",
+180,137a,Aetideopsis (armata),Rostrum: large with 2 strong points,
+181,137a,Aetideopsis (armata),P2-4: terminal spine of Re3 with numerous equal teeth,Markhaseva 1966: fig. 15
+182,137b,Aetideopsis (armatus),A1: setae of last segments thick & annulated,"Sars 1903: pl. 20, fig. a1 "
+183,139a,Stephos (pentacanthos),"Male P5: uniramous, left leg p enultimate segment enlarged or not, final segment with 2 or many appendages","C/Z 1965: pl. 20, fig. 5"
+184,"140a, 165a",Aetideus (armatus),Male P5: present on left leg only,Bradford 1972: fig. 6(3)
+185,141a,Neoscolecithrix (japonica),"Male P5: right leg, exopod 2-segmented, endopod, if present, very short, 1-segmented; left leg uniramous, 5-segmented",Ohtsuka et al. 2003: fig. 3E
+186,"141b, 142a",Tharybis (macrophthalma),"Male P5: right leg uniramous, left leg biramous, Re3 inserted terminally onRe2",Andronov 202: fig. 217
+187,"141b, 142b, 175a",Undinella (gricei),"Male P5: right leg uniramous, left leg biramous, Re3 inserted subterminally onRe2",Andronov 2002: fig. 421
+188,"141c, 143a, 144a",Microcalanus (pusilus),"Male P5: both legs uniramous, left leg 5-6-segmented, right leg 3-segmented, P1Re3 with 4 setae",Bradford-Grieve 1994: fig. 75E
+189,"141c, 143a, 144b",Mimocalanus (crassus),"Male P5: both legs uniramous and essentially 5-segmented, but with various degree of fusion in segmentation; P1Re3 with 5 setae",Park 1970: fig. 12
+190,"141c, 143b, 145a  ",Chiridius(gracilis),"Male P5: both legs uniramous, right leg longer than left leg; rostrum absent",Park 1975: fig. 8j
+191,"141d,143b, 145b",Pseudocalanus (elongatus),"Male P5: both legs uniramous, right let needle-like, as long as left leg; rostrum present",Sars 1903: pl. 11
+192,"148a,155a",Gaetanus (latifrons),Rostrum with one point,
+193,"141d,146b, 149a",Aetideopsis (armata),"Male P5: both legs biramous, Ri often very shortened, Ri rounded in one leg tapering in the other",
+194,"141d, 149b, 168a",Bradyidius (similis),"Male P5: both legs biramous, Ri often very shortened, both Ri tapering","Shih et al. 1981, fig. 108"
+195,156b,Undeuchaeta (incisa),Genital double somite more or less asymmetrical (sometimes very little) with 1 lateral or ventral spine,
+196,"160a, 170a ",Pseudochirella (obaesa),A2: Ri > one-half of Re,Roe 1975: fig. 7b
+197,"160b, 170b",Euchirella (galeata),A2: Ri < one-half of Re,
+198,161b,Euchaeta (indica),"Appendicular caudal seta well-developed, two of the caudal setae always naked, and usually much longer than the others",
+199,162a,Chirundina (streetsi),Rostrum uniramous,Tanaka 1957: fig. 53d
+200,162b,Chiridiella (macrodactyla),Mx1: reduction in lobes and setation,Deevey 1974: fig. 15i
+201,163a,Euchaeta (marina),A2: Re2 without seta,Park 1995: fig. 1k
+202,163b,Paraeuchaeta (malayensis),A2: Re2 with a small inner seta,Park 1995:
+203,"164b, 166a",Euchaeta (marina),"P5: right leg, Ri 1-segmented, club-shaped; left leg, Ri reduced to a minute process. Re 3 on both legs tapering into a long spine",Park 1978: fig. 65k
+204,164b,Paraeuchaeta (malayensis),"P5: right leg, Ri 1-segmented, club-shaped; left leg, Ri reduced to a minute process. Re3 with a vestigial terminal spine",Park 1995: fig. 22e
+205,167a,Chirundina (streetsi),Leg 5: left and right endopods equally developed,
+206,168b,Undeuchaeta (plumosa),"Leg 5 complex, basis very swollen",
+207,174a,Valdiviella (minor),Rostrum: short and bifid,Park 1978: fig. 63F
+208,177b,Acartiella (sinensis),Female leg5: biramous with both exopod and endopod 1-segmented,
+209,177b,Acartiella (sinensis),Male leg 5: uniramous and 4-segmented,
+210,"179a, 184a",Tortanus (dextrilobatus),Female leg 5: exopod pointed distally,
+211,179a,Tortanus (dextrilobatus),"Male leg 5: basis of right leg expanded medially; basis and exopod of left leg simple, not forming a pincer",
+212,179b,Temora (turbinata),Female leg 5: exopod bearing spines,
+213,179b,Temora (turbinata),"Male leg 5: basis of left leg expanded medially; right leg, basis and exopod simple,not forming a chela",
+214,180a,Acartia (bilobata),Female leg 5: uniramous and 2-segmented,
+215,180a,Acartia (bilobata),Male leg 5: left leg 4-segmented; right leg 3 or 4-segmented,
+216,181a,Calanopia (elliptica),Female leg 5: uniramous and 3 or 4 segmented,
+217,181z,Calanopia (elliptica),"Male leg 5: uniramous and 4-segmented, right leg segments 3 and 4 forming a pincer",
+218,182a,Paracandacia (truncata),"Leg 5 of female: distal segment with 2 setae on inner margin and with terminal finger-like process, which may be finely serrate on one or both margins",
+219,182a,Paracandacia (truncata),"Right leg 5 of male not chelate, ending in long feather-like seta",
+220,182b,Candacia (tuberculata),"Leg 5 of female: ending in spine-like process, in points, or in a single, long seta-like spine",
+221,182b,Candacia (tuberculata),Right leg 5 of male chelate,
+222,185a,Pontellina (plumata),Right caudal ramus fused with anal somite,
+223,185a,Pontellina (plumata),Female leg 5: Re armed with several long setae,
+224,185b,Pontellopsis (armata),Female: right caudal ramus separate from anal somite ,
+225,185b,Pontellopsis (armata),Female leg 5: exopod armed with several small and large spines,
+226,186a,Pontellosis (yamadae),"Prehensile antennule very swollen, globular in the middle",
+227,186a,Pontellosis (yamadae),Male urosomite 3: hump on right margin.,
+228,186a,Pontellosis (yamadae),Male leg 5: basis with small outer seta,
+229,186b,Pontellina (morii),Male urosomite 3 without lateral humps,
+230,186b,Pontellina (morii),Male leg 5: basis with long and very plumose outer seta,

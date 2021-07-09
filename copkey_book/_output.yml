@@ -1,0 +1,43 @@
+bookdown::gitbook:
+  includes:
+    in_header: fancybox_css.html
+    before_body: fancybox.html
+  css: copkey_book.css
+  split_by: rmd
+  config:
+    toc:
+      before: |
+        <li><a href="https://bio.odb.ntu.edu.tw/copbook">HOME</a></li>
+      after: |
+        <li><a href="https://bio.odb.ntu.edu.tw/copkey" target="_blank">KEY TO THE GENERA OF CALANOID COPEPODS</a></li>
+        <hr><br>
+        <li><a href="#">Author affiliation</a></li>
+        <li><a href="#">Corresponding author</a></li>
+        <div style="line-height:1em;">
+        <p style="text-align:center"><em><strong>Chang-tai Shih</strong></em></p>
+        <p style="text-align:center"><em>National Taiwan Ocean University &</em></p>
+        <p style="text-align:center"><em>Canadian Museum of Nature</em></p>
+        <p style="text-align:center">ctshih ＠ mail.ntou.edu.tw</p></div><br>
+        <div style="line-height:1em;">
+        <p style="text-align:center"><em>Qing-Chao Chen (Diseased)</em></p>
+        <p style="text-align:center; margin-left:-2em;"><em>South China Sea Institute of Oceanology</em></p>
+        </div><br>
+        <div style="line-height:1em;">
+        <p style="text-align:center"><em>Yang-Chi Lan</em></p>
+        <p style="text-align:center"><em>Fisheries Research Institute</em></p>
+        </div><br>
+        <div style="line-height:1em;">
+        <p style="text-align:center"><em>Shih-Hui Hsiao</em></p>
+        <p style="text-align:center"><em>National Taipei University of Education</em></p>
+        </div><br>
+        <li><a href="#">Webmaster</a></li>
+        <div style="line-height:1em;">
+        <p style="text-align:center"><em>Chi-yu Weng</em></p>
+        <p style="text-align:center">cyweng24 ＠ ntu.edu.tw</p></div>
+        <li><a href="http://www.odb.ntu.edu.tw/bio" target="_blank">Bio-data in Ocean Data Bank, NTU</a></li>
+    fontsettings:
+      theme: sepia
+      family: serif
+      size: 2
+    download: no #["pdf", "epub"]
+    sharing: no
