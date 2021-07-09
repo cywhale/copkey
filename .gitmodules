@@ -1,0 +1,3 @@
+[submodule "jQuery-searchPaginate"]
+	path = jQuery-searchPaginate
+	url = https://github.com/cywhale/jQuery-searchPaginate.git
