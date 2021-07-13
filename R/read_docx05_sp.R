@@ -13,17 +13,15 @@ library(stringr)
 
 key_src_dir <- "D:/ODB/Data/shih/shih_5_202107/Key"
 
-IndexVers<- 3L ## Shih's document version
-EnableBlkFig <- TRUE ## Enable Block figure, but move from main-column to sidebar
-BlkFigSide <- TRUE #### After version 3
-EnableLongToBlk <- FALSE #### too long side bar, flush figs into blk (Version 3 disable: all figs in sidebar)
 
 options(useFancyQuotes = FALSE)
-skipLine <- 23L
+
+skipLine <- 4L
 ##############  #No need use dynamic pagination
 wordLine <- 36 #(em) 1 line may contains 40 bytes, used to count page
 pageLine <- 30 #in word docx, one page contains 55 line if 12 pt font used
 figperLine<-6  #one figure is about 6 line text, to align in formats
+
 
 webCite <- "from the website <a href='https://copepodes.obs-banyuls.fr/en/' target='_blank'>https://copepodes.obs-banyuls.fr/en/</a> managed by Razouls, C., F. de Bovée, J. Kouwenberg, & N. Desreumaux (2015-2017)"
 
@@ -47,7 +45,6 @@ termList <- data.table(name=c("A([1-9])?","(R|L)?P", "Mx(p)?", "Md",
 #  endimgt <- '</span>'
 #} else {
   imglst <- list.files("doc/img2/", pattern="\\.jpg$",full.names = T)
-  dc0 <- read_docx("doc/New_Version_Key.docx") ######################## 20191014 modified
   ftent <- rbindlist(list(tstrsplit(imglst, "_", names=TRUE)))[,3:7] %>%
     setnames(1:5, c("figx","genus","spp","sext","cht")) %>%
     .[,`:=`(Fig=as.integer(substr(figx,4,6)),
@@ -63,7 +60,6 @@ termList <- data.table(name=c("A([1-9])?","(R|L)?P", "Mx(p)?", "Md",
   #### Ver3 add citation text in figs.
   fcap <- fread("doc/Fig_key_ref2.csv", header = T)
 #}
-ctent <- docx_summary(dc0)
 
 trimx <- function (x) {
   gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(x)))
@@ -203,8 +199,39 @@ find_Figfilex <- function (figxt, ftent, imglst, Vers=IndexVers) {
   return(fdt)  
 }
 ###############################################################################################
-tstL <- nrow(ctent)
-inTesting <- FALSE  ### please change it to FALSE when generate HTML finally
+doclst <- list.files(key_src_dir, pattern="^Key?(.*).docx$",full.names = T)
+
+for (docfile in doclst) {
+  dc0 <- read_docx(docfile) ######################## 20191014 modified
+  ctent <- docx_summary(dc0)
+
+  fn <- tstrsplit(docfile, "/") %>% .[[length(.)]]
+  lfn <- regexpr("^(Key to the species of\\s)(?:[a-zA-Z]{1,})\\s", fn)
+  fam_name <- substr(fn, nchar('Key to the species of ')+1, lfn+attributes(lfn)$match.length-2L)
+  fnt<- paste0('^(Key to the species of ', fam_name, '\\s)(?:[a-zA-Z]{1,})\\s')
+  lfn <- regexpr(fnt, fn)                   
+  gen_name <- substr(fn, nchar(paste0('Key to the species of ', fam_name, ' '))+1, 
+                     lfn+attributes(lfn)$match.length-2L)
+  
+  lfn <- regexpr("^(Key to the species of\\s)(?:[a-zA-Z]{1,})\\s", ctent[1,]$text)
+  gen_chk <- substr(ctent[1,]$text, nchar('Key to the species of ')+1, lfn+attributes(lfn)$match.length-2L)
+  
+  if (gen_chk == gen_name) {
+    print(paste0("Now we got genus: ", gen_name, " to start..."))
+  } else {
+    print(paste0("Genus name not right check: ", gen_name, " before starting!"))
+    break
+  }
+  
+  #epithets list #insert spacing between (subgenus)epithets,epithets
+  epi_list <- trimx(gsub("(?![a-zA-Z]{1,})\\(", " (",
+              gsub("(?![a-zA-Z]{1,})\\)", ") ",     
+              gsub("(?![a-zA-Z]{1,})\\,", ", ",ctent[3,]$text, perl=T), perl=T), perl=T))
+  
+  tstL <- nrow(ctent)
+  
+
+  inTesting <- FALSE  ### please change it to FALSE when generate HTML finally
 
 #tstL <- 308L #key 90(89) #150L #(chk Fig63) #before 107L #key25 93L #key22 #79L #key18 #60L #Calanidae 65L Sinocalanus  #50L #fig.11
 
@@ -234,30 +261,22 @@ dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(),
                   body=character(), remark=character(), fdup=character(), # the imgf had been used (diff figx, use the same imgf)
                   flushed=integer(), ckeyx=integer(), ## flushed means if flushed to ctxt already (1, otherwise 0)
                   case=integer(), blkx=integer()) ### case: blkfigure or not; blkx: counter of block of fig flushed into block
-i = skipLine+1L
-prekeyx <- 0L
-pret <- ""
-#finalFlush <- FALSE
 
-while (i<=tstL) { #nrow(ctent)) {
+  i = skipLine+1L
+  keyx <- ""
+  prekeyx <- ""
+  pret <- ""
 
-  x <- gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i])))
+  while (i<=tstL) { #nrow(ctent)) {
+    x <- gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i])))
   
-  tt <- which(is.na(x) | x=="")
-  if (any(tt)) {
-    #    x <- x[-tt]
-    #    flagKeyBrk <- TRUE
-    # subkeyx <- 1L
-    if (i<tstL) {
-      i <- i+1
-      next
-    } #else {
-      #finalFlush <- TRUE ### End up the total files
-    #}
-  } else {
-    #if (i==skipLine+1L) {pret <- paste0('<p id=',dQuote(paste0("p",page)),'></p>')}
-    
-    if (!st_conti_flag) {
+    tt <- which(is.na(x) | x=="")
+    if (any(tt)) {
+      if (i<tstL) {
+        i <- i+1
+        next
+      } 
+    } else {
       stcnt <- 1L; wcnt <- 0L #word count, #stcnt: pointer where to start to catch key in a statement 
       figx <- NA_integer_; fidx_dup <- NA_integer_ ## some duplicated fig_ling but link to the same fig file
       kflag <- FALSE #; prekflag <- FALSE; figflag <- FALSE; 
@@ -268,140 +287,61 @@ while (i<=tstL) { #nrow(ctent)) {
       xsex<- NA_character_; body <- NA_character_; keyword <- NA_character_
       cnt_rst_flag <- FALSE; ###### counter reset flag if the page had only few figs so idx1=0 idx2=0 not exhaust pgRemain
       
-      ## detect primary key, such as "1 Head..."
+      ## detect primary key, such as "1a" or "1a/1b"
       x1 <- x; x2<-x
-      wl <- regexpr("^[0-9]{1,}(?:\\s|[a-zA-Z]|\\()",x)
+      wl <- regexpr("^[0-9]{1,}[0-9ab\\/]{1,}(?=\\s|[A-Z])",x, perl=T)
+      
       if (attributes(wl)$match.length>0) {
-        keyx <- as.integer(substr(x,wl,wl+attributes(wl)$match.length-2L)) 
+        keyx <- substr(x,wl,wl+attributes(wl)$match.length-1)
         stopifnot(!any(is.na(keyx))) ## because HTML no more support <a name...> for anchor, we use font id to be catched
-        if (IndexVers==1L) {
-          pret <- paste0(pret,'<br><p class=leader><span class=',dQuote('keycol'),'>',
-                         '<mark id=', dQuote(paste0('key_', keyx)), '>', keyx, '</mark> ')
-        } else if (i== skipLine+1L) {
-          pret <- paste0('<div class=kblk><p class=leader><span class=',dQuote('keycol'),'>',
+        
+        if (grepl("\\/", keyx)) {
+          keyx <- tstrsplit(keyx, "/")[[1]]
+          prekeyx <- tstrsplit(keyx, "/")[[2]]
+        } else {
+          prekeyx <- ""
+        }   
+        
+        if (i== skipLine+1L) {
+          pret <- paste0('<div class=', dQuote('kblk'), '><p class=', dQuote('leader'), 
+                         '><span class=',dQuote('keycol'),'>',
                          '<mark id=', dQuote(paste0('key_', keyx)), '>', keyx, '</mark> ')
         } else {
           ### 20191015 modified to put </div> in previous dtk, so I can flush image earilier because <div>...</div> cannot be broken
           ### dtk[nrow(dtk), ctxt:=paste0(ctxt,'</div>')] ## previous change is wrong because maginnote should be inside <div>..</div>
-          pret <- paste0(pret,'</div><div class=kblk><p class=leader><span class=',dQuote('keycol'),'>',
+          pret <- paste0(pret,'</div><div class=', dQuote('kblk'), '><p class=', dQuote('leader'), 
+                         '><span class=',dQuote('keycol'),'>',
                          '<mark id=', dQuote(paste0('key_', keyx)), '>', keyx, '</mark> ')
         }
+        
         stcnt<- nchar(pret)+1L #move pointer to next start in a statment
-        x1<- substr(x,wl+attributes(wl)$match.length-1L, nchar(x))
+        x1<- substr(x,wl+attributes(wl)$match.length, nchar(x))
         xc<- paste0(pret,x1) #HTML results
         kflag <- TRUE #primary key found
-        ##########################################################################################
-        #..........pkey......skey.....pkey....skey.....pkey....
-        #Kflag.....11111111110000000001111111100000000011111...
-        #figx.........11111(sometimes have figs)...1111........
-        #fig_conti_flag.111111111111111100(Delay flush until next key, all previous primary-secondary keys unit end)
-        #wCurrKey.......00000111111111111000000000.............
-        #WaitFlush[1](Ver3)............111100000000.... inform next primary key have found, need flush figs, a pulse.
-        ##########################################################################################
-        if (fig_conti_flag & withinCurrKey & IndexVers>2) {
-          WaitFlush[1] <- TRUE ## Need to flush all prev-key figs
-          fig_conti_flag<-FALSE
-          withinCurrKey<- FALSE
-        }
-        prekeyx <- 0L #if primary key not found, no update for prekeyx
-        subkeyx <- 1L
       } else {
         xc<- x1
         subkeyx <- subkeyx + 1L
         if (!withinCurrKey) withinCurrKey <- TRUE
       }
       
-      ## detect pre key, such as "2(1) Head..."
-      wl0s <- regexpr("^\\((?:[0-9]{1,})\\)",x1)
-      if (attributes(wl0s)$match.length>0) {
-        cat("Detect prekey in i: ", i, "\n") 
-        prekeyx <- as.integer(substr(x1,2L, attributes(wl0s)$match.length-1L)) 
-        stopifnot(!any(is.na(prekeyx)))
-        
-        pret0s <- paste0('([', prekeyx, '](#key_', prekeyx, '))&nbsp;')
-        x1<- substr(x,wl+attributes(wl)$match.length-1L+attributes(wl0s)$match.length, nchar(x))
+      if (prekeyx!="") {
+        pret0s <- paste0('([', prekeyx, '](#key_', prekeyx, '))&nbsp;') #note it's a md anchor
         xc<- paste0(pret, pret0s, x1)
         stcnt <- nchar(pret)+nchar(pret0s) +1L
       }
-    }  
-    
-    ## detect figure index, such as "Head... (figs.1,2) and too-long dots start and end, such as "figs)……..2"    
-    if (st_conti_flag) {
-      x1t <- x ## a cutted line due to word with too-long dots
-    } else {
-      x1t <- x1 # Normal cases
-    }
-    #wl1<- regexpr("(?:^[a-zA-Z]{1,}(.*?)fig{1}(.*?))[0-9]",x1)
-    #wl2<- regexpr("(?:^[a-zA-Z]{1,}(.*?)fig{1}(.*?))(?:\\))",x1)
-    wl1 <- regexpr("\\(*(f|F)ig{1}(s)*(\\.|\\s)*",x1t) ## fig. figs. w/o space + Number(fig id, 1-3 digits)
-    #wl1<- regexpr("(?:((f|F)ig{1}(.*?)))[0-9]+",x1)
-    wl2 <- regexpr("(?:((f|F)ig{1}(.*?)))\\)",x1t)
-    
-    if (attributes(wl1)$match.length>0 & attributes(wl2)$match.length>0) {
-      st_fig_find <- TRUE
-    } else {
-      st_fig_find <- FALSE
-      if (st_conti_flag) {x2 <- x}
-    }
-    ############## Some fig label scattered in the long sentences.. need find them independently
-    while (st_fig_find) {
-      #figt<- tstrsplit(gsub("\\.|\\s","",substr(x1t,attributes(wl1)$match.length-1, attributes(wl2)$match.length-1L)), ",") %>%
-      tt <- substr(x1t,wl1+attributes(wl1)$match.length, wl2+attributes(wl2)$match.length-2L)
-      if (grepl('-',tt)) {
-        figt <- tstrsplit(tt,"-") %>% unlist(use.names = F) %>% trimx() %>% as.integer() 
-        figt <- seq(figt[1], figt[length(figt)])
-        pret_case <- 1L ## different HTML code for (fig. 35-37) (it means figs 35,36,37)
-      } else {
-        figt <- tstrsplit(gsub("\\.|\\s","",tt), ",") %>% unlist(use.names = F) %>% trimx() %>% as.integer()
-        pret_case <- 0L #default: it's for (fig. 35,36)
-      }
-      stopifnot(all(!is.na(figt)))
       
-      if (all(!is.na(figx))) {
-        figx <- c(figx, figt)
-        #stcnt<- stcnt+nchar(as.character(figt[1]))
-      } else {
-        figx <- figt
-      }
-      
-      if (pret_case == 1L) {
-        pret<- paste0('[',tt,'](#figblk_',tt,')')
-        insBlkId <- c(insBlkId, paste0('figblk_',tt))
-        #      if (length(insBlkcnt)==0) {
-        #        insBlkcnt <- c(blkcnt+1L)
-        #      } else {
-        #        insBlkcnt <- c(insBlkcnt, max(insBlkcnt)+1L)
-        #      }
-      } else {
-        pret<- do.call(function(x) {paste0('[',x,'](#fig_',x,')')}, list(figt)) %>%
-          paste(collapse=", ")
-      } 
-      
-      #x2<-substr(x1t,attributes(wl2)$match.length+1L, nchar(x1t))
-      x2<- substr(x1t,wl2+attributes(wl2)$match.length, nchar(x1t))
-      #xc<-paste0(substr(xc,1L,stcnt+attributes(wl1)$match.length-2L),
-      #           pret, substr(xc,stcnt+attributes(wl2)$match.length,nchar(xc)))
+  
+    ## detect too-long dots start and subgenus (Acartiura)l, or …Acartia…14,  or …......
       if (st_conti_flag) {
-        xc <- paste0(xc, " ", substr(x1t,1,wl1+attributes(wl1)$match.length-1L), 
-                     pret, ')')
+        x1t <- x ## a cutted line due to word with too-long dots
       } else {
-        xc<- paste0(substr(xc,1L,stcnt+wl1+attributes(wl1)$match.length-2L),  # stcnt now is the exact position if start, so -1L to calculate position
-                    pret, substr(xc,stcnt+wl2+attributes(wl2)$match.length-2L,nchar(xc)))
+        x1t <- x1 # Normal cases
       }
+
+      wl2 <- regexpr("(?:…+\\.*\\s*)(?)",x2)
       
-      if (!(any(grepl("fig\\.",x2)))) {
-        st_fig_find <- FALSE
-      } else {
-        x1t <- x2
-        stcnt <- nchar(xc)-nchar(x1t) + 1L
-        wl1 <- regexpr("(f|F)ig{1}(s)*(\\.|\\s)*",x1t)
-        wl2 <- regexpr("(?:((f|F)ig{1}(.*?)))\\)",x1t)
-      }
-    }
-    
-    wl3 <- regexpr("(?:…+\\.*\\s*)[0-9]+$",x2)
-    if (wl3<0) {
-      #wl3<- regexpr("(?:…+\\s*|\\.+\\s*)[a-zA-Z]+\\s*[\\(a-zA-Z]+\\s{0,1}(♀|♂|\\))*\\s{0,1}$",x2)
+      wl3 <- regexpr("(?:…+\\.*\\s*)[0-9]+$",x2)
+      if (wl3<0) {
       wl3 <- regexpr("(?:…+\\.*\\s*)[a-zA-Z]+(.*?)\\s{0,1}(♀|♂|\\))*\\s{0,1}$",x2)
       
       if (wl3<0) {
@@ -412,7 +352,7 @@ while (i<=tstL) { #nrow(ctent)) {
         } else {
           print("Too many cutted-line! check it!")
           break
-        } 
+    1    } 
       }
       nsp <- as.character(gsub("…|\\.","",substr(x2,wl3+1,nchar(x2))))
       stopifnot(!any(is.na(nxtk)))
@@ -1120,6 +1060,8 @@ while (i<=tstL) { #nrow(ctent)) {
   print(paste0("Page: ",page, " at i: ",i," Line count: ", lcnt, " & words in this line: ", wcnt, "& fig cnt: ", fcnt))
   
   i <- i+1
+}
+
 }
 
 
