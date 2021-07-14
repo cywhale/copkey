@@ -266,8 +266,10 @@ dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(),
   keyx <- ""
   prekeyx <- ""
   pret <- ""
+  subgen <- ""
+  keystr <- ""
 
-  while (i<=tstL) { #nrow(ctent)) {
+  while (i<=tstL) {
     x <- gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i])))
   
     tt <- which(is.na(x) | x=="")
@@ -277,73 +279,99 @@ dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(),
         next
       } 
     } else {
-      stcnt <- 1L; wcnt <- 0L #word count, #stcnt: pointer where to start to catch key in a statement 
-      figx <- NA_integer_; fidx_dup <- NA_integer_ ## some duplicated fig_ling but link to the same fig file
-      kflag <- FALSE #; prekflag <- FALSE; figflag <- FALSE; 
-      nxtk <- 0L; nxttype <- 0L; #0: integer key, 1: sp name 
-      pret_case <- 0L # 1L: fig. xx-yy and display in block of main-column
-      #fblk_flag <- FALSE; # if flag, display figs in block of main-column (not in right-side)
-      nsp <- NA_character_; xsp <- NA_character_; xf <- NA_character_
-      xsex<- NA_character_; body <- NA_character_; keyword <- NA_character_
-      cnt_rst_flag <- FALSE; ###### counter reset flag if the page had only few figs so idx1=0 idx2=0 not exhaust pgRemain
+      if (!st_conti_flag) {
+    
+        stcnt <- 1L; wcnt <- 0L #word count, #stcnt: pointer where to start to catch key in a statement 
+        figx <- NA_integer_; fidx_dup <- NA_integer_ ## some duplicated fig_ling but link to the same fig file
+        kflag <- FALSE #; prekflag <- FALSE; figflag <- FALSE; 
+        nxtk <- 0L; nxttype <- 0L; #0: integer key, 1: sp name 
+        pret_case <- 0L # 1L: fig. xx-yy and display in block of main-column
+        #fblk_flag <- FALSE; # if flag, display figs in block of main-column (not in right-side)
+        nsp <- NA_character_; xsp <- NA_character_; xf <- NA_character_
+        xsex<- NA_character_; body <- NA_character_; keyword <- NA_character_
+        cnt_rst_flag <- FALSE; ###### counter reset flag if the page had only few figs so idx1=0 idx2=0 not exhaust pgRemain
       
-      ## detect primary key, such as "1a" or "1a/1b"
-      x1 <- x; x2<-x
-      wl <- regexpr("^[0-9]{1,}[0-9ab\\/]{1,}(?=\\s|[A-Z])",x, perl=T)
+        ## detect primary key, such as "1a" or "1a/1b"
+        x1 <- x; x2<-x
+        
+        wl <- regexpr("^[0-9]{1,}[0-9ab\\/]{1,}(?=\\s|[A-Z])",x, perl=T)
       
-      if (attributes(wl)$match.length>0) {
-        keyx <- substr(x,wl,wl+attributes(wl)$match.length-1)
-        stopifnot(!any(is.na(keyx))) ## because HTML no more support <a name...> for anchor, we use font id to be catched
+        if (attributes(wl)$match.length>0) {
+          keyx <- substr(x,wl,wl+attributes(wl)$match.length-1)
+          stopifnot(!any(is.na(keyx))) ## because HTML no more support <a name...> for anchor, we use font id to be catched
         
-        if (grepl("\\/", keyx)) {
-          keyx <- tstrsplit(keyx, "/")[[1]]
-          prekeyx <- tstrsplit(keyx, "/")[[2]]
-        } else {
-          prekeyx <- ""
-        }   
+          if (grepl("\\/", keyx)) {
+            prekeyx <- tstrsplit(keyx, "/")[[2]]
+            keyx <- tstrsplit(keyx, "/")[[1]]
+          } else {
+            prekeyx <- ""
+          }   
         
-        if (i== skipLine+1L) {
-          pret <- paste0('<div class=', dQuote('kblk'), '><p class=', dQuote('leader'), 
-                         '><span class=',dQuote('keycol'),'>',
-                         '<mark id=', dQuote(paste0('key_', keyx)), '>', keyx, '</mark> ')
+          if (i== skipLine+1L) {
+            pret <- paste0('<div class=', dQuote('kblk'), '><p class=', dQuote('leader'), 
+                           '><span class=',dQuote('keycol'),'>',
+                           '<mark id=', dQuote(paste0('key_', keyx)), '>', keyx, '</mark>')
+          } else {
+            ### 20191015 modified to put </div> in previous dtk, so I can flush image earilier because <div>...</div> cannot be broken
+            ### dtk[nrow(dtk), ctxt:=paste0(ctxt,'</div>')] ## previous change is wrong because maginnote should be inside <div>..</div>
+            pret <- paste0(pret,'</div><div class=', dQuote('kblk'), '><p class=', dQuote('leader'), 
+                           '><span class=',dQuote('keycol'),'>',
+                           '<mark id=', dQuote(paste0('key_', keyx)), '>', keyx, '</mark>')
+          }
+          
+          if (prekeyx!="") {
+            pret <- paste0(pret, '/<mark id=', dQuote(paste0('key_', prekeyx)), '>', prekeyx, '</mark> ')
+          } else {
+            pret <- paste0(pret, " ")
+          }
+        
+          stcnt<- nchar(pret)+1L #move pointer to next start in a statment
+          x1<- substr(x,wl+attributes(wl)$match.length, nchar(x))
+          xc<- paste0(pret,x1) #HTML results
+          kflag <- TRUE #primary key found
         } else {
-          ### 20191015 modified to put </div> in previous dtk, so I can flush image earilier because <div>...</div> cannot be broken
-          ### dtk[nrow(dtk), ctxt:=paste0(ctxt,'</div>')] ## previous change is wrong because maginnote should be inside <div>..</div>
-          pret <- paste0(pret,'</div><div class=', dQuote('kblk'), '><p class=', dQuote('leader'), 
-                         '><span class=',dQuote('keycol'),'>',
-                         '<mark id=', dQuote(paste0('key_', keyx)), '>', keyx, '</mark> ')
+          xc<- x1
+          subkeyx <- subkeyx + 1L
+          if (!withinCurrKey) withinCurrKey <- TRUE
         }
-        
-        stcnt<- nchar(pret)+1L #move pointer to next start in a statment
-        x1<- substr(x,wl+attributes(wl)$match.length, nchar(x))
-        xc<- paste0(pret,x1) #HTML results
-        kflag <- TRUE #primary key found
-      } else {
-        xc<- x1
-        subkeyx <- subkeyx + 1L
-        if (!withinCurrKey) withinCurrKey <- TRUE
-      }
       
-      if (prekeyx!="") {
-        pret0s <- paste0('([', prekeyx, '](#key_', prekeyx, '))&nbsp;') #note it's a md anchor
-        xc<- paste0(pret, pret0s, x1)
-        stcnt <- nchar(pret)+nchar(pret0s) +1L
-      }
-      
-  
-    ## detect too-long dots start and subgenus (Acartiura)l, or …Acartia…14,  or …......
-      if (st_conti_flag) {
-        x1t <- x ## a cutted line due to word with too-long dots
-      } else {
-        x1t <- x1 # Normal cases
-      }
+        if (prekeyx!="") {
+          pret0s <- paste0('([', prekeyx, '](#key_', prekeyx, '))&nbsp;') #note it's a md anchor
+          xc<- paste0(pret, pret0s, x1)
+          stcnt <- nchar(pret)+nchar(pret0s) +1L
+        }
 
-      wl2 <- regexpr("(?:…+\\.*\\s*)(?)",x2)
+        mat_subgen1 = paste0("((?:…*\\.*\\s*)(\\()(?:[A-Z][a-z]{1,}(.*)\\)))|", 
+                             "((?:…+\\.*\\s*)([A-Z])(?:[a-z]{1,}(?:…+|\\.+)))")
+        # cannot match spacing because may a species name, not subgenus (only one word)
+        # i.e. cannot match (but can match ...(Subgenus Euacartia))...)
+        # regexpr(mat_subgenus, "of urosomites smooth…………....……………………Euacartia …..28", perl=T)
+        # use ?= to get only start position, but here we need length to get whole subgenus
+        wl2 <- regexpr(mat_subgen1, x1, perl=T)
       
-      wl3 <- regexpr("(?:…+\\.*\\s*)[0-9]+$",x2)
-      if (wl3<0) {
-      wl3 <- regexpr("(?:…+\\.*\\s*)[a-zA-Z]+(.*?)\\s{0,1}(♀|♂|\\))*\\s{0,1}$",x2)
-      
+        x2 <- x1
+        if (wl2>0) {
+          subgen <- gsub("\\(Subgenus |\\(Subgen |\\(|\\)|…|\\.|\\s", "", substr(x1, wl2+1, wl2+attributes(wl2)$match.length-1))
+          print(paste0("Find Subgenus: ", subgen, " in i: ", i))
+        
+          keystr <- trimx(substr(x1, 1, wl2))
+          pret <- paste0(pret, keystr)
+          #pret <- paste0(pret, keystr, '<mark id=',dQuote(paste0('subgen_', subgen)),
+          #               '>(*', subgen, '*)</mark>') # star * here make italic in markdown
+        
+          x1<- substr(x1,wl2+attributes(wl2)$match.length, nchar(x1))
+          xc<- paste0(pret,x1) #HTML results
+        } else { #try to find species 
+          
+        }
+      }  
+      ## detect too-long dots start and subgenus (Acartiura)l, or …Acartia…14,  or …......
+      else { #st_conti_flag
+        x2 <- x ## a cutted line due to word with too-long dots
+      }
+    
+      wl3 <- regexpr("(?:…+\\.*\\s*)[0-9]+$",x1)
+
       if (wl3<0) {
         if (!st_conti_flag) {
           st_conti_flag <- TRUE
@@ -352,28 +380,15 @@ dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(),
         } else {
           print("Too many cutted-line! check it!")
           break
-    1    } 
+        } 
       }
-      nsp <- as.character(gsub("…|\\.","",substr(x2,wl3+1,nchar(x2))))
-      stopifnot(!any(is.na(nxtk)))
-      nxttype <- 1L
-      stt <- nchar(nsp)
-      wl3t <- regexpr("\\s*(♀|♂)\\s*",nsp)
-      if (wl3t>0) {
-        tt <- trimx(substr(nsp,wl3t,wl3t+attributes(wl3t)$match.length-1L))
-        xsex<-ifelse(tt=="♂","male","female")
-        nsp <-substr(nsp,1,wl3t-1L)
-      }
-    } else {
+      
       nxtk <- as.integer(gsub("…|\\.","",substr(x2,wl3+1,nchar(x2))))
       stopifnot(!any(is.na(nxtk)))
-      nxttype <- 0L 
-      stt <- nchar(paste0(nxtk))
-    }
-    
+
     #### Detect annotated species in description, not the next link or sp (nsp) ########  
     #### and sex ♀ (female) ♂ (male)
-    wl4 <- regexpr("\\s{0,}\\([A-Z][a-z]+(.*?)\\)\\s{0,}(?:…{1,}\\s{0,}|\\.{1,}\\s{0,})",x2)
+    wl4 <- regexpr("\\s{0,}\\([A-Z]\\.[a-z]+(.*?)\\)\\s{0,}(?:…{1,}\\s{0,}|\\.{1,}\\s{0,})",x2)
     if (wl4>0 & attributes(wl4)$match.length>0) {
       xsp <- trimx(gsub("\\(|\\)|\\.|…","",substr(x2,wl4,wl4+attributes(wl4)$match.length-1L))) #%>%
       wltt<- regexpr(",",xsp) ## Key34(32)  "Augaptilidae, part"

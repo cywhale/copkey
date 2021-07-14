@@ -76,3 +76,4 @@ static/admin/
 static/cmd/font*/
 **/dist
 **/dist_*
+.Rproj.user
