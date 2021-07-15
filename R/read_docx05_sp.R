@@ -14,16 +14,16 @@ library(stringr)
 key_src_dir <- "D:/ODB/Data/shih/shih_5_202107/Key"
 
 
-options(useFancyQuotes = FALSE)
-
 skipLine <- 4L
 ##############  #No need use dynamic pagination
 wordLine <- 36 #(em) 1 line may contains 40 bytes, used to count page
 pageLine <- 30 #in word docx, one page contains 55 line if 12 pt font used
 figperLine<-6  #one figure is about 6 line text, to align in formats
 
-
 webCite <- "from the website <a href='https://copepodes.obs-banyuls.fr/en/' target='_blank'>https://copepodes.obs-banyuls.fr/en/</a> managed by Razouls, C., F. de Bovée, J. Kouwenberg, & N. Desreumaux (2015-2017)"
+
+options(useFancyQuotes = FALSE)
+
 
 #Mx -> Mx(p) #"Antenn(a|ule)", #Prosom(e|a)
 termList <- data.table(name=c("A([1-9])?","(R|L)?P", "Mx(p)?", "Md", 
@@ -244,7 +244,7 @@ WaitFlush<- c(FALSE) ### Wait Next primary key and flush out stacked Number of f
 blkflush_flag<- FALSE ## Now flush block of figs!!
 blkcnt <- 0L; ########## blocks ID (how many times we flush out blocks of figs)
 rgtflush_flag<- FALSE ## Flush figs in right-side column
-keyx <- 0L; subkeyx <- 1L; padx = "pad1"; indentx = "indent2"
+subkeyx <- 1L; padx = "pad1"; indentx = "indent2"
 withinCurrKey <- FALSE # Within one major key, in version3, those figs within will merge into block(blk) figs
 st_conti_flag <- FALSE # line cutted by longer dots, and continue to next line
 fig_conti_flag<- FALSE # figs stacked in st_keep
@@ -268,9 +268,10 @@ dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(),
   pret <- ""
   subgen <- ""
   keystr <- ""
+  nsp <- ""
 
   while (i<=tstL) {
-    x <- gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i])))
+    x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i]))))
   
     tt <- which(is.na(x) | x=="")
     if (any(tt)) {
@@ -307,26 +308,27 @@ dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(),
             prekeyx <- ""
           }   
         
-          if (i== skipLine+1L) {
+          if (i== skipLine+1L) { #key 1a will repeat in New Version for different genus, must prevent duplication
             pret <- paste0('<div class=', dQuote('kblk'), '><p class=', dQuote('leader'), 
                            '><span class=',dQuote('keycol'),'>',
-                           '<mark id=', dQuote(paste0('key_', keyx)), '>', keyx, '</mark>')
+                           '<mark id=', dQuote(paste0('key_', gen_name, "_", keyx)), '>', keyx, '</mark>')
           } else {
             ### 20191015 modified to put </div> in previous dtk, so I can flush image earilier because <div>...</div> cannot be broken
             ### dtk[nrow(dtk), ctxt:=paste0(ctxt,'</div>')] ## previous change is wrong because maginnote should be inside <div>..</div>
             pret <- paste0(pret,'</div><div class=', dQuote('kblk'), '><p class=', dQuote('leader'), 
                            '><span class=',dQuote('keycol'),'>',
-                           '<mark id=', dQuote(paste0('key_', keyx)), '>', keyx, '</mark>')
+                           '<mark id=', dQuote(paste0('key_', gen_name, "_", keyx)), '>', keyx, '</mark>')
+          }
+          # Use below markdown version??
+          if (prekeyx!="") {
+          # pret <- paste0(pret, '/<mark id=', dQuote(paste0('key_', prekeyx)), '>', prekeyx, '</mark> ')
+            pret <- paste0(pret, ' (')
+          } else {
+            pret <- paste0(pret, "&nbsp;")
           }
           
-          if (prekeyx!="") {
-            pret <- paste0(pret, '/<mark id=', dQuote(paste0('key_', prekeyx)), '>', prekeyx, '</mark> ')
-          } else {
-            pret <- paste0(pret, " ")
-          }
-        
           stcnt<- nchar(pret)+1L #move pointer to next start in a statment
-          x1<- substr(x,wl+attributes(wl)$match.length, nchar(x))
+          x1<- trimx(substr(x,wl+attributes(wl)$match.length, nchar(x)))
           xc<- paste0(pret,x1) #HTML results
           kflag <- TRUE #primary key found
         } else {
@@ -336,9 +338,10 @@ dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(),
         }
       
         if (prekeyx!="") {
-          pret0s <- paste0('([', prekeyx, '](#key_', prekeyx, '))&nbsp;') #note it's a md anchor
+          pret0s <- paste0('[', prekeyx, '](#key_',  gen_name, "_", prekeyx, '))&nbsp;') #note it's a md anchor
           xc<- paste0(pret, pret0s, x1)
           stcnt <- nchar(pret)+nchar(pret0s) +1L
+          pret <- paste0(pret, pret0s)
         }
 
         mat_subgen1 = paste0("((?:…*\\.*\\s*)(\\()(?:[A-Z][a-z]{1,}(.*)\\)))|", 
@@ -359,130 +362,106 @@ dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(),
           #pret <- paste0(pret, keystr, '<mark id=',dQuote(paste0('subgen_', subgen)),
           #               '>(*', subgen, '*)</mark>') # star * here make italic in markdown
         
-          x1<- substr(x1,wl2+attributes(wl2)$match.length, nchar(x1))
-          xc<- paste0(pret,x1) #HTML results
-        } else { #try to find species 
-          
-        }
+          x2<- substr(x1,wl2+attributes(wl2)$match.length, nchar(x1))
+          xc<- paste0(pret,x2) #HTML results
+        } 
       }  
       ## detect too-long dots start and subgenus (Acartiura)l, or …Acartia…14,  or …......
       else { #st_conti_flag
         x2 <- x ## a cutted line due to word with too-long dots
       }
+      
+      #try to find species 
+      mat_sp1 = paste0("(?:…+\\.*\\s*)([A-Z])\\.\\s*[a-z]{1,}$")
+      wl3 <- regexpr(mat_sp1, x2, perl=T)
+      if (wl3>0) {
+        nsp <- gsub("^\\.|…|\\.{2,}|\\s", "", substr(x2, wl3+1, nchar(x2))) #equal wl2s+attributes(wl2s)$match.length-1)   
+        print(paste0("Find end SP: ", nsp, " in i: ", i, " with equal end: ", nchar(x2)==wl3+attributes(wl3)$match.length-1))
+        nxttype <- 1L
+        xsp <- gsub("\\s{1,}", " ", gsub(substr(nsp,1,2), paste0(gen_name, " "), nsp))
+        keystr <- gsub("\\.$", "", trimx(gsub("…|\\.{2,}", "", substr(x2, 1, wl3))))
+        pret <- paste0(pret, keystr)
+        xc <- paste0(pret,x2)
+        
+      } else {
+        wl3 <- regexpr("(?:…+\\.*\\s*)[0-9]+$",x2)
+        
+        if (wl3<0) {
+          if (!st_conti_flag) {
+            st_conti_flag <- TRUE
+            i <- i+1
+            next
+          } else {
+            print("Too many cutted-line! check it!")
+            break
+          } 
+        }
+        nxtk <- as.integer(gsub("…|\\.","",substr(x2,wl3+1,nchar(x2))))
+        stopifnot(!any(is.na(nxtk)))
+        nxttype <- 0L
+      }
     
-      wl3 <- regexpr("(?:…+\\.*\\s*)[0-9]+$",x1)
+      if (nxttype==1L) {
+        xc <- paste0(pret,
+          '</span><span class=',dQuote('keycol'),'>',
+           paste0('<mark id=',  dQuote(paste0('taxon_', gsub("\\s","_",xsp))), '>*', xsp, '*</mark></span></p>'))
+        
+      } else if (subgen!="" | nxtk!=0L) {
+        xc <- paste0(#gsub("…|\\.{2,}|…\\.{1,}|\\.{1,}…","",
+          #ifelse(st_conti_flag, xc, substr(xc,1,nchar(xc)-stt))),
+          pret, '</span><span class=',dQuote('keycol'),'>', 
+          ifelse(subgen=="", "", paste0('<mark id=',dQuote(paste0('subgen_', subgen)),'>(*', subgen, '*)</mark>')),
+          paste0('[', nxtk, '](#key_', gen_name, "_", nxtk,'a)'), '</span></p>')
+      } else {
+        print("Not found any recognized patterns or key! check it in i: ", i)
+        break;
+      }
 
-      if (wl3<0) {
-        if (!st_conti_flag) {
-          st_conti_flag <- TRUE
-          i <- i+1
-          next
-        } else {
-          print("Too many cutted-line! check it!")
-          break
-        } 
+      keyn <- as.integer(gsub("[a-z]", "", keyx)) 
+      prekeyn <- as.integer(gsub("[a-z]", "", prekeyx))
+      if (is.na(prekeyn)) {
+        prekeyn <- 0L
       }
       
-      nxtk <- as.integer(gsub("…|\\.","",substr(x2,wl3+1,nchar(x2))))
-      stopifnot(!any(is.na(nxtk)))
-
-    #### Detect annotated species in description, not the next link or sp (nsp) ########  
-    #### and sex ♀ (female) ♂ (male)
-    wl4 <- regexpr("\\s{0,}\\([A-Z]\\.[a-z]+(.*?)\\)\\s{0,}(?:…{1,}\\s{0,}|\\.{1,}\\s{0,})",x2)
-    if (wl4>0 & attributes(wl4)$match.length>0) {
-      xsp <- trimx(gsub("\\(|\\)|\\.|…","",substr(x2,wl4,wl4+attributes(wl4)$match.length-1L))) #%>%
-      wltt<- regexpr(",",xsp) ## Key34(32)  "Augaptilidae, part"
-      if (wltt>0) {
-        xtt<- substr(xsp,wltt,nchar(xsp))
-        xsp<- substr(xsp,1,wltt-1)
+      if (keyn>=100 & prekeyn>=100) {
+        padx = "pad8"
+        indentx = "indent4"
+      } else if ((keyn>=100 & prekeyn>=10) | prekeyn>=100) {
+        padx = "pad7"
+        indentx = "indent3"
+      } else if ((keyn>=100 & prekeyn>0) | (keyn>=10 & prekeyn>=10)) {
+        padx = "pad6"
+        indentx = "indent3"
+      } else if ((keyn>=10 & prekeyn>0) | prekeyn>=10) {
+        padx = "pad5"
+        indentx = "indent3"
+      } else if (prekeyn > 0) {
+        padx = "pad4"
+        indentx = "indent2"
+      } else if (keyn>=100 & prekeyn==0) {
+        padx = "pad3"
+        indentx = "indent2"
+      } else if (keyn>=10 & prekeyn==0) {
+        padx = "pad2"
+        indentx = "indent2"
       } else {
-        xtt<- ")"
+        padx = "pad1"
+        indentx = "indent2"
       }
-      
-      #tstrsplit("&") %>% unlist(use.names = F)
-      
-      print(paste0("Find annotated species: ", paste(xsp, collapse=","), " in i: ", i))
-      
-      xspt <- tstrsplit(xsp,"&") %>% unlist(use.names = F) %>% trimx()
-      ############################### Extract sex info
-      wl4t <- regexpr("(♀|♂)",xspt)
-      
-      if (any(wl4t>0)) {
-        wl4t[wl4t<0] <- 0
-        tt <- substr(xspt,wl4t,wl4t)
-        xsex<-sapply(tt, function(x) {ifelse(x=="♂","male","female")}, simplify = TRUE, USE.NAMES = FALSE)
-        xspx<- trimx(substr(xspt,1,wl4t-1L))
-        xsex[wl4t==0] <- NA_character_
-        xspx[wl4t==0] <- xspt[wl4t==0]
-      } else {
-        xsex<- rep(NA_character_, length(xspt))
-        xspx<- xspt
-      }
-      
-      pret0s <- sapply(xspx, function(x) {
-        ifelse(substr(x, nchar(x)-1L, nchar(x))=="ae", '**', '*')
-      }, simplify = TRUE, USE.NAMES = FALSE)
-      
-      pret<- do.call(function(x, pres, sex) {paste0('<mark id=',dQuote(paste0(ifelse(is.na(sex),'taxon_', paste0(sex,'_')), 
-                                                                              gsub("\\s","_",x))),
-                                                    '>', pres, x, pres, ifelse(is.na(sex),"",ifelse(sex=="female","♀","♂")),
-                                                    '</mark>')}, 
-                     list(x=trimx(xspx), pres=pret0s, sex=xsex)) %>% paste(collapse=" & ")
-      
-      tt <- substr(x2, wl4, nchar(x2))
-      wl4t <- regexpr(xtt,tt) #")"
-      
-      xc <- paste0(substr(xc,1L,regexpr(xsp,xc)-1), #nchar(xc)-nchar(x2)+2L), 
-                          pret, substr(tt,wl4t, nchar(tt)))
-      xsp<- xspx
-    }
     
-    xc<-paste0(gsub("…|\\.{2,}|…\\.{1,}|\\.{1,}…","",ifelse(st_conti_flag, xc, substr(xc,1,nchar(xc)-stt))),
-               '</span><span class=',dQuote('keycol'),'>',
-               ifelse(nxttype==0L, paste0('[', nxtk, '](#key_',nxtk,')'), 
-                      paste0('<mark id=', 
-                             dQuote(paste0(ifelse(all(is.na(xsex)),'taxon_',paste0(xsex,"_")),paste(unlist(tstrsplit(nsp,'\\s')),collapse='_'))), '>*', nsp, '*</mark>')),
-               ifelse(all(is.na(xsex)),"",ifelse(xsex=="female","♀","♂")),'</span></p>')
-    
-    if (keyx>=100 & prekeyx>=100) {
-      padx = "pad8"
-      indentx = "indent4"
-    } else if ((keyx>=100 & prekeyx>=10) | prekeyx>=100) {
-      padx = "pad7"
-      indentx = "indent3"
-    } else if ((keyx>=100 & prekeyx>0) | (keyx>=10 & prekeyx>=10)) {
-      padx = "pad6"
-      indentx = "indent3"
-    } else if ((keyx>=10 & prekeyx>0) | prekeyx>=10) {
-      padx = "pad5"
-      indentx = "indent3"
-    } else if (prekeyx > 0) {
-      padx = "pad4"
-      indentx = "indent2"
-    } else if (keyx>=100 & prekeyx==0) {
-      padx = "pad3"
-      indentx = "indent2"
-    } else if (keyx>=10 & prekeyx==0) {
-      padx = "pad2"
-      indentx = "indent2"
-    } else {
-      padx = "pad1"
-      indentx = "indent2"
-    }
-    
-    if (!kflag) {
-      if (IndexVers==1L) {
-        xc <- paste0('<p class=leader><span class=', #ifelse(prekeyx>0, dQuote('keycol pad4'), dQuote('keycol pad1')), 
-                     dQuote(paste0('keycol ', padx)), '>', xc)
-        #paste(rep("&nbsp;",ifelse(prekeyx>0, 9L, 3L)),collapse=""), xc)
-      } else {
+      if (!kflag) {
         xc <- paste0('<p class=',dQuote(paste0('leader ', indentx)),'><span class=',
                      dQuote(paste0('keycol ', padx)), '>', xc)
+      } else {
+        xc <- gsub("<p class(.*?)><span", paste0('<p class=',dQuote(paste0('leader ', indentx)),'><span'), xc)
       }
-    } else if (IndexVers>1L) { ## need insert indention in new version
-      xc <- gsub("<p class(.*?)><span", paste0('<p class=',dQuote(paste0('leader ', indentx)),'><span'), xc)
-    }
-  } 
+      
+      if (nxttype==1L | subgen != "" | nxtk != 0L) {
+        st_conti_flag <- FALSE
+        nxtk <- 0L
+        subgen <- ""
+      }
+    } 
   
   if ((i==tstL & !inTesting) | (kflag & !st_conti_flag & WaitFlush[1])) {
     if (is.na(x) | x=="") {
