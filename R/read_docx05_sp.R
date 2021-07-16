@@ -1,3 +1,4 @@
+x
 ## Version 2: try to maintain the compatibility with version 1
 ## Version 3: move blkfigure into sidebar, sidebar can turn on/off, will not consistent with the behaviors of previous version
 ## Version 4: Still have some bugs 1. if sp name have a spacing btw dots and name cause italitic mark * have additional spacing
@@ -200,6 +201,7 @@ find_Figfilex <- function (figxt, ftent, imglst, Vers=IndexVers) {
 }
 ###############################################################################################
 doclst <- list.files(key_src_dir, pattern="^Key?(.*).docx$",full.names = T)
+cntg <- 0L
 
 for (docfile in doclst) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
@@ -218,22 +220,22 @@ for (docfile in doclst) {
   
   if (gen_chk == gen_name) {
     print(paste0("Now we got genus: ", gen_name, " to start..."))
+    cntg <- cntg+1L
+    
   } else {
     print(paste0("Genus name not right check: ", gen_name, " before starting!"))
     break
   }
   
   #epithets list #insert spacing between (subgenus)epithets,epithets
-  epi_list <- trimx(gsub("(?![a-zA-Z]{1,})\\(", " (",
+  epi_list <- trimx(gsub("\\s\\,", "\\,", gsub("(?!^\\()(?![a-zA-Z]{1,})\\(", ", (",
               gsub("(?![a-zA-Z]{1,})\\)", ") ",     
-              gsub("(?![a-zA-Z]{1,})\\,", ", ",ctent[3,]$text, perl=T), perl=T), perl=T))
+              gsub("(?![a-zA-Z]{1,})\\,", ", ",ctent[3,]$text, perl=T), perl=T), perl=T)))
   
   tstL <- nrow(ctent)
   
 
   inTesting <- FALSE  ### please change it to FALSE when generate HTML finally
-
-#tstL <- 308L #key 90(89) #150L #(chk Fig63) #before 107L #key25 93L #key22 #79L #key18 #60L #Calanidae 65L Sinocalanus  #50L #fig.11
 
 #page lcnt, fcnt No need use dynamic pagination, BUT, change to reset after every align with text and fig 20190126
 lcnt <- 0L; fcnt <- 0L; page <- 1L #word count and line count (text:lcnt, fig:fcnt) 
@@ -250,26 +252,42 @@ st_conti_flag <- FALSE # line cutted by longer dots, and continue to next line
 fig_conti_flag<- FALSE # figs stacked in st_keep
 st_keep <- data.table(xfig = integer(), xkey = integer(), blkx = integer(), case = integer())
 
-dtk <- data.table(rid=integer(), ckey=integer(), 
-             subkey=character(), pkey=integer(),
+dtk <- data.table(rid=integer(), unikey=character(), ckey=character(), 
+             subkey=character(), pkey=character(),
              figs=character(), type=integer(), nkey=integer(), 
-             taxon=character(), ctxt=character(), fkey=character(),
+             taxon=character(), abbrev_taxon=character(), subgen=character(), genus=character(),
+             epithets=character(), keystr=character(), ctxt=character(), fkey=character(),
              sex=character(), body=character(), keyword=character()) #, page=integer())
 
+dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0("gen_", cntg), 
+                                     ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
+                                     figs=NA_character_, type=NA_integer_, nkey=NA_integer_, 
+                                     taxon=NA_character_, abbrev_taxon=NA_character_, 
+                                     subgen=NA_character_, genus=gen_name, epithets=epi_list, 
+                                     keystr=NA_character_, ctxt=NA_character_, fkey=NA_character_, 
+                                     sex=NA_character_, body=NA_character_, keyword=NA_character_)))
+
+epiall <- trimx(gsub("\\((?:.*)\\)", "", unlist(tstrsplit(dtk[1,]$epithets, ","), use.names = F)))
+print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
+
 #### Used to store figs <-> fig_file mapping
-dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(), 
-                  body=character(), remark=character(), fdup=character(), # the imgf had been used (diff figx, use the same imgf)
-                  flushed=integer(), ckeyx=integer(), ## flushed means if flushed to ctxt already (1, otherwise 0)
-                  case=integer(), blkx=integer()) ### case: blkfigure or not; blkx: counter of block of fig flushed into block
+#dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(), 
+#                  body=character(), remark=character(), fdup=character(), # the imgf had been used (diff figx, use the same imgf)
+#                  flushed=integer(), ckeyx=integer(), ## flushed means if flushed to ctxt already (1, otherwise 0)
+#                  case=integer(), blkx=integer()) ### case: blkfigure or not; blkx: counter of block of fig flushed into block
 
   i = skipLine+1L
-  keyx <- ""
-  prekeyx <- ""
+  st_conti_flag <- FALSE
+  keyx <- ""; prekeyx <- ""; subkeyx <- ""
   pret <- ""
   subgen <- ""
   keystr <- ""
-  nsp <- ""
-
+  nxtk <- 0L; nxttype <- 0L; #0: integer key, 1: sp name 
+  nsp <- ""; xsp <- ""; epithet <- ""
+  withinCurrKey <- FALSE
+  kflag <- FALSE
+  #tstL=40 (key 9b) #181(sp list end) #28 (first end sp.) #18 (next fist st_config_flag)
+  
   while (i<=tstL) {
     x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i]))))
   
@@ -281,21 +299,17 @@ dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(),
       } 
     } else {
       if (!st_conti_flag) {
-    
-        stcnt <- 1L; wcnt <- 0L #word count, #stcnt: pointer where to start to catch key in a statement 
-        figx <- NA_integer_; fidx_dup <- NA_integer_ ## some duplicated fig_ling but link to the same fig file
-        kflag <- FALSE #; prekflag <- FALSE; figflag <- FALSE; 
-        nxtk <- 0L; nxttype <- 0L; #0: integer key, 1: sp name 
-        pret_case <- 0L # 1L: fig. xx-yy and display in block of main-column
-        #fblk_flag <- FALSE; # if flag, display figs in block of main-column (not in right-side)
-        nsp <- NA_character_; xsp <- NA_character_; xf <- NA_character_
-        xsex<- NA_character_; body <- NA_character_; keyword <- NA_character_
-        cnt_rst_flag <- FALSE; ###### counter reset flag if the page had only few figs so idx1=0 idx2=0 not exhaust pgRemain
+        #stcnt <- 1L; wcnt <- 0L #word count, #stcnt: pointer where to start to catch key in a statement 
+        #figx <- NA_integer_; fidx_dup <- NA_integer_ ## some duplicated fig_ling but link to the same fig file
+        #pret_case <- 0L # 1L: fig. xx-yy and display in block of main-column
+        #xf <- NA_character_
+        #xsex<- NA_character_; body <- NA_character_; keyword <- NA_character_
+        #cnt_rst_flag <- FALSE; ###### counter reset flag if the page had only few figs so idx1=0 idx2=0 not exhaust pgRemain
       
         ## detect primary key, such as "1a" or "1a/1b"
         x1 <- x; x2<-x
         
-        wl <- regexpr("^[0-9]{1,}[0-9ab\\/]{1,}(?=\\s|[A-Z])",x, perl=T)
+        wl <- regexpr("^[0-9]{1,}[0-9a-z\\/]{1,}(?=\\s|[A-Z])",x, perl=T)
       
         if (attributes(wl)$match.length>0) {
           keyx <- substr(x,wl,wl+attributes(wl)$match.length-1)
@@ -322,7 +336,7 @@ dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(),
           # Use below markdown version??
           if (prekeyx!="") {
           # pret <- paste0(pret, '/<mark id=', dQuote(paste0('key_', prekeyx)), '>', prekeyx, '</mark> ')
-            pret <- paste0(pret, ' (')
+            pret <- paste0(pret, '&nbsp;(')
           } else {
             pret <- paste0(pret, "&nbsp;")
           }
@@ -331,98 +345,133 @@ dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(),
           x1<- trimx(substr(x,wl+attributes(wl)$match.length, nchar(x)))
           xc<- paste0(pret,x1) #HTML results
           kflag <- TRUE #primary key found
+          
+          if (prekeyx!="") {
+            pret0s <- paste0('[', prekeyx, '](#key_',  gen_name, "_", prekeyx, '))&nbsp;') #note it's a md anchor
+            xc<- paste0(pret, pret0s, x1)
+            stcnt <- nchar(pret)+nchar(pret0s) +1L
+            pret <- paste0(pret, pret0s)
+          }
         } else {
-          xc<- x1
-          subkeyx <- subkeyx + 1L
-          if (!withinCurrKey) withinCurrKey <- TRUE
+          epix <- trimx(unlist(tstrsplit(x1, ","), use.names = F))
+          if (any(epix[!epix %chin% epiall])) {
+            print(paste0("Warning! Epithets not match! check it: ", 
+                  paste(epix[!epix %chin% epiall], collapse=", "), " in i & key: ", i, " & ", dtk[nrow(dtk),]$unikey))
+          } else {
+            print(paste0("Find some epithets: ", paste(epix, collapse=", "), " in i & key: ", i, " & ", dtk[nrow(dtk),]$unikey))
+            dtk[nrow(dtk), epithets:= paste(epix, collapse=", ")]
+          }
+          #xc <- paste0('</div>', x1)
+          if (gsub("\\s","", paste(epix, collapse=",")) != gsub("\\s", "", x1)) {
+            print(paste0("Warning! Epithets not all of the contents. check it: ", 
+                         paste(epix, collapse=", "), " in i & key: ", i, " & ", dtk[nrow(dtk),]$unikey))
+          }
+          withinCurrKey <- TRUE
         }
-      
-        if (prekeyx!="") {
-          pret0s <- paste0('[', prekeyx, '](#key_',  gen_name, "_", prekeyx, '))&nbsp;') #note it's a md anchor
-          xc<- paste0(pret, pret0s, x1)
-          stcnt <- nchar(pret)+nchar(pret0s) +1L
-          pret <- paste0(pret, pret0s)
-        }
-
+        x2 <- x1
+        
+      # detect too-long dots start and subgenus (Acartiura)l, or …Acartia…14,  or …......
+      } else { #st_conti_flag
+        x2 <- paste0(x1, x) ## a cutted line due to word with too-long dots
+      }
+        
+      if (!withinCurrKey) {
         mat_subgen1 = paste0("((?:…*\\.*\\s*)(\\()(?:[A-Z][a-z]{1,}(.*)\\)))|", 
-                             "((?:…+\\.*\\s*)([A-Z])(?:[a-z]{1,}(?:…+|\\.+)))")
+                               "((?:…+\\.*\\s*)([A-Z])(?:[a-z]{1,}(?:…+|\\.+)))")
         # cannot match spacing because may a species name, not subgenus (only one word)
         # i.e. cannot match (but can match ...(Subgenus Euacartia))...)
         # regexpr(mat_subgenus, "of urosomites smooth…………....……………………Euacartia …..28", perl=T)
         # use ?= to get only start position, but here we need length to get whole subgenus
-        wl2 <- regexpr(mat_subgen1, x1, perl=T)
+        wl2 <- regexpr(mat_subgen1, x2, perl=T)
       
-        x2 <- x1
         if (wl2>0) {
-          subgen <- gsub("\\(Subgenus |\\(Subgen |\\(|\\)|…|\\.|\\s", "", substr(x1, wl2+1, wl2+attributes(wl2)$match.length-1))
-          print(paste0("Find Subgenus: ", subgen, " in i: ", i))
+          subgen <- gsub("\\(Subgenus |\\(Subgen |\\(|\\)|…|\\.|\\s", "", substr(x2, wl2+1, wl2+attributes(wl2)$match.length-1))
+          print(paste0("Find Subgenus: ", subgen, " in i, keyx: ", i, ", ", keyx))
         
-          keystr <- trimx(substr(x1, 1, wl2))
+          keystr <- trimx(gsub("\\.\\s*$", "", gsub("…|\\.{2,}", "", substr(x2, 1, wl2))))
           pret <- paste0(pret, keystr)
           #pret <- paste0(pret, keystr, '<mark id=',dQuote(paste0('subgen_', subgen)),
           #               '>(*', subgen, '*)</mark>') # star * here make italic in markdown
         
-          x2<- substr(x1,wl2+attributes(wl2)$match.length, nchar(x1))
+          x2<- paste0("…",substr(x2,wl2+attributes(wl2)$match.length, nchar(x2))) #at least one "…" for the following regex
           xc<- paste0(pret,x2) #HTML results
-        } 
+        }  
       }  
-      ## detect too-long dots start and subgenus (Acartiura)l, or …Acartia…14,  or …......
-      else { #st_conti_flag
-        x2 <- x ## a cutted line due to word with too-long dots
+      
+      if (!withinCurrKey) {
+        #try to find species 
+        mat_sp1 = paste0("(?:(…+\\.*\\s*|\\.{2,}…*\\s*))([A-Z])\\.\\s*[a-z]{1,}$")
+        wl3 <- regexpr(mat_sp1, x2, perl=T)
+        if (wl3>0) {
+          nsp <- gsub("\\.", "\\. ", gsub("^\\.", "", gsub("…|\\.{2,}|\\s", "", substr(x2, wl3+1, nchar(x2))))) #equal wl2s+attributes(wl2s)$match.length-1)   
+          print(paste0("Find end SP: ", nsp, " in i, keyx: ", i, ", ", keyx, " with equal end: ", nchar(x2)==wl3+attributes(wl3)$match.length-1))
+          nxttype <- 1L
+          xsp <- gsub("\\s{1,}", " ", gsub(substr(nsp,1,2), paste0(gen_name, " "), nsp))
+          epithet <- gsub(paste0(gen_name, " "), "", xsp)
+          keystr <- gsub("\\.$", "", trimx(gsub("…|\\.{2,}", "", substr(x2, 1, wl3))))
+          pret <- paste0(pret, keystr)
+          
+        } else {
+          wl3 <- regexpr("(?:(…+\\.*\\s*|\\.{2,}…*\\s*))[0-9]+$",x2)
+          
+          if (wl3<0) {
+            if (!st_conti_flag) {
+              st_conti_flag <- TRUE
+              i <- i+1
+              next
+            } else {
+              print("Too many cutted-line! check it!")
+              break
+            } 
+          }
+          nxtk <- as.integer(gsub("…|\\.","",substr(x2,wl3+1,nchar(x2))))
+          stopifnot(!any(is.na(nxtk)))
+          nxttype <- 0L
+          if (keystr=="") { #no subgen, so no keystr fetched
+            keystr <- trimx(gsub("\\.\\s*$", "", gsub("…|\\.{2,}", "", substr(x2, 1, wl3))))
+            pret <- paste0(pret, keystr)
+          }
+        }
+        
+        if (nxttype==1L) {
+          xc <- paste0(pret,
+                       '</span><span class=',dQuote('keycol'),'>',
+                       paste0('<mark id=',  dQuote(paste0('taxon_', gsub("\\s","_",xsp))), '>*', xsp, '*</mark></span></p>'))
+          
+        } else if (subgen!="" | nxtk!=0L) {
+          if (grepl("\\,", subgen)) { #with multiple subgenus
+            subgx <- trimx(unlist(tstrsplit(subgen, ","), use.names = F))
+            subgen<- paste(subgx, collapse=", ") #to make format consistently
+            
+            xc0 <- do.call(function(x) {paste0('<mark id=',dQuote(paste0('subgen_', x)),'>*', x, '*</mark>')}, list(subgx)) %>%
+              paste(collapse=",&nbsp;")
+            
+            xc <- paste0(pret, '</span>&nbsp;<span class=',dQuote('keycol'),'>', 
+              paste0('(', xc0, ')'),
+              paste0('[', nxtk, '](#key_', gen_name, "_", nxtk,'a)'), '</span></p>')
+          } else {
+            xc <- paste0(#gsub("…|\\.{2,}|…\\.{1,}|\\.{1,}…","",
+              #ifelse(st_conti_flag, xc, substr(xc,1,nchar(xc)-stt))),
+              pret, '</span>&nbsp;<span class=',dQuote('keycol'),'>', 
+              ifelse(subgen=="", "", paste0('<mark id=',dQuote(paste0('subgen_', subgen)),'>(*', subgen, '*)</mark>')),
+              paste0('[', nxtk, '](#key_', gen_name, "_", nxtk,'a)'), '</span></p>')
+          }
+        } else {
+          print("Not found any recognized patterns or key! check it in i: ", i)
+          break;
+        }
+      } else { #use previous key when withinCurrKey
+        keyx <- dtk[nrow(dtk),]$ckey
+        prekeyx <- dtk[nrow(dtk),]$pkey
       }
       
-      #try to find species 
-      mat_sp1 = paste0("(?:…+\\.*\\s*)([A-Z])\\.\\s*[a-z]{1,}$")
-      wl3 <- regexpr(mat_sp1, x2, perl=T)
-      if (wl3>0) {
-        nsp <- gsub("^\\.|…|\\.{2,}|\\s", "", substr(x2, wl3+1, nchar(x2))) #equal wl2s+attributes(wl2s)$match.length-1)   
-        print(paste0("Find end SP: ", nsp, " in i: ", i, " with equal end: ", nchar(x2)==wl3+attributes(wl3)$match.length-1))
-        nxttype <- 1L
-        xsp <- gsub("\\s{1,}", " ", gsub(substr(nsp,1,2), paste0(gen_name, " "), nsp))
-        keystr <- gsub("\\.$", "", trimx(gsub("…|\\.{2,}", "", substr(x2, 1, wl3))))
-        pret <- paste0(pret, keystr)
-        xc <- paste0(pret,x2)
-        
-      } else {
-        wl3 <- regexpr("(?:…+\\.*\\s*)[0-9]+$",x2)
-        
-        if (wl3<0) {
-          if (!st_conti_flag) {
-            st_conti_flag <- TRUE
-            i <- i+1
-            next
-          } else {
-            print("Too many cutted-line! check it!")
-            break
-          } 
-        }
-        nxtk <- as.integer(gsub("…|\\.","",substr(x2,wl3+1,nchar(x2))))
-        stopifnot(!any(is.na(nxtk)))
-        nxttype <- 0L
-      }
-    
-      if (nxttype==1L) {
-        xc <- paste0(pret,
-          '</span><span class=',dQuote('keycol'),'>',
-           paste0('<mark id=',  dQuote(paste0('taxon_', gsub("\\s","_",xsp))), '>*', xsp, '*</mark></span></p>'))
-        
-      } else if (subgen!="" | nxtk!=0L) {
-        xc <- paste0(#gsub("…|\\.{2,}|…\\.{1,}|\\.{1,}…","",
-          #ifelse(st_conti_flag, xc, substr(xc,1,nchar(xc)-stt))),
-          pret, '</span><span class=',dQuote('keycol'),'>', 
-          ifelse(subgen=="", "", paste0('<mark id=',dQuote(paste0('subgen_', subgen)),'>(*', subgen, '*)</mark>')),
-          paste0('[', nxtk, '](#key_', gen_name, "_", nxtk,'a)'), '</span></p>')
-      } else {
-        print("Not found any recognized patterns or key! check it in i: ", i)
-        break;
-      }
-
       keyn <- as.integer(gsub("[a-z]", "", keyx)) 
+      subkeyx <- gsub(as.character(keyn), "", keyx)
       prekeyn <- as.integer(gsub("[a-z]", "", prekeyx))
       if (is.na(prekeyn)) {
         prekeyn <- 0L
       }
-      
+        
       if (keyn>=100 & prekeyn>=100) {
         padx = "pad8"
         indentx = "indent4"
@@ -448,20 +497,48 @@ dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(),
         padx = "pad1"
         indentx = "indent2"
       }
-    
-      if (!kflag) {
-        xc <- paste0('<p class=',dQuote(paste0('leader ', indentx)),'><span class=',
-                     dQuote(paste0('keycol ', padx)), '>', xc)
-      } else {
-        xc <- gsub("<p class(.*?)><span", paste0('<p class=',dQuote(paste0('leader ', indentx)),'><span'), xc)
-      }
       
-      if (nxttype==1L | subgen != "" | nxtk != 0L) {
-        st_conti_flag <- FALSE
-        nxtk <- 0L
-        subgen <- ""
+      prekeyx <- ifelse(prekeyx=="", NA_character_, prekeyx)
+      nxtk <- ifelse(nxtk==0L, NA_integer_, nxtk) 
+      nsp <- ifelse(nsp=="", NA_character_, nsp)
+      xsp <- ifelse(xsp=="", NA_character_, xsp)
+      subgen <- ifelse(subgen=="", NA_character_, subgen)
+
+      if (!withinCurrKey) {
+        if (!kflag) {
+          xc <- paste0('<p class=',dQuote(paste0('leader ', indentx)),'><span class=',
+                       dQuote(paste0('keycol ', padx)), '>', xc)
+        } else {
+          xc <- gsub("<p class(.*?)><span", paste0('<p class=',dQuote(paste0('leader ', indentx)),'><span'), xc)
+        }
+        
+        dtk <- rbindlist(list(dtk,data.table(rid=i, unikey=paste0(gen_name, "_", keyx),
+                                             ckey= keyx, subkey= subkeyx, pkey= prekeyx,
+                                             figs=NA_character_, type=nxttype, nkey=nxtk, 
+                                             taxon=xsp, abbrev_taxon=nsp, subgen=subgen, genus=gen_name,
+                                             epithets=NA_character_, keystr=keystr, ctxt=xc, fkey=NA_character_, 
+                                             sex=NA_character_, body=NA_character_, keyword=NA_character_)))
+      } else {
+        xc <- paste0('</div><div><p class=',dQuote(paste0(indentx)),'><span class=',
+                       dQuote(padx), '>*', paste(epix, collapse="*, *"), '*</span></p>')
+        xc0 <- dtk[nrow(dtk),]$ctxt
+        dtk[nrow(dtk), ctxt:=paste0(xc0, xc)]
       }
+    
+      #if (nxttype==1L | subgen != "" | nxtk != 0L) {
+      st_conti_flag <- FALSE
+      keyx <- ""; prekeyx <- ""; subkeyx <- ""
+      pret <- ""
+      subgen <- ""
+      keystr <- ""
+      nxttype <- 0L; nxtk <- 0L
+      nsp <- ""; xsp <- ""; epithet <- ""
+      kflag <- FALSE
+      #}
+      i = i + 1L
+      withinCurrKey <- FALSE
     } 
+  }
   
   if ((i==tstL & !inTesting) | (kflag & !st_conti_flag & WaitFlush[1])) {
     if (is.na(x) | x=="") {
