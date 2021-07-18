@@ -1,10 +1,3 @@
-x
-## Version 2: try to maintain the compatibility with version 1
-## Version 3: move blkfigure into sidebar, sidebar can turn on/off, will not consistent with the behaviors of previous version
-## Version 4: Still have some bugs 1. if sp name have a spacing btw dots and name cause italitic mark * have additional spacing
-##            bug 1 in New_Version_Key.docs is at 48(43) and the spacing is before Metacalanus
-##            bug 2. if species annotation within (SP with sex), the sex will appear in the end with key value
-##                  for example 50(49), cause copkey web appear 51_with_sex and 57_with_sex 
 ## Version 5: Specific version for species key for Shih new work 202107
 library(officer)
 library(odbapi)
@@ -471,30 +464,32 @@ print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
       if (is.na(prekeyn)) {
         prekeyn <- 0L
       }
-        
-      if (keyn>=100 & prekeyn>=100) {
+
+      #Note that key now is 2a, 10b (but < 100) ..., so need more pad than before        
+      #if (keyn>=100 & prekeyn>=100) {
+      #  padx = "pad8"
+      #  indentx = "indent4"
+      #} else if ((keyn>=100 & prekeyn>=10) | prekeyn>=100) {
+      #  padx = "pad7"
+      #  indentx = "indent3"
+      #} else 
+      if ((keyn>=100 & prekeyn>0) | (keyn>=10 & prekeyn>=10)) {
         padx = "pad8"
         indentx = "indent4"
-      } else if ((keyn>=100 & prekeyn>=10) | prekeyn>=100) {
+      } else if ((keyn>=10 & prekeyn>0) | prekeyn>=10) {
         padx = "pad7"
         indentx = "indent3"
-      } else if ((keyn>=100 & prekeyn>0) | (keyn>=10 & prekeyn>=10)) {
+      } else if (prekeyn > 0) {
         padx = "pad6"
         indentx = "indent3"
-      } else if ((keyn>=10 & prekeyn>0) | prekeyn>=10) {
-        padx = "pad5"
-        indentx = "indent3"
-      } else if (prekeyn > 0) {
-        padx = "pad4"
-        indentx = "indent2"
-      } else if (keyn>=100 & prekeyn==0) {
+      #}else if (keyn>=100 & prekeyn==0) {
+        #padx = "pad4"
+        #indentx = "indent2"
+      } else if (keyn>=10 & prekeyn==0) {
         padx = "pad3"
         indentx = "indent2"
-      } else if (keyn>=10 & prekeyn==0) {
-        padx = "pad2"
-        indentx = "indent2"
       } else {
-        padx = "pad1"
+        padx = "pad2"
         indentx = "indent2"
       }
       
@@ -519,9 +514,11 @@ print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
                                              epithets=NA_character_, keystr=keystr, ctxt=xc, fkey=NA_character_, 
                                              sex=NA_character_, body=NA_character_, keyword=NA_character_)))
       } else {
-        xc <- paste0('</div><div><p class=',dQuote(paste0(indentx)),'><span class=',
-                       dQuote(padx), '>*', paste(epix, collapse="*, *"), '*</span></p>')
-        xc0 <- dtk[nrow(dtk),]$ctxt
+        xc <- paste0('</div><div><p class=',dQuote(paste0(indentx, ' lxbot')), '><span class=', 
+                     dQuote(padx), '>*', paste(epix, collapse="*, *"), '*</span></p>')
+        xc0 <- gsub("<p class(.*?)><span", 
+                    paste0('<p class=',dQuote(paste0('leader ', indentx, ' lxtop')), '><span'), 
+                    dtk[nrow(dtk),]$ctxt)
         dtk[nrow(dtk), ctxt:=paste0(xc0, xc)]
       }
     
@@ -539,6 +536,8 @@ print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
       withinCurrKey <- FALSE
     } 
   }
+  
+  dtk[nrow(dtk), ctxt:=paste0(dtk[nrow(dtk),]$ctxt, '</div>')]
   
   if ((i==tstL & !inTesting) | (kflag & !st_conti_flag & WaitFlush[1])) {
     if (is.na(x) | x=="") {
@@ -1133,10 +1132,9 @@ print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
   i <- i+1
 }
 
-}
 
 
-cat(na.omit(dtk$ctxt), file="www/bak/web_tmp.txt")
+cat(na.omit(dtk$ctxt), file="www_sp/web_tmp.txt")
 
 ## output source fig file
 fwrite(dfk[!is.na(imgf), ] %>% .[,srcf:=imglst[imgf]] %>% .[,.(fidx, srcf)], file="www/bak/src_figfile_list.csv")
