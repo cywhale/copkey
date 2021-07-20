@@ -76,4 +76,5 @@ static/admin/
 static/cmd/font*/
 **/dist
 **/dist_*
+**/web_tmp.txt
 .Rproj.user

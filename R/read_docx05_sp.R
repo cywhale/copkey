@@ -245,6 +245,13 @@ st_conti_flag <- FALSE # line cutted by longer dots, and continue to next line
 fig_conti_flag<- FALSE # figs stacked in st_keep
 st_keep <- data.table(xfig = integer(), xkey = integer(), blkx = integer(), case = integer())
 
+#### Used to store figs <-> fig_file mapping
+dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(), 
+                  body=character(), remark=character(), fdup=character(), # the imgf had been used (diff figx, use the same imgf)
+                  flushed=integer(), ckeyx=integer(), ## flushed means if flushed to ctxt already (1, otherwise 0)
+                  case=integer(), blkx=integer()) ### case: blkfigure or not; blkx: counter of block of fig flushed into block
+
+
 dtk <- data.table(rid=integer(), unikey=character(), ckey=character(), 
              subkey=character(), pkey=character(),
              figs=character(), type=integer(), nkey=integer(), 
@@ -263,11 +270,6 @@ dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0("gen_", cntg),
 epiall <- trimx(gsub("\\((?:.*)\\)", "", unlist(tstrsplit(dtk[1,]$epithets, ","), use.names = F)))
 print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
 
-#### Used to store figs <-> fig_file mapping
-#dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(), 
-#                  body=character(), remark=character(), fdup=character(), # the imgf had been used (diff figx, use the same imgf)
-#                  flushed=integer(), ckeyx=integer(), ## flushed means if flushed to ctxt already (1, otherwise 0)
-#                  case=integer(), blkx=integer()) ### case: blkfigure or not; blkx: counter of block of fig flushed into block
 
   i = skipLine+1L
   st_conti_flag <- FALSE
@@ -279,18 +281,38 @@ print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
   nsp <- ""; xsp <- ""; epithet <- ""
   withinCurrKey <- FALSE
   kflag <- FALSE
-  #tstL=40 (key 9b) #181(sp list end) #28 (first end sp.) #18 (next fist st_config_flag)
+  ncflag <- 0L
+  fig_mode <- FALSE
+  #tstL=40 (key 9b) #181-> 194(sp list end, next is fig) #28 (first end sp.) #18 (next fist st_config_flag)
+  female_start <- -1
+  male_start <- -1
+  xsex_flag <- FALSE #during sex decision key splitting, don't decide sex
   
   while (i<=tstL) {
     x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i]))))
-  
+
     tt <- which(is.na(x) | x=="")
     if (any(tt)) {
+      ncflag <- ncflag + 1
+      if (ncflag >=31 ) { # excced one page of docx
+        print(paste0("Warning: Too many NuLL rows, check it at i: ", i))
+        fig_mode <- TRUE
+        ncflag <- 0L
+        break
+      }
       if (i<tstL) {
         i <- i+1
         next
       } 
     } else {
+      wl0 <- regexpr("^[A-Z][a-z]{1,}",x)
+      if (wl0==1 & nrow(dtk)>0 & ncflag>=1) {
+        print(paste0("Warning: Now handle Figures at i: ", i))
+        fig_mode <- TRUE
+        ncflag <- 0L
+        break
+      }
+      ncflag <- 0L;
       if (!st_conti_flag) {
         #stcnt <- 1L; wcnt <- 0L #word count, #stcnt: pointer where to start to catch key in a statement 
         #figx <- NA_integer_; fidx_dup <- NA_integer_ ## some duplicated fig_ling but link to the same fig file
@@ -460,11 +482,42 @@ print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
       
       keyn <- as.integer(gsub("[a-z]", "", keyx)) 
       subkeyx <- gsub(as.character(keyn), "", keyx)
+      if (subkeyx=="") {
+        print(paste0("Warning: No Subkey found for keyx: ", keyx, " of genus: ", gen_name, " at i: ", i))
+      }
       prekeyn <- as.integer(gsub("[a-z]", "", prekeyx))
       if (is.na(prekeyn)) {
         prekeyn <- 0L
       }
 
+      if (substr(keystr,1,6)=="Female") {
+        female_start <- nxtk
+        xsex_flag <- TRUE
+        print(paste0("Note: Female key after: ", nxtk, " of genus: ", gen_name, " at i: ", i))
+      }
+      if (substr(keystr,1,4)=="Male") {
+        male_start <- nxtk
+        xsex_flag <- TRUE
+        print(paste0("Note: Male key after: ", nxtk, " of genus: ", gen_name, " at i: ", i))
+      }
+      
+      xsex = NA_character_
+      if (!xsex_flag & nxttype==1L & female_start > 0 & male_start >0) {
+        if (female_start > male_start) {
+          if (keyn >= male_start & keyn < female_start) {
+            xsex = "male"
+          } else if (keyn >= female_start) {
+            xsex = "female"
+          }
+        } else if (female_start < male_start) {
+          if (keyn >= female_start & keyn < male_start) {
+            xsex = "female"
+          } else if (keyn >= male_start) {
+            xsex = "male"
+          }
+        }  
+      }
+      
       #Note that key now is 2a, 10b (but < 100) ..., so need more pad than before        
       #if (keyn>=100 & prekeyn>=100) {
       #  padx = "pad8"
@@ -512,7 +565,7 @@ print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
                                              figs=NA_character_, type=nxttype, nkey=nxtk, 
                                              taxon=xsp, abbrev_taxon=nsp, subgen=subgen, genus=gen_name,
                                              epithets=NA_character_, keystr=keystr, ctxt=xc, fkey=NA_character_, 
-                                             sex=NA_character_, body=NA_character_, keyword=NA_character_)))
+                                             sex=xsex, body=NA_character_, keyword=NA_character_)))
       } else {
         xc <- paste0('</div><div><p class=',dQuote(paste0(indentx, ' lxbot')), '><span class=', 
                      dQuote(padx), '>*', paste(epix, collapse="*, *"), '*</span></p>')
@@ -533,12 +586,75 @@ print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
       kflag <- FALSE
       #}
       i = i + 1L
+      xsex_flag <- FALSE
       withinCurrKey <- FALSE
     } 
   }
   
   dtk[nrow(dtk), ctxt:=paste0(dtk[nrow(dtk),]$ctxt, '</div>')]
-  
+  print(paste0("Checking fig_mode: ", fig_mode))
+  chkt <- dtk[!is.na(taxon), .(taxon, sex)]
+  if (any(duplicated(chkt))) {
+    print(paste0("Warning: Duplicated taxon, sex. Check it: ", 
+                 paste0(chkt[duplicated(chkt),]$taxon, collapse=", "),
+                 " of genus: ", gen_name))
+  }
+
+  while (fig_mode & nrow(dtk)>0 & i<=tstL) {
+    x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i]))))
+    wa <- regexpr("\\(Size",x)
+    if (wa>0) {
+      spname<- substr(x, 1, wa-1)
+      sattr <- substr(x, wa, nchar(x))
+    } else {
+      spname<- x
+      sattr <- ""
+    }
+    xsp2 <- odbapi::sciname_simplify(spname, simplify_two = T)
+    x_dtk<- which(dtk$taxon==xsp2)
+    
+    if (!any(x_dtk)) {
+      print(paste0("Error: Check fig_mode got ?? sp: ", xsp2, " at i: ", i))
+      break
+    } else {
+      within_xsp_flag <- TRUE
+      i <- i + 1L
+      ncflag <- 0L
+      fig_info <- c("subfig", "title", "caption")
+      subfig <- ""
+      stepx <- 1L
+      while (within_xsp_flag) {
+        x <- gsub("^\\\t", "", gsub("^\\s+|\\s+$", "", as.character(ctent$text[i])))  
+        tt <- which(is.na(x) | x=="")
+        if (any(tt)) {
+          ncflag <- ncflag + 1
+          if (ncflag >=31 ) { # excced one page of docx
+            print(paste0("Warning: Too many NuLL rows, check it at i: ", i))
+            fig_mode <- TRUE
+            ncflag <- 0L
+            break
+          }
+          if (i<tstL) {
+            i <- i+1
+            next
+          } 
+        } else {
+          if (stepx == 1L) {
+            
+          }
+          
+          wl0 <- regexpr("^[A-Z][a-z]{1,}",x)
+          if (wl0==1) {
+            x1 <- odbapi::sciname_simplify(x, trim.auther_year_in_bracket = FALSE)
+          }
+        }    
+      }
+      
+    }
+    
+
+    
+  }
   if ((i==tstL & !inTesting) | (kflag & !st_conti_flag & WaitFlush[1])) {
     if (is.na(x) | x=="") {
       xc <- ""
