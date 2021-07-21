@@ -3,23 +3,29 @@ library(officer)
 library(odbapi)
 library(data.table)
 library(magrittr)
-library(stringr)
+#library(stringr)
 
 key_src_dir <- "D:/ODB/Data/shih/shih_5_202107/Key"
-
+web_dir <- "www_sp/"
+web_img <- paste0(web_dir, "img/")
 
 skipLine <- 4L
-##############  #No need use dynamic pagination
-wordLine <- 36 #(em) 1 line may contains 40 bytes, used to count page
-pageLine <- 30 #in word docx, one page contains 55 line if 12 pt font used
-figperLine<-6  #one figure is about 6 line text, to align in formats
+#webCite <- "from the website <a href='https://copepodes.obs-banyuls.fr/en/' target='_blank'>https://copepodes.obs-banyuls.fr/en/</a> managed by Razouls, C., F. de Bovée, J. Kouwenberg, & N. Desreumaux (2015-2017)"
+#options(useFancyQuotes = FALSE)
 
-webCite <- "from the website <a href='https://copepodes.obs-banyuls.fr/en/' target='_blank'>https://copepodes.obs-banyuls.fr/en/</a> managed by Razouls, C., F. de Bovée, J. Kouwenberg, & N. Desreumaux (2015-2017)"
+trimx <- function (x) {
+  gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(x)))
+}
 
-options(useFancyQuotes = FALSE)
+padzerox <- function (x, nzero=3) {
+  xt <- as.character(x)
+  if (is.na(xt)) return(NA_character_)
+  if (nzero <= 1 | nzero <= nchar(xt)) return(xt)
+  #if (nzero > nchar(xt)) {
+    return (paste0(paste0(rep(0, nzero-nchar(xt)), collapse=""), xt))
+  #}
+}
 
-
-#Mx -> Mx(p) #"Antenn(a|ule)", #Prosom(e|a)
 termList <- data.table(name=c("A([1-9])?","(R|L)?P", "Mx(p)?", "Md", 
                               "Le(?:g|gs)", "Re", "Ri", "Head", "Crest",
                               "Rostrum", "Appendage","Antenn(?:a|ule)", "Pedigerous somites",
@@ -28,173 +34,10 @@ termList <- data.table(name=c("A([1-9])?","(R|L)?P", "Mx(p)?", "Md",
                        prefix=c(0,1,1,1,2,1,1,3,3,3,3,3,3,3,3,3,3,3,3),
                        body = c(F,F,F,F,T,F,F,T,T,T,T,T,T,T,T,T,T,T,T))
 
-#if (IndexVers==1L) {
-#  imglst <- list.files("doc/img/", pattern="\\.jpg$",full.names = T)
-#  dc0 <- read_docx("doc/New_Version_Key.docx")
-  
-##### Note manually edit doc/Table of key... -> Fig_key_tbl.csv for first column Fig. 8,9 to two rows
-#  ftent <- fread("doc/Fig_key_tbl.csv", header = T)
-#  
-#  preimgt <- '<a class='
-#  endimgt <- '</span>'
-#} else {
-  imglst <- list.files("doc/img2/", pattern="\\.jpg$",full.names = T)
-  ftent <- rbindlist(list(tstrsplit(imglst, "_", names=TRUE)))[,3:7] %>%
-    setnames(1:5, c("figx","genus","spp","sext","cht")) %>%
-    .[,`:=`(Fig=as.integer(substr(figx,4,6)),
-            Taxon=gsub(".jpg","",paste0(genus," ",spp)),
-            Characters=ifelse(is.na(sext)|sext==".jpg", NA_character_, 
-                      ifelse(is.na(cht), gsub(".jpg","", sext),
-                        paste0(gsub(".jpg","", sext),": ",
-                               gsub(".jpg","", cht)))),
-            Remarks=NA_character_)] %>% .[,.(Fig, Taxon, Characters, Remarks)]
-               
-  preimgt <- paste0('<span class=',dQuote('thumbnail'),'><a class=')
-  endimgt <- '</span></span>'
-  #### Ver3 add citation text in figs.
-  fcap <- fread("doc/Fig_key_ref2.csv", header = T)
-#}
-
-trimx <- function (x) {
-  gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(x)))
-}
-
-########## find file name according to fig in key #####################
-find_Figfilex <- function (figxt, ftent, imglst, Vers=IndexVers) {
-  #require(odbapi)
-  
-  fdt <- rbindlist(lapply(figxt, function(x, dt, imglst, vers) {
-    idx <- match(as.character(x), dt$Fig)
-    #if (any(!is.na(idx))) 
-    #if have Remarks in mapping table, i.e. figs are in citations, not yet plotted, so is empty
-    if (any(is.na(idx)) | (!is.na(dt[idx[[1]],]$Remarks) & trimx(dt[idx[[1]],]$Remarks)!="")) {
-      if (trimx(dt[idx[[1]],]$Remarks)!="") {
-        print(paste0("No fig provided, only in REF: ", trimx(dt[idx[[1]],]$Remarks), "...in i: ", i))
-      }
-      return(list(fidx=idx, imgf=NA_integer_, 
-                  sex=NA_character_, body=NA_character_, remark=trimx(dt[idx[[1]],]$Remarks)))
-    }
-    
-    sp <- dt[idx[[1]],]$Taxon
-    
-    #### too many fuzzy choices.. just use sex as a criteria to judge which file belong to this fig/key    
-    tf <- grepl("^female|\\female", trimx(tolower(dt[idx[[1]],]$Characters)))
-    tm <- grepl("^male|\\bmale", trimx(tolower(dt[idx[[1]],]$Characters)))
-    if (length(tf)==0 & length(tm)==0) {
-      sex <- NA_character_
-    } else {
-      sex<- ifelse(tf, "female", ifelse(tm, "male", NA_character_))
-    }
-    
-    #"\\b(P|A|Mx|Leg|leg|Re2)\\s{0,1}[0-9]{1,}((?:/|-)[0-9]{1,})?"
-    body <- NA_character_
-    if (!is.na(dt[idx[[1]],]$Characters)) {
-      bl <- regexpr(paste0('((^(',paste(tolower(termList[prefix==0,]$name),collapse="|"),')|\\b(',
-                           paste(tolower(termList[prefix %in% c(1:2),]$name), collapse="|"),
-                           '))\\s{0,}([0-9]{1,}|:)(\\s{0,}(?:/|-|&)\\s{0,}[0-9]{1,})?)|\\b(',
-                           paste0(tolower(termList[prefix==3,]$name),collapse="|"),')(?:|\\s)'), 
-                    tolower(dt[idx[[1]],]$Characters))
-      if (bl>0 & attributes(bl)$match.length > 0) {
-        body <- trimx(gsub(":","",gsub("P\\s","P",gsub("/","-",substr(dt[idx[[1]],]$Characters, bl, bl+attributes(bl)$match.length-1L)))))
-      } #else {
-        #body <- NA_character_
-      #}
-    }
-    if (vers>1L) { 
-      return(list(fidx=idx, imgf=idx, sex=sex, body=body, remark=NA_character_))
-      
-    } else {
-      tt <- grep(gsub("\\s","_",sciname_simplify(gsub("\\(|\\)","",sp), simplify_two = TRUE)), imglst)
-      
-      ### If duplicated figure, used latest version ###########
-      vl <- regexpr("[0-9]+(.*?)_[a-zA-Z]", imglst[tt])
-      vl[vl<0] <- 0
-      vll <- attributes(vl)$match.length
-      vll[vll<0] <- 0
-      if (any(vl>0) & any(vll>0)) {
-        xv <- tstrsplit(substr(imglst[tt],vl,vl+vll-2), "_")
-        names(xv) <- c("date","vers")
-        xv$date <- as.Date(xv$date, "%Y%m%d")
-        xv$vers <- as.integer(xv$vers)
-      } else {
-        xv <- list(dat=rep(0L, length(tt)), vers=rep(0L, length(tt)))
-      }
-      
-      chklatest <- function(dat, ver) {
-        which.max(ver[dat %in% max(dat)])
-      }
-      
-      if (all(is.na(tt))) return(list(fidx=idx, imgf=NA_integer_, 
-                                      sex=sex, body=body, remark=NA_character_))
-      
-      if (any(!is.na(tt)) & length(tt)==1) {
-        return(list(fidx=idx, imgf=tt, sex=sex, body=body, remark=NA_character_))
-      }
-      
-      if (!is.na(body)) {
-        if (nchar(body)==2 & substr(body,1,1) %in% c('P')) {
-          btx <- paste0(body,'|',substr(body,1,1),'[0-9](.*?)(-|_){1,}',substr(body,2,2))
-        } else {
-          btx <- body
-        }
-        bt1<- grep(tolower(btx), tolower(imglst[tt]))
-        if (!any(bt1)) {
-          bdt <- sapply(termList$name, function(x,body) {grepl(x,body)},body=body, 
-                        simplify = TRUE, USE.NAMES = FALSE)
-          bt1 <- grep(tolower(paste(termList$name[bdt],collapse="|")), tolower(imglst[tt]))
-        }
-      } else {
-        bt1<- integer()
-      }
-      
-      if (!is.na(sex)) {
-        if (sex=="female") { ## grep male also get results including "female"
-          st1<- grep(sex, tolower(imglst[tt]))
-        } else {
-          st1<- grep("(\\s|\\b|\\_|\\-)?male", tolower(imglst[tt]))
-        }
-      } else {
-        st1<- integer()
-      }
-      
-      tt1 <- intersect(bt1, st1)
-      
-      if (any(tt1)) {
-        if (length(tt1)>1) {
-          tt2 <- chklatest(xv$date[tt1], xv$vers[tt1])
-          return(list(fidx=idx, imgf=tt[tt1[tt2]], sex=sex, body=body, 
-                      remark=paste(tt[tt1], collapse = ",")))
-        } else {
-          return(list(fidx=idx, imgf=tt[tt1], sex=sex, body=body, remark=NA_character_))
-        }
-      } else if (any(!is.na(bt1)) | any(!is.na(st1))) {
-        if (any(!is.na(bt1))) {
-          cat("Warning Img: Body match, but no sex match in figx: ", x, " sp: ",sp,"\n")
-          
-          tt2 <- chklatest(xv$date[bt1], xv$vers[bt1])
-          return(list(fidx=idx, imgf=tt[bt1[tt2]], sex=sex, body=body, 
-                      remark=paste(tt[bt1], collapse = ",")))
-        }
-        if (length(st1)==1) {
-          return(list(fidx=idx, imgf=tt[st1], sex=sex, body=body, remark=paste(tt, collapse = ",")))
-        }
-        tt2 <- chklatest(xv$date[st1], xv$vers[st1])
-        return(list(fidx=idx, imgf=tt[st1[tt2]], sex=sex, body=body, remark=paste(tt[st1], collapse = ",")))
-        
-      } else {
-        tt1 <- chklatest(xv$date, xv$vers)
-        return(list(fidx=idx, imgf=tt[tt1], sex=sex, body=body, remark=paste(tt, collapse = ",")))
-      }
-      #idx <- grep(paste(c(paste0("^",x,","),paste0(",",x,"$")), collapse="|"), dt$Fig)
-      #if (any(idx)) return(idx[[1]])
-    }
-  }, dt=ftent, imglst=imglst, vers=Vers))
-
-  return(fdt)  
-}
 ###############################################################################################
 doclst <- list.files(key_src_dir, pattern="^Key?(.*).docx$",full.names = T)
 cntg <- 0L
+#docfile <- doclst[1]
 
 for (docfile in doclst) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
@@ -600,6 +443,7 @@ print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
                  " of genus: ", gen_name))
   }
 
+  cnt_fig <- 0L 
   while (fig_mode & nrow(dtk)>0 & i<=tstL) {
     x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i]))))
     wa <- regexpr("\\(Size",x)
@@ -610,19 +454,21 @@ print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
       spname<- x
       sattr <- ""
     }
-    xsp2 <- odbapi::sciname_simplify(spname, simplify_two = T)
+    xsp2 <- odbapi::sciname_simplify(spname, simplify_two = T, trim.subgen = T) #note that odbapi_v073 has trim.subgen
     x_dtk<- which(dtk$taxon==xsp2)
     
     if (!any(x_dtk)) {
       print(paste0("Error: Check fig_mode got ?? sp: ", xsp2, " at i: ", i))
       break
     } else {
+      cnt_fig <- cnt_fig + 1L
       within_xsp_flag <- TRUE
       i <- i + 1L
       ncflag <- 0L
       fig_info <- c("subfig", "title", "caption")
       subfig <- ""
-      stepx <- 1L
+      fig_title <- ""
+      fig_caption <- c()
       while (within_xsp_flag) {
         x <- gsub("^\\\t", "", gsub("^\\s+|\\s+$", "", as.character(ctent$text[i])))  
         tt <- which(is.na(x) | x=="")
@@ -639,13 +485,59 @@ print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
             next
           } 
         } else {
-          if (stepx == 1L) {
-            
-          }
-          
-          wl0 <- regexpr("^[A-Z][a-z]{1,}",x)
-          if (wl0==1) {
-            x1 <- odbapi::sciname_simplify(x, trim.auther_year_in_bracket = FALSE)
+          if (subfig=="") {
+            subfig <- trimx(unlist(tstrsplit(x, '\\s{2,}|\\t'), use.names = F)) #note that sometimes pattern has: "a1   b2 & c3", split to "a1" "b2 & c3" 
+            i <- i + 1L
+            next
+          } else if (fig_title=="") {
+            x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i]))))
+            if (x!=spname) {
+              print(paste0("Warning: Not equal fig title with spname, check it fig_titile: ", x, "  at i:",  i))
+              tt <- odbapi::sciname_simplify(x, simplify_two = T, trim.subgen = T)
+              if (tt!=xsp2) {
+                print(paste0("Error: Not equal short fig title with taxon, check it fig_titile: ", x, "  at i:",  i))
+                break
+              } else {
+                fig_title <- x
+              }
+            } else {
+              fig_title <- x
+            }
+            i <- i + 1L
+            next
+          } else {
+            x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i]))))
+            wa <- regexpr("\\(Size",x)
+            if (wa>0) {
+              spt<- substr(x, 1, wa-1)
+              if (spt != spname) {
+                print(paste0("Start next sp: ", spt, "  at i:",  i)) #cannot add i, repeated this step though..
+                next
+              } else {
+                print(paste0("Warning: Format not consistent to get the same sp: ", spt, "  Check it at i:",  i))
+                break 
+              }
+            } else {
+              if (length(fig_caption)==0) {
+                if (subfig[1] == substr(x, 1, nchar(subfig))) {
+                  if (subfig[1] != "Original") {
+                    imgf = paste0(web_img, cnt)
+                    if (!file.exists(paste0(web_img, outf[j]))) {
+                      cat("copy file from img: ", outf[j])
+                      system(enc2utf8(paste0("cmd.exe /c copy ", gsub("/","\\\\",paste0("D:/R/copkey/",fn[j])), 
+                                             " ",gsub("/","\\\\",paste0("D:/R/copkey/www/img/",outf[j])))))
+                    }
+                    
+                  }
+                  #dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(), 
+                  #                  body=character(), remark=character(), fdup=character(), # the imgf had been used (diff figx, use the same imgf)
+                  #                  flushed=integer(), ckeyx=integer(), ## flushed means if flushed to ctxt already (1, otherwise 0)
+                  #                  case=integer(), blkx=integer()) ### case: blkfigure or not; blkx: counter of block of fig flushed into block
+                  
+                  dfk <- rbidnlist(list(dfk, data.table(fidx=)))
+                }
+              }
+            }
           }
         }    
       }
@@ -1250,7 +1142,7 @@ print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
 
 
 
-cat(na.omit(dtk$ctxt), file="www_sp/web_tmp.txt")
+cat(na.omit(dtk$ctxt), file=paste0(web_dir, "web_tmp.txt"))
 
 ## output source fig file
 fwrite(dfk[!is.na(imgf), ] %>% .[,srcf:=imglst[imgf]] %>% .[,.(fidx, srcf)], file="www/bak/src_figfile_list.csv")
@@ -1259,5 +1151,3 @@ length(unique(na.omit(dtk$ckey))) #187
 which(!1:187 %in% unique(na.omit(dtk$ckey)))
 
 nrow(unique(dtk[!is.na(ckey)|!is.na(subkey),])) #391
-
-length(unique(na.omit(dtk$taxon))) #203 (but some taxon nsp is xxx (aaa & bbb), still not subdivided 20180130)
