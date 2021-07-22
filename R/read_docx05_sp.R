@@ -26,14 +26,6 @@ padzerox <- function (x, nzero=3) {
   #}
 }
 
-termList <- data.table(name=c("A([1-9])?","(R|L)?P", "Mx(p)?", "Md", 
-                              "Le(?:g|gs)", "Re", "Ri", "Head", "Crest",
-                              "Rostrum", "Appendage","Antenn(?:a|ule)", "Pedigerous somites",
-                              "Prosom(?:e|a)", "Urosome", "Urosomite", "Caudal ram(?:us|i)",
-                              "maxilliped", "mandible"), #maxilliped, mandible used in Vers=2L
-                       prefix=c(0,1,1,1,2,1,1,3,3,3,3,3,3,3,3,3,3,3,3),
-                       body = c(F,F,F,F,T,F,F,T,T,T,T,T,T,T,T,T,T,T,T))
-
 ###############################################################################################
 doclst <- list.files(key_src_dir, pattern="^Key?(.*).docx$",full.names = T)
 cntg <- 0L
@@ -69,40 +61,22 @@ for (docfile in doclst) {
               gsub("(?![a-zA-Z]{1,})\\,", ", ",ctent[3,]$text, perl=T), perl=T), perl=T)))
   
   tstL <- nrow(ctent)
-  
-
-  inTesting <- FALSE  ### please change it to FALSE when generate HTML finally
-
-#page lcnt, fcnt No need use dynamic pagination, BUT, change to reset after every align with text and fig 20190126
-lcnt <- 0L; fcnt <- 0L; page <- 1L #word count and line count (text:lcnt, fig:fcnt) 
-insRow<-c()  ########### insert fig in right row of dtk
-insBlkId<-c() ########## insert a block in HTML code
-## indBlkcnt<-c()########## insert Nth block 
-WaitFlush<- c(FALSE) ### Wait Next primary key and flush out stacked Number of figs (before that primary key)!!
-blkflush_flag<- FALSE ## Now flush block of figs!!
-blkcnt <- 0L; ########## blocks ID (how many times we flush out blocks of figs)
-rgtflush_flag<- FALSE ## Flush figs in right-side column
-subkeyx <- 1L; padx = "pad1"; indentx = "indent2"
-withinCurrKey <- FALSE # Within one major key, in version3, those figs within will merge into block(blk) figs
-st_conti_flag <- FALSE # line cutted by longer dots, and continue to next line
-fig_conti_flag<- FALSE # figs stacked in st_keep
-st_keep <- data.table(xfig = integer(), xkey = integer(), blkx = integer(), case = integer())
 
 #### Used to store figs <-> fig_file mapping
-dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(), 
-                  body=character(), remark=character(), fdup=character(), # the imgf had been used (diff figx, use the same imgf)
-                  flushed=integer(), ckeyx=integer(), ## flushed means if flushed to ctxt already (1, otherwise 0)
-                  case=integer(), blkx=integer()) ### case: blkfigure or not; blkx: counter of block of fig flushed into block
+#dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(), 
+#                  body=character(), remark=character(), fdup=character(), # the imgf had been used (diff figx, use the same imgf)
+#                  flushed=integer(), ckeyx=integer(), ## flushed means if flushed to ctxt already (1, otherwise 0)
+#                  case=integer(), blkx=integer()) ### case: blkfigure or not; blkx: counter of block of fig flushed into block
 
 
-dtk <- data.table(rid=integer(), unikey=character(), ckey=character(), 
+  dtk <- data.table(rid=integer(), unikey=character(), ckey=character(), 
              subkey=character(), pkey=character(),
              figs=character(), type=integer(), nkey=integer(), 
              taxon=character(), abbrev_taxon=character(), subgen=character(), genus=character(),
              epithets=character(), keystr=character(), ctxt=character(), fkey=character(),
              sex=character(), body=character(), keyword=character()) #, page=integer())
 
-dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0("gen_", cntg), 
+  dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0("gen_", cntg), 
                                      ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
                                      figs=NA_character_, type=NA_integer_, nkey=NA_integer_, 
                                      taxon=NA_character_, abbrev_taxon=NA_character_, 
@@ -110,9 +84,8 @@ dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0("gen_", cntg),
                                      keystr=NA_character_, ctxt=NA_character_, fkey=NA_character_, 
                                      sex=NA_character_, body=NA_character_, keyword=NA_character_)))
 
-epiall <- trimx(gsub("\\((?:.*)\\)", "", unlist(tstrsplit(dtk[1,]$epithets, ","), use.names = F)))
-print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
-
+  epiall <- trimx(gsub("\\((?:.*)\\)", "", unlist(tstrsplit(dtk[1,]$epithets, ","), use.names = F)))
+  print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
 
   i = skipLine+1L
   st_conti_flag <- FALSE
@@ -454,7 +427,12 @@ print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
       spname<- x
       sattr <- ""
     }
-    xsp2 <- odbapi::sciname_simplify(spname, simplify_two = T, trim.subgen = T) #note that odbapi_v073 has trim.subgen
+    
+    if (as.numeric(as.character(packageVersion("odbapi"))) < 0.73) {
+      xsp2 <- odbapi::sciname_simplify(spname, simplify_two = T)
+    } else {
+      xsp2 <- odbapi::sciname_simplify(spname, simplify_two = T, trim.subgen = T) #note that odbapi_v073 has trim.subgen
+    }
     x_dtk<- which(dtk$taxon==xsp2)
     
     if (!any(x_dtk)) {
