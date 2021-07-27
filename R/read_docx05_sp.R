@@ -8,6 +8,7 @@ library(magrittr)
 key_src_dir <- "D:/ODB/Data/shih/shih_5_202107/Key"
 web_dir <- "www_sp/"
 web_img <- paste0(web_dir, "img/")
+web_imgsrc <- paste0(web_dir, "img_src/")
 
 skipLine <- 4L
 #webCite <- "from the website <a href='https://copepodes.obs-banyuls.fr/en/' target='_blank'>https://copepodes.obs-banyuls.fr/en/</a> managed by Razouls, C., F. de Bovée, J. Kouwenberg, & N. Desreumaux (2015-2017)"
@@ -463,7 +464,7 @@ for (docfile in doclst) {
             next
           } 
         } else {
-          if (subfig=="") {
+          if (any(subfig=="")) {
             subfig <- trimx(unlist(tstrsplit(x, '\\s{2,}|\\t'), use.names = F)) #note that sometimes pattern has: "a1   b2 & c3", split to "a1" "b2 & c3" 
             i <- i + 1L
             next
@@ -499,12 +500,27 @@ for (docfile in doclst) {
               if (length(fig_caption)==0) {
                 if (subfig[1] == substr(x, 1, nchar(subfig))) {
                   if (subfig[1] != "Original") {
-                    imgf = paste0(web_img, cnt)
-                    if (!file.exists(paste0(web_img, outf[j]))) {
-                      cat("copy file from img: ", outf[j])
-                      system(enc2utf8(paste0("cmd.exe /c copy ", gsub("/","\\\\",paste0("D:/R/copkey/",fn[j])), 
-                                             " ",gsub("/","\\\\",paste0("D:/R/copkey/www/img/",outf[j])))))
-                    }
+                    cnt_fig <- cnt_fig + 1
+                    docfn <- unlist(tstrsplit(docfile, "\\/"), use.names = F) %>% .[length(.)]
+                    imgzip = paste0(web_imgsrc, 
+                             paste(padzerox(cntg,2), padzerox(cnt_fig,2), 
+                                   paste0(unlist(tstrsplit(xsp2, "\\s"), use.names = F), collapse = "_"),
+                                   subfig[1], sep="_"),".zip")
+                    #if (!file.exists(imgzip)) {
+                    #  cat("copy file to img zip: ", imgzip)
+                    #  system(enc2utf8(#gsub('\\“|\\”', '"', 
+                    #             paste0( #cmd.exe /c copy
+                    #                         "powershell -Command 'Copy-Item", 
+                    #                         #dQuote(paste0("Copy-Item  ", #gsub("/","\\\\", paste0(key_src_dir, "/")),
+                    #                         #"'", docfn, "'",
+                    #                         '"', docfile, '"',
+                    #                         '"', paste0("D:/proj/copkey/", imgzip), '"', "'" #)
+                    #             )
+                    #  ))
+                    #                         #gsub("/","\\\\", " D:/proj/copkey/"),
+                    #                         #gsub("/","\\\\", imgzip))))
+                    #}
+                    imgf = "D:/proj/copkey/www_sp/img_src/01_02_Acartia_bifilosa_Mazzocchi.zip/word/media/image1.jpeg"
                     
                   }
                   #dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(), 

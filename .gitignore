@@ -30,6 +30,7 @@ node_modules
 **/*.bak
 **/*.swp
 **/*~
+**/*_zip
 **/*.zip
 **/*.tgz
 **/*.gz
