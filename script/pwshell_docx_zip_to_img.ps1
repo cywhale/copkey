@@ -30,9 +30,9 @@ Set-Location $documents
 #    Expand-Archive ($_.BaseName + ".zip")
 #}
 
-#Get-ChildItem $documents *.zip | % { 
-#    Expand-Archive ($_.BaseName + ".zip")
-#}
+Get-ChildItem $documents *.zip | % { 
+    Expand-Archive ($_.BaseName + ".zip")
+}
 
 # get the images from the directories, then delete each directory
 Get-ChildItem -Directory | ForEach-Object {

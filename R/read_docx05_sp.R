@@ -8,7 +8,7 @@ library(magrittr)
 key_src_dir <- "D:/ODB/Data/shih/shih_5_202107/Key"
 web_dir <- "www_sp/"
 web_img <- paste0(web_dir, "img/")
-web_imgsrc <- paste0(web_dir, "img_src/")
+doc_imgdir <- "doc/sp_key_zip/"
 
 skipLine <- 4L
 #webCite <- "from the website <a href='https://copepodes.obs-banyuls.fr/en/' target='_blank'>https://copepodes.obs-banyuls.fr/en/</a> managed by Razouls, C., F. de Bovée, J. Kouwenberg, & N. Desreumaux (2015-2017)"
@@ -440,7 +440,6 @@ for (docfile in doclst) {
       print(paste0("Error: Check fig_mode got ?? sp: ", xsp2, " at i: ", i))
       break
     } else {
-      cnt_fig <- cnt_fig + 1L
       within_xsp_flag <- TRUE
       i <- i + 1L
       ncflag <- 0L
@@ -448,6 +447,9 @@ for (docfile in doclst) {
       subfig <- ""
       fig_title <- ""
       fig_caption <- c()
+      fig_citation <- c()
+      imfg <- c()
+      imgj <- 0L
       while (within_xsp_flag) {
         x <- gsub("^\\\t", "", gsub("^\\s+|\\s+$", "", as.character(ctent$text[i])))  
         tt <- which(is.na(x) | x=="")
@@ -491,47 +493,83 @@ for (docfile in doclst) {
               spt<- substr(x, 1, wa-1)
               if (spt != spname) {
                 print(paste0("Start next sp: ", spt, "  at i:",  i)) #cannot add i, repeated this step though..
+                within_xsp_flag <- FALSE #A species is completed its record, and go into next sp! 
+                
+                #dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(), 
+                #                  body=character(), remark=character(), fdup=character(), # the imgf had been used (diff figx, use the same imgf)
+                #                  flushed=integer(), ckeyx=integer(), ## flushed means if flushed to ctxt already (1, otherwise 0)
+                #                  case=integer(), blkx=integer()) ### case: blkfigure or not; blkx: counter of block of fig flushed into block
+                
+                #dfk <- rbidnlist(list(dfk, data.table(fidx=))) 
+                
+                dtk <- rbindlist(list(dtk,data.table(rid=i, unikey=paste0(gen_name, "_", keyx),
+                                                     ckey= keyx, subkey= subkeyx, pkey= prekeyx,
+                                                     figs=NA_character_, type=nxttype, nkey=nxtk, 
+                                                     taxon=xsp, abbrev_taxon=nsp, subgen=subgen, genus=gen_name,
+                                                     epithets=NA_character_, keystr=keystr, ctxt=xc, fkey=NA_character_, 
+                                                     sex=xsex, body=NA_character_, keyword=NA_character_)))
+                                
+                xf <- data.table(rid=i, ckey=NA_integer_, subkey=NA_character_, pkey=NA_integer_,
+                                 figs=paste(fig_dt[idx2,]$fidx,collapse=","),  type=NA_integer_, nkey=NA_integer_, 
+                                 taxon=paste(spt[idx2],collapse=","),
+                                 ctxt=paste(paste0('\n\n```{marginfigure}\n','<span class=', dQuote('blkfigure'),'>'), 
+                                            mapply(function(outf,flink,cfigx,sp,sex,ckeyx,spanx,fdupx,capx) {
+                                              paste0('<span id=', dQuote(insBlkId[1]),' class=', dQuote(spanx), '><a class=', dQuote("fbox"), 
+                                                     ' href=', dQuote(paste0('img/',outf)),
+                                                     ' data-alt=', dQuote(paste0(capx)),' /><img src=',
+                                                     dQuote(paste0('img/',outf)), ' border=', dQuote('0'),
+                                                     ' /></a><span id=', dQuote(flink), ' class=', dQuote('spnote'),
+                                                     '>Fig.',cfigx,' *',sp,'* ',sex,' [&#9754;](#key_',ckeyx,') &nbsp;',
+                                                     fdupx,'</span></span>') ############ Only MARK duplicated imgf
+                                            },outf=outf[idx2], flink=flink[idx2], cfigx=fig_dt[idx2,]$fidx, 
+                                            sp=spt[idx2], sex=sxt[idx2], ckeyx=fig_dt[idx2,]$ckeyx, fdupx=fig_dt[idx2,]$fdup,
+                                            capx=caps, MoreArgs = list(spanx=spanx), SIMPLIFY = TRUE, USE.NAMES = FALSE) %>% 
+                                              paste(collapse="\n"),'</span>','```\n\n', sep="\n"),
+                                 fkey=paste(flink[idx2], collapse=","),
+                                 sex=paste(sxt[idx2], collapse=","), 
+                                 body=paste(fig_dt[idx2,]$body, collapse=","), 
+                                 keyword=NA_character_, fidx=min(idx2))                
+                
                 next
               } else {
                 print(paste0("Warning: Format not consistent to get the same sp: ", spt, "  Check it at i:",  i))
                 break 
               }
             } else {
-              if (length(fig_caption)==0) {
-                if (subfig[1] == substr(x, 1, nchar(subfig))) {
-                  if (subfig[1] != "Original") {
+              #if (length(fig_caption)==0) {
+                if (subfig[imgj+1] == substr(x, 1, nchar(subfig[imgj+1]))) {
+                  #if (subfig[imgj+1] != "Original") {
                     cnt_fig <- cnt_fig + 1
                     docfn <- unlist(tstrsplit(docfile, "\\/"), use.names = F) %>% .[length(.)]
-                    imgzip = paste0(web_imgsrc, 
-                             paste(padzerox(cntg,2), padzerox(cnt_fig,2), 
-                                   paste0(unlist(tstrsplit(xsp2, "\\s"), use.names = F), collapse = "_"),
-                                   subfig[1], sep="_"),".zip")
-                    #if (!file.exists(imgzip)) {
-                    #  cat("copy file to img zip: ", imgzip)
-                    #  system(enc2utf8(#gsub('\\“|\\”', '"', 
-                    #             paste0( #cmd.exe /c copy
-                    #                         "powershell -Command 'Copy-Item", 
-                    #                         #dQuote(paste0("Copy-Item  ", #gsub("/","\\\\", paste0(key_src_dir, "/")),
-                    #                         #"'", docfn, "'",
-                    #                         '"', docfile, '"',
-                    #                         '"', paste0("D:/proj/copkey/", imgzip), '"', "'" #)
-                    #             )
-                    #  ))
-                    #                         #gsub("/","\\\\", " D:/proj/copkey/"),
-                    #                         #gsub("/","\\\\", imgzip))))
-                    #}
-                    imgf = "D:/proj/copkey/www_sp/img_src/01_02_Acartia_bifilosa_Mazzocchi.zip/word/media/image1.jpeg"
-                    
+                    imgsrc <- paste0(doc_imgdir, 
+                                     gsub("\\s", "_", gsub("Key to the species of\\s|\\s\\(China seas 2\\)\\.docx", "", docfn)),
+                                     "/word/media/image", cnt_fig, ".jpeg")
+                    if (!file.exists(imgsrc)) {
+                      print(paste0("Error: Cannot get the the image file: ", imgsrc, "  Check it at i:",  i))
+                      break 
+                    }
+                    imgf[imgj+1L] <- paste0(web_img, padzerox(cnt_fig, 4), "_",
+                                            gsub("\\s", "_", xsp2),
+                                            "_", padzerox(imgj+1), ".jpg")
+                    if (!file.exists(imgf[imgj+1L])) {
+                      system(enc2utf8(paste0("cmd.exe /c copy ", gsub("/","\\\\", imgsrc), 
+                                             " ",gsub("/","\\\\",imgf[imgj+1L]))))
+                    }
+                    fig_caption[imgj+1L] <- x
+                    imgj <- imgj + 1L
+                    i <- i + 1L
+                    next
+                  #}
+                } else { #Not another subfig, can be citation of subfig
+                  if (subfig[imgj] == "Original" | substr(x,1,7) != "Adapted") {
+                    print(paste0("Warning: Get a not-citation remark: ", x, "  Check it at i:",  i))
                   }
-                  #dfk <- data.table(fidx=integer(), imgf=integer(), sex=character(), 
-                  #                  body=character(), remark=character(), fdup=character(), # the imgf had been used (diff figx, use the same imgf)
-                  #                  flushed=integer(), ckeyx=integer(), ## flushed means if flushed to ctxt already (1, otherwise 0)
-                  #                  case=integer(), blkx=integer()) ### case: blkfigure or not; blkx: counter of block of fig flushed into block
-                  
-                  dfk <- rbidnlist(list(dfk, data.table(fidx=)))
+                  fig_citation[imgj] <- x
+                  i <- i+1
+                  next
                 }
-              }
-            }
+              #}
+            } # end of fig_caption
           }
         }    
       }
