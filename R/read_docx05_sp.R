@@ -56,7 +56,7 @@ italics_spname <- function(xstr, spname) {
     xspx <- substr(xstr, chk_gsp, chk_gsp+attributes(chk_gsp)$match.length-2) %>% #if detect "As Acartia hongi" substr need +3
       tstrsplit("\\s") %>% unlist(use.names = F)
     for (x in xspx) {
-      str1 <- gsub(gsub("\\)","\\\\)",gsub("\\(","\\\\(",x)), paste0("<em>",x,"</em>"), str1)
+      str1 <- gsub(paste0("(?!\\_)",gsub("\\)","\\\\)",gsub("\\(","\\\\(",x)),"(?!\\_)"), paste0("<em>",x,"</em>"), str1, perl = T)
     }
   }
 
@@ -65,16 +65,16 @@ italics_spname <- function(xstr, spname) {
       tstrsplit("\\s") %>% unlist(use.names = F)
     for (x in xspx) {
       str1 <- gsub("<em><em>", "<em>", gsub("</em></em>", "</em>",
-                   gsub(gsub("\\)","\\\\)",gsub("\\(","\\\\(",x)), paste0("<em>",x,"</em>"), str1)))
+                   gsub(paste0("(?!\\_)",gsub("\\)","\\\\)",gsub("\\(","\\\\(",x)),"(?!\\_)"), paste0("<em>",x,"</em>"), str1, perl = T)))
     }
   }
 
   xspx2 <- unlist(tstrsplit(xspt, "\\s"), use.names = F)
   if (!identical(xspx, xspx2)) {
     if (chk_sp1>0 | chk_sp3>0) {
-      for (x in xspx2) {
+      for (x in xspx2) { #key_Acartia_40b cannot be inserted with <em>
         str1 <- gsub("<em><em>", "<em>", gsub("</em></em>", "</em>",
-                     gsub(gsub("\\)","\\\\)",gsub("\\(","\\\\(",x)), paste0("<em>",x,"</em>"), str1)))
+                     gsub(paste0("(?!\\_)",gsub("\\)","\\\\)",gsub("\\(","\\\\(",x)),"(?!\\_)"), paste0("<em>",x,"</em>"), str1, perl = T)))
       }
     }
   }
@@ -175,27 +175,29 @@ for (docfile in doclst) {
 #### Used to store figs <-> fig_file mapping
   dfk <- data.table(fidx=integer(), 
                     fkey=character(), ckeyx=character(),
-                    imgf=character(), sex=character(), 
+                    imgf=character(), fsex=character(), 
                     main=character(), title=character(),
                     subfig=character(), caption=character(), citation=character(),
                     flushed=character(), ## flushed means flush figs in a row
-                    blkx=integer(), docn=integer(), ### blkx: counter of block of fig, docn: nth document
-                    genus=character(), family=character()) 
+                    blkx=integer(), docn=integer(), rid=character(), ### blkx: counter of block of fig, docn: nth document
+                    xdtk=character(), genus=character(), family=character()) #rid link to dtk, xdtk link to key of dtk
   
+  #Note: figs is type=2
   dtk <- data.table(rid=integer(), unikey=character(), ckey=character(), 
              subkey=character(), pkey=character(),
              figs=character(), type=integer(), nkey=integer(), 
-             taxon=character(), abbrev_taxon=character(), subgen=character(), genus=character(),
+             taxon=character(), abbrev_taxon=character(), fullname=character(),
+             subgen=character(), genus=character(), family=character(), 
              epithets=character(), keystr=character(), ctxt=character(), fkey=character(),
-             sex=character(), body=character(), keyword=character()) #, page=integer())
+             sex=character()) #, keyword=character()) #, page=integer())
 
   dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0("gen_", cntg), 
                                      ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
                                      figs=NA_character_, type=NA_integer_, nkey=NA_integer_, 
-                                     taxon=NA_character_, abbrev_taxon=NA_character_, 
-                                     subgen=NA_character_, genus=gen_name, epithets=epi_list, 
+                                     taxon=NA_character_, abbrev_taxon=NA_character_, fullname=NA_character_,
+                                     subgen=NA_character_, genus=gen_name, family=NA_character_, epithets=epi_list, 
                                      keystr=NA_character_, ctxt=NA_character_, fkey=NA_character_, 
-                                     sex=NA_character_, body=NA_character_, keyword=NA_character_)))
+                                     sex=NA_character_))) #, keyword=NA_character_)))
 
   epiall <- trimx(gsub("\\((?:.*)\\)", "", unlist(tstrsplit(dtk[1,]$epithets, ","), use.names = F)))
   print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
@@ -494,9 +496,10 @@ for (docfile in doclst) {
         dtk <- rbindlist(list(dtk,data.table(rid=i, unikey=paste0(gen_name, "_", keyx),
                                              ckey= keyx, subkey= subkeyx, pkey= prekeyx,
                                              figs=NA_character_, type=nxttype, nkey=nxtk, 
-                                             taxon=xsp, abbrev_taxon=nsp, subgen=subgen, genus=gen_name,
+                                             taxon=xsp, abbrev_taxon=nsp, fullname=NA_character_,
+                                             subgen=subgen, genus=gen_name, family=fam_name,
                                              epithets=NA_character_, keystr=keystr, ctxt=xc, fkey=NA_character_, 
-                                             sex=xsex, body=NA_character_, keyword=NA_character_)))
+                                             sex=xsex))) #keyword=NA_character_)))
       } else {
         xc <- paste0('</div><div><p class=',dQuote(paste0(indentx, ' lxbot')), '><span class=', 
                      dQuote(padx), '>*', paste(epix, collapse="*, *"), '*</span></p>')
@@ -531,7 +534,7 @@ for (docfile in doclst) {
                  " of genus: ", gen_name))
   }
 
-  #i <- 195L #just when test first doc file #i<=232L before p.12 #i<=tstL #245L p13
+  #i <- 195L #just when test first doc file #i<=232L before p.12 #i<=tstL #245L p13 #321L
   while (fig_mode & nrow(dtk)>0 & i<=321L) {
     x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i]))))
     wa <- regexpr("\\(Size",x)
@@ -543,9 +546,9 @@ for (docfile in doclst) {
       sattr <- ""
     }
     
-    fig_main <- trimx(x)
+    fig_main <- trimx(x) #changed to full_name + sattr with link to ckey when stored in dtk ctxt
     xsp2 <- sp2namex(spname)
-    x_dtk<- which(dtk$taxon==xsp2)
+    x_dtk<- which(dtk$taxon==xsp2 & dtk$type==1L)
     
     if (!any(x_dtk)) {
       print(paste0("Error: Check fig_mode got ?? sp: ", xsp2, " at i: ", i))
@@ -621,47 +624,30 @@ for (docfile in doclst) {
                 fkey <- substring(gsub("www_sp\\/img\\/|\\.jpg", "", imgf), 6)
                 fnum <- gsub("_", "", gsub(gsub("\\s", "_", xsp2), "", fkey))
                 
-                #fcitex <- copy(fig_citation)
-                #if (length(fig_citation)==0) {
-                #  fcitex <- rep(NA_character_, length(fig_num))
-                #} else if (length(fig_citation) < length(fig_num)) {
-                #  fcitex <- c(fig_citation, rep(NA_character_, length(fig_num)-length(fig_citation)))
-                #}
-                #cap_cite <- data.table(cap=fig_caption, cite=fcitex)
-                #cap_cite[is.na(cite), cite:=is.na()]
-                
-                #if (any(is.na(fig_caption))) {
-                #  capx <- fig_caption[!is.na(fig_caption)]
-                #  if (grepl("Original", capx)) {
-                #    ori_cite <- rep("Original", length(fig_num))
-                #  } else {
-                #    ori_cite <- rep(NA_character_, length(fig_num))
-                #  }
-                #} else {
-                #  ori_cite <- sapply(fig_caption, function(x) {
-                #    if(grepl("Original", x)) return("Original") 
-                #    return (NA_character_)
-                #  },simplify = TRUE, USE.NAMES = FALSE)   
-                #}
+                cap_cite <- data.table(cap=fig_caption, 
+                                       cite=c(fig_citation, rep(NA_character_, length(fig_num)-length(fig_citation))))
+
+                citex <- cap_cite[!is.na(cite),]$cite[1]
+                cap_cite[is.na(cap), cap:=fig_caption[!is.na(fig_caption)]] 
+                cap_cite[is.na(cite), cite:=ifelse(grepl("Original", cap), "Original", citex)]
                 
                 key_sex <- rbindlist(list(dtk[x_dtk, .(ckey, sex)],
                                      data.table(ckey=paste(dtk[x_dtk,]$ckey, collapse = ","),
                                                 sex="female/male")))
-                ckeyx <- key_sex[sex %chin% fsex,]$ckey
+                ckeyx <- key_sex[chmatch(fsex, sex),]$ckey
+                dfkt <- data.table(fidx=fig_num, fkey=fkey,
+                             ckeyx=ckeyx, #rep(paste(dtk[x_dtk,]$ckey, collapse = ","), length(fig_num)),
+                             imgf=gsub("www_sp\\/", "", imgf), 
+                             fsex=fsex, #rep(NA_character_, length(fig_num)),
+                             main= c(fig_main, rep(NA_character_, length(fig_num)-1L)), #rep(fig_main, length(fig_num)),
+                             title=c(fig_title,rep(NA_character_, length(fig_num)-1L)), #rep(fig_title, length(fig_num)),
+                             subfig= subfig, caption= cap_cite$cap, 
+                             citation= cap_cite$cite, #may be null, so use fill=NA
+                             flushed=rep(paste(fig_num, collapse = ","), length(fig_num)), ## flushed means flush figs in a row
+                             blkx=blk_cnt, docn=cntg, rid=i, xdtk=paste(x_dtk, collapse=","),
+                             genus=gen_name, family=fam_name) ### blkx: counter of block of fig, docn: nth document
                 
-                dfk <- rbindlist(list(dfk, 
-                         data.table(fidx=fig_num, fkey=fkey,
-                                  ckeyx=ckeyx, #rep(paste(dtk[x_dtk,]$ckey, collapse = ","), length(fig_num)),
-                                  imgf=gsub("www_sp\\/", "", imgf), 
-                                  sex=fsex, #rep(NA_character_, length(fig_num)),
-                                  main= c(fig_main, NA_character_), #rep(fig_main, length(fig_num)),
-                                  title=c(fig_title, NA_character_), #rep(fig_title, length(fig_num)),
-                                  subfig= subfig, caption= fig_caption, 
-                                  citation= fig_citation, #may be null, so use fill=NA
-                                  flushed=rep(paste(fig_num, collapse = ","), length(fig_num)), ## flushed means flush figs in a row
-                                  blkx=blk_cnt, docn=cntg,
-                                  genus=gen_name, family=fam_name) ### blkx: counter of block of fig, docn: nth document
-                ), fill = TRUE) 
+                dfk <- rbindlist(list(dfk, dfkt), fill = TRUE) 
                 
                 fdlink <- paste0("fig_", gsub("\\s", "_", xsp2)) #, "_", paste(fnum, collapse="-"))
                 
@@ -682,12 +668,63 @@ for (docfile in doclst) {
                   xsubf <- subfig
                 }
                 
-                dtk <- rbindlist(list(dtk,data.table(rid=i, unikey=fdlink,
+                #"Acartia (Acanthacartia) bilobata Braham, 1970" ->
+                # Acartia (Acanthacartia) bilobata (Braham, 1970)
+                xsp3 <- odbapi::sciname_simplify(spname, trim.subgen = F, simplify_two = T)
+                xaut <- trimx(gsub(gsub("\\(","\\\\(",gsub("\\)","\\\\)",xsp3)),"",spname))
+                if (xaut=="") {
+                  full_name <- xsp3
+                } else {
+                  full_name <- gsub("\\(\\(", "(", gsub("\\)\\)", ")", paste0(xsp3," (",xaut,")")))
+                }
+                subgenx <- trimx(gsub(paste0(gsub("\\s","|", xsp2),"|\\(|\\)"), "",
+                                     odbapi::sciname_simplify(spname, trim.subgen = F, simplify_two = T)))
+                epit <- trimx(gsub(gen_name, "", xsp2)) #epithets
+
+                if (sattr!="") { #has Size: female ; male:..)
+                  fig_main = paste0(full_name, " ",
+                    gsub("(\\;\\s*|\\s)(M|m)ale\\,*\\s*", 
+                      paste0("; <a href=", dQuote(paste0("#key_",gen_name,"_",key_sex[sex=="male",]$ckey)), ">male</a>, "), 
+                      gsub("\\s*(F|f)emale\\,*\\s*", 
+                           paste0(" <a href=", dQuote(paste0("#key_",gen_name,"_",key_sex[sex=="female",]$ckey)), ">female</a>, "), sattr)))
+                } else {
+                  fig_main = paste0(full_name, " (key: ",
+                                    paste0("<a href=", dQuote(paste0("#key_",gen_name,"_",key_sex[sex=="female",]$ckey)), ">female</a>; "),
+                                    paste0("<a href=", dQuote(paste0("#key_",gen_name,"_",key_sex[sex=="male",]$ckey)), ">male</a>)")) 
+                }
+                
+                dtk[x_dtk, `:=`(
+                  fullname = full_name,
+                  subgen = subgenx,
+                  epithets = epit, 
+                  figs = sapply(sex, function(x) {
+                    if (x=="male") {
+                      fk <- dfkt[fsex=="male" | fsex=="female/male",]$fidx
+                    } else if (x=="female") {
+                      fk <- dfkt[fsex=="female" | fsex=="female/male",]$fidx
+                    } else {
+                      fk <- dfkt$fidx
+                    }
+                    return(paste(fk, collapse=","))
+                  }, simplify = TRUE, USE.NAMES = FALSE),
+                  fkey = sapply(sex, function(x) { #cannot just use grepl because "female" contains "male"
+                    if (x=="male") {
+                      fk <- dfkt[fsex=="male" | fsex=="female/male",]$fkey
+                    } else if (x=="female") {
+                      fk <- dfkt[fsex=="female" | fsex=="female/male",]$fkey
+                    } else {
+                      fk <- dfkt$fkey
+                    }
+                    return(paste(fk, collapse=","))
+                  }, simplify = TRUE, USE.NAMES = FALSE)
+                )]
+                
+                dtk <- rbindlist(list(dtk, data.table(rid=i, unikey=fdlink,
                                       ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
-                                      figs=paste(fig_num, collapse = ","), type=NA_integer_, nkey=NA_integer_, 
-                                      taxon=xsp2, abbrev_taxon=dtk[x_dtk[1],]$abbrev_taxon, 
-                                      subgen=dtk[x_dtk[1],]$subgen, genus=gen_name,
-                                      epithets=NA_character_, keystr=keystr, 
+                                      figs=paste(fig_num, collapse = ","), type=2L, nkey=NA_integer_, 
+                                      taxon=xsp2, abbrev_taxon=dtk[x_dtk[1],]$abbrev_taxon, fullname=full_name,
+                                      subgen=subgenx, genus=gen_name, family=fam_name,
+                                      epithets=epit, keystr=keystr, 
                                       ctxt=paste(paste0('\n\n<div id=', dQuote(fdlink),'><span class=', dQuote('blkfigure'),'>'), 
                                                  paste0('<div class=', dQuote("fig_title"),'><span class=', dQuote('spmain'), '>', italics_spname(fig_main, spname),'</span></div>'),
                                                  mapply(function(outf,flink,cfigx,spanx) {
@@ -704,7 +741,7 @@ for (docfile in doclst) {
                                                      flink=fkey, cfigx=xsubf, #fgcnt=fig_num,
                                                    MoreArgs = list(spanx=spanx), SIMPLIFY = TRUE, USE.NAMES = FALSE) %>% 
                                                  paste(collapse=" "),'</span></div>', 
-                                                 paste0('<div class=', dQuote("fig_title"),'><span class=', dQuote('spnote'), '>', italics_spname(fig_title, spname),'</span></div>'),
+                                                 paste0('<div class=', dQuote("fig_title"),'><span class=', dQuote('spnote'), '>', italics_spname(full_name, spname),'</span></div>'),
                                                  sapply(seq_along(fig_caption), function(k) { #citex, capx, 
                                                    citex=fig_citation; capx=fig_caption
                                                    cx <- ifelse(is.na(citex[k]) | citex[k]=="", "", 
@@ -718,7 +755,7 @@ for (docfile in doclst) {
                                                   paste(collapse="<br>"), 
                                                   sep="<br>"),
                                       fkey=paste(fkey, collapse=","), 
-                                      sex=NA_character_, body=NA_character_, keyword="figs")))
+                                      sex=NA_character_))) #, keyword="figs"))) #figs is type =2
                 next
               } else {
                 print(paste0("Warning: Format not consistent to get the same sp: ", spt, "  Check it at i:",  i))
