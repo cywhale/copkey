@@ -106,12 +106,28 @@ bold_spsex <- function(xstr) { #only match Male or Female
 
 find_subfigx <- function(xstr, subfig, idx) {
   xsubf <- subfig[idx]
-  xt <- as.integer(gsub("\\((?:.*)\\)", "", xsubf)) ## some subfig with: 1 (John, 1999. plate 24)
+  iprex <- "Fig."
+  if (all(grepl("Plate|Pl\\.", subfig))) {
+    if (grepl("\\sPlate", xstr)) {
+      iprex <- "Plate"
+    } else if (grepl("\\sPl.", xstr)) {
+      iprex <- "Pl."
+    } else {
+      print(paste0("Warning: Detect Plate as subfig but NO Plate, Pl. in xstr, use empty prex: ", xstr))
+      iprex <- ""
+    }
+    subx <- gsub("Plate|Pl\\.", iprex, subfig)
+    xsubf <- subx[idx]
+  } else {
+    subx <- subfig
+  }
+  iprext <- gsub("\\.", "\\\\.", iprex)
+  xt <- as.integer(gsub("\\((?:.*)\\)", "", gsub(iprext, "", xsubf))) ## some subfig with: 1 (John, 1999. plate 24)
   if (!is.na(xt)) {
-    xt <- as.integer(gsub("\\((?:.*)\\)", "", subfig))
+    xt <- as.integer(gsub("\\((?:.*)\\)", "", gsub(iprext, "", subx)))
     if (all(!is.na(xt))) {
-      print(paste0("Warning: Detect integer: ", xsubf,", use Fig. ", paste(subfig, collapse=",")))
-      xc <- sapply(xt, function(x) {regexpr(paste0("Fig\\.*\\s*",x), xstr)}, simplify = T, USE.NAMES = F)
+      print(paste0("Warning: Detect integer: ", xsubf,", use ", iprex, ": ", paste(subx, collapse=",")))
+      xc <- sapply(xt, function(x) {regexpr(paste0(iprext,"*\\s*",x), xstr)}, simplify = T, USE.NAMES = F)
       if (!all(xc>0)) {
         print(paste0("Warning: Detect subfig is integer but not all found: ", 
                      paste(subfig, collapse=","), " and founded: ", paste(xc, collapse=","), 
@@ -129,9 +145,8 @@ find_subfigx <- function(xstr, subfig, idx) {
     xsubf <- gsub("\\s*(\\&|\\/){1}(?:.*)+$", "", xsubf)
   }
   #chk_sub <- regexpr(paste0("(?=([A-Z]{1,1}\\.*\\s*){0,1})", xsubf), xstr, perl = T)
-  return(regexpr(paste0("^(([A-Z]\\.(\\-[a-z]\\.*)*\\s*){0,})", 
-                        #gsub("\\s", "\\\\s", gsub("\\,", "\\\\,", xsubf))),
-                        xsubf), xstr)) #also can match Q.-c Chen or Q. C. Chen
+  return(regexpr(paste0("^(([A-Z]\\.(\\-[a-z]\\.*)*\\s*){0,})",   #also can match Q.-c Chen or Q. C. Chen
+                        gsub("\\s*\\,\\s*", ", ", xsubf)), xstr)) #make Sewell,1914 -> Sewell, 1914
 }
 
 ###############################################################################################
@@ -180,7 +195,8 @@ for (docfile in doclst) {
                     subfig=character(), caption=character(), citation=character(),
                     flushed=character(), ## flushed means flush figs in a row
                     blkx=integer(), docn=integer(), rid=character(), ### blkx: counter of block of fig, docn: nth document
-                    xdtk=character(), genus=character(), family=character()) #rid link to dtk, xdtk link to key of dtk
+                    xdtk=character(), taxon=character(), subgen=character(),
+                    genus=character(), family=character()) #rid link to dtk, xdtk link to key of dtk
   
   #Note: figs is type=2
   dtk <- data.table(rid=integer(), unikey=character(), ckey=character(), 
@@ -219,7 +235,8 @@ for (docfile in doclst) {
   male_start <- -1
   xsex_flag <- FALSE #during sex decision key splitting, don't decide sex
   doc_fign<- 0 ## cntg_fig is counter of all fig num in total docs (stored in fig_num), doc_fign just for one doc file
-
+  fig_exclude <- "\\(F\\,\\s*M\\)" #exclude pattern in title/main: (F,M)
+  
   while (i<=tstL) {
     x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i]))))
 
@@ -433,9 +450,12 @@ for (docfile in doclst) {
         xsex_flag <- TRUE
         print(paste0("Note: Male key after: ", nxtk, " of genus: ", gen_name, " at i: ", i))
       }
-      
-      xsex = NA_character_
-      if (!xsex_flag & nxttype==1L & female_start > 0 & male_start >0) {
+
+      both_sexflag <- substr(keystr, 1, 13) == "In both sexes" 
+      xsex <- NA_character_
+      if (!xsex_flag & nxttype==1L & both_sexflag) {
+        xsex = "female/male"
+      } else if (!xsex_flag & nxttype==1L & female_start > 0 & male_start >0) {
         if (female_start > male_start) {
           if (keyn >= male_start & keyn < female_start) {
             xsex = "male"
@@ -534,19 +554,19 @@ for (docfile in doclst) {
                  " of genus: ", gen_name))
   }
 
-  #i <- 195L #just when test first doc file #i<=232L before p.12 #i<=tstL #245L p13 #321L
-  while (fig_mode & nrow(dtk)>0 & i<=321L) {
+  #i <- 195L #just when test first doc file #i<=232L before p.12 #i<=tstL #245L p13 #351L p25
+  while (fig_mode & nrow(dtk)>0 & i<=373L) {
     x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i]))))
     wa <- regexpr("\\(Size",x)
     if (wa>0) {
       spname<- trimx(substr(x, 1, wa-1))
       sattr <- substr(x, wa, nchar(x))
     } else {
-      spname<- trimx(x)
+      spname<- trimx(gsub(fig_exclude, "", x))
       sattr <- ""
     }
     
-    fig_main <- trimx(x) #changed to full_name + sattr with link to ckey when stored in dtk ctxt
+    fig_main <- trimx(gsub(fig_exclude, "", x)) #changed to full_name + sattr with link to ckey when stored in dtk ctxt
     xsp2 <- sp2namex(spname)
     x_dtk<- which(dtk$taxon==xsp2 & dtk$type==1L)
     
@@ -568,7 +588,7 @@ for (docfile in doclst) {
       imgj <- 0L
       while (within_xsp_flag) {
         x <- gsub("^\\\t", "", gsub("^\\s+|\\s+$", "", as.character(ctent$text[i])))  
-        tt <- which(is.na(x) | x=="")
+        tt <- which(is.na(x) | gsub("Last update(?:.*)", "", x)=="") #ignore Last update:...
         if (any(tt)) {
           ncflag <- ncflag + 1
           if (ncflag >=31 ) { # excced one page of docx
@@ -583,12 +603,14 @@ for (docfile in doclst) {
           } 
         } else {
           xt <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i])))))
-          if (length(subfig)==0 & fig_title=="" & xt != spname) { #(any(subfig=="")) {
-            subfig <- trimx(unlist(tstrsplit(x, '\\s{2,}|\\t'), use.names = F)) #note that sometimes pattern has: "a1   b2 & c3", split to "a1" "b2 & c3" 
+          if (length(subfig)==0 & fig_title=="" & trimx(gsub(fig_exclude,"",xt)) != spname) { #(any(subfig=="")) {
+            subfig <- gsub("\\s*\\,\\s*", ", ", #make Sewell,1914 -> Sewell, 1914 with the same format
+                        trimx(unlist(tstrsplit(x, '\\s{2,}|\\t'), use.names = F))) #note that sometimes pattern has: "a1   b2 & c3", split to "a1" "b2 & c3" 
             i <- i + 1L
             next
           } else if (fig_title=="") {
             x <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i])))))
+            x <- gsub(fig_exclude, "", x)  
             if (x!=spname) {
               print(paste0("Warning: Not equal fig title with spname, check it fig_titile: ", x, "  at i:",  i))
               tt <- sp2namex(x)
@@ -609,7 +631,7 @@ for (docfile in doclst) {
             xsp1 <- trimx(odbapi::sciname_simplify(x, simplify_one = T))
             if (wa>0 | (xsp1==gen_name & trimx(sp2namex(x)) != xsp2)) {
               if (wa<0) {
-                spt <- trimx(x)
+                spt <- trimx(gsub(fig_exclude, "", x))
               } else {
                 spt<- trimx(substr(x, 1, wa-1))
               }
@@ -631,28 +653,26 @@ for (docfile in doclst) {
                 cap_cite[is.na(cap), cap:=fig_caption[!is.na(fig_caption)]] 
                 cap_cite[is.na(cite), cite:=ifelse(grepl("Original", cap), "Original", citex)]
                 
-                key_sex <- rbindlist(list(dtk[x_dtk, .(ckey, sex)],
-                                     data.table(ckey=paste(dtk[x_dtk,]$ckey, collapse = ","),
-                                                sex="female/male")))
-                ckeyx <- key_sex[chmatch(fsex, sex),]$ckey
-                dfkt <- data.table(fidx=fig_num, fkey=fkey,
-                             ckeyx=ckeyx, #rep(paste(dtk[x_dtk,]$ckey, collapse = ","), length(fig_num)),
-                             imgf=gsub("www_sp\\/", "", imgf), 
-                             fsex=fsex, #rep(NA_character_, length(fig_num)),
-                             main= c(fig_main, rep(NA_character_, length(fig_num)-1L)), #rep(fig_main, length(fig_num)),
-                             title=c(fig_title,rep(NA_character_, length(fig_num)-1L)), #rep(fig_title, length(fig_num)),
-                             subfig= subfig, caption= cap_cite$cap, 
-                             citation= cap_cite$cite, #may be null, so use fill=NA
-                             flushed=rep(paste(fig_num, collapse = ","), length(fig_num)), ## flushed means flush figs in a row
-                             blkx=blk_cnt, docn=cntg, rid=i, xdtk=paste(x_dtk, collapse=","),
-                             genus=gen_name, family=fam_name) ### blkx: counter of block of fig, docn: nth document
+                if (!any("female/male" %chin% dtk[x_dtk,]$sex)) {
+                  key_sex <- rbindlist(list(dtk[x_dtk, .(ckey, sex)],
+                                            data.table(ckey=paste(dtk[x_dtk,]$ckey, collapse = ","),
+                                                       sex="female/male")))
+                } else {
+                  key_sex <- dtk[x_dtk, .(ckey, sex)]
+                }
                 
-                dfk <- rbindlist(list(dfk, dfkt), fill = TRUE) 
+                malekey <- ifelse("male" %chin% key_sex$sex, key_sex[sex=="male",]$ckey, key_sex[sex=="female/male",]$ckey)
+                femalekey <- ifelse("female" %chin% key_sex$sex, key_sex[sex=="female",]$ckey, key_sex[sex=="female/male",]$ckey)
+                keymat <- chmatch(fsex, key_sex$sex) #cannot just use key_sex[chmatch(fsex, sex),]$ckey because may lost match
+                keymat[is.na(keymat)] <- chmatch("female/male", key_sex$sex)
+                ckeyx <- key_sex[keymat,]$ckey
                 
                 fdlink <- paste0("fig_", gsub("\\s", "_", xsp2)) #, "_", paste(fnum, collapse="-"))
-                
-                if (length(fig_num)>=3) {
-                  spanx <- 'ntrd' ### narrow span
+
+                if (length(fig_num)>=4) {
+                  spanx <- 'nnar' ### narrow span
+                } else if (length(fig_num) ==3 ) {
+                  spanx <- 'ntrd' 
                 } else if (length(fig_num) == 2) {
                   spanx <- 'ntwo'
                 } else { 
@@ -677,21 +697,40 @@ for (docfile in doclst) {
                 } else {
                   full_name <- gsub("\\(\\(", "(", gsub("\\)\\)", ")", paste0(xsp3," (",xaut,")")))
                 }
-                subgenx <- trimx(gsub(paste0(gsub("\\s","|", xsp2),"|\\(|\\)"), "",
-                                     odbapi::sciname_simplify(spname, trim.subgen = F, simplify_two = T)))
+                #Note that if Subgenus == Genus, i.e. Acartia (Acartia) negligens, without ?!\\( ?!\\), cannot get correct subgenx
+                subgenx <- trimx(gsub(paste0(paste0("(?!\\()(",gsub("\\s","|", xsp2),")(?!\\))"),"|\\(|\\)"), "",
+                                     odbapi::sciname_simplify(spname, trim.subgen = F, simplify_two = T), perl = T))
                 epit <- trimx(gsub(gen_name, "", xsp2)) #epithets
 
                 if (sattr!="") { #has Size: female ; male:..)
-                  fig_main = paste0(full_name, " ",
+                  fig_main = paste0(full_name, " ", sattr)
+                  fig_mtxt = paste0(full_name, " ",
                     gsub("(\\;\\s*|\\s)(M|m)ale\\,*\\s*", 
-                      paste0("; <a href=", dQuote(paste0("#key_",gen_name,"_",key_sex[sex=="male",]$ckey)), ">male</a>, "), 
+                      paste0("; <a href=", dQuote(paste0("#key_",gen_name,"_",malekey)), ">male</a>, "), 
                       gsub("\\s*(F|f)emale\\,*\\s*", 
-                           paste0(" <a href=", dQuote(paste0("#key_",gen_name,"_",key_sex[sex=="female",]$ckey)), ">female</a>, "), sattr)))
+                           paste0(" <a href=", dQuote(paste0("#key_",gen_name,"_",femalekey)), ">female</a>, "), sattr)))
                 } else {
-                  fig_main = paste0(full_name, " (key: ",
-                                    paste0("<a href=", dQuote(paste0("#key_",gen_name,"_",key_sex[sex=="female",]$ckey)), ">female</a>; "),
-                                    paste0("<a href=", dQuote(paste0("#key_",gen_name,"_",key_sex[sex=="male",]$ckey)), ">male</a>)")) 
+                  fig_main = full_name
+                  fig_mtxt = paste0(full_name, " ",
+                                    paste0("<a href=", dQuote(paste0("#key_",gen_name,"_",femalekey)), ">female</a>; "),
+                                    paste0("<a href=", dQuote(paste0("#key_",gen_name,"_",malekey)), ">male</a>)")) 
                 }
+                
+                dfkt <- data.table(fidx=fig_num, fkey=fkey,
+                                   ckeyx=ckeyx, #rep(paste(dtk[x_dtk,]$ckey, collapse = ","), length(fig_num)),
+                                   imgf=gsub("www_sp\\/", "", imgf), 
+                                   fsex=fsex, #rep(NA_character_, length(fig_num)),
+                                   main= fig_main,  #c(fig_main, rep(NA_character_, length(fig_num)-1L)),
+                                   title=full_name, #c(full_name,rep(NA_character_, length(fig_num)-1L)),
+                                   subfig= subfig, caption= cap_cite$cap, 
+                                   citation= cap_cite$cite, #may be null, so use fill=NA
+                                   flushed=rep(paste(fig_num, collapse = ","), length(fig_num)), ## flushed means flush figs in a row
+                                   blkx=blk_cnt, docn=cntg, rid=i, xdtk=paste(x_dtk, collapse=","),
+                                   taxon=xsp2, subgen=subgenx,
+                                   genus=gen_name, family=fam_name) ### blkx: counter of block of fig, docn: nth document
+                
+                dfk <- rbindlist(list(dfk, dfkt), fill = TRUE) 
+                
                 
                 dtk[x_dtk, `:=`(
                   fullname = full_name,
@@ -726,7 +765,7 @@ for (docfile in doclst) {
                                       subgen=subgenx, genus=gen_name, family=fam_name,
                                       epithets=epit, keystr=keystr, 
                                       ctxt=paste(paste0('\n\n<div id=', dQuote(fdlink),'><span class=', dQuote('blkfigure'),'>'), 
-                                                 paste0('<div class=', dQuote("fig_title"),'><span class=', dQuote('spmain'), '>', italics_spname(fig_main, spname),'</span></div>'),
+                                                 paste0('<div class=', dQuote("fig_title"),'><span class=', dQuote('spmain'), '>', italics_spname(fig_mtxt, spname),'</span></div>'),
                                                  mapply(function(outf,flink,cfigx,spanx) {
                                                    paste0('<span class=', dQuote(spanx), '><a class=', dQuote("fbox"), 
                                                           ' href=', dQuote(outf),
@@ -792,8 +831,20 @@ for (docfile in doclst) {
                     }
                   }
                   if (length(xc)>1 & k>1) {
-                    xseg <- trimx(unlist(tstrsplit(x, "(\\s|\\.)Fig\\."), use.names = F))
-                    if (substr(x, 1, 4) != "Fig.") { xseg <- xseg[-1] }
+                    iprex <- "Fig."
+                    if (all(grepl("Plate|Pl\\.", subfig))) {
+                      if (grepl("\\sPlate", x)) {
+                        iprex <- "Plate"
+                      } else if (grepl("\\sPl.", x)) {
+                        iprex <- "Pl."
+                      } else {
+                        print(paste0("Warning: Detect Plate as subfig but NO Plate, Pl. in xstr, use empty prex: ", xstr))
+                        iprex <- ""
+                      }
+                    }
+                    iprext <- gsub("\\.", "\\\\.", iprex)
+                    xseg <- trimx(unlist(tstrsplit(x, paste0("(\\s|\\.)", iprext)), use.names = F))
+                    if (substr(x, 1, 4) != iprex) { xseg <- xseg[-1] }
                     if (length(xseg) != length(xc)) {
                       print(paste0("Warning: Detect subfig is integer but NOT equal segemnt! Check this str: ", xstr))
                     }
@@ -821,10 +872,10 @@ for (docfile in doclst) {
                       system(enc2utf8(paste0("cmd.exe /c copy ", gsub("/","\\\\", imgsrc), 
                                              " ",gsub("/","\\\\",imgf[imgj+1L]))))
                     }
-                    if (k>1 & imgj==1 & (xc[1]<0 | (length(xc)>1 & length(xc)==k))) { #subfig[imgj+1] != substr(x, 1, nchar(subfig[imgj+1]))) {
+                    if (k>1 & imgj>=1 & (xc[1]<0 | (length(xc)>1 & length(xc)==k))) { #subfig[imgj+1] != substr(x, 1, nchar(subfig[imgj+1]))) {
                       fig_caption[imgj+1L] <- NA_character_ #only one description but contains two subfigs
                     } else {
-                      fig_caption[imgj+1L] <- trimx(gsub("\\.Fig.", ". Fig.", x))
+                      fig_caption[imgj+1L] <- trimx(gsub("\\.Mmale",". Male",gsub("\\.Female",". Female",gsub("\\.{1,}Fig.", ". Fig.", x))))
                     }
                     
                     need_fetch_fsex <- FALSE
