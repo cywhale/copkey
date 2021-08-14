@@ -124,7 +124,7 @@ find_subfigx <- function(xstr, subfig, idx) {
   iprext <- gsub("\\.", "\\\\.", iprex)
   xt <- as.integer(gsub("\\((?:.*)\\)", "", gsub(iprext, "", xsubf))) ## some subfig with: 1 (John, 1999. plate 24)
   if (!is.na(xt)) {
-    xt <- as.integer(gsub("\\((?:.*)\\)", "", gsub(iprext, "", subx)))
+    xt <- as.integer(trimx(gsub("\\((?:.*)\\)", "", gsub(iprext, "", subx))))
     if (all(!is.na(xt))) {
       print(paste0("Warning: Detect integer: ", xsubf,", use ", iprex, ": ", paste(subx, collapse=",")))
       xc <- sapply(xt, function(x) {regexpr(paste0(iprext,"*\\s*",x), xstr)}, simplify = T, USE.NAMES = F)
@@ -555,7 +555,7 @@ for (docfile in doclst) {
   }
 
   #i <- 195L #just when test first doc file #i<=232L before p.12 #i<=tstL #245L p13 #351L p25
-  while (fig_mode & nrow(dtk)>0 & i<=373L) {
+  while (fig_mode & nrow(dtk)>0 & i<=tstL) {
     x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i]))))
     wa <- regexpr("\\(Size",x)
     if (wa>0) {
@@ -589,7 +589,7 @@ for (docfile in doclst) {
       while (within_xsp_flag) {
         x <- gsub("^\\\t", "", gsub("^\\s+|\\s+$", "", as.character(ctent$text[i])))  
         tt <- which(is.na(x) | gsub("Last update(?:.*)", "", x)=="") #ignore Last update:...
-        if (any(tt)) {
+        if (i<tstL & any(tt)) {
           ncflag <- ncflag + 1
           if (ncflag >=31 ) { # excced one page of docx
             print(paste0("Warning: Too many NuLL rows, check it at i: ", i))
@@ -602,6 +602,7 @@ for (docfile in doclst) {
             next
           } 
         } else {
+          ncflag <- 0L
           xt <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i])))))
           if (length(subfig)==0 & fig_title=="" & trimx(gsub(fig_exclude,"",xt)) != spname) { #(any(subfig=="")) {
             subfig <- gsub("\\s*\\,\\s*", ", ", #make Sewell,1914 -> Sewell, 1914 with the same format
@@ -629,14 +630,18 @@ for (docfile in doclst) {
             x <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i])))))
             wa <- regexpr("\\(Size",x)
             xsp1 <- trimx(odbapi::sciname_simplify(x, simplify_one = T))
-            if (wa>0 | (xsp1==gen_name & trimx(sp2namex(x)) != xsp2)) {
+            if (i==tstL | wa>0 | (xsp1==gen_name & trimx(sp2namex(x)) != xsp2)) {
               if (wa<0) {
                 spt <- trimx(gsub(fig_exclude, "", x))
               } else {
                 spt<- trimx(substr(x, 1, wa-1))
               }
-              if (spt != spname) {
-                print(paste0("Start next sp: ", spt, "  at i:",  i)) #cannot add i, repeated this step though..
+              if (i==tstL | spt != spname) {
+                if (i==tstL) {
+                  print(paste0("End of doc: ", docfile))
+                } else {
+                  print(paste0("Start next sp: ", spt, "  at i:",  i)) #cannot add i, repeated this step though..
+                }
                 within_xsp_flag <- FALSE #A species is completed its record, and go into next sp! 
                 
                 blk_cnt <- blk_cnt + 1
