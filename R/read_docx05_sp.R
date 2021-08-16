@@ -32,7 +32,10 @@ sp2namex <- function(spname, trim_subgen=TRUE) {
   chkver <- as.numeric(as.character(packageVersion("odbapi")))
   #print(paste0("check odbapi version: ", chkver))
   if (!is.na(chkver) & chkver >= 0.73) {
-    xsp2 <- odbapi::sciname_simplify(spname, simplify_two = T, trim.subgen = trim_subgen) #note that odbapi_v073 has trim.subgen
+    #odbapi got bugs need modified(20210815) if "Aetideopsis armata (Boeck, 1872)" and use simplify_two = T, trim.subgen = trim_subgen
+    #xsp2 <- odbapi::sciname_simplify(spname, simplify_two = T, trim.subgen = trim_subgen) #note that odbapi_v073 has trim.subgen
+    xsp2 <- odbapi::sciname_simplify(spname, simplify_two = T)
+    xsp2 <- odbapi::sciname_simplify(xsp2, trim.subgen = trim_subgen)
   } else {
     xsp2 <- odbapi::sciname_simplify(spname, simplify_two = T)
   }
@@ -107,6 +110,7 @@ bold_spsex <- function(xstr) { #only match Male or Female
 find_subfigx <- function(xstr, subfig, idx) {
   xsubf <- subfig[idx]
   iprex <- "Fig."
+  xstr <- gsub("\\sfig\\.", " Fig.", gsub("\\splate", " Plate", xstr))
   if (all(grepl("Plate|Pl\\.", subfig))) {
     if (grepl("\\sPlate", xstr)) {
       iprex <- "Plate"
@@ -121,10 +125,10 @@ find_subfigx <- function(xstr, subfig, idx) {
   } else {
     subx <- subfig
   }
-  iprext <- gsub("\\.", "\\\\.", iprex)
-  xt <- as.integer(gsub("\\((?:.*)\\)", "", gsub(iprext, "", xsubf))) ## some subfig with: 1 (John, 1999. plate 24)
+  iprext <- gsub("\\.", "\\\\.", iprex) #the following, also can match 20d (John, 1999. plate 24)
+  xt <- as.integer(trimx(gsub("(?![0-9]+)[a-z]*", "", gsub("\\s*\\((?:.*)\\)", "", gsub(iprext, "", xsubf)), perl=T))) ## some subfig with: 1 (John, 1999. plate 24)
   if (!is.na(xt)) {
-    xt <- as.integer(trimx(gsub("\\((?:.*)\\)", "", gsub(iprext, "", subx))))
+    xt <- as.integer(trimx(gsub("(?![0-9]+)[a-z]*", "", gsub("\\s*\\((?:.*)\\)", "", gsub(iprext, "", subx)), perl=T)))
     if (all(!is.na(xt))) {
       print(paste0("Warning: Detect integer: ", xsubf,", use ", iprex, ": ", paste(subx, collapse=",")))
       xc <- sapply(xt, function(x) {regexpr(paste0(iprext,"*\\s*",x), xstr)}, simplify = T, USE.NAMES = F)
@@ -156,7 +160,28 @@ cntg_fig <- 0L
 blk_cnt <- 0L
 #docfile <- doclst[1]
 
-for (docfile in doclst) {
+#### Used to store figs <-> fig_file mapping
+dfk <- data.table(fidx=integer(), 
+                  fkey=character(), ckeyx=character(),
+                  imgf=character(), fsex=character(), 
+                  main=character(), title=character(),
+                  subfig=character(), caption=character(), citation=character(),
+                  flushed=character(), ## flushed means flush figs in a row
+                  blkx=integer(), docn=integer(), rid=character(), ### blkx: counter of block of fig, docn: nth document
+                  xdtk=character(), taxon=character(), subgen=character(),
+                  genus=character(), family=character()) #rid link to dtk, xdtk link to key of dtk
+
+#Note: figs is type=2
+dtk <- data.table(rid=integer(), unikey=character(), ckey=character(), 
+                  subkey=character(), pkey=character(),
+                  figs=character(), type=integer(), nkey=integer(), 
+                  taxon=character(), abbrev_taxon=character(), fullname=character(),
+                  subgen=character(), genus=character(), family=character(), 
+                  epithets=character(), keystr=character(), ctxt=character(), fkey=character(),
+                  sex=character()) #, keyword=character()) #, page=integer())
+
+
+for (docfile in doclst[1:3]) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
   ctent <- docx_summary(dc0)
 
@@ -184,38 +209,24 @@ for (docfile in doclst) {
   epi_list <- trimx(gsub("\\s\\,", "\\,", gsub("(?!^\\()(?![a-zA-Z]{1,})\\(", ", (",
               gsub("(?![a-zA-Z]{1,})\\)", ") ",     
               gsub("(?![a-zA-Z]{1,})\\,", ", ",ctent[3,]$text, perl=T), perl=T), perl=T)))
+  epitxt <- unlist(tstrsplit(epi_list, "\\,\\s*"), use.names = F) %>%
+    sapply(function(x) {
+      paste0("<em>", x, "</em>")
+    }, simplify = T, USE.NAMES = F) %>% paste(collapse=", ")
   
+  epi_list <- trimx(gsub(paste0("(?!\\()", gen_name, "(?!\\))"), "", epi_list, perl = T)) #Some (Subgen) == gen_name cannot be filtered
+  #for example: c("(Acartia) abc", "Acartia ddd") -> "(Acartia) abc" "ddd" 
+  
+  dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0("gen_", cntg), 
+                                       ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
+                                       figs=NA_character_, type=NA_integer_, nkey=NA_integer_, 
+                                       taxon=NA_character_, abbrev_taxon=NA_character_, fullname=NA_character_,
+                                       subgen=NA_character_, genus=gen_name, family=fam_name, epithets=epi_list, 
+                                       keystr=NA_character_, ctxt=epitxt, fkey=NA_character_, 
+                                       sex=NA_character_))) #, keyword=NA_character_)))
   tstL <- nrow(ctent)
 
-#### Used to store figs <-> fig_file mapping
-  dfk <- data.table(fidx=integer(), 
-                    fkey=character(), ckeyx=character(),
-                    imgf=character(), fsex=character(), 
-                    main=character(), title=character(),
-                    subfig=character(), caption=character(), citation=character(),
-                    flushed=character(), ## flushed means flush figs in a row
-                    blkx=integer(), docn=integer(), rid=character(), ### blkx: counter of block of fig, docn: nth document
-                    xdtk=character(), taxon=character(), subgen=character(),
-                    genus=character(), family=character()) #rid link to dtk, xdtk link to key of dtk
-  
-  #Note: figs is type=2
-  dtk <- data.table(rid=integer(), unikey=character(), ckey=character(), 
-             subkey=character(), pkey=character(),
-             figs=character(), type=integer(), nkey=integer(), 
-             taxon=character(), abbrev_taxon=character(), fullname=character(),
-             subgen=character(), genus=character(), family=character(), 
-             epithets=character(), keystr=character(), ctxt=character(), fkey=character(),
-             sex=character()) #, keyword=character()) #, page=integer())
-
-  dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0("gen_", cntg), 
-                                     ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
-                                     figs=NA_character_, type=NA_integer_, nkey=NA_integer_, 
-                                     taxon=NA_character_, abbrev_taxon=NA_character_, fullname=NA_character_,
-                                     subgen=NA_character_, genus=gen_name, family=NA_character_, epithets=epi_list, 
-                                     keystr=NA_character_, ctxt=NA_character_, fkey=NA_character_, 
-                                     sex=NA_character_))) #, keyword=NA_character_)))
-
-  epiall <- trimx(gsub("\\((?:.*)\\)", "", unlist(tstrsplit(dtk[1,]$epithets, ","), use.names = F)))
+  epiall <- trimx(gsub("\\((?:.*)\\)", "", unlist(tstrsplit(dtk[rid==0 & genus==gen_name & family==fam_name,]$epithets, ","), use.names = F)))
   print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
 
   i = skipLine+1L
@@ -243,7 +254,7 @@ for (docfile in doclst) {
     tt <- which(is.na(x) | x=="")
     if (any(tt)) {
       ncflag <- ncflag + 1
-      if (ncflag >=31 ) { # excced one page of docx
+      if (ncflag >=31 ) { # exceed one page of docx
         print(paste0("Warning: Too many NuLL rows, check it at i: ", i))
         fig_mode <- TRUE
         ncflag <- 0L
@@ -255,7 +266,7 @@ for (docfile in doclst) {
       } 
     } else {
       wl0 <- regexpr("^[A-Z][a-z]{1,}",x)
-      if (wl0==1 & nrow(dtk)>0 & ncflag>=1) {
+      if (wl0==1 & nrow(dtk)>0) { #& ncflag>=1) {
         print(paste0("Warning: Now handle Figures at i: ", i))
         fig_mode <- TRUE
         ncflag <- 0L
@@ -364,13 +375,23 @@ for (docfile in doclst) {
       
       if (!withinCurrKey) {
         #try to find species 
-        mat_sp1 = paste0("(?:(…+\\.*\\s*|\\.{2,}…*\\s*))([A-Z])\\.\\s*[a-z]{1,}$")
+        mat_sp1 = paste0("(?:(…+\\.*\\s*…*|\\.{2,}…*\\s*))(([A-Z])\\.\\s*|", gen_name, "\\s)[a-z]{1,}$")
         wl3 <- regexpr(mat_sp1, x2, perl=T)
         if (wl3>0) {
-          nsp <- gsub("\\.", "\\. ", gsub("^\\.", "", gsub("…|\\.{2,}|\\s", "", substr(x2, wl3+1, nchar(x2))))) #equal wl2s+attributes(wl2s)$match.length-1)   
+          nsp <- gsub("\\.", "\\. ", gsub("^\\.", "", gsub("…|\\.{2,}|\\s(?![a-z]+)", "", substr(x2, wl3+1, nchar(x2)), perl=T))) #equal wl2s+attributes(wl2s)$match.length-1)   
           print(paste0("Find end SP: ", nsp, " in i, keyx: ", i, ", ", keyx, " with equal end: ", nchar(x2)==wl3+attributes(wl3)$match.length-1))
           nxttype <- 1L
-          xsp <- gsub("\\s{1,}", " ", gsub(substr(nsp,1,2), paste0(gen_name, " "), nsp))
+          if (substr(nsp,1,2)==paste0(substr(gen_name, 1, 1), ".")) {
+            xsp <- gsub("\\s{1,}", " ", gsub(substr(nsp,1,2), paste0(gen_name, " "), nsp))
+          } else {
+            xt <- odbapi::sciname_simplify(nsp, simplify_one=T)
+            if (xt != gen_name) {
+              print(paste0("Warning and Check it: Not equal genus name when get end species: ", nsp, " for genus: ", gen_name, " at i: ", i))
+              xsp <- gsub(xt, gen_name, nsp)
+            } else {
+              xsp <- nsp
+            }
+          }
           epithet <- gsub(paste0(gen_name, " "), "", xsp)
           keystr <- gsub("\\.$", "", trimx(gsub("…|\\.{2,}", "", substr(x2, 1, wl3))))
           pret <- paste0(pret, keystr)
@@ -513,6 +534,15 @@ for (docfile in doclst) {
           xc <- gsub("<p class(.*?)><span", paste0('<p class=',dQuote(paste0('leader ', indentx)),'><span'), xc)
         }
         
+        if (is.na(xsex)) {
+          if (grepl("(I|i)n female|(F|f)emale\\:\\,", keystr)) {
+            xsex <- "female"
+          }
+          if (grepl("(I|i)n male|(\\s|\\.|^)(M|m)ale(\\:|\\,)", keystr)) {
+            xsex <- ifelse(is.na(xsex), "male", "female/male")
+          }
+        }
+        
         dtk <- rbindlist(list(dtk,data.table(rid=i, unikey=paste0(gen_name, "_", keyx),
                                              ckey= keyx, subkey= subkeyx, pkey= prekeyx,
                                              figs=NA_character_, type=nxttype, nkey=nxtk, 
@@ -611,12 +641,21 @@ for (docfile in doclst) {
             next
           } else if (fig_title=="") {
             x <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i])))))
+            if (length(subfig)>0) {
+              xc <- find_subfigx(x, subfig, 1L)
+              if (xc[1]>0) {
+                print(paste0("Warning: No fig title provided but detect subfig, use default spname in sp: ", spname))
+                fig_title <- spname
+                next #Note i cannot add 1 and let it go to fig_caption detection
+              }
+            }
+            
             x <- gsub(fig_exclude, "", x)  
             if (x!=spname) {
               print(paste0("Warning: Not equal fig title with spname, check it fig_titile: ", x, "  at i:",  i))
               tt <- sp2namex(x)
               if (tt!=xsp2) {
-                print(paste0("Error: Not equal short fig title with taxon, check it fig_titile: ", x, "  at i:",  i))
+                print(paste0("Error: Not equal short fig title with taxon, check it fig_title: ", x, "  at i:",  i))
                 break
               } else {
                 fig_title <- x
@@ -864,7 +903,7 @@ for (docfile in doclst) {
                     fig_num[imgj+1] <- cntg_fig
                     docfn <- unlist(tstrsplit(docfile, "\\/"), use.names = F) %>% .[length(.)]
                     imgsrc <- paste0(doc_imgdir, 
-                                     gsub("\\s", "_", gsub("Key to the species of\\s|\\s\\(China seas 2\\)\\.docx", "", docfn)),
+                                     gsub("\\s", "_", gsub("Key to the species of\\s|\\s\\(China seas\\s*[2]*\\)\\.docx", "", docfn)),
                                      "/word/media/image", doc_fign, ".jpeg")
                     if (!file.exists(imgsrc)) {
                       print(paste0("Error: Cannot get the the image file: ", imgsrc, "  Check it at i:",  i))
