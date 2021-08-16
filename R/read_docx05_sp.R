@@ -51,12 +51,24 @@ italics_spname <- function(xstr, spname) {
   chk_sp3 <- regexpr(gsub("\\s","\\\\s",gsub("\\)","\\\\)",gsub("\\(","\\\\(",xspt))),xstr)
   #chk_gsp <- regexpr(paste0("(A|a)s\\s",xsp1,"(\\s[a-z]{1,}(\\s|\\.))"),xstr) #if detect "As Acartia hongi" substr need +3
   chk_gsp <- regexpr(paste0(xsp1,"(\\s[a-z]{1,}(\\s|\\.))"),xstr)
+  chk_abbrev <- gregexpr(paste0(substr(gen_name, 1, 1),"\\.\\s[a-z]{3,}(?!(\\s|\\.|\\(|\\)|\\,|\\:|$))"), xstr, perl = T)
   
-  if (chk_sp1<0 & chk_sp2<0 & chk_sp3<0 & chk_gsp<0) return(xstr)
+  if (chk_sp1<0 & chk_sp2<0 & chk_sp3<0 & chk_gsp<0 & chk_abbrev[[1]][1]<0) return(xstr)
   
   str1 <- xstr
+  if (chk_abbrev[[1]][1]>0) {
+    xspx <- c()
+    for (i in seq_along(chk_abbrev[[1]])) {
+      xspx <- c(xspx, substr(str1, chk_abbrev[[1]][i], chk_abbrev[[1]][i]+attributes(chk_abbrev[[1]])$match.length[i]))
+    }
+    for (x in unique(xspx)) {
+      str1 <- gsub(paste0("(?!\\_)",gsub("\\)","\\\\)",gsub("\\(","\\\\(",x)),"(?!\\_)"), paste0("<em>",x,"</em>"), str1, perl = T)
+    }
+  }
+  
+  chk_gsp <- regexpr(paste0(xsp1,"(\\s[a-z]{1,}(\\s|\\.))"), str1)
   if (chk_gsp>0) {
-    xspx <- substr(xstr, chk_gsp, chk_gsp+attributes(chk_gsp)$match.length-2) %>% #if detect "As Acartia hongi" substr need +3
+    xspx <- substr(str1, chk_gsp, chk_gsp+attributes(chk_gsp)$match.length-2) %>% #if detect "As Acartia hongi" substr need +3
       tstrsplit("\\s") %>% unlist(use.names = F)
     for (x in xspx) {
       str1 <- gsub(paste0("(?!\\_)",gsub("\\)","\\\\)",gsub("\\(","\\\\(",x)),"(?!\\_)"), paste0("<em>",x,"</em>"), str1, perl = T)
@@ -81,8 +93,8 @@ italics_spname <- function(xstr, spname) {
       }
     }
   }
-  
-  return(str1)
+  str2 <- gsub("<\\/em>\\s<em>", " ", str1)
+  return(str2)
 }
 
 bold_spsex <- function(xstr) { #only match Male or Female
@@ -107,7 +119,9 @@ bold_spsex <- function(xstr) { #only match Male or Female
   return(str1)
 }
 
-find_subfigx <- function(xstr, subfig, idx) {
+# In figure info extraction, test twice for find_subfigx(), but
+# in first time(during find fig_title, just test if have caption but no fig title provided), don't print warning that confuse debugging
+find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
   xsubf <- subfig[idx]
   iprex <- "Fig."
   xstr <- gsub("\\sfig\\.", " Fig.", gsub("\\splate", " Plate", xstr))
@@ -117,7 +131,7 @@ find_subfigx <- function(xstr, subfig, idx) {
     } else if (grepl("\\sPl.", xstr)) {
       iprex <- "Pl."
     } else {
-      print(paste0("Warning: Detect Plate as subfig but NO Plate, Pl. in xstr, use empty prex: ", xstr))
+      if (print_info) print(paste0("Warning: Detect Plate as subfig but NO Plate, Pl. in xstr, use empty prex: ", xstr))
       iprex <- ""
     }
     subx <- gsub("Plate|Pl\\.", iprex, subfig)
@@ -130,22 +144,26 @@ find_subfigx <- function(xstr, subfig, idx) {
   if (!is.na(xt)) {
     xt <- as.integer(trimx(gsub("(?![0-9]+)[a-z]*", "", gsub("\\s*\\((?:.*)\\)", "", gsub(iprext, "", subx)), perl=T)))
     if (all(!is.na(xt))) {
-      print(paste0("Warning: Detect integer: ", xsubf,", use ", iprex, ": ", paste(subx, collapse=",")))
+      if (print_info) print(paste0("Warning: Detect integer: ", xsubf,", use ", iprex, ": ", paste(subx, collapse=",")))
       xc <- sapply(xt, function(x) {regexpr(paste0(iprext,"*\\s*",x), xstr)}, simplify = T, USE.NAMES = F)
       if (!all(xc>0)) {
-        print(paste0("Warning: Detect subfig is integer but not all found: ", 
-                     paste(subfig, collapse=","), " and founded: ", paste(xc, collapse=","), 
-                     " Check this str: ", xstr))
+        if (print_info) {
+          print(paste0("Warning: Detect subfig is integer but not all found: ", 
+                       paste(subfig, collapse=","), " and founded: ", paste(xc, collapse=","), 
+                       " Check this str: ", xstr))
+        }
       }
       return (xc)
     } else {
-      print(paste0("Warning: Detect integer: ", xsubf,", But CANNOT use Fig. ", paste(subfig, collapse=","),
+      if (print_info) {
+        print(paste0("Warning: Detect integer: ", xsubf,", But CANNOT use Fig. ", paste(subfig, collapse=","),
                    " Check this str: ", xstr)) #Use default (the following) matching, then
+      }   
     }
   }
   
   if (grepl("\\&|\\/", xsubf)) {
-    print(paste0("Warning: Detect multiple name in subfig: ", xsubf,", use first: ", gsub("\\s*(\\&|\\/){1}(?:.*)+$", "", xsubf)))
+    if (print_info) print(paste0("Warning: Detect multiple name in subfig: ", xsubf,", use first: ", gsub("\\s*(\\&|\\/){1}(?:.*)+$", "", xsubf)))
     xsubf <- gsub("\\s*(\\&|\\/){1}(?:.*)+$", "", xsubf)
   }
   #chk_sub <- regexpr(paste0("(?=([A-Z]{1,1}\\.*\\s*){0,1})", xsubf), xstr, perl = T)
@@ -154,12 +172,6 @@ find_subfigx <- function(xstr, subfig, idx) {
 }
 
 ###############################################################################################
-doclst <- list.files(key_src_dir, pattern="^Key?(.*).docx$",full.names = T)
-cntg <- 0L
-cntg_fig <- 0L
-blk_cnt <- 0L
-#docfile <- doclst[1]
-
 #### Used to store figs <-> fig_file mapping
 dfk <- data.table(fidx=integer(), 
                   fkey=character(), ckeyx=character(),
@@ -179,6 +191,12 @@ dtk <- data.table(rid=integer(), unikey=character(), ckey=character(),
                   subgen=character(), genus=character(), family=character(), 
                   epithets=character(), keystr=character(), ctxt=character(), fkey=character(),
                   sex=character()) #, keyword=character()) #, page=integer())
+
+doclst <- list.files(key_src_dir, pattern="^Key?(.*).docx$",full.names = T)
+cntg <- 0L
+cntg_fig <- 0L
+blk_cnt <- 0L
+#docfile <- doclst[1]
 
 
 for (docfile in doclst[1:3]) {
@@ -209,11 +227,13 @@ for (docfile in doclst[1:3]) {
   epi_list <- trimx(gsub("\\s\\,", "\\,", gsub("(?!^\\()(?![a-zA-Z]{1,})\\(", ", (",
               gsub("(?![a-zA-Z]{1,})\\)", ") ",     
               gsub("(?![a-zA-Z]{1,})\\,", ", ",ctent[3,]$text, perl=T), perl=T), perl=T)))
-  epitxt <- unlist(tstrsplit(epi_list, "\\,\\s*"), use.names = F) %>%
-    sapply(function(x) {
-      paste0("<em>", x, "</em>")
-    }, simplify = T, USE.NAMES = F) %>% paste(collapse=", ")
-  
+  titletxt <- paste0("<div class=", dQuote("kblk"), "><span class=", dQuote("doc_title"), ">", italics_spname(ctent[1,]$text, gen_name), "</span></div><br><br>")
+  epitxt <- paste0(titletxt, "<div class=", dQuote("kblk"), "><span class=", dQuote("doc_epithets"), ">", 
+    unlist(tstrsplit(epi_list, "\\,\\s*"), use.names = F) %>%
+      sapply(function(x) {
+        paste0("<em>", x, "</em>")
+      }, simplify = T, USE.NAMES = F) %>% paste(collapse=", "), "</span></div><br>\n\n")
+    
   epi_list <- trimx(gsub(paste0("(?!\\()", gen_name, "(?!\\))"), "", epi_list, perl = T)) #Some (Subgen) == gen_name cannot be filtered
   #for example: c("(Acartia) abc", "Acartia ddd") -> "(Acartia) abc" "ddd" 
   
@@ -322,7 +342,9 @@ for (docfile in doclst[1:3]) {
           kflag <- TRUE #primary key found
           
           if (prekeyx!="") {
-            pret0s <- paste0('[', prekeyx, '](#key_',  gen_name, "_", prekeyx, '))&nbsp;') #note it's a md anchor
+            #using markdown 
+            #pret0s <- paste0('[', prekeyx, '](#key_',  gen_name, "_", prekeyx, '))&nbsp;') #note it's a md anchor
+            pret0s <- paste0('<a href=', dQuote(paste0('#key_', gen_name, "_", prekeyx)), '>', prekeyx, '</a>)&nbsp;') 
             xc<- paste0(pret, pret0s, x1)
             stcnt <- nchar(pret)+nchar(pret0s) +1L
             pret <- paste0(pret, pret0s)
@@ -422,25 +444,31 @@ for (docfile in doclst[1:3]) {
           xc <- paste0(pret,
                        '</span><span class=',dQuote('keycol'),'>',
                        paste0('<mark id=',  dQuote(paste0('taxon_', gsub("\\s","_",xsp))), 
-                              '>*<a href=', dQuote(paste0('#fig_', gsub("\\s","_", xsp))), '>', xsp, '</a>*</mark></span></p>'))
+                              '><em><a href=', dQuote(paste0('#fig_', gsub("\\s","_", xsp))), '>', xsp, '</a></em></mark></span></p>'))
           
         } else if (subgen!="" | nxtk!=0L) {
           if (grepl("\\,", subgen)) { #with multiple subgenus
             subgx <- trimx(unlist(tstrsplit(subgen, ","), use.names = F))
             subgen<- paste(subgx, collapse=", ") #to make format consistently
             
-            xc0 <- do.call(function(x) {paste0('<mark id=',dQuote(paste0('subgen_', x)),'>*', x, '*</mark>')}, list(subgx)) %>%
+            xc0 <- do.call(function(x) {paste0('<mark id=',dQuote(paste0('subgen_', x)),'><em>', x, '</em></mark>')}, list(subgx)) %>%
               paste(collapse=",&nbsp;")
             
             xc <- paste0(pret, '</span>&nbsp;<span class=',dQuote('keycol'),'>', 
               paste0('(', xc0, ')'),
-              paste0('[', nxtk, '](#key_', gen_name, "_", nxtk,'a)'), '</span></p>')
+              #using markdown
+              #paste0('[', nxtk, '](#key_', gen_name, "_", nxtk,'a)'), 
+              paste0('<a href=', dQuote(paste0('#key_', gen_name, "_", nxtk,'a')), '>', nxtk,'</a>'), 
+              '</span></p>')
           } else {
             xc <- paste0(#gsub("…|\\.{2,}|…\\.{1,}|\\.{1,}…","",
               #ifelse(st_conti_flag, xc, substr(xc,1,nchar(xc)-stt))),
               pret, '</span>&nbsp;<span class=',dQuote('keycol'),'>', 
-              ifelse(subgen=="", "", paste0('<mark id=',dQuote(paste0('subgen_', subgen)),'>(*', subgen, '*)</mark>')),
-              paste0('[', nxtk, '](#key_', gen_name, "_", nxtk,'a)'), '</span></p>')
+              ifelse(subgen=="", "", paste0('<mark id=',dQuote(paste0('subgen_', subgen)),'>(<em>', subgen, '</em>)</mark>')),
+              #using markdown
+              #paste0('[', nxtk, '](#key_', gen_name, "_", nxtk,'a)'),
+              paste0('<a href=', dQuote(paste0('#key_', gen_name, "_", nxtk,'a')), '>', nxtk,'</a>'), 
+              '</span></p>')
           }
         } else {
           print("Not found any recognized patterns or key! check it in i: ", i)
@@ -552,7 +580,7 @@ for (docfile in doclst[1:3]) {
                                              sex=xsex))) #keyword=NA_character_)))
       } else {
         xc <- paste0('</div><div><p class=',dQuote(paste0(indentx, ' lxbot')), '><span class=', 
-                     dQuote(padx), '>*', paste(epix, collapse="*, *"), '*</span></p>')
+                     dQuote(padx), '><em>', paste(epix, collapse="</em>, <em>"), '</em></span></p>')
         xc0 <- gsub("<p class(.*?)><span", 
                     paste0('<p class=',dQuote(paste0('leader ', indentx, ' lxtop')), '><span'), 
                     dtk[nrow(dtk),]$ctxt)
@@ -575,7 +603,7 @@ for (docfile in doclst[1:3]) {
     } 
   }
   
-  dtk[nrow(dtk), ctxt:=paste0(dtk[nrow(dtk),]$ctxt, '</div>')]
+  dtk[nrow(dtk), ctxt:=paste0(dtk[nrow(dtk),]$ctxt, '</div><br><br>\n\n')]
   print(paste0("Checking fig_mode: ", fig_mode))
   chkt <- dtk[!is.na(taxon), .(taxon, sex)]
   if (any(duplicated(chkt))) {
@@ -584,7 +612,7 @@ for (docfile in doclst[1:3]) {
                  " of genus: ", gen_name))
   }
 
-  #i <- 195L #just when test first doc file #i<=232L before p.12 #i<=tstL #245L p13 #351L p25
+  #i <- 195L #just when test first doc file #i<=232L before p.12 #i<=tstL #245L p13 #292L before p19 #351L p25
   while (fig_mode & nrow(dtk)>0 & i<=tstL) {
     x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i]))))
     wa <- regexpr("\\(Size",x)
@@ -642,7 +670,7 @@ for (docfile in doclst[1:3]) {
           } else if (fig_title=="") {
             x <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i])))))
             if (length(subfig)>0) {
-              xc <- find_subfigx(x, subfig, 1L)
+              xc <- find_subfigx(x, subfig, 1L, print_info = FALSE)
               if (xc[1]>0) {
                 print(paste0("Warning: No fig title provided but detect subfig, use default spname in sp: ", spname))
                 fig_title <- spname
@@ -808,7 +836,7 @@ for (docfile in doclst[1:3]) {
                                       taxon=xsp2, abbrev_taxon=dtk[x_dtk[1],]$abbrev_taxon, fullname=full_name,
                                       subgen=subgenx, genus=gen_name, family=fam_name,
                                       epithets=epit, keystr=keystr, 
-                                      ctxt=paste(paste0('\n\n<div id=', dQuote(fdlink),'><span class=', dQuote('blkfigure'),'>'), 
+                                      ctxt=paste0(paste(paste0('\n\n<div id=', dQuote(fdlink),'><span class=', dQuote('blkfigure'),'>'), 
                                                  paste0('<div class=', dQuote("fig_title"),'><span class=', dQuote('spmain'), '>', italics_spname(fig_mtxt, spname),'</span></div>'),
                                                  mapply(function(outf,flink,cfigx,spanx) {
                                                    paste0('<span class=', dQuote(spanx), '><a class=', dQuote("fbox"), 
@@ -836,7 +864,7 @@ for (docfile in doclst[1:3]) {
                                                   #MoreArgs = list(k=seq_along(fig_caption)), SIMPLIFY = TRUE, 
                                                   simplify = TRUE, USE.NAMES = FALSE) %>%
                                                   paste(collapse="<br>"), 
-                                                  sep="<br>"),
+                                                  sep="<br>"), ifelse(i==tstL, "<br><br><br><br>\n\n", "")),
                                       fkey=paste(fkey, collapse=","), 
                                       sex=NA_character_))) #, keyword="figs"))) #figs is type =2
                 next
@@ -876,10 +904,11 @@ for (docfile in doclst[1:3]) {
                   }
                   if (length(xc)>1 & k>1) {
                     iprex <- "Fig."
+                    xstr <- gsub("\\sfig\\.", " Fig.", gsub("\\splate", " Plate", x))
                     if (all(grepl("Plate|Pl\\.", subfig))) {
-                      if (grepl("\\sPlate", x)) {
+                      if (grepl("\\sPlate", xstr)) {
                         iprex <- "Plate"
-                      } else if (grepl("\\sPl.", x)) {
+                      } else if (grepl("\\sPl.", xstr)) {
                         iprex <- "Pl."
                       } else {
                         print(paste0("Warning: Detect Plate as subfig but NO Plate, Pl. in xstr, use empty prex: ", xstr))
@@ -887,7 +916,7 @@ for (docfile in doclst[1:3]) {
                       }
                     }
                     iprext <- gsub("\\.", "\\\\.", iprex)
-                    xseg <- trimx(unlist(tstrsplit(x, paste0("(\\s|\\.)", iprext)), use.names = F))
+                    xseg <- trimx(unlist(tstrsplit(xstr, paste0("(\\s|\\.)", iprext)), use.names = F))
                     if (substr(x, 1, 4) != iprex) { xseg <- xseg[-1] }
                     if (length(xseg) != length(xc)) {
                       print(paste0("Warning: Detect subfig is integer but NOT equal segemnt! Check this str: ", xstr))
