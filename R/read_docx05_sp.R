@@ -14,6 +14,8 @@ skipLine <- 4L
 #webCite <- "from the website <a href='https://copepodes.obs-banyuls.fr/en/' target='_blank'>https://copepodes.obs-banyuls.fr/en/</a> managed by Razouls, C., F. de Bovée, J. Kouwenberg, & N. Desreumaux (2015-2017)"
 #options(useFancyQuotes = FALSE)
 # some unicode should be replaced: <U+00A0> by " ", dQuote() by "
+# some special character should be replaced in docx, otherwise docx_summary lost it:
+# 24 => ° 18 -> 'N
 
 trimx <- function (x) {
   gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(x)))
@@ -43,6 +45,7 @@ sp2namex <- function(spname, trim_subgen=TRUE) {
 }
 
 italics_spname <- function(xstr, spname) {
+  if (is.na(spname) | trimx(spname)=="") return (xstr)
   xsp2 <- sp2namex(spname)
   xspt <- sp2namex(spname, trim_subgen=FALSE)
   xsp1 <- odbapi::sciname_simplify(spname, simplify_one = T) #get a old alternative spname in caption
@@ -50,10 +53,12 @@ italics_spname <- function(xstr, spname) {
   chk_sp2 <- regexpr(gsub("\\s","(\\\\s|\\\\s\\\\((?:.*)\\\\)\\\\s)",xsp2),xstr) #match e.g. Acartia (Acartiura/whatever) hongi
   chk_sp3 <- regexpr(gsub("\\s","\\\\s",gsub("\\)","\\\\)",gsub("\\(","\\\\(",xspt))),xstr)
   #chk_gsp <- regexpr(paste0("(A|a)s\\s",xsp1,"(\\s[a-z]{1,}(\\s|\\.))"),xstr) #if detect "As Acartia hongi" substr need +3
-  chk_gsp <- regexpr(paste0(xsp1,"(\\s[a-z]{1,}(\\s|\\.))"),xstr)
+  #special genus pattern #"Euaetideus"
+  spe_gen <- c(xsp1, "Euaetideus")
+  chk_gsp <- gregexpr(paste0("(", paste(spe_gen, collapse="|"),")(\\s[a-z]{1,}(\\s|\\.))"),xstr)
   chk_abbrev <- gregexpr(paste0(substr(gen_name, 1, 1),"\\.\\s[a-z]{3,}(?!(\\s|\\.|\\(|\\)|\\,|\\:|$))"), xstr, perl = T)
-  
-  if (chk_sp1<0 & chk_sp2<0 & chk_sp3<0 & chk_gsp<0 & chk_abbrev[[1]][1]<0) return(xstr)
+   
+  if (chk_sp1<0 & chk_sp2<0 & chk_sp3<0 & chk_gsp[[1]][1]<0 & chk_abbrev[[1]][1]<0) return(xstr)
   
   str1 <- xstr
   if (chk_abbrev[[1]][1]>0) {
@@ -64,30 +69,37 @@ italics_spname <- function(xstr, spname) {
     for (x in unique(xspx)) {
       str1 <- gsub(paste0("(?!\\_)",gsub("\\)","\\\\)",gsub("\\(","\\\\(",x)),"(?!\\_)"), paste0("<em>",x,"</em>"), str1, perl = T)
     }
+    chk_gsp <- gregexpr(paste0("(", paste(spe_gen, collapse="|"),")(\\s[a-z]{1,}(\\s|\\.))"), str1)
   }
   
-  chk_gsp <- regexpr(paste0(xsp1,"(\\s[a-z]{1,}(\\s|\\.))"), str1)
-  if (chk_gsp>0) {
-    xspx <- substr(str1, chk_gsp, chk_gsp+attributes(chk_gsp)$match.length-2) %>% #if detect "As Acartia hongi" substr need +3
-      tstrsplit("\\s") %>% unlist(use.names = F)
-    for (x in xspx) {
+  if (chk_gsp[[1]][1]>0) {
+    xspx <- c()
+    for (i in seq_along(chk_gsp[[1]])) {
+      xspx <- c(xspx, substr(str1, chk_gsp[[1]][i], chk_gsp[[1]][i]+attributes(chk_gsp[[1]])$match.length[i]-2) %>% #if detect "As Acartia hongi" substr need +3
+        tstrsplit("\\s") %>% unlist(use.names = F))
+    }  
+    for (x in unique(xspx)) {
       str1 <- gsub(paste0("(?!\\_)",gsub("\\)","\\\\)",gsub("\\(","\\\\(",x)),"(?!\\_)"), paste0("<em>",x,"</em>"), str1, perl = T)
     }
   }
 
   if (chk_sp2>0) { #Some text use different subgen in citation that make exactly match A (subgen) epi not work
-    xspx <- substr(xstr, chk_sp2, chk_sp2+attributes(chk_sp2)$match.length-1) %>%
+    xspx2 <- substr(xstr, chk_sp2, chk_sp2+attributes(chk_sp2)$match.length-1) %>%
       tstrsplit("\\s") %>% unlist(use.names = F)
-    for (x in xspx) {
-      str1 <- gsub("<em><em>", "<em>", gsub("</em></em>", "</em>",
-                   gsub(paste0("(?!\\_)",gsub("\\)","\\\\)",gsub("\\(","\\\\(",x)),"(?!\\_)"), paste0("<em>",x,"</em>"), str1, perl = T)))
+    if (!all(xspx2 %chin% unique(xspx))) {
+      for (x in xspx2) {
+        str1 <- gsub("<em><em>", "<em>", gsub("</em></em>", "</em>",
+                                         gsub(paste0("(?!\\_)",gsub("\\)","\\\\)",gsub("\\(","\\\\(",x)),"(?!\\_)"), paste0("<em>",x,"</em>"), str1, perl = T)))
+      }
     }
+  } else {
+    xspx2 <- unique(xspx)
   }
 
-  xspx2 <- unlist(tstrsplit(xspt, "\\s"), use.names = F)
-  if (!identical(xspx, xspx2)) {
+  xspx3 <- unlist(tstrsplit(xspt, "\\s"), use.names = F)
+  if (!identical(xspx2, xspx3)) {
     if (chk_sp1>0 | chk_sp3>0) {
-      for (x in xspx2) { #key_Acartia_40b cannot be inserted with <em>
+      for (x in xspx3) { #key_Acartia_40b cannot be inserted with <em>
         str1 <- gsub("<em><em>", "<em>", gsub("</em></em>", "</em>",
                      gsub(paste0("(?!\\_)",gsub("\\)","\\\\)",gsub("\\(","\\\\(",x)),"(?!\\_)"), paste0("<em>",x,"</em>"), str1, perl = T)))
       }
@@ -948,7 +960,7 @@ for (docfile in doclst[1:3]) {
                     if (k>1 & imgj>=1 & (xc[1]<0 | (length(xc)>1 & length(xc)==k))) { #subfig[imgj+1] != substr(x, 1, nchar(subfig[imgj+1]))) {
                       fig_caption[imgj+1L] <- NA_character_ #only one description but contains two subfigs
                     } else {
-                      fig_caption[imgj+1L] <- trimx(gsub("\\.Mmale",". Male",gsub("\\.Female",". Female",gsub("\\.{1,}Fig.", ". Fig.", x))))
+                      fig_caption[imgj+1L] <- trimx(gsub("°", "&deg;", gsub("\\.Mmale",". Male",gsub("\\.Female",". Female",gsub("\\.{1,}Fig.", ". Fig.", x)))))
                     }
                     
                     need_fetch_fsex <- FALSE
@@ -1010,10 +1022,10 @@ for (docfile in doclst[1:3]) {
 
 cat(na.omit(dtk$ctxt), file=paste0(web_dir, "web_tmp.txt"))
 
-## output source fig file
-fwrite(dfk[!is.na(imgf), ] %>% .[,srcf:=imglst[imgf]] %>% .[,.(fidx, srcf)], file="www/bak/src_figfile_list.csv")
+## output source html_txt, fig file
+fwrite(dtk, file="doc/newsp_htm_extract.csv")
+fwrite(dfk, file="doc/newsp_fig_extract.csv")
 
 length(unique(na.omit(dtk$ckey))) #187
 which(!1:187 %in% unique(na.omit(dtk$ckey)))
-
 nrow(unique(dtk[!is.na(ckey)|!is.na(subkey),])) #391
