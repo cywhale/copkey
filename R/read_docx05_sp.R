@@ -61,8 +61,8 @@ italics_spname <- function(xstr, spname) {
   if (chk_sp1<0 & chk_sp2<0 & chk_sp3<0 & chk_gsp[[1]][1]<0 & chk_abbrev[[1]][1]<0) return(xstr)
   
   str1 <- xstr
+  xspx <- c()
   if (chk_abbrev[[1]][1]>0) {
-    xspx <- c()
     for (i in seq_along(chk_abbrev[[1]])) {
       xspx <- c(xspx, substr(str1, chk_abbrev[[1]][i], chk_abbrev[[1]][i]+attributes(chk_abbrev[[1]])$match.length[i]))
     }
@@ -86,7 +86,7 @@ italics_spname <- function(xstr, spname) {
   if (chk_sp2>0) { #Some text use different subgen in citation that make exactly match A (subgen) epi not work
     xspx2 <- substr(xstr, chk_sp2, chk_sp2+attributes(chk_sp2)$match.length-1) %>%
       tstrsplit("\\s") %>% unlist(use.names = F)
-    if (!all(xspx2 %chin% unique(xspx))) {
+    if (length(xspx)==0 | !all(xspx2 %chin% unique(xspx))) {
       for (x in xspx2) {
         str1 <- gsub("<em><em>", "<em>", gsub("</em></em>", "</em>",
                                          gsub(paste0("(?!\\_)",gsub("\\)","\\\\)",gsub("\\(","\\\\(",x)),"(?!\\_)"), paste0("<em>",x,"</em>"), str1, perl = T)))
