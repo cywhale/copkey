@@ -1023,7 +1023,9 @@ for (docfile in doclst[1:3]) {
 cat(na.omit(dtk$ctxt), file=paste0(web_dir, "web_tmp.txt"))
 
 ## output source html_txt, fig file
-fwrite(dtk, file="doc/newsp_htm_extract.csv")
+dtk1 <- copy(dtk)
+dtk1[,ctxt:=gsub("\\\n", "", gsub("\\“|\\”",'\\"', ctxt))]
+fwrite(dtk1,file="doc/newsp_htm_extract.csv")
 fwrite(dfk, file="doc/newsp_fig_extract.csv")
 
 length(unique(na.omit(dtk$ckey))) #187
