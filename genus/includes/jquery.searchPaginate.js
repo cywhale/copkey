@@ -380,6 +380,7 @@ var gblfx = function() {
             elementsPerPage: 15,
             enableSideFig: true, //It's very specific by case followed comments in aboving easyPaginate
     /* If want to unify the parameters in both seachable and easyPaginate, use $.extend(curr_sets..)*/
+            hashGen: 'taxon_',
             hashFig: 'fig_',
             hashKey: 'key_',   // specific by case, key value is use <mark id="key.."> for anchor in html 
             blockFig:'marginnote' /* old version: blkfigure, but now blkfigure move to sidebar, enclosed by .marginnote. The CSS selector that let figures shown in sidebar even when Searching. The pagination changes when searching (only parts of searched items shown in main column, including only parts of figures). Change CSS setting in your sidebar as turn on/off in function switchSidebar() */

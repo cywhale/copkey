@@ -44,11 +44,23 @@ sp2namex <- function(spname, trim_subgen=TRUE) {
   return(xsp2)
 }
 
-italics_spname <- function(xstr, spname) {
+italics_spname <- function(xstr, spname, genus="") {
   if (is.na(spname) | trimx(spname)=="") return (xstr)
   xsp2 <- sp2namex(spname)
   xspt <- sp2namex(spname, trim_subgen=FALSE)
   xsp1 <- odbapi::sciname_simplify(spname, simplify_one = T) #get a old alternative spname in caption
+  if (is.na(genus) | genus=="") {
+    genus <- xsp1
+  }
+  only_genus_flag <- FALSE
+  if (genus == xsp2) {
+    only_genus_flag <- TRUE
+  }
+  
+  if (only_genus_flag) {
+    return (gsub(genus, paste0("<em>",genus,"</em>"),xstr))
+  }
+  
   chk_sp1 <- regexpr(gsub("\\s","\\\\s",gsub("\\)","\\\\)",gsub("\\(","\\\\(",spname))),xstr)
   chk_sp2 <- regexpr(gsub("\\s","(\\\\s|\\\\s\\\\((?:.*)\\\\)\\\\s)",xsp2),xstr) #match e.g. Acartia (Acartiura/whatever) hongi
   chk_sp3 <- regexpr(gsub("\\s","\\\\s",gsub("\\)","\\\\)",gsub("\\(","\\\\(",xspt))),xstr)
@@ -239,8 +251,8 @@ for (docfile in doclst[1:3]) {
   epi_list <- trimx(gsub("\\s\\,", "\\,", gsub("(?!^\\()(?![a-zA-Z]{1,})\\(", ", (",
               gsub("(?![a-zA-Z]{1,})\\)", ") ",     
               gsub("(?![a-zA-Z]{1,})\\,", ", ",ctent[3,]$text, perl=T), perl=T), perl=T)))
-  titletxt <- paste0("<div class=", dQuote("kblk"), "><span class=", dQuote("doc_title"), ">", italics_spname(ctent[1,]$text, gen_name), "</span></div><br><br>")
-  epitxt <- paste0(titletxt, "<div class=", dQuote("kblk"), "><span class=", dQuote("doc_epithets"), ">", 
+  titletxt <- paste0("<div id=", dQuote(paste0("genus_",gen_name))," class=", dQuote("kblk"), "><span class=", dQuote("doc_title"), ">", italics_spname(ctent[1,]$text, gen_name, gen_name), "</span></div><br><br>")
+  epitxt <- paste0(titletxt, "<div id=", dQuote(paste0("epithets_",gen_name))," class=", dQuote("kblk"), "><span class=", dQuote("doc_epithets"), ">", 
     unlist(tstrsplit(epi_list, "\\,\\s*"), use.names = F) %>%
       sapply(function(x) {
         paste0("<em>", x, "</em>")
@@ -249,7 +261,7 @@ for (docfile in doclst[1:3]) {
   epi_list <- trimx(gsub(paste0("(?!\\()", gen_name, "(?!\\))"), "", epi_list, perl = T)) #Some (Subgen) == gen_name cannot be filtered
   #for example: c("(Acartia) abc", "Acartia ddd") -> "(Acartia) abc" "ddd" 
   
-  dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0("gen_", cntg), 
+  dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0("genus_", gen_name), 
                                        ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
                                        figs=NA_character_, type=NA_integer_, nkey=NA_integer_, 
                                        taxon=NA_character_, abbrev_taxon=NA_character_, fullname=NA_character_,
@@ -854,7 +866,7 @@ for (docfile in doclst[1:3]) {
                                                    paste0('<span class=', dQuote(spanx), '><a class=', dQuote("fbox"), 
                                                           ' href=', dQuote(outf),
                                                           #' data-alt=', dQuote(paste0(capx)),
-                                                          ' /><img src=',
+                                                          '><img src=',
                                                           dQuote(outf), ' border=', dQuote('0'),
                                                           ' /></a><span id=', dQuote(paste0("fig_",flink)), ' class=', dQuote('spnote'),
                                                           '>',cfigx, #' *',sp,'* ',sex,
