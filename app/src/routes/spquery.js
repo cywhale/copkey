@@ -1,6 +1,6 @@
 //import S from 'fluent-json-schema'
 //export const autoPrefix = process.env.NODE_ENV === 'production'? '/search/layers' : '/searchinfo/layers'
-export const autoPrefix = '/spkey'
+export const autoPrefix = '/species'
 //import Spkey from '../models/spkey_mongoose'; //change to use graphql by mercurius
 //import fp from 'fastify-plugin'
 
