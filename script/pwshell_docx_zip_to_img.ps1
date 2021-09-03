@@ -34,13 +34,14 @@ Get-ChildItem $documents *.zip | % {
     Expand-Archive ($_.BaseName + ".zip")
 }
 
+# If want to copy image out (or just use images within expanded_zip folders)
 # get the images from the directories, then delete each directory
-Get-ChildItem -Directory | ForEach-Object {
-	#$fileName = $_.BaseName
-	$sdir = New-Item -Type Directory -Path $images -Name $_.BaseName
-    Copy-Item "$documents$_\word\media\*" $sdir
-#   Remove-Item $documents$_ -Recurse -WhatIf
-}
+#Get-ChildItem -Directory | ForEach-Object {
+#	#$fileName = $_.BaseName
+#	$sdir = New-Item -Type Directory -Path $images -Name $_.BaseName
+#    Copy-Item "$documents$_\word\media\*" $sdir
+##   Remove-Item $documents$_ -Recurse -WhatIf
+#}
 
 # restore the docx files
 # Get-ChildItem $documents *.zip | % { 

@@ -66,7 +66,7 @@ italics_spname <- function(xstr, spname, genus="") {
   chk_sp3 <- regexpr(gsub("\\s","\\\\s",gsub("\\)","\\\\)",gsub("\\(","\\\\(",xspt))),xstr)
   #chk_gsp <- regexpr(paste0("(A|a)s\\s",xsp1,"(\\s[a-z]{1,}(\\s|\\.))"),xstr) #if detect "As Acartia hongi" substr need +3
   #special genus pattern #"Euaetideus"
-  spe_gen <- c(xsp1, "Euaetideus")
+  spe_gen <- c(xsp1, "Euaetideus", "Euchirella")
   chk_gsp <- gregexpr(paste0("(", paste(spe_gen, collapse="|"),")(\\s[a-z]{1,}(\\s|\\.))"),xstr)
   chk_abbrev <- gregexpr(paste0(substr(gen_name, 1, 1),"\\.\\s[a-z]{3,}(?!(\\s|\\.|\\(|\\)|\\,|\\:|$))"), xstr, perl = T)
    
@@ -195,6 +195,15 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
                         gsub("\\s*\\,\\s*", ", ", xsubf)), xstr)) #make Sewell,1914 -> Sewell, 1914
 }
 
+read_docx_row <- function (ctentxt) {
+  x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctentxt))))
+  tt <- which(is.na(x) | x=="")
+  if (any(tt)) return("")
+  
+  return(x)  
+}
+  
+
 ###############################################################################################
 #### Used to store figs <-> fig_file mapping
 dfk <- data.table(fidx=integer(), 
@@ -246,19 +255,54 @@ for (docfile in doclst[1:3]) {
     print(paste0("Genus name not right check: ", gen_name, " before starting!"))
     break
   }
+
+  i <- 2  
+  xt <- read_docx_row(ctent$text[i])
+  if (xt=="") {
+    i <- i+1
+    xt <- read_docx_row(ctent$text[i])
+    if (xt=="") {
+      print(paste0("Error: cannot read epi_list, check format: ", docfile))
+      break
+    }
+  }
+  i <- i+1
   
+  #20210903 modifed: New version after 0902 add epi_link after epithets i.e. (Acanthoarcartia) bifilosa(35a/40a/f)
+  #  so need to detect (?=[^0-9]) not a epi_link
   #epithets list #insert spacing between (subgenus)epithets,epithets
-  epi_list <- trimx(gsub("\\s\\,", "\\,", gsub("(?!^\\()(?![a-zA-Z]{1,})\\(", ", (",
-              gsub("(?![a-zA-Z]{1,})\\)", ") ",     
-              gsub("(?![a-zA-Z]{1,})\\,", ", ",ctent[3,]$text, perl=T), perl=T), perl=T)))
+  epi_list <- trimx(gsub("\\s\\.", ".", gsub("\\s\\,", "\\,", gsub("(?![^\\,\\.])\\s*(?!^\\()(?![a-zA-Z]{1,})\\((?=[^0-9])", ", (",
+              gsub("(?![a-zA-Z]{1,})\\)(?=[^\\,\\.])", ") ",     
+              gsub("(?![a-zA-Z]{1,})\\,", ", ",xt, perl=T), perl=T), perl=T))))
   titletxt <- paste0("<div id=", dQuote(paste0("genus_",gen_name))," class=", dQuote("kblk"), "><span class=", dQuote("doc_title"), ">", italics_spname(ctent[1,]$text, gen_name, gen_name), "</span></div><br><br>")
   epitxt <- paste0(titletxt, "<div id=", dQuote(paste0("epithets_",gen_name))," class=", dQuote("kblk"), "><span class=", dQuote("doc_epithets"), ">", 
-    unlist(tstrsplit(epi_list, "\\,\\s*"), use.names = F) %>%
+    unlist(tstrsplit(epi_list, "(\\,|\\.)\\s*"), use.names = F) %>%
       sapply(function(x) {
-        paste0("<em>", x, "</em>")
+        wl1 <- regexpr("\\([0-9](?:.*)\\)", x)
+        if (wl1>0) {
+          xt1 <- substr(x, wl1, nchar(x))
+          wl2 <- gregexpr("(?!(\\(|\\/))[0-9]+[a-z]{1}", xt1, perl=T)
+          # 20210903 modified: "(38a/40b/f)" -> "(<a href="key_Acartia_38a">38a</a>/<a href="key_Acartia_40b">40b</a>/f)"
+          if (wl2[[1]][1]>0) {
+            xtx <- substr(xt1, 1, wl2[[1]][1]-1)
+            for (y in seq_along(wl2[[1]])) {
+              xtx <- paste0(xtx, paste0("<a href=",dQuote(paste0("key_",gen_name,"_",substr(xt1, wl2[[1]][y], wl2[[1]][y]+attributes(wl2[[1]])$match.length[y]-1))),
+                            ">",substr(xt1, wl2[[1]][y], wl2[[1]][y]+attributes(wl2[[1]])$match.length[y]-1),"</a>"),
+                            ifelse(y<length(wl2[[1]]), 
+                              substr(xt1, wl2[[1]][y]+attributes(wl2[[1]])$match.length[y], wl2[[1]][y+1]-1),
+                              substr(xt1, wl2[[1]][y]+attributes(wl2[[1]])$match.length[y], nchar(xt1))))
+            }  
+          }            
+          paste0("<em>", substr(x, 1, wl1-1), "</em>", xtx) 
+        } else {
+          paste0("<em>", x, "</em>")
+        }
       }, simplify = T, USE.NAMES = F) %>% paste(collapse=", "), "</span></div><br>\n\n")
     
-  epi_list <- trimx(gsub(paste0("(?!\\()", gen_name, "(?!\\))"), "", epi_list, perl = T)) #Some (Subgen) == gen_name cannot be filtered
+  epi_list <- unlist(tstrsplit(epi_list, "(\\,|\\.)\\s*"), use.names = F) %>%
+        sapply(function(x) {trimx(gsub("\\,$","",gsub("\\([0-9]+(?:.*)\\)(\\.|\\,|$)", ",", 
+                    gsub(paste0("(?!\\()", gen_name, "(?!\\))"), "", x, perl = T)))) 
+      },simplify = T, USE.NAMES = F) %>% paste(collapse=", ") #Some (Subgen) == gen_name cannot be filtered
   #for example: c("(Acartia) abc", "Acartia ddd") -> "(Acartia) abc" "ddd" 
   
   dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0("genus_", gen_name), 
@@ -273,7 +317,7 @@ for (docfile in doclst[1:3]) {
   epiall <- trimx(gsub("\\((?:.*)\\)", "", unlist(tstrsplit(dtk[rid==0 & genus==gen_name & family==fam_name,]$epithets, ","), use.names = F)))
   print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
 
-  i = skipLine+1L
+  #i = skipLine+1L
   st_conti_flag <- FALSE
   keyx <- ""; prekeyx <- ""; subkeyx <- ""
   pret <- ""
@@ -289,6 +333,7 @@ for (docfile in doclst[1:3]) {
   female_start <- -1
   male_start <- -1
   xsex_flag <- FALSE #during sex decision key splitting, don't decide sex
+  init_flag <- TRUE #just a flag to initially <div> to replace skipLine+1
   doc_fign<- 0 ## cntg_fig is counter of all fig num in total docs (stored in fig_num), doc_fign just for one doc file
   fig_exclude <- "\\(F\\,\\s*M\\)" #exclude pattern in title/main: (F,M)
   
@@ -341,10 +386,11 @@ for (docfile in doclst[1:3]) {
             prekeyx <- ""
           }   
         
-          if (i== skipLine+1L) { #key 1a will repeat in New Version for different genus, must prevent duplication
+          if (init_flag) { #i== skipLine+1L) { #key 1a will repeat in New Version for different genus, must prevent duplication
             pret <- paste0('<div class=', dQuote('kblk'), '><p class=', dQuote('leader'), 
                            '><span class=',dQuote('keycol'),'>',
                            '<mark id=', dQuote(paste0('key_', gen_name, "_", keyx)), '>', keyx, '</mark>')
+            init_flag <- FALSE
           } else {
             ### 20191015 modified to put </div> in previous dtk, so I can flush image earilier because <div>...</div> cannot be broken
             ### dtk[nrow(dtk), ctxt:=paste0(ctxt,'</div>')] ## previous change is wrong because maginnote should be inside <div>..</div>
@@ -637,12 +683,12 @@ for (docfile in doclst[1:3]) {
   }
 
   #i <- 195L #just when test first doc file #i<=232L before p.12 #i<=tstL #245L p13 #292L before p19 #351L p25
-  while (fig_mode & nrow(dtk)>0 & i<=tstL) {
+  while (fig_mode & nrow(dtk)>0 & i<=59L) {
     x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i]))))
-    wa <- regexpr("\\(Size",x)
+    wa <- regexpr("\\((S|s)ize",x)
     if (wa>0) {
       spname<- trimx(substr(x, 1, wa-1))
-      sattr <- substr(x, wa, nchar(x))
+      sattr <- gsub("\\(Size", "(size", substr(x, wa, nchar(x)))
     } else {
       spname<- trimx(gsub(fig_exclude, "", x))
       sattr <- ""
@@ -719,7 +765,7 @@ for (docfile in doclst[1:3]) {
             next
           } else {
             x <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i])))))
-            wa <- regexpr("\\(Size",x)
+            wa <- regexpr("\\((S|s)ize",x)
             xsp1 <- trimx(odbapi::sciname_simplify(x, simplify_one = T))
             if (i==tstL | wa>0 | (xsp1==gen_name & trimx(sp2namex(x)) != xsp2)) {
               if (wa<0) {
