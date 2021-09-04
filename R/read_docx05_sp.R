@@ -15,7 +15,7 @@ skipLine <- 4L
 #options(useFancyQuotes = FALSE)
 # some unicode should be replaced: <U+00A0> by " ", dQuote() by "
 # some special character should be replaced in docx, otherwise docx_summary lost it:
-# 24 => ° 18 -> 'N
+# 24 => ° 18 -> 'N (Need  22°59')
 
 trimx <- function (x) {
   gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(x)))
@@ -286,7 +286,7 @@ for (docfile in doclst[1:3]) {
           if (wl2[[1]][1]>0) {
             xtx <- substr(xt1, 1, wl2[[1]][1]-1)
             for (y in seq_along(wl2[[1]])) {
-              xtx <- paste0(xtx, paste0("<a href=",dQuote(paste0("key_",gen_name,"_",substr(xt1, wl2[[1]][y], wl2[[1]][y]+attributes(wl2[[1]])$match.length[y]-1))),
+              xtx <- paste0(xtx, paste0("<a href=",dQuote(paste0("#key_",gen_name,"_",substr(xt1, wl2[[1]][y], wl2[[1]][y]+attributes(wl2[[1]])$match.length[y]-1))),
                             ">",substr(xt1, wl2[[1]][y], wl2[[1]][y]+attributes(wl2[[1]])$match.length[y]-1),"</a>"),
                             ifelse(y<length(wl2[[1]]), 
                               substr(xt1, wl2[[1]][y]+attributes(wl2[[1]])$match.length[y], wl2[[1]][y+1]-1),
@@ -681,9 +681,11 @@ for (docfile in doclst[1:3]) {
                  paste0(chkt[duplicated(chkt),]$taxon, collapse=", "),
                  " of genus: ", gen_name))
   }
-
+  with_thesame_sp <- FALSE #some sp will have two different block for title, subfig, img, may due to too many figs that cannot be within a single row.
+  Blk_condi <- 0 #"Normal" condition, #block(blk) belong to differnet species
+  
   #i <- 195L #just when test first doc file #i<=232L before p.12 #i<=tstL #245L p13 #292L before p19 #351L p25
-  while (fig_mode & nrow(dtk)>0 & i<=59L) {
+  while (fig_mode & nrow(dtk)>0 & i<=tstL) {
     x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i]))))
     wa <- regexpr("\\((S|s)ize",x)
     if (wa>0) {
@@ -767,26 +769,47 @@ for (docfile in doclst[1:3]) {
             x <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i])))))
             wa <- regexpr("\\((S|s)ize",x)
             xsp1 <- trimx(odbapi::sciname_simplify(x, simplify_one = T))
-            if (i==tstL | wa>0 | (xsp1==gen_name & trimx(sp2namex(x)) != xsp2)) {
+            if (i==tstL | wa>0 | (xsp1==gen_name & imgj>0 & imgj>=length(subfig))) { #trimx(sp2namex(x)) != xsp2)) {
               if (wa<0) {
                 spt <- trimx(gsub(fig_exclude, "", x))
               } else {
                 spt<- trimx(substr(x, 1, wa-1))
               }
-              if (i==tstL | spt != spname) {
+              with_thesame_sp_flag <- FALSE
+              if (i==tstL | spt != spname | (spt == spname & imgj>0 & imgj>=length(subfig))) {
                 if (i==tstL) {
                   print(paste0("End of doc: ", docfile))
-                } else {
+                } else if (spt != spname) {
                   print(paste0("Start next sp: ", spt, "  at i:",  i)) #cannot add i, repeated this step though..
+                } else {
+                  with_thesame_sp_flag <- TRUE
+                  print(paste0("Warning! Start a the-same sp: ", spt, "  at i:",  i)) 
                 }
+                
+                if (!with_thesame_sp & !with_thesame_sp_flag) {
+                  ## It's a normal condition, curr blk and next blk are different species
+                  Blk_condi <- 0 #"Normal" condition
+                } else if (!with_thesame_sp & with_thesame_sp_flag) {
+                  ## Next blk will have the same species as curr blk (by reading fig_main and get the same sp info)
+                  ## Still write the same info, but need to keep some info?? to make ctxt is appendable
+                  Blk_condi <- 1 #"Prepare" condition
+                } else if (with_thesame_sp & !with_thesame_sp_flag) {
+                  ## Curr blk belong to the same species as previous blk
+                  ## Need to append ctxt, and use some previous info like <div id="fig_species">
+                  Blk_condi <- 2 #"Append_blk" condition
+                } else {
+                  ## Should no this condition with both with_thesame_sp & with_thesame_sp_flag TRUE
+                  Blk_condi <- 0
+                }
+                
                 within_xsp_flag <- FALSE #A species is completed its record, and go into next sp! 
                 
                 blk_cnt <- blk_cnt + 1
                 #flink <- sapply(fig_num, function(x) {
                 #  paste0("fig_", gsub("\\s", "_", xsp2), "_", padzerox(x))
                 #}, simplify = T)
-                fkey <- substring(gsub("www_sp\\/img\\/|\\.jpg", "", imgf), 6)
-                fnum <- gsub("_", "", gsub(gsub("\\s", "_", xsp2), "", fkey))
+                fkeyx<- substring(gsub("www_sp\\/img\\/|\\.jpg", "", imgf), 6)
+                fnum <- gsub("_", "", gsub(gsub("\\s", "_", xsp2), "", fkeyx))
                 
                 cap_cite <- data.table(cap=fig_caption, 
                                        cite=c(fig_citation, rep(NA_character_, length(fig_num)-length(fig_citation))))
@@ -832,37 +855,39 @@ for (docfile in doclst[1:3]) {
                 
                 #"Acartia (Acanthacartia) bilobata Braham, 1970" ->
                 # Acartia (Acanthacartia) bilobata (Braham, 1970)
-                xsp3 <- odbapi::sciname_simplify(spname, trim.subgen = F, simplify_two = T)
-                xaut <- trimx(gsub(gsub("\\(","\\\\(",gsub("\\)","\\\\)",xsp3)),"",spname))
-                if (xaut=="") {
-                  full_name <- xsp3
-                } else {
-                  full_name <- gsub("\\(\\(", "(", gsub("\\)\\)", ")", paste0(xsp3," (",xaut,")")))
-                }
-                #Note that if Subgenus == Genus, i.e. Acartia (Acartia) negligens, without ?!\\( ?!\\), cannot get correct subgenx
-                subgenx <- trimx(gsub(paste0(paste0("(?!\\()(",gsub("\\s","|", xsp2),")(?!\\))"),"|\\(|\\)"), "",
-                                     odbapi::sciname_simplify(spname, trim.subgen = F, simplify_two = T), perl = T))
-                epit <- trimx(gsub(gen_name, "", xsp2)) #epithets
-
-                if (sattr!="") { #has Size: female ; male:..)
-                  fig_main = paste0(full_name, " ", sattr)
-                  fig_mtxt = paste0(full_name, " ",
-                    gsub("(\\;\\s*|\\s)(M|m)ale\\,*\\s*", 
-                      paste0("; <a href=", dQuote(paste0("#key_",gen_name,"_",malekey)), ">male</a>, "), 
-                      gsub("\\s*(F|f)emale\\,*\\s*", 
-                           paste0(" <a href=", dQuote(paste0("#key_",gen_name,"_",femalekey)), ">female</a>, "), sattr)))
-                } else {
-                  fig_main = full_name
-                  fig_mtxt = paste0(full_name, " ",
-                                    paste0("<a href=", dQuote(paste0("#key_",gen_name,"_",femalekey)), ">female</a>; "),
-                                    paste0("<a href=", dQuote(paste0("#key_",gen_name,"_",malekey)), ">male</a>)")) 
+                if (Blk_condi <= 1) { # if Blk_condi ==2 the same sp info as previous blk, not overwrite
+                  xsp3 <- odbapi::sciname_simplify(spname, trim.subgen = F, simplify_two = T)
+                  xaut <- trimx(gsub(gsub("\\(","\\\\(",gsub("\\)","\\\\)",xsp3)),"",spname))
+                  if (xaut=="") {
+                    full_name <- xsp3
+                  } else {
+                    full_name <- gsub("\\(\\(", "(", gsub("\\)\\)", ")", paste0(xsp3," (",xaut,")")))
+                  }
+                  #Note that if Subgenus == Genus, i.e. Acartia (Acartia) negligens, without ?!\\( ?!\\), cannot get correct subgenx
+                  subgenx <- trimx(gsub(paste0(paste0("(?!\\()(",gsub("\\s","|", xsp2),")(?!\\))"),"|\\(|\\)"), "",
+                                        odbapi::sciname_simplify(spname, trim.subgen = F, simplify_two = T), perl = T))
+                  epit <- trimx(gsub(gen_name, "", xsp2)) #epithets
+                  
+                  if (sattr!="") { #has Size: female ; male:..)
+                    fig_main = paste0(full_name, " ", sattr)
+                    fig_mtxt = paste0(full_name, " ",
+                                      gsub("(\\;\\s*|\\s)(M|m)ale\\,*\\s*", 
+                                           paste0("; <a href=", dQuote(paste0("#key_",gen_name,"_",malekey)), ">male</a>, "), 
+                                           gsub("\\s*(F|f)emale\\,*\\s*", 
+                                                paste0(" <a href=", dQuote(paste0("#key_",gen_name,"_",femalekey)), ">female</a>, "), sattr)))
+                  } else {
+                    fig_main = full_name
+                    fig_mtxt = paste0(full_name, " ",
+                                      paste0("<a href=", dQuote(paste0("#key_",gen_name,"_",femalekey)), ">female</a>; "),
+                                      paste0("<a href=", dQuote(paste0("#key_",gen_name,"_",malekey)), ">male</a>)")) 
+                  }
                 }
                 
-                dfkt <- data.table(fidx=fig_num, fkey=fkey,
+                dfkt <- data.table(fidx=fig_num, fkey=fkeyx,
                                    ckeyx=ckeyx, #rep(paste(dtk[x_dtk,]$ckey, collapse = ","), length(fig_num)),
                                    imgf=gsub("www_sp\\/", "", imgf), 
                                    fsex=fsex, #rep(NA_character_, length(fig_num)),
-                                   main= fig_main,  #c(fig_main, rep(NA_character_, length(fig_num)-1L)),
+                                   main= ifelse(Blk_condi<=1, fig_main, NA_character_),  #c(fig_main, rep(NA_character_, length(fig_num)-1L)),
                                    title=full_name, #c(full_name,rep(NA_character_, length(fig_num)-1L)),
                                    subfig= subfig, caption= cap_cite$cap, 
                                    citation= cap_cite$cite, #may be null, so use fill=NA
@@ -873,70 +898,131 @@ for (docfile in doclst[1:3]) {
                 
                 dfk <- rbindlist(list(dfk, dfkt), fill = TRUE) 
                 
+                # 20210903 modified: write dtk only when with_thesame_sp is false (wait all blocks of the same sp)
+                # Blk_condi <=1 write normal ctxt; Blk_condi == 2 appends to previous ctxt
+                if (Blk_condi!=2) {
+                  #ctxt0 need append new fig into <div id="fig_species_name"> when Blk_condi==2
+                  #20210903 modified extend this <div id="fig_species_name"></div> contains not only figs, but also caps, citations
+                  #         and change <span class='blkfigure'> to <div>
+                  ctxt0 <- paste0(paste0('\n\n<div id=', dQuote(fdlink),'><div class=', dQuote('blkfigure'),'>'), 
+                             paste0('<div class=', dQuote("fig_title"),'><span class=', dQuote('spmain'), '>', italics_spname(fig_mtxt, spname),'</span></div>'),
+                             mapply(function(outf,flink,cfigx,spanx) {
+                                  paste0('<span class=', dQuote(spanx), '><a class=', dQuote("fbox"), 
+                                         ' href=', dQuote(outf),
+                                         #' data-alt=', dQuote(paste0(capx)),
+                                         '><img src=',
+                                         dQuote(outf), ' border=', dQuote('0'),
+                                         ' /></a><span id=', dQuote(paste0("fig_",flink)), ' class=', dQuote('spcap'),
+                                         '>',cfigx, #' *',sp,'* ',sex,
+                                         #' [&#9754;](#key_',ckeyx,') &nbsp;', fdupx,
+                                         '</span></span>') ############ Only MARK duplicated imgf
+                             },outf=gsub("www_sp\\/", "", imgf), # No need www_sp/ in html link
+                               flink=fkeyx, cfigx=xsubf, #fgcnt=fig_num,
+                               MoreArgs = list(spanx=spanx), SIMPLIFY = TRUE, USE.NAMES = FALSE) %>% 
+                               paste(collapse=" "),
+                             '</div><br><br>') #it's ends of <div class='blkfigure'>
+
+                  #ctxt1 need not change
+                  ctxt1 <- paste0(paste0('<div class=', dQuote("fig_title"),'><span class=', dQuote('spcap'), '>', italics_spname(full_name, spname),'</span></div>'),
+                               sapply(seq_along(fig_caption), function(k) { #citex, capx, 
+                                   citex=fig_citation; capx=fig_caption
+                                   cx <- ifelse(is.na(citex[k]) | citex[k]=="", "", 
+                                                paste0('<div class=', dQuote('fig_cite'), '><span class=', dQuote('spcap'), '>', italics_spname(citex[k], spname),'</span></div>'))
+                                   out <-paste0('<div class=', dQuote('fig_cap'), '><span class=', dQuote('spcap'), '>',
+                                                bold_spsex(italics_spname(capx[k], spname)), '</span></div>', cx)
+                                      return(out)
+                               },#citex=fig_citation, capx=fig_caption, 
+                                 #MoreArgs = list(k=seq_along(fig_caption)), SIMPLIFY = TRUE, 
+                                 simplify = TRUE, USE.NAMES = FALSE) %>% paste(collapse="<br>"))
+                  
+                  if (Blk_condi==0) {
+                    #ctxt0<- paste0(ctxt0, '</div><br>')  # This </div> ends with <div id="fig_species_name">
+                    ctxtt <- paste0(ctxt0, ctxt1, '</div><br><br>',  ifelse(i==tstL, "<br><br>\n\n", ""))
+                  } else {
+                    ctxtt <- paste0(ctxt0, ctxt1)
+                  }
+                  dtk <- rbindlist(list(dtk, 
+                      data.table(rid=i, unikey=fdlink,
+                        ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
+                        figs=paste(fig_num, collapse = ","), type=2L, nkey=NA_integer_, 
+                        taxon=xsp2, abbrev_taxon=dtk[x_dtk[1],]$abbrev_taxon, fullname=full_name,
+                        subgen=subgenx, genus=gen_name, family=fam_name,
+                        epithets=epit, keystr=keystr, 
+                        ctxt=ctxtt,
+                        fkey=paste(fkeyx, collapse=","), 
+                        sex=NA_character_))) #, keyword="figs"))) #figs is type =2
+                  
+                } else { #Blk_condi==2
+                  dfkt <- dfk[taxon==xsp2,] #extend to all blks belong to the same species
+                  ctxtt<- paste0(ctxtt, 
+                            paste0('\n<br><br><div class=', dQuote('blkfigure'),'>'), 
+                            #paste0('<div class=', dQuote("fig_title"),'><span class=', dQuote('spmain'), '>', italics_spname(fig_mtxt, spname),'</span></div>'),
+                            mapply(function(outf,flink,cfigx,spanx) {
+                                paste0('<span class=', dQuote(spanx), '><a class=', dQuote("fbox"), 
+                                       ' href=', dQuote(outf),
+                                       #' data-alt=', dQuote(paste0(capx)),
+                                       '><img src=',
+                                       dQuote(outf), ' border=', dQuote('0'),
+                                       ' /></a><span id=', dQuote(paste0("fig_",flink)), ' class=', dQuote('spcap'),
+                                       '>',cfigx, #' *',sp,'* ',sex,
+                                       #' [&#9754;](#key_',ckeyx,') &nbsp;', fdupx,
+                                       '</span></span>') ############ Only MARK duplicated imgf
+                            },outf=gsub("www_sp\\/", "", imgf), # No need www_sp/ in html link
+                              flink=fkeyx, cfigx=xsubf, #fgcnt=fig_num,
+                              MoreArgs = list(spanx=spanx), SIMPLIFY = TRUE, USE.NAMES = FALSE) %>% 
+                            paste(collapse=" "), '</div><br><br>', #it's ends of <div class='blkfigure'>
+                            
+                            paste0('<div class=', dQuote("fig_title"),'><span class=', dQuote('spcap'), '>', italics_spname(full_name, spname),'</span></div>'),
+                            sapply(seq_along(fig_caption), function(k) { #citex, capx, 
+                              citex=fig_citation; capx=fig_caption
+                              cx <- ifelse(is.na(citex[k]) | citex[k]=="", "", 
+                                           paste0('<div class=', dQuote('fig_cite'), '><span class=', dQuote('spcap'), '>', italics_spname(citex[k], spname),'</span></div>'))
+                              out <-paste0('<div class=', dQuote('fig_cap'), '><span class=', dQuote('spcap'), '>',
+                                           bold_spsex(italics_spname(capx[k], spname)), '</span></div>', cx)
+                              return(out)
+                            },simplify = TRUE, USE.NAMES = FALSE) %>% paste(collapse="<br>"),
+                            '</div><br><br>',  ifelse(i==tstL, "<br><br>\n\n", "")) # This </div> ends with <div id="fig_species_name">
+                  
+                  dtk[nrow(dtk), `:=`(
+                    ctxt = ctxtt,
+                    fkey = paste(fkey, paste0(fkeyx, collapse=",")) 
+                  )]
+                } 
+                if (Blk_condi==0 | Blk_condi==2) { #if next blk is the same sp (Blk_condi==1), just wait until next blk come in
+                  dtk[x_dtk, `:=`(
+                    fullname = full_name,
+                    subgen = subgenx,
+                    epithets = epit, 
+                    figs = sapply(sex, function(x) {
+                      if (x=="male") {
+                        fk <- dfkt[fsex=="male" | fsex=="female/male",]$fidx
+                      } else if (x=="female") {
+                        fk <- dfkt[fsex=="female" | fsex=="female/male",]$fidx
+                      } else {
+                        fk <- dfkt$fidx
+                      }
+                      return(paste(fk, collapse=","))
+                    }, simplify = TRUE, USE.NAMES = FALSE),
+                    fkey = sapply(sex, function(x) { #cannot just use grepl because "female" contains "male"
+                      if (x=="male") {
+                        fk <- dfkt[fsex=="male" | fsex=="female/male",]$fkey
+                      } else if (x=="female") {
+                        fk <- dfkt[fsex=="female" | fsex=="female/male",]$fkey
+                      } else {
+                        fk <- dfkt$fkey
+                      }
+                      return(paste(fk, collapse=","))
+                    }, simplify = TRUE, USE.NAMES = FALSE)
+                  )]
+                }
                 
-                dtk[x_dtk, `:=`(
-                  fullname = full_name,
-                  subgen = subgenx,
-                  epithets = epit, 
-                  figs = sapply(sex, function(x) {
-                    if (x=="male") {
-                      fk <- dfkt[fsex=="male" | fsex=="female/male",]$fidx
-                    } else if (x=="female") {
-                      fk <- dfkt[fsex=="female" | fsex=="female/male",]$fidx
-                    } else {
-                      fk <- dfkt$fidx
-                    }
-                    return(paste(fk, collapse=","))
-                  }, simplify = TRUE, USE.NAMES = FALSE),
-                  fkey = sapply(sex, function(x) { #cannot just use grepl because "female" contains "male"
-                    if (x=="male") {
-                      fk <- dfkt[fsex=="male" | fsex=="female/male",]$fkey
-                    } else if (x=="female") {
-                      fk <- dfkt[fsex=="female" | fsex=="female/male",]$fkey
-                    } else {
-                      fk <- dfkt$fkey
-                    }
-                    return(paste(fk, collapse=","))
-                  }, simplify = TRUE, USE.NAMES = FALSE)
-                )]
-                
-                dtk <- rbindlist(list(dtk, data.table(rid=i, unikey=fdlink,
-                                      ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
-                                      figs=paste(fig_num, collapse = ","), type=2L, nkey=NA_integer_, 
-                                      taxon=xsp2, abbrev_taxon=dtk[x_dtk[1],]$abbrev_taxon, fullname=full_name,
-                                      subgen=subgenx, genus=gen_name, family=fam_name,
-                                      epithets=epit, keystr=keystr, 
-                                      ctxt=paste0(paste(paste0('\n\n<div id=', dQuote(fdlink),'><span class=', dQuote('blkfigure'),'>'), 
-                                                 paste0('<div class=', dQuote("fig_title"),'><span class=', dQuote('spmain'), '>', italics_spname(fig_mtxt, spname),'</span></div>'),
-                                                 mapply(function(outf,flink,cfigx,spanx) {
-                                                   paste0('<span class=', dQuote(spanx), '><a class=', dQuote("fbox"), 
-                                                          ' href=', dQuote(outf),
-                                                          #' data-alt=', dQuote(paste0(capx)),
-                                                          '><img src=',
-                                                          dQuote(outf), ' border=', dQuote('0'),
-                                                          ' /></a><span id=', dQuote(paste0("fig_",flink)), ' class=', dQuote('spnote'),
-                                                          '>',cfigx, #' *',sp,'* ',sex,
-                                                          #' [&#9754;](#key_',ckeyx,') &nbsp;', fdupx,
-                                                          '</span></span>') ############ Only MARK duplicated imgf
-                                                   },outf=gsub("www_sp\\/", "", imgf), # No need www_sp/ in html link
-                                                     flink=fkey, cfigx=xsubf, #fgcnt=fig_num,
-                                                   MoreArgs = list(spanx=spanx), SIMPLIFY = TRUE, USE.NAMES = FALSE) %>% 
-                                                 paste(collapse=" "),'</span></div>', 
-                                                 paste0('<div class=', dQuote("fig_title"),'><span class=', dQuote('spnote'), '>', italics_spname(full_name, spname),'</span></div>'),
-                                                 sapply(seq_along(fig_caption), function(k) { #citex, capx, 
-                                                   citex=fig_citation; capx=fig_caption
-                                                   cx <- ifelse(is.na(citex[k]) | citex[k]=="", "", 
-                                                                paste0('<div class=', dQuote('fig_cite'), '><span class=', dQuote('spnote'), '>', italics_spname(citex[k], spname),'</span></div>'))
-                                                   out <-paste0('<div class=', dQuote('fig_cap'), '><span class=', dQuote('spnote'), '>',
-                                                     bold_spsex(italics_spname(capx[k], spname)), '</span></div>', cx)
-                                                   return(out)
-                                                  }, #citex=fig_citation, capx=fig_caption, 
-                                                  #MoreArgs = list(k=seq_along(fig_caption)), SIMPLIFY = TRUE, 
-                                                  simplify = TRUE, USE.NAMES = FALSE) %>%
-                                                  paste(collapse="<br>"), 
-                                                  sep="<br>"), ifelse(i==tstL, "<br><br><br><br>\n\n", "")),
-                                      fkey=paste(fkey, collapse=","), 
-                                      sex=NA_character_))) #, keyword="figs"))) #figs is type =2
+                if (!with_thesame_sp & with_thesame_sp_flag) {
+                  with_thesame_sp <- TRUE  #Next turn will be Append_Blk condition
+                  with_thesame_sp_flag <- FALSE
+                } else { #Return to nomal condition
+                  with_thesame_sp <- FALSE
+                  with_thesame_sp_flag <- FALSE
+                }
                 next
               } else {
                 print(paste0("Warning: Format not consistent to get the same sp: ", spt, "  Check it at i:",  i))
@@ -1035,13 +1121,13 @@ for (docfile in doclst[1:3]) {
                       } else {
                         xt <- x
                       }
-                      if (grepl("(\\s|\\.)Male", xt)) {
-                        if (grepl("(\\s|\\.)Female", xt)) {
+                      if (grepl("(\\s|\\.|\\,)(M|m)ale", xt)) {
+                        if (grepl("(\\s|\\.|\\,)(F|f)emale", xt)) {
                           fsex[imgj+1L] <- "female/male"
                         } else {
                           fsex[imgj+1L] <- "male"
                         }
-                      } else if (grepl("(\\s|\\.)Female", xt)) {
+                      } else if (grepl("(\\s|\\.|\\,)(F|f)emale", xt)) {
                         fsex[imgj+1L] <- "female"
                       } else {
                         fsex[imgj+1L] <- NA_character_
