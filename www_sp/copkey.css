@@ -286,6 +286,11 @@ mark {
   transition: .4s;
 }
 
+.doc_epithets {
+  font-size:1em;
+  width:auto;
+}
+
 input:checked + .slider {
   background-color: #2196F3;
 }
