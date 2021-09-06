@@ -35,9 +35,10 @@ sp2namex <- function(spname, trim_subgen=TRUE) {
   #print(paste0("check odbapi version: ", chkver))
   if (!is.na(chkver) & chkver >= 0.73) {
     #odbapi got bugs need modified(20210815) if "Aetideopsis armata (Boeck, 1872)" and use simplify_two = T, trim.subgen = trim_subgen
-    #xsp2 <- odbapi::sciname_simplify(spname, simplify_two = T, trim.subgen = trim_subgen) #note that odbapi_v073 has trim.subgen
-    xsp2 <- odbapi::sciname_simplify(spname, simplify_two = T)
-    xsp2 <- odbapi::sciname_simplify(xsp2, trim.subgen = trim_subgen)
+    #modified: odbapi 0.74 version is ok 20210906
+    xsp2 <- odbapi::sciname_simplify(spname, simplify_two = T, trim.subgen = trim_subgen) #note that odbapi_v073 has trim.subgen
+    #xsp2 <- odbapi::sciname_simplify(spname, simplify_two = T)
+    #xsp2 <- odbapi::sciname_simplify(xsp2, trim.subgen = trim_subgen)
   } else {
     xsp2 <- odbapi::sciname_simplify(spname, simplify_two = T)
   }
@@ -1066,7 +1067,8 @@ for (docfile in doclst[1:4]) {
                   fig_mode <- FALSE
                   print(paste("End dtk loop in i for genus: ", i, gen_name, within_xsp_flag, fig_mode, sep=", "))
                   break
-                }  
+                }
+                print(paste("End dtk loop in i with sp: ", i, spname, within_xsp_flag, fig_mode, sep=", "))
                 next
               } else {
                 print(paste0("Warning: Format not consistent to get the same sp: ", spt, "  Check it at i:",  i))
