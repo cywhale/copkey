@@ -1,17 +1,36 @@
+'use strict'
 import Fastify from 'fastify';
+import { readFileSync } from 'fs'
 import Env from 'fastify-env'
 import S from 'fluent-json-schema'
 import { join } from 'desm'
-//import mercurius from 'mercurius';
-//import db from './config/index';
-//import schema from './graphql/schema';
-//import resolvers from './graphql/resolvers';
 import srvapp from './srvapp.js'
 
-const PORT = process.env.PORT || 3000;
-const fastify = Fastify({ logger: true });
+const configSecServ = async (certDir='config') => {
+  const readCertFile = (filename) => {
+    return readFileSync(join(import.meta.url, certDir, filename)) //fs.readFileSync(path.join(__dirname, certDir, filename));
+  };
+  try {
+    const [key, cert] = await Promise.all(
+      [readCertFile('privkey.pem'), readCertFile('fullchain.pem')]);
+    return {key, cert, allowHTTP1: true};
+  } catch (err) {
+    console.log('Error: certifite failed. ' + err);
+    process.exit(1);
+  }
+}
 
-fastify.register(Env, {
+const startServer = async () => {
+  const PORT = process.env.PORT || 3000;
+  const {key, cert, allowHTTP1} = await configSecServ()
+  const fastify = Fastify({
+      http2: true,
+      trustProxy: true,
+      https: {key, cert, allowHTTP1},
+      logger: true
+  })
+
+  fastify.register(Env, {
     //confKey: 'config',
     dotenv: {
       path: join(import.meta.url, 'config/.env'),
@@ -22,32 +41,23 @@ fastify.register(Env, {
       .prop('COOKIE_SECRET', S.string().required())
       .prop('MONGO_CONNECT', S.string().required())
       .valueOf()
-}).ready((err) => {
-    if (err) console.error(err)
-  //console.log("fastify config: ", fastify.config)
-})
+  }).ready((err) => {
+    if (err) console.error(err) //console.log(fastify.config)
+  })
 
+  fastify.register(srvapp) //old: use fastify-mongodb, but not work used in graphql resolvers
 
-
-//fastify.register(db, { uri }); //use mongoose
-fastify.register(srvapp) //old: use fastify-mongodb, but not work used in graphql resolvers
-//  .after(err => {
-//    if (err) throw err
-//  })
-/*
-fastify.register(mercurius, {
-	schema,
-	resolvers,
-	graphiql: 'playground'
-});
-*/
-// create server
-const start = async () => {
+  const start = async () => {
 	try {
-	    await fastify.listen(PORT);
+	    await fastify.listen(PORT)
+            fastify.log.info(`server listening on ${fastify.server.address().port}`)
 	} catch (err) {
-	    fastify.log.error(err);
-	    process.exit(1);
+	    fastify.log.error(err)
+	    process.exit(1)
 	}
-};
-start();
+  }
+  start()
+}
+
+startServer()
+

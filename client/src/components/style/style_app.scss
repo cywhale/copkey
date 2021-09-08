@@ -1,0 +1,24 @@
+.home {
+	display: flex;
+	margin: 0 auto;
+	min-height: 100%;
+	padding: 20px;
+	width: 100%;
+	overflow-y: auto;
+}
+.right_area {
+  height:100%;
+  float:right;
+  right:0;
+  position:absolute;
+  width:38px;
+  margin:0
+}
+/*
+.siema {
+  margin: 1rem 0;
+}
+img {
+  width: auto;
+}
+*/

@@ -1,0 +1,14 @@
+{
+  "env": {
+    "test": {
+      "presets": [
+        ["preact-cli/babel", { 
+            "modules": false,
+            "targets": "> 0.25%, not dead",
+            "useBuiltIns": "usage"
+        }]
+      ]
+    },
+  },
+  "plugins": ["@babel/plugin-syntax-dynamic-import"]
+}

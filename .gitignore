@@ -1,3 +1,7 @@
+!client/src/assets/
+!client/src/assets/*/*.png
+!client/src/assets/*/*.svg
+!client/src/assets/*/*.jpg
 **/img
 **/img*
 **/test

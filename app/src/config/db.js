@@ -14,7 +14,7 @@ const dbConnector = async (fastify, options) => {
 		const db = await mongoose.connect(options.url, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
-			useCreateIndex: true
+			//useCreateIndex: true #not supported after v6
 		});
 
 		// decorates fastify with our model

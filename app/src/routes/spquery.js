@@ -1,6 +1,5 @@
 //import S from 'fluent-json-schema'
-//export const autoPrefix = process.env.NODE_ENV === 'production'? '/search/layers' : '/searchinfo/layers'
-export const autoPrefix = '/species'
+export const autoPrefix = process.env.NODE_ENV === 'production'? '/species' : '/specieskey'
 //import Spkey from '../models/spkey_mongoose'; //change to use graphql by mercurius
 //import fp from 'fastify-plugin'
 
@@ -47,12 +46,12 @@ export default async function spquery (fastify, opts, next) {
           await reply.send({});
         } else {
           //await reply.send(key); // if use fastify-mongodb
-          await reply.send([...key]);
+          await reply.send([...key]); // use mongoose
         }
       })*/
       let name = req.params.name
-      const query = `query ($name: String!) { key(sp: $name) {unikey ctxt} }`
-      req.log.info("Query use graphql: "+ query + " with sp: " + name)
+      const query = `query ($name: String!) { key(sp: $name) {ctxt} }` //{unikey ctxt}
+      //req.log.info("Query use graphql: "+ query + " with sp: " + name)
       return reply.graphql(query, null, {"name": name})
     })
   next()

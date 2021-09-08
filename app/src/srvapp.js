@@ -24,9 +24,10 @@ export default async function (fastify, opts) {
   })
 */
   fastify.register(mercurius, {
-        schema,
-        resolvers,
-        graphiql: 'playground'
+        schema: schema,
+        resolvers: resolvers,
+        graphiql: 'playground',
+        jit: 1
   });
 
   fastify.register(AutoLoad, {
