@@ -48,13 +48,18 @@ node_modules
 **/tmp
 **/*.pdf
 **/*.png
+!client/src/assets/*/*.png
 **/*.jpg
+!client/src/assets/*/*.jpg
 **/*.jpeg
+!client/src/assets/*/*.jpeg
 **/*.PNG
+!client/src/assets/*/*.PNG
 **/*.GTiff
 **/*.tiff
 **/*.tif
 **/*.gif
+!client/src/assets/*/*.gif
 **/*.kml
 **/*.xml
 **/*.html.*
@@ -69,6 +74,7 @@ node_modules
 **/*.sql
 **/*.dot
 **/*.svg
+!client/src/assets/*/*.svg
 **/*.asvp
 **/.cache
 **/cache

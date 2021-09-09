@@ -77,15 +77,8 @@ const Home = () => {
 	<div>
 	     <h1>Copkey App</h1>
              <p> Testing... </p>
-             <div>
-                <label for="spkeysearch" style="font-size:0.8em;color:grey">Searching...</label>
-                <div id="searchxdiv" data-searchin="" data-searchout="" />
-                <input type="search" id="spkeysearch" name="spkeysearch" aria-label="Search species key" />
-                <button class="keysearchBut">Search</button>
-                <div id="resultxdiv" />
-             </div><br />
-             <UserSearch /><br />
-             <div style="max-width:50%;"><MultiSelectSort /></div>
+             <UserSearch />
+             <div style="margin-top:30px;"><MultiSelectSort /></div>
 	</div>
   );
 };

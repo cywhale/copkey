@@ -68,7 +68,8 @@
   "dependencies": {
     "preact": "^10.5.13",
     "preact-router": "^3.2.1",
-    "react-dropdown-tree-select": "^2.5.1"
+    "react-dropdown-tree-select": "^2.5.1",
+    "react-query": "^3.22.0"
   },
   "jest": {
     "preset": "jest-preset-preact",

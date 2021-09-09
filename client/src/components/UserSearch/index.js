@@ -1,115 +1,129 @@
 import { render, Fragment } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
-/*
-import(// webpackMode: "lazy" //
-       // webpackPrefetch: true //
+import { useState, useEffect, useCallback } from 'preact/hooks';
+import { useQuery } from 'react-query';
+//import debounce from 'lodash.debounce';
+import Copkey from 'async!../Copkey';
+import SvgLoading from 'async!../Compo/SvgLoading';
+import(/* webpackMode: "lazy" */
+       /* webpackPrefetch: true */
        '../../style/style_ctrlcompo');
-*/
+
 const UserSearch = (props) => {
-  const [state, setState] = useState(false);
+  const [state, setState] = useState({
+    searched: false,
+    searching: '',
+    isLoading: false, //use react-query
+  });
   const [searchSpkey, setSearchSpkey] = useState('');
   const [result, setResult] = useState({
     spkey: '',
   });
+
   const searchx = process.env.NODE_ENV === 'production'? 'species/' : 'specieskey/';
 
-/* old test code from fastify-preact
-  const onLayerSearch = () => {
-    let term = document.getElementById("searchtxt").value;
-    if (term !== '') {
-      console.log('Searching: ', term);
-      setSearchSpkey(term);
-    }
-  }
+/*//https://dmitripavlutin.com/react-throttle-debounce/
+  const debouncedChangeHandler = useCallback(
+    debounce(changeHandler, 300)
+  , []);
 */
-  const set_searchingtext= (elem_search, dom, evt) => {
-    let x = elem_search.value;
-    if (x && x.trim() !== "" && x !== dom.dataset.searchin) {
-      dom.dataset.searchin = x;
+
+  const sendSearch = () => {
+    if (searchSpkey && searchSpkey.trim() !== '' && searchSpkey !== state.searching) {
+      history.pushState(null, null, '#search');
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
+
+      return(
+        setState((prev) => ({
+          ...prev,
+          searched: true,
+          searching: searchSpkey,
+          isLoading: true
+        }))
+      )
     }
+    //console.log("Repeated search, dismiss it..")
   };
+/*
+  const waitData = useCallback(() => {
+    const fetchingData = async () => {
+      await render_search();
+      console.log("Now await dataLoader and isLoading is: ", state.isLoading);
+    };
 
-  const get_searchingtext = (dom, evt) => {
-    //let REGEX_EAST = /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f\u3131-\uD79D]/;
-    //if (dom.dataset.search && dom.dataset.search.trim() !== "") { //|| dom.dataset.search.match(REGEX_EAST))
-    setSearchSpkey(dom.dataset.searchin);
-    dom.dataset.searchout = dom.dataset.searchin;
-  };
-
-  const enable_search_listener = async () => {
-    let elem_search = document.getElementById("spkeysearch");
-    let search_term = document.getElementById("searchxdiv");
-    let butt_search = document.querySelector(".keysearchBut");
-    await elem_search.addEventListener("change", set_searchingtext.bind(null, elem_search, search_term), false);
-    await elem_search.addEventListener("search",get_searchingtext.bind(null, search_term), false);
-    await butt_search.addEventListener("click", get_searchingtext.bind(null, search_term), false);
-  }
-
-  const sendSearch = async (searchtxt) => {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json; charset=utf-8');
-    headers.append('Accept', 'application/json');
-    let searchurl = searchx + searchtxt; // + 'key/' +
-
-    try {
-      await fetch(searchurl, {
-        method: 'GET',
-        //mode: 'same-origin',
-        //redirect: 'follow',
-        //credentials: 'include',
-        //withCredentials: true,
-        headers: headers,
-        //body: JSON.stringify( {})
-      })
-      .then(res => res.json())
-      .then(json => {
-        let data = JSON.stringify(json);
-        if (data === null || data === '' || data === '{}' || data === '[]') {
-          return(setResult((prev) => ({
-              ...prev,
-              spkey: 'Spkey not found...'
-            }))
-          )
-        }
-        return(
-          setResult((prev) => ({
-              ...prev,
-              spkey: data
-          }))
-        );
-      });
-    } catch(err) {
-      console.log("Error when search: ", err);
-    }
-  }
+    setState((prev) => ({
+        ...prev,
+        isLoading: true
+    }))
+    fetchingData();
+  }, []);
 
   useEffect(() => {
-    if(!state) {
-      enable_search_listener();
-      setState(true);
-    } else {
-      if (searchSpkey !== '') {
-        sendSearch(searchSpkey);
-        history.pushState(null, null, '#search');
-        window.dispatchEvent(new HashChangeEvent('hashchange'));
-      }
+    if (state.searched) {
+      waitData(state.searching);
+      history.pushState(null, null, '#search');
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
     }
-  }, [state, searchSpkey]);
+  },[state.searched, waitData]);
+*/
+  const render_search = () => {
+    let searchtxt = state.searching;
+    const { isLoading, isError, data, error } = useQuery([searchx, searchtxt], async () => {
+      const res = await fetch(searchx + searchtxt);
 
-  const render_searchresult = (output) => {
-      return(
-        render(<Fragment>
-                 <div style="position:relative;top:0px;margin:10px;"/>
-                   { output.spkey === '' && <p>Not perform searching yet...</p>}
-                   { output.spkey !== '' && <p>{output.spkey}</p>}
-               </Fragment>,
-               document.getElementById('resultxdiv'))
-      )
+      if (!res.ok) {
+        throw new Error('Error: Network response was not ok when searching... ')
+      }
+      return res.json()
+    },{enabled: state.searched})
+
+    if (isError) { console.log(error.message) }; //not affect previous searching result
+
+    let ctxt = '';
+    let NotFound = true;
+    if (state.searched && !isError && !isLoading) {
+      if (data === null || data.data === {} || !data.data.key.length) {
+        alert("Warning: Nothing found when searching: ", searchtxt);
+      } else {
+        NotFound = false;
+        ctxt = data.data.key.reduce((acc, cur) => { return(acc + cur["ctxt"])}, "").replace(/^(<\/div>)/g,''); //.replace(/class/g, 'className');
+        setResult((prev) => ({
+          ...prev,
+          spkey: ctxt
+        }));
+      }
+      setState((prev) => ({
+        ...prev,
+        searched: false,
+        isLoading: false
+      }))
+    }
+
+    let ctent;
+    if (NotFound) { // Fragment(result.spkey)
+      ctent = result.spkey
+    } else {
+      ctent = ctxt
+    }
+    //        {NotFound && <p>{result.spkey}</p>}
+    //        {!NotFound && <p>{ctxt}</p>}
+    return(//render(<Fragment>
+        <Copkey ctxt={ctent} />
+        //</Fragment>//, document.getElementById('resultxdiv'))
+    )
   };
 
   return (
     <Fragment>
-      { render_searchresult(result) }
+      <SvgLoading enable = {state.searched} isLoading = {state.isLoading} />
+      <div>
+          <label for="spkeysearch" style="font-size:0.8em;color:grey">Searching...</label>
+          <input type="search" id="spkeysearch" name="spkeysearch" placeholder="Search species key"
+                  onInput={(e) => { setSearchSpkey(e.target.value) }} />
+          <button class="ctrlbutn" id="keysearchbutn" onClick={sendSearch}>Search</button>
+      </div>
+      <div id="resultxdiv" style="position:relative;top:0px;margin-top:20px;">
+          {render_search()}
+      </div>
     </Fragment>
   )
 };
