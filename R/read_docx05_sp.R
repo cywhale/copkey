@@ -224,7 +224,7 @@ dtk <- data.table(rid=integer(), unikey=character(), ckey=character(),
                   taxon=character(), abbrev_taxon=character(), fullname=character(),
                   subgen=character(), genus=character(), family=character(), 
                   epithets=character(), keystr=character(), ctxt=character(), fkey=character(),
-                  sex=character()) #, keyword=character()) #, page=integer())
+                  sex=character(), docn=integer()) #, keyword=character()) #, page=integer())
 
 doclst <- list.files(key_src_dir, pattern="^Key?(.*).docx$",full.names = T)
 cntg <- 0L
@@ -332,7 +332,7 @@ for (docfile in doclst[1:4]) {
                                        taxon=NA_character_, abbrev_taxon=NA_character_, fullname=NA_character_,
                                        subgen=NA_character_, genus=gen_name, family=fam_name, epithets=epi_list, 
                                        keystr=NA_character_, ctxt=epitxt, fkey=NA_character_, 
-                                       sex=NA_character_))) #, keyword=NA_character_)))
+                                       sex=NA_character_, docn=cntg))) #, keyword=NA_character_)))
   tstL <- nrow(ctent)
 
   epiall <- trimx(gsub("\\((?:.*)\\)", "", unlist(tstrsplit(dtk[rid==0 & genus==gen_name & family==fam_name,]$epithets, ","), use.names = F)))
@@ -354,7 +354,7 @@ for (docfile in doclst[1:4]) {
   female_start <- -1
   male_start <- -1
   xsex_flag <- FALSE #during sex decision key splitting, don't decide sex
-  init_flag <- TRUE #just a flag to initially <div> to replace skipLine+1
+  #init_flag <- TRUE #just a flag to initially <div> to replace skipLine+1
   doc_fign<- 0 ## cntg_fig is counter of all fig num in total docs (stored in fig_num), doc_fign just for one doc file
   fig_exclude <- "\\(F\\,\\s*M\\)|\\(1\\,f\\)" #exclude pattern in title/main: (F,M)
   
@@ -407,18 +407,19 @@ for (docfile in doclst[1:4]) {
             prekeyx <- ""
           }   
         
-          if (init_flag) { #i== skipLine+1L) { #key 1a will repeat in New Version for different genus, must prevent duplication
+        ## 202109 New version need not </div> because img would not flushed between <div></div>  
+          #if (init_flag) { #i== skipLine+1L) { #key 1a will repeat in New Version for different genus, must prevent duplication
             pret <- paste0('<div class=', dQuote('kblk'), '><p class=', dQuote('leader'), 
                            '><span class=',dQuote('keycol'),'>',
                            '<mark id=', dQuote(paste0('key_', gen_name, "_", keyx)), '>', keyx, '</mark>')
-            init_flag <- FALSE
-          } else {
+          #  init_flag <- FALSE
+          #} else {
             ### 20191015 modified to put </div> in previous dtk, so I can flush image earilier because <div>...</div> cannot be broken
             ### dtk[nrow(dtk), ctxt:=paste0(ctxt,'</div>')] ## previous change is wrong because maginnote should be inside <div>..</div>
-            pret <- paste0(pret,'</div><div class=', dQuote('kblk'), '><p class=', dQuote('leader'), 
-                           '><span class=',dQuote('keycol'),'>',
-                           '<mark id=', dQuote(paste0('key_', gen_name, "_", keyx)), '>', keyx, '</mark>')
-          }
+          #  pret <- paste0(pret,'</div><div class=', dQuote('kblk'), '><p class=', dQuote('leader'), 
+          #                 '><span class=',dQuote('keycol'),'>',
+          #                 '<mark id=', dQuote(paste0('key_', gen_name, "_", keyx)), '>', keyx, '</mark>')
+          #}
           # Use below markdown version??
           if (prekeyx!="") {
           # pret <- paste0(pret, '/<mark id=', dQuote(paste0('key_', prekeyx)), '>', prekeyx, '</mark> ')
@@ -666,6 +667,7 @@ for (docfile in doclst[1:4]) {
             xsex <- ifelse(is.na(xsex), "male", "female/male")
           }
         }
+        xc <- paste0(xc,'</div>') #202109 no need for delaying output </div> 
         
         dtk <- rbindlist(list(dtk,data.table(rid=i, unikey=paste0(gen_name, "_", keyx),
                                              ckey= keyx, subkey= subkeyx, pkey= prekeyx,
@@ -673,10 +675,11 @@ for (docfile in doclst[1:4]) {
                                              taxon=xsp, abbrev_taxon=nsp, fullname=NA_character_,
                                              subgen=subgen, genus=gen_name, family=fam_name,
                                              epithets=NA_character_, keystr=keystr, ctxt=xc, fkey=NA_character_, 
-                                             sex=xsex))) #keyword=NA_character_)))
+                                             sex=xsex, docn=cntg))) #keyword=NA_character_)))
       } else {
-        xc <- paste0('</div><div><p class=',dQuote(paste0(indentx, ' lxbot')), '><span class=', 
-                     dQuote(padx), '><em>', paste(epix, collapse="</em>, <em>"), '</em></span></p>')
+        #202109 no need for delaying output </div>
+        xc <- paste0('<div><p class=',dQuote(paste0(indentx, ' lxbot')), '><span class=', 
+                     dQuote(padx), '><em>', paste(epix, collapse="</em>, <em>"), '</em></span></p></div>')
         xc0 <- gsub("<p class(.*?)><span", 
                     paste0('<p class=',dQuote(paste0('leader ', indentx, ' lxtop')), '><span'), 
                     dtk[nrow(dtk),]$ctxt)
@@ -700,7 +703,7 @@ for (docfile in doclst[1:4]) {
   }
   
   if (key_chk_flag) {
-    dtk[nrow(dtk), ctxt:=paste0(dtk[nrow(dtk),]$ctxt, '</div><br><br>\n\n')]
+    dtk[nrow(dtk), ctxt:=paste0(dtk[nrow(dtk),]$ctxt, '<br><br>\n\n')] #202109 no need for delaying output </div>
     print(paste0("Checking fig_mode: ", fig_mode))
     chkt <- dtk[!is.na(taxon), .(taxon, sex)]
     if (any(duplicated(chkt))) {
@@ -989,7 +992,7 @@ for (docfile in doclst[1:4]) {
                         epithets=epit, keystr=keystr, 
                         ctxt=ctxtt,
                         fkey=paste(fkeyx, collapse=","), 
-                        sex=NA_character_))) #, keyword="figs"))) #figs is type =2
+                        sex=NA_character_, docn=cntg))) #, keyword="figs"))) #figs is type =2
                   
                 } else { #Blk_condi==2
                   dfkt <- dfk[taxon==xsp2,] #extend to all blks belong to the same species
