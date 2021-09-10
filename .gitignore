@@ -2,6 +2,8 @@
 !client/src/assets/*/*.png
 !client/src/assets/*/*.svg
 !client/src/assets/*/*.jpg
+**/build
+**/ver_bak
 **/img
 **/img*
 **/test
@@ -89,3 +91,4 @@ static/cmd/font*/
 **/dist_*
 **/web_tmp.txt
 .Rproj.user
+client/src/template.html
