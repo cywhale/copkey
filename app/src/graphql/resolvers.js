@@ -8,16 +8,22 @@ const resolvers = {
 		  const keys = await Spkey.find({$text: {$search: spx}});
 		  return keys;
 		},
-                getsp: async (_, obj) => {
-                  const { sp } = obj;
-                  let spx = sp.replace(/\s/g, "\\\s")
-                  const keyx = await Spkey.find({"taxon":{$regex: spx, $options: "ix"}})
+                init: async (_, obj) => {
+                  let key = "genus_Acartia"
+                  let fig = "fig_Acartia_bifilosa"
+                  const out = await Spkey.find({$or:[{"unikey": key}, {"unikey": fig}]});
+                  return out;
+                },
+
+                page: async (_, obj, ctx) => {
+                  const { p } = obj;
+                  //ctx.reply.log.info("GraphQL to find page: " + p)
+                  const keyx = await Spkey.find({"docn":p})
                   return keyx
                 },
 		key: async (_, obj, ctx) => {
-		  const { sp } = obj; //if sp is String
+		  const { sp } = obj;
                   let spx = decodeURIComponent(sp).replace(/\s/g, "\\\s")
-                  ctx.reply.log.info("GraphQL to find: " + spx)
 		  const keyx = await Spkey.find({$or:[
                     {"taxon": {$regex: spx, $options: "ix"} },
                     {"fullname": {$regex: spx, $options: "ix"} },

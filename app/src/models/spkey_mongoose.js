@@ -33,7 +33,11 @@ const spkeyschema = new Schema({
 	ctxt: {
 		type: String,
 		required: false
-	}
+	},
+        docn: {
+                type: Number,
+                required: false
+        }
 });
 
 const Spkey = mongoose.model('spkey', spkeyschema, 'spkey');

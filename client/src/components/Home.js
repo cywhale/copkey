@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'preact/hooks';
 //import { Fragment } from 'preact';
+import { useQueryClient } from 'react-query'
 import MultiSelectSort from 'async!./MultiSelectSort';
 import UserSearch from 'async!./UserSearch';
 
 
 const Home = () => {
-
+  const searchx = process.env.NODE_ENV === 'production'? 'species/' : 'specieskey/';
   const [appstate, setAppState] = useState({
     loaded: false,
   });
@@ -14,6 +15,25 @@ const Home = () => {
     handling: false,
     hash: '',
   });
+  const [querystr, setQueryStr] = useState({
+    //handling: false,
+    par: {},
+  });
+
+  const queryClient = useQueryClient()
+  const prefetchInit = async () => {
+    console.log("Prefetching: ", searchx.replace("/",""), "init");
+    await queryClient.prefetchQuery("init", async () => {
+      const res = await fetch(searchx + "init");
+      if (!res.ok) {
+        throw new Error('Error: Network response was not ok when prefetching... ')
+      }
+      return res.json()
+    }, {
+        staleTime: Infinity,
+        cacheTime: Infinity
+    })
+  };
 
   const clear_uri = () => {
     let uri = window.location.toString();
@@ -30,11 +50,21 @@ const Home = () => {
 
   useEffect(() => {
     if (!appstate.loaded) {
-      window.addEventListener("hashchange", function(e) {
+      prefetchInit();
+      window.addEventListener("hashchange", (e) => {
         setHashState((prev) => ({
           ...prev,
           hash: window.location.hash,
         }))
+      }, false);
+
+      window.addEventListener("load", (e) => { //"popstate"
+        let parx = window.location.search.replace('?', '').split('&').reduce((r,e) => (r[e.split('=')[0]] = decodeURIComponent(e.split('=')[1]), r), {});
+        //console.log("Popstate: ", parx);
+        setQueryStr((prev) => ({
+          ...prev,
+          par: parx,
+        }));
       }, false);
 
       setAppState((preState) => ({
@@ -77,7 +107,7 @@ const Home = () => {
 	<div>
 	     <h1>Copkey App</h1>
              <p> Testing... </p>
-             <UserSearch />
+             <UserSearch urlqry={querystr.par} />
              <div style="margin-top:30px;"><MultiSelectSort /></div>
 	</div>
   );

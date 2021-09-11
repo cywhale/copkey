@@ -5,9 +5,10 @@ import (/* webpackMode: "lazy" */
         "../../style/style_copkey.scss");
 
 class Copkey extends React.Component {
-/*constructor() {
-    super();
+/*constructor(props) {
+    super(props);
   }
+//https://stackoverflow.com/questions/51417291/this-props-history-push-not-re-rendering-react-component
   componentDidMount() {
     let dom = document.getElementById("resultxdiv");
     //...

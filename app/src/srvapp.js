@@ -11,6 +11,7 @@ export default async function (fastify, opts) {
     node_env: process.env.NODE_ENV || 'development',
     port: process.env.PORT || 3000,
     devTestPort: 3003,
+    //srvTestPort: 3001,
     sessiondir: process.env.NODE_ENV === 'production'? '/session' : '/sessioninfo'
   })
 
@@ -26,7 +27,7 @@ export default async function (fastify, opts) {
   fastify.register(mercurius, {
         schema: schema,
         resolvers: resolvers,
-        graphiql: 'playground',
+        graphiql: true, //'playground', //has been removed from mercuius issue #453
         jit: 1
   });
 

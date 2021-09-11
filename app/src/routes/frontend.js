@@ -80,7 +80,8 @@ export default async function (fastify, opts) {
       next();
   })
 
-  if (fastify.conf.port !== fastify.conf.devTestPort) { // for testing
+  if (fastify.conf.port !== fastify.conf.devTestPort) {
+      //fastify.conf.port !== fastify.conf.srvTestPort) { // for testing
     fastify.register(Static, {
         root: join(import.meta.url, '../..', 'client/build'), //path.join(__dirname, '..', 'client/build'),
         prefix: '/',

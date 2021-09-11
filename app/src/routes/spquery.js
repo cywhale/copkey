@@ -16,6 +16,41 @@ export default async function spquery (fastify, opts, next) {
               keystr: { type: 'string' },
               ctxt: { type: 'string' }
             }; */ // if not use graphql
+    fastify.get('/', {
+      schema: {
+        query: {
+          //$id: 'common_schema',
+          properties: {
+            page: {
+              type: 'number'
+            }/*,
+            fig_only: {
+              type: 'boolean'
+            },
+            taxon: {
+              type: 'string'
+            }*/
+          }
+        }
+      }
+    },(req, reply) => {
+      const qstr = req.query
+      let pqry; //, fqry, tqry
+      //if (typeof qstr.fig_only !== 'undefined' && qstr.fig_only==true) {}
+      if (typeof qstr.page !== 'undefined') {
+        let pg = parseInt(qstr.page);
+        req.log.info("Query use graphql with page: " + pg)
+        if (!isNaN(pg)) {
+          pqry = `query ($pg: Int!) { page(p: $pg) {ctxt} }`
+          return reply.graphql(pqry, null, {"pg": pg})
+        } else {
+          return {}
+        }
+      } else {
+        return {}
+      }
+    })
+
     fastify.get('/:name', /*{ //if not use graphql
       schema: {
         tags: ['spkey'],
@@ -50,10 +85,14 @@ export default async function spquery (fastify, opts, next) {
         }
       })*/
       let name = req.params.name
+      if (name==="init") {
+        return reply.graphql('{ init {ctxt} }')
+      }
       const query = `query ($name: String!) { key(sp: $name) {ctxt} }` //{unikey ctxt}
       //req.log.info("Query use graphql: "+ query + " with sp: " + name)
       return reply.graphql(query, null, {"name": name})
     })
+
   next()
 }
 /*
