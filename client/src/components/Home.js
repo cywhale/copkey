@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 //import { Fragment } from 'preact';
-import { useQueryClient } from 'react-query'
+//import { useQueryClient } from 'react-query'
 import MultiSelectSort from 'async!./MultiSelectSort';
 import UserSearch from 'async!./UserSearch';
 
@@ -19,22 +19,30 @@ const Home = () => {
     //handling: false,
     par: {},
   });
-
+/*
   const queryClient = useQueryClient()
-  const prefetchInit = async () => {
-    console.log("Prefetching: ", searchx.replace("/",""), "init");
-    await queryClient.prefetchQuery("init", async () => {
-      const res = await fetch(searchx + "init");
-      if (!res.ok) {
-        throw new Error('Error: Network response was not ok when prefetching... ')
-      }
-      return res.json()
-    }, {
-        staleTime: Infinity,
-        cacheTime: Infinity
-    })
-  };
+  const prefetchInit = useCallback(() => {
+    const fetchingData = async () => {
+      console.log("Prefetching: ", searchx.replace("/",""), "init");
+      await Promise.resolve(queryClient.prefetchQuery("init", async () => {
+        const res = await fetch(searchx + "init");
+        if (!res.ok) {
+          throw new Error('Error: Network response was not ok when prefetching... ')
+        }
+        return res.json()
+      }, {
+           staleTime: Infinity,
+           cacheTime: Infinity //prefetchQuery will never return data
+      })//.then((result) => {
+        //   console.log("Data just got from perfectch: ", result);
+        //   return(result);
+        // })
+      )
+    };
 
+    fetchingData();
+  }, []);
+*/
   const clear_uri = () => {
     let uri = window.location.toString();
     let clean_uri = uri.substring(0, uri.indexOf("#"));
@@ -49,8 +57,8 @@ const Home = () => {
   };
 
   useEffect(() => {
+//  prefetchInit();
     if (!appstate.loaded) {
-      prefetchInit();
       window.addEventListener("hashchange", (e) => {
         setHashState((prev) => ({
           ...prev,
@@ -100,7 +108,7 @@ const Home = () => {
       }*/
       clear_uri();
     }
-  },[appstate.loaded, hashstate]);
+  },[appstate.loaded, hashstate]); //, prefetchInit
 
 
   return(

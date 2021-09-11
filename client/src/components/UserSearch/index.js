@@ -1,5 +1,5 @@
 import { render, Fragment } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
+import { useState, useEffect, useCallback } from 'preact/hooks';
 import { useQuery, useQueryClient } from 'react-query';
 //import debounce from 'lodash.debounce';
 import Copkey from 'async!../Copkey';
@@ -11,7 +11,7 @@ import(/* webpackMode: "lazy" */
 const UserSearch = (props) => {
   const { urlqry } = props;
   const [state, setState] = useState({
-    init: true, //initial searching
+    init: false, //initial searching
     searched: false,
     searching: '',
     isLoading: false, //use react-query
@@ -20,6 +20,7 @@ const UserSearch = (props) => {
 
   const searchx = process.env.NODE_ENV === 'production'? 'species/' : 'specieskey/';
   const queryClient = useQueryClient();
+  //const queryCache = queryClient.getQueryCache()
 
   const [result, setResult] = useState({
     spkey: ''
@@ -43,38 +44,48 @@ const UserSearch = (props) => {
       )
     } //console.log("Repeated search, dismiss it..")
   };
-/*
-  const waitData = useCallback(() => {
-    const fetchingData = async () => {
-      await render_search();
-      console.log("Now await dataLoader and isLoading is: ", state.isLoading);
-    };
-    setState((prev) => ({
-        ...prev,
-        isLoading: true
-    }))
-    fetchingData();
-  }, []);
-*/
-  useEffect(() => {
-    if (state.init) {
-      //waitData(state.searching);
-      const data = queryClient.getQueryData("init");
-      console.log("Data in initial stage: ", data); //Note that {data: {Query_Name_in_graphql: [{ctxt: }, ...]}}
-      //so that "init" query has data.data.init not the same as spquery by name as: data.data.key !!
-      let ctxt = data.data.init.reduce((acc, cur) => { return(acc + cur["ctxt"])}, "");
-      console.log("Ctxt in initial stage: ", ctxt);
-      setResult((prev) => ({
-        ...prev,
-        spkey: ctxt
-      }));
 
-      setState((prev) => ({
-        ...prev,
-        init: false
-      }))
-    }
-  },[state.init]); //, waitData
+  const waitInitData = useCallback(() => {
+  //return(queryClient.getQueryData("init")); //prefetchQuery may later than you want it, then undefined!
+  /*let r = queryCache.find("init"); //It's a whole cache object
+    if (r) {
+       return Promise.resolve(r);
+    }*/
+    const fetchingInit = async () => {
+      await Promise.resolve(queryClient.fetchQuery("init", async () => {
+          const res = await fetch(searchx + "init");
+          if (!res.ok) {
+            throw new Error('Error: Network response was not ok when fetchingInit... ')
+          }
+          return res.json()
+        }, {
+             staleTime: Infinity,
+             cacheTime: Infinity //prefetchQuery will never return data
+        })
+      ).then((data) => {
+        //console.log("Result just got from init fetch: ", data);
+        if (data) {
+          let ctxt = data.data.init.reduce((acc, cur) => { return(acc + cur["ctxt"])}, "").replace(/img\//g,'/assets/img/species/');
+          setResult((prev) => ({
+            ...prev,
+            spkey: ctxt
+          }));
+
+          setState((prev) => ({
+            ...prev,
+            init: true
+          }))
+        }
+      })
+    };
+
+    fetchingInit();
+  }, []);
+
+  useEffect(() => {
+    //if (!state.init) {}
+    waitInitData();
+  },[waitInitData]);
 
   const render_search = () => {
     let searchtxt = state.searching;
@@ -86,8 +97,8 @@ const UserSearch = (props) => {
         throw new Error('Error: Network response was not ok when searching... ')
       }
       return res.json()
-    },{ enabled: state.searched,//},
-        keepPreviousData: true /*, !! Note that "init" query has data.data.init not the same as spquery by name as: data.data.key !!
+    },{ enabled: state.searched,// && state.init},
+        keepPreviousData: true/*, //!! Note that "init" query has data.data.init not the same as spquery by name as: data.data.key !!
         placeholderData: () => { //initialData
           return queryClient.getQueryData("init")
             //(searchx.replace("/",""))
@@ -95,28 +106,35 @@ const UserSearch = (props) => {
         }*/
     })
 
-    if (qryx.isError) { console.log(error.message) }; //not affect previous searching result
+    if (qryx.isError) { console.log("Error when searching: ", error.message) }; //not affect previous searching result
 
     let ctxt;
     let data = qryx.data;
     let NotFound = true;
     //let NotInit = false;
-    if (state.searched && !qryx.isError && !qryx.isLoading) {
-      if (data === null || data.data === {} || !data.data.key.length) {
-        alert("Warning: Nothing found when searching: ", searchtxt);
+    if (data && state.searched && !qryx.isError && !qryx.isLoading) {
+      if (data.data === {} || !data.data.key.length) {
+          alert("Warning: Nothing found when searching: ", searchtxt);
       } else {
+          NotFound = false;
+          ctxt = data.data.key.reduce((acc, cur) => { return(acc + cur["ctxt"])}, "").replace(/img\//g,'/assets/img/species/'); //.replace(/^(<\/div>)/g,''); //.replace(/class/g, 'className');
+
+           setState((prev) => ({
+             ...prev,
+             searched: false,
+             isLoading: false
+           }))
+      }
+      /*else if (result.spkey==='') {
         NotFound = false;
-        ctxt = data.data.key.reduce((acc, cur) => { return(acc + cur["ctxt"])}, ""); //.replace(/^(<\/div>)/g,''); //.replace(/class/g, 'className');
+        ctxt = data.data.init.reduce((acc, cur) => { return(acc + cur["ctxt"])}, "").replace(/img\//g,'/assets/img/species/');
+      }*/
+      if (ctxt) {
         setResult((prev) => ({
           ...prev,
           spkey: ctxt
         }));
       }
-      setState((prev) => ({
-        ...prev,
-        searched: false,
-        isLoading: false
-      }))
     }
 
     let ctent;
@@ -126,9 +144,8 @@ const UserSearch = (props) => {
       ctent = ctxt
     }
 
-    return(//render(<Fragment>
+    return(//render(<Fragment />, document.getElementById('resultxdiv'))
         <Copkey ctxt={ctent} />
-        //</Fragment>//, document.getElementById('resultxdiv'))
     )
   };
 
@@ -142,7 +159,7 @@ const UserSearch = (props) => {
           <button class="ctrlbutn" id="keysearchbutn" onClick={trigSearch}>Search</button>
       </div>
       <div id="resultxdiv" style="position:relative;top:0px;margin-top:20px;">
-          {render_search()}
+          {state.init && render_search()}
       </div>
     </Fragment>
   )

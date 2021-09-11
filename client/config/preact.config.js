@@ -1,5 +1,6 @@
 import webpack from 'webpack';
 import path from 'path';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 const { merge } = require('webpack-merge');
 const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -198,11 +199,14 @@ const client_other_config = (config, env) => {
           }],
         },
         {
-            test: /\.(png|gif|jpg|jpeg|xml|json)$/, //|svg
+            test: /\.(png|gif|xml|json)$/, //|svg
             use: [{ loader: 'url-loader',
                     options: { limit: 30 * 1024 }
-            }]
-            //name: 'assets/[name].[hash:8].[ext]'
+                 }]
+        },
+        {
+            test: /\.(jpg|jpeg)$/,
+            use: [{ loader: 'file-loader?name=[path][name].[ext]'}]
         },
         {
           test: /\.(jpe?g|png|gif|svg|webp)$/i,
@@ -226,7 +230,7 @@ const client_other_config = (config, env) => {
         ]
     },
     devServer: {
-      contentBase: path.join(__dirname, 'dist'),
+      contentBase: path.join(__dirname, 'assets'),
       https: true,
       host : '0.0.0.0',
       //host: 'localhost',
@@ -297,6 +301,15 @@ const baseConfig = (config, env, helpers) => {
 
 // transform https://github.com/webpack-contrib/copy-webpack-plugin/issues/6
   config.plugins.push(
+
+    new CopyWebpackPlugin({
+      patterns: [
+      {
+        from: path.join(__dirname, "..", "src/assets/img"),
+        to: path.join(__dirname, "..", "build/assets/img"),
+      }
+      ]
+    }),
 
     new ImageminPlugin({
       cacheFolder: path.resolve(__dirname, 'cache'),
