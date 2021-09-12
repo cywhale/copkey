@@ -30,6 +30,14 @@ const UserSearch = (props) => {
     debounce(changeHandler, 300)
   , []);
 */
+  const trans_htmltxt = (data, key="key") => {
+    //if (process.env.NODE_ENV === 'production') {
+    // return(data.data[key].reduce((acc, cur) => { return(acc + cur["ctxt"])}, "").replace(/img\//g,'/img/species/'))
+    //} //.replace(/^(<\/div>)/g,''); //.replace(/class/g, 'className');
+    return(data.data[key].reduce((acc, cur) => { return(acc + cur["ctxt"])}, "").replace(/img\//g,'/assets/img/species/').replace(/\.(jpg|jpeg)/g,'.png'))
+
+  };
+
   const trigSearch = () => {
     if (searchSpkey && searchSpkey.trim() !== '' && searchSpkey !== state.searching) {
       //history.pushState(null, null, '#search');
@@ -65,7 +73,7 @@ const UserSearch = (props) => {
       ).then((data) => {
         //console.log("Result just got from init fetch: ", data);
         if (data) {
-          let ctxt = data.data.init.reduce((acc, cur) => { return(acc + cur["ctxt"])}, "").replace(/img\//g,'/assets/img/species/');
+          let ctxt = trans_htmltxt(data, "init")
           setResult((prev) => ({
             ...prev,
             spkey: ctxt
@@ -117,7 +125,7 @@ const UserSearch = (props) => {
           alert("Warning: Nothing found when searching: ", searchtxt);
       } else {
           NotFound = false;
-          ctxt = data.data.key.reduce((acc, cur) => { return(acc + cur["ctxt"])}, "").replace(/img\//g,'/assets/img/species/'); //.replace(/^(<\/div>)/g,''); //.replace(/class/g, 'className');
+          ctxt = trans_htmltxt(data, "key");
 
            setState((prev) => ({
              ...prev,
