@@ -1,5 +1,7 @@
 // import React from "react";
+import { Fragment } from "preact";
 import React from "preact/compat";
+import Copimg from "async!./Copimg";
 import (/* webpackMode: "lazy" */
         /* webpackPrefetch: true */
         "../../style/style_copkey.scss");
@@ -18,9 +20,12 @@ class Copkey extends React.Component {
     let ctxt = this.props.ctxt;
 
     return (
-      <div className="container" id="easySearch">
-        <div id="easyPaginate" dangerouslySetInnerHTML={{ __html: ctxt }} />
-      </div>
+      <Fragment>
+        <div className="container" id="easySearch">
+          <div id="easyPaginate" dangerouslySetInnerHTML={{ __html: ctxt.key }} />
+        </div>
+        <Copimg ftxt={ctxt.fig} />
+      </Fragment>
     );
   }
 }

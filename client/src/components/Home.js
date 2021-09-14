@@ -86,9 +86,9 @@ const Home = () => {
           ...prev,
           handling: true,
         }));
-      } else {
-        clear_uri();
-      }
+      } //else {
+        //clear_uri();
+      //}
     } else if (hashstate.handling) {
       console.log("simu el.click for hashstate handling");
     /*let el;

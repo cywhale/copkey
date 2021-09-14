@@ -23,7 +23,7 @@ const UserSearch = (props) => {
   //const queryCache = queryClient.getQueryCache()
 
   const [result, setResult] = useState({
-    spkey: ''
+    spkey: {key:'', fig:''}
   });
 /*//https://dmitripavlutin.com/react-throttle-debounce/
   const debouncedChangeHandler = useCallback(
@@ -34,8 +34,15 @@ const UserSearch = (props) => {
     //if (process.env.NODE_ENV === 'production') {
     // return(data.data[key].reduce((acc, cur) => { return(acc + cur["ctxt"])}, "").replace(/img\//g,'/img/species/'))
     //} //.replace(/^(<\/div>)/g,''); //.replace(/class/g, 'className');
-    return(data.data[key].reduce((acc, cur) => { return(acc + cur["ctxt"])}, "").replace(/img\//g,'/assets/img/species/').replace(/\.(jpg|jpeg)/g,'.png'))
+    let ctxt = data.data[key].reduce((acc, cur) => { return(acc + cur["ctxt"] + "\\n") }, "")
+                 .replace(/img\//g,'/assets/img/species/').replace(/\.(jpg|jpeg)/g, '.png')
+                 .replace(/a class=/g, 'a data-fancybox="gallery" class=');
 
+    let keyx = (ctxt.match(/\<div (class=\"kblk|id=\"genus_|id=\"species_)(.*)\/p\>\<\/div\>(\<br\>)*/g)||[''])[0]
+                 .replace(/\\n/g,'');
+    let figx = (ctxt.match(/\<div id=\"fig_(.*)\/span\>\<\/div\>(\\n)*/g) || [""])[0]; //split that feed into Fancybox
+
+    return({key: keyx, fig: figx});
   };
 
   const trigSearch = () => {

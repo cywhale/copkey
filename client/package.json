@@ -67,6 +67,7 @@
     "xmlhttprequest": "^1.8.0"
   },
   "dependencies": {
+    "@fancyapps/ui": "^4.0.2",
     "preact": "^10.5.13",
     "preact-router": "^3.2.1",
     "react-dropdown-tree-select": "^2.5.1",

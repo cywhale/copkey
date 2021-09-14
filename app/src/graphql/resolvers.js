@@ -10,8 +10,9 @@ const resolvers = {
 		},
                 init: async (_, obj) => {
                   let key = "genus_Acartia"
-                  let fig = "fig_Acartia_bifilosa"
-                  const out = await Spkey.find({$or:[{"unikey": key}, {"unikey": fig}]});
+                  let spx = decodeURIComponent("Acartia bifilosa").replace(/\s/g, "\\\s")
+                  //let fig = "fig_Acartia_bifilosa" //{"unikey": fig}
+                  const out = await Spkey.find({$or:[{"unikey": key}, {"taxon": {$regex: spx, $options: "ix"}}]});
                   return out;
                 },
 
