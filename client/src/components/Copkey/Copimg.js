@@ -41,7 +41,7 @@ const Copimg = (props) => {
 
     if (fsub.length == f2.length) {
       f2.forEach((el, idx, arr) => {
-        arr[idx] = '<div>' + //if use Carousel
+        arr[idx] = '<div style="display:table">' + //if use Carousel
           arr[idx].replace(
         // /a data-fancybox=(.*)class=\"fbox\"/g,
         //  "a data-fancybox='gallery' " + "data-caption='" + fsub[idx] + "'"

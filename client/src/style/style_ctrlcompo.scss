@@ -4,6 +4,32 @@
   font-size:0.8em;
 }
 
+.headdiv {
+  max-height:170px;
+  height:auto;
+  width:95%;
+}
+
+.float-left-div {
+  float:left;
+  max-width:60%;
+  margin-top:-15px
+}
+
+.flex-right-div {
+  float:right;
+  margin-left:auto;
+  order:2;
+}
+
+.blkdiv {
+  clear: left;
+  margin: 30px;
+  height: auto;
+  position: absolute;
+  top: 25%;
+}
+
 .flexpspan {
   display:flex;
   flex-wrap:wrap;

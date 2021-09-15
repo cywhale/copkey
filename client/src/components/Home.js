@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'preact/hooks';
-//import { Fragment } from 'preact';
+import { Fragment } from 'preact';
 //import { useQueryClient } from 'react-query'
 import MultiSelectSort from 'async!./MultiSelectSort';
 import UserSearch from 'async!./UserSearch';
-
+import SvgLoading from 'async!./Compo/SvgLoading';
+import(/* webpackMode: "lazy" */
+       /* webpackPrefetch: true */
+       '../style/style_ctrlcompo');
 
 const Home = () => {
   const searchx = process.env.NODE_ENV === 'production'? 'species/' : 'specieskey/';
@@ -19,6 +22,29 @@ const Home = () => {
     //handling: false,
     par: {},
   });
+
+  const [search, setSearch] = useState({
+    str: '',
+    searched: false,
+    isLoading: false,
+  });
+  const [searchSpkey, setSearchSpkey] = useState('');
+
+  const trigSearch = () => {
+    if (searchSpkey && searchSpkey.trim() !== '' && searchSpkey !== search.str) {
+      //history.pushState(null, null, '#search');
+      //window.dispatchEvent(new HashChangeEvent('hashchange'));
+      return(
+        setSearch((prev) => ({
+          ...prev,
+          str: searchSpkey,
+          searched: true,
+          isLoading: true
+        }))
+      )
+    } //console.log("Repeated search, dismiss it..")
+  };
+
 /*
   const queryClient = useQueryClient()
   const prefetchInit = useCallback(() => {
@@ -112,12 +138,23 @@ const Home = () => {
 
 
   return(
-	<div>
-	     <h1>Copkey App</h1>
-             <p> Testing... </p>
-             <UserSearch urlqry={querystr.par} />
-             <div style="margin-top:30px;"><MultiSelectSort /></div>
-	</div>
+    <Fragment>
+        <div class="headdiv">
+          <h1>Copkey App</h1>
+          <div class="float-left-div">
+              <p class="flexpspan">
+                <label for="spkeysearch" style="color:grey" />
+                <input type="search" id="spkeysearch" name="spkeysearch" placeholder="Search species key"
+                   onInput={(e) => { setSearchSpkey(e.target.value) }} />
+                <button class="ctrlbutn" id="keysearchbutn" onClick={trigSearch}>Search</button>
+              </p>
+          </div>
+          <MultiSelectSort />
+        </div>
+        <div class="blkdiv">
+          <UserSearch search={search} onSearch={setSearch} />
+        </div>
+    </Fragment>
   );
 };
 export default Home;

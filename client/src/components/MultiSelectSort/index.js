@@ -3,11 +3,10 @@ import { MultiSelectContainer } from './MultiSelectContainer';
 import(/* webpackMode: "lazy" */
        /* webpackPrefetch: true */
        'react-dropdown-tree-select/dist/styles.css');
-/*
-import(// webpackMode: "lazy" //
-       // webpackPrefetch: true //
+import(/* webpackMode: "lazy" */
+       /* webpackPrefetch: true */
        '../../style/style_dropdown.scss');
-*/
+
 import data from './data.json';
 
 const MultiSelectSort = () => {
@@ -72,7 +71,9 @@ const MultiSelectSort = () => {
   }, []);
 
   return(
-    <MultiSelectContainer data={data} onChange={onChange} inlineSearchInput={true} />
+    <div class="flex-right-div">
+      <MultiSelectContainer data={data} onChange={onChange} inlineSearchInput={true} />
+    </div>
   );
 };
 export default MultiSelectSort;

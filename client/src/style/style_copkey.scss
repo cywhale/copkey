@@ -1,24 +1,13 @@
-.fancybox-opened {
-  transition:none;
-}
-
-.fancybox-wrap {
-  position: absolute; 
-  top: 0; 
-  left: 0;
-}
-
 .kblk {
   display: block;
   clear: left;
 }
-
 .leader {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   line-height: 2rem;
   margin-top: 1.4rem;
   margin-bottom: 1.4rem;
-  width: 85%;
+  width: 97.5%;
   padding-right: 0;
   vertical-align: baseline; 
   position: relative;
@@ -27,6 +16,33 @@
   list-style: none;
   clear: left;
 }
+
+.doc_title {
+  color: #004481;
+  width:auto;
+}
+
+.doc_epithets {
+  font-size:1em;
+  width:auto;
+}
+
+@media screen and (max-width: 840px) {
+  .doc_title, .leader { width:85%; font-size:1.1rem;}
+  .doc_epithets { width:85%; font-size: 0.9em;}
+}
+@media screen and (max-width: 680px) { 
+  h1.title { margin-top: 1rem; font-size: 1.6rem; }
+  h3.subtitle { font-size: 1.2rem; }
+  h4.author, .date { font-size: 1rem; }
+  .menutxt { display: none; } 
+  .doc_title, .leader { width: 70%; font-size: 1rem;}
+  .doc_epithets { width: 70%; font-size: 0.8em;}
+}
+@media screen and (max-width: 450px) {
+  .doc_title, .leader { width: 56%; font-size: 0.95rem}
+  .doc_epithets { width: 56%; font-size: 0.8em;}
+} 
 
 .leader > span:first-child::after, .leader > span:nth-child(2):before {
   position: absolute;
@@ -119,12 +135,14 @@
 .lxbot {
   margin-top: 0;
 }
-/*
-.fbox {
-  width:30%;
-}
-*/
+
 /* Cosmetic only */
+#easySearch {
+  position: relative;
+  top: 0;
+  padding:2px;
+}
+
 #easyPaginate {width:100%;}
 #easyPaginate img {display:block;margin-bottom:10px;}
 .easyPaginateNav {margin-left:0.5%;}
@@ -136,168 +154,8 @@ li {
   display: inline-block;
   list-style-type : none; 
 }
+
 mark {
   background-color: transparent;
   color: darkblue;
-}
-/*
-.blkfigure {
-  display:inline-block;
-}
-.blkfigure > span.ntrd {
-  max-width:32%;
-  position: relative;
-  width: 125px;
-  height:125px;
-  overflow: hidden;
-  display:inline-block;  
-}
-.blkfigure > span.ntwo {
-  max-width:45%;
-  position: relative;
-  width: 125px;
-  height: 125px;
-  overflow: hidden;
-  display:inline-block;  
-}
-.blkfigure > span.ntwo:nth-of-type(2) {
-  display:inline-block;  
-  margin-left:10px;
-}
-
-.blkfigure > span img {
-  display:inline-block;  
-  position: absolute;
-  left:50%;
-  top: 50%;
-  height:auto;
-  width: auto;
-  -webkit-transform: translate(-50%,-50%);
-      -ms-transform: translate(-50%,-50%);
-          transform: translate(-50%,-50%);
-}
-
-.thumbnail {
-  position: relative;
-  margin-left: 30px;
-  padding:5px;
-  width: 125px;
-  height: 125px;
-  overflow: hidden;
-  display:inline-block; 
-}
-.thumbnail > img {
-  display:inline-block;  
-  position: absolute;
-  left:50%;
-  top: 50%;
-  height:auto;
-  width: auto;
-  -webkit-transform: translate(-50%,-50%);
-      -ms-transform: translate(-50%,-50%);
-          transform: translate(-50%,-50%);
-}
-*/
-.footinfo {
-  font-size: 1.1em;
-  margin-left: 2.5%;
-  margin-right: 2.5%;
-  /*max-width: 50%;*/
-}
-.footinfo > div {
-  line-height: 1.2rem;
-  font-size: 1em;
-  text-align: center;
-  margin-left: 2.5%;
-  margin-right: 7.5%;
-  max-width: 75%;
-}
-.footinfo > ul {
-  line-height: 1.2rem;
-  font-size: 1em;
-  text-align: left;
-}
-.footinfo > hr.ftline {
-  overflow: visible; /* For IE */
-  height: 30px;
-  border-style: solid;
-  border-color: black;
-  border-width: 1px 0 0 0;
-  border-radius: 20px;
-}
-.footinfo > hr.ftline:before { 
-  display: block;
-  content: "";
-  height: 30px;
-  margin-top: -31px;
-  border-style: solid;
-  border-color: black;
-  border-width: 0 0 1px 0;
-  border-radius: 20px;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 46px;
-  height: 24px;
-  top: 5px;
-}
-
-.switch input {display:none;}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 21px;
-  width: 21px;
-  left: 2px;
-  bottom: 2px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.doc_epithets {
-  font-size:1em;
-  width:auto;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(21px);
-  -ms-transform: translateX(21px);
-  transform: translateX(21px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 24px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-
-input.main-toggle { 
-  display: none; 
 }
