@@ -71,7 +71,9 @@
     "preact": "^10.5.13",
     "preact-router": "^3.2.1",
     "react-dropdown-tree-select": "^2.5.1",
-    "react-query": "3.23.2"
+    "react-query": "3.23.2",
+    "react-xarrows": "^2.0.2",
+    "zustand": "^3.5.10"
   },
   "jest": {
     "preset": "jest-preset-preact",

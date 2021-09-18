@@ -1,6 +1,7 @@
 import { Fragment } from 'preact';
 import { useState, useEffect, useCallback } from 'preact/hooks';
 import { useQuery, useQueryClient } from 'react-query';
+//import useHelp from '../Helper/useHelp';
 import Copkey from 'async!../Copkey';
 
 const UserSearch = (props) => {
@@ -13,6 +14,7 @@ const UserSearch = (props) => {
   });
 
   const searchx = process.env.NODE_ENV === 'production'? 'species/' : 'specieskey/';
+  //const toHelp = useHelp.getState().toHelp;
   const queryClient = useQueryClient();
   //const queryCache = queryClient.getQueryCache()
 

@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'preact/hooks';
 import { Fragment } from 'preact';
 //import { useQueryClient } from 'react-query'
+import useHelp from './Helper/useHelp';
 import MultiSelectSort from 'async!./MultiSelectSort';
 import UserSearch from 'async!./UserSearch';
 import SvgLoading from 'async!./Compo/SvgLoading';
+import Helper from 'async!./Helper';
 import(/* webpackMode: "lazy" */
        /* webpackPrefetch: true */
        '../style/style_ctrlcompo');
@@ -14,6 +16,7 @@ const Home = () => {
     loaded: false,
   });
 
+  //const closeHelp = useHelp(state => state.closeHelp)
   const [hashstate, setHashState] = useState({
     handling: false,
     hash: '',
@@ -45,6 +48,21 @@ const Home = () => {
     } //console.log("Repeated search, dismiss it..")
   };
 
+  const kickInitHelper = () => {
+    if (useHelp.getState().iniHelp) {
+      //history.pushState(null, null, '#help');
+      //window.dispatchEvent(new HashChangeEvent('hashchange'));
+      /*return(
+        setAppState((prev) => ({
+          ...prev,
+          iniHelp: false,
+          toHelp: false,
+        }))
+      )*/
+      //closeHelp();
+      useHelp.getState().closeHelp();
+    }
+  };
 /*
   const queryClient = useQueryClient()
   const prefetchInit = useCallback(() => {
@@ -139,8 +157,8 @@ const Home = () => {
 
   return(
     <Fragment>
+      <div id="homediv" onClick={kickInitHelper}>
         <div class="headdiv">
-          <h1>Copkey App</h1>
           <div class="float-left-div">
               <p class="flexpspan">
                 <label for="spkeysearch" style="color:grey" />
@@ -151,9 +169,9 @@ const Home = () => {
           </div>
           <MultiSelectSort />
         </div>
-        <div class="blkdiv">
-          <UserSearch search={search} onSearch={setSearch} />
-        </div>
+        <UserSearch search={search} onSearch={setSearch} />
+        <Helper />
+      </div>
     </Fragment>
   );
 };

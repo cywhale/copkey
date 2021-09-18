@@ -5,9 +5,9 @@
 }
 
 .headdiv {
-  max-height:170px;
   height:auto;
   width:95%;
+  padding:2px;
 }
 
 .float-left-div {
@@ -21,7 +21,7 @@
   margin-left:auto;
   order:2;
 }
-
+/*
 .blkdiv {
   clear: left;
   margin: 30px;
@@ -29,7 +29,7 @@
   position: absolute;
   top: 25%;
 }
-
+*/
 .flexpspan {
   display:flex;
   flex-wrap:wrap;
@@ -38,6 +38,7 @@
   }
   input {
     font-size:0.9em;
+    max-width:97.5%;
   }
   textarea {
     font-size:0.9em;

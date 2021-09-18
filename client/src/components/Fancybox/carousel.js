@@ -5,6 +5,9 @@ import { Carousel as NativeCarousel } from "@fancyapps/ui/dist/carousel.esm.js";
 import(/* webpackMode: "lazy" */
        /* webpackPrefetch: true */
        "@fancyapps/ui/dist/carousel.css");
+import(/* webpackMode: "lazy" */
+       /* webpackPrefetch: true */
+       "../../style/style_fancy.scss");
 
 const Carousel = (props) => {
   const wrapper = useRef(null);

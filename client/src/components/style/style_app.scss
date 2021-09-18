@@ -1,16 +1,19 @@
 .home {
-	display: flex;
-	margin: 0 auto;
-	min-height: 100%;
-	padding: 20px;
-	width: 100%;
-	overflow-y: auto;
+  margin: 0 auto;
+  min-height: 100%;
+  padding: 20px;
+  width: 100%;
+  overflow-y: auto;
+  h1 {
+    margin-top:-15px
+  }
 }
 .right_area {
   height:100%;
   float:right;
+  top:25%;
   right:0;
   position:absolute;
-  width:38px;
-  margin:0
+  width:27.5%;
+  margin:10px;
 }

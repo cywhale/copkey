@@ -18,30 +18,27 @@
 }
 
 .doc_title {
-  color: #004481;
+  font-size: 1.2rem;
+  margin-top: 4.2rem;
+  color: #004481; 
   width:auto;
 }
 
 .doc_epithets {
   font-size:1em;
   width:auto;
+  line-height: 1.4rem;
 }
 
-@media screen and (max-width: 840px) {
-  .doc_title, .leader { width:85%; font-size:1.1rem;}
-  .doc_epithets { width:85%; font-size: 0.9em;}
-}
 @media screen and (max-width: 680px) { 
   h1.title { margin-top: 1rem; font-size: 1.6rem; }
   h3.subtitle { font-size: 1.2rem; }
   h4.author, .date { font-size: 1rem; }
   .menutxt { display: none; } 
-  .doc_title, .leader { width: 70%; font-size: 1rem;}
-  .doc_epithets { width: 70%; font-size: 0.8em;}
+  .doc_epithets { width: auto; font-size: 1em;}
 }
 @media screen and (max-width: 450px) {
-  .doc_title, .leader { width: 56%; font-size: 0.95rem}
-  .doc_epithets { width: 56%; font-size: 0.8em;}
+  .doc_epithets { font-size: 0.9em;}
 } 
 
 .leader > span:first-child::after, .leader > span:nth-child(2):before {
@@ -137,12 +134,6 @@
 }
 
 /* Cosmetic only */
-#easySearch {
-  position: relative;
-  top: 0;
-  padding:2px;
-}
-
 #easyPaginate {width:100%;}
 #easyPaginate img {display:block;margin-bottom:10px;}
 .easyPaginateNav {margin-left:0.5%;}
