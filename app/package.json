@@ -7,7 +7,7 @@
 	"scripts": {
 		"start": "node --es-module-specifier-resolution=node ./src/index.js",
 		"dev": "nodemon --es-module-specifier-resolution=node ./src/index.js",
-                "prod": "export NODE_ENV=production && export PORT=3000 && nodemon --es-module-specifier-resolution=node ./src/index.js",
+		"prod": "export NODE_ENV=production && export PORT=3000 && nodemon --es-module-specifier-resolution=node ./src/index.js",
 		"dev-client": "export NODE_ENV=development && export PORT=3003 && nodemon --es-module-specifier-resolution=node ./src/index.js"
 	},
 	"keywords": [],
@@ -15,16 +15,17 @@
 	"license": "MIT",
 	"dependencies": {
 		"desm": "^1.1.0",
-		"fastify": "^3.21.0",
-		"fastify-autoload": "^3.8.1",
+		"fastify": "^3.21.3",
+		"fastify-autoload": "^3.9.0",
 		"fastify-env": "^2.1.1",
 		"fastify-helmet": "^5.3.2",
 		"fastify-plugin": "^3.0.0",
 		"fastify-static": "^4.2.3",
 		"fluent-json-schema": "^3.0.1",
 		"fs": "^0.0.2",
+		"i": "^0.3.6",
 		"mercurius": "^8.2.1",
-		"mongoose": "^6.0.5"
+		"mongoose": "^6.0.6"
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.12"
