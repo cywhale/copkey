@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useState, useCallback } from 'preact/hooks';
 import { Fragment } from 'preact';
 //import { useQueryClient } from 'react-query'
 import useHelp from './Helper/useHelp';
@@ -6,6 +6,8 @@ import MultiSelectSort from 'async!./MultiSelectSort';
 import UserSearch from 'async!./UserSearch';
 import SvgLoading from 'async!./Compo/SvgLoading';
 import Helper from 'async!./Helper';
+import Popup from 'async!./Compo/Popup';
+//import draggable_element from './Compo/draggable_element';
 import(/* webpackMode: "lazy" */
        /* webpackPrefetch: true */
        '../style/style_ctrlcompo');
@@ -14,6 +16,14 @@ const Home = () => {
   const searchx = process.env.NODE_ENV === 'production'? 'species/' : 'specieskey/';
   const [appstate, setAppState] = useState({
     loaded: false,
+  });
+
+  const [figx, setFigx] = useState({
+    popup: false,
+  /*hash to html: e.g.,  #fig_Acartia_bilobata_004 (Note no 's'
+    '<a data-fancybox="gallery" href="#fig_Artia_bilobata_004"><img src="/assets/img/species/0004_Acartia_bilobata_$
+  */
+    html: '', //hash: #figs_xxx => get xxx
   });
 
   //const closeHelp = useHelp(state => state.closeHelp)
@@ -33,6 +43,9 @@ const Home = () => {
   });
   const [searchSpkey, setSearchSpkey] = useState('');
 
+  //const toHelp = useHelp(useCallback(state => state.toHelp, []));
+  const iniHelp= useHelp(useCallback(state => state.iniHelp, []));
+
   const trigSearch = () => {
     if (searchSpkey && searchSpkey.trim() !== '' && searchSpkey !== search.str) {
       //history.pushState(null, null, '#search');
@@ -49,7 +62,7 @@ const Home = () => {
   };
 
   const kickInitHelper = () => {
-    if (useHelp.getState().iniHelp) {
+    if (iniHelp) {
       //history.pushState(null, null, '#help');
       //window.dispatchEvent(new HashChangeEvent('hashchange'));
       /*return(
@@ -100,6 +113,15 @@ const Home = () => {
     )
   };
 
+  const closePopup = () => {
+    setFigx((prev) => ({
+      ...prev,
+      popup: false,
+    }));
+
+    clear_uri();
+  }
+
   useEffect(() => {
 //  prefetchInit();
     if (!appstate.loaded) {
@@ -118,14 +140,17 @@ const Home = () => {
           par: parx,
         }));
       }, false);
-
+/*    let drag_opts = { dom: ".popup", dragArea: '.popup' };
+      draggable_element(drag_opts);
+*/
       setAppState((preState) => ({
         ...preState,
         loaded: true,
       }));
     }
-    if (hashstate.hash !== '' && !hashstate.handling) {
-      if (hashstate.hash === "#search" || hashstate.hash === "#details" || hashstate.hash === "#close") {
+    let hash = hashstate.hash.toLowerCase()
+    if (hash !== '' && !hashstate.handling) {
+      if (hash === "#search" || hash.substring(0,4) === "#fig" || hash === "#close") {
         setHashState((prev) => ({
           ...prev,
           handling: true,
@@ -134,7 +159,14 @@ const Home = () => {
         //clear_uri();
       //}
     } else if (hashstate.handling) {
-      console.log("simu el.click for hashstate handling");
+      console.log("simu el.click for hashstate handling: ", hash);
+      if (hash.substring(0,4) === "#fig") {
+
+        setFigx((prev) => ({
+          ...prev,
+          popup: true,
+        }));
+      }
     /*let el;
       if (hashstate.hash === "#search") {
         el = document.getElementById("tab-4");
@@ -154,6 +186,7 @@ const Home = () => {
     }
   },[appstate.loaded, hashstate]); //, prefetchInit
 
+  let teststr='<a data-fancybox="gallery" href="#figs_Acartia_bilobata_004"><img src="/assets/img/species/0004_Acartia_bilobata_004.png" border="0" /></a>';
 
   return(
     <Fragment>
@@ -166,12 +199,16 @@ const Home = () => {
                    onInput={(e) => { setSearchSpkey(e.target.value) }} />
                 <button class="ctrlbutn" id="keysearchbutn" onClick={trigSearch}>Search</button>
               </p>
+              { iniHelp &&
+                <p style="text-indent:0;" class="triangle-right top" id="search_tooltips">Search taxon for its identification key<br/>搜尋物種分類檢索，輸入物種名</p>
+              }
           </div>
           <MultiSelectSort />
         </div>
         <UserSearch search={search} onSearch={setSearch} />
         <Helper />
       </div>
+      { figx.popup && <Popup ctxt={teststr} onClose={closePopup} /> }
     </Fragment>
   );
 };

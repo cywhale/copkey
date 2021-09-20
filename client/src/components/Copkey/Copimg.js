@@ -3,11 +3,11 @@ import { Fragment } from "preact";
 //import React from "preact/compat";
 //import parse from "html-react-parser"; // if use Fancybox
 import DDiv from "async!../Compo/DDiv";
-//import Fancybox from "async!../Fancybox";
-import Carousel from "async!../Fancybox/carousel";
+import Fancybox from "async!../Fancybox";
+import Carousel from "async!../Fancybox/Carousel";
 
 const Copimg = (props) => {
-  const { ftxt } = props
+  const { ftxt } = props;
 
   const fboxs = ftxt.split(/\\n/).map((fx) => {
     let f1 = (fx.match(
@@ -43,11 +43,14 @@ const Copimg = (props) => {
       f2.forEach((el, idx, arr) => {
         arr[idx] = '<div style="display:table">' + //if use Carousel
           arr[idx].replace(
-        // /a data-fancybox=(.*)class=\"fbox\"/g,
-        //  "a data-fancybox='gallery' " + "data-caption='" + fsub[idx] + "'"
-        //).replace(
-           /img src=\"\/assets\/img\/species/g, 'img src="/assets/img/sp_thumb'
-        ) + //if use Carousel
+            // /\<a data-fancybox=(.*)class=\"fbox\"/g,
+              //'<Fancybox>{parse(
+            //  '<a data-fancybox="gallery"' // ' + 'data-caption="' + fsub[idx] + '"'
+            //).replace(
+              /img src=\"\/assets\/img\/species/g, 'img src="/assets/img/sp_thumb'
+          //).replace(
+          //  /border=\"0\"\s*\/\>/g, '/></Fancybox>'
+            ) + //if use Carousel
         '<br><br>' + fsub[idx] + '</div>'
       });
     }

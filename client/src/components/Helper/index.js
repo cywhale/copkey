@@ -21,6 +21,7 @@ const Xarr2 = (props) => {
 const Helper = (props) => {
   //const [ isOpen, setIsOpen ] = useState(false);
   const toHelp = useHelp(useCallback(state => state.toHelp, []));
+  const iniHelp= useHelp(useCallback(state => state.iniHelp, []));
 
   const arrline2x = (s1,s2,e1,e2,biasx=0.5,biasy=0) => {
     const linex1 = {
@@ -76,7 +77,7 @@ const Helper = (props) => {
     const { helpclass } = props;
 
     let langsel = "en";
-    let hxid_e0 = useHelp.getState().iniHelp? "key_Acartia_35a": document.querySelector('[id^="key_"]').id;
+    let hxid_e0 = iniHelp? "key_Acartia_35a": document.querySelector('[id^="key_"]').id;
     if (hxid_e0) {
       console.log("Find a dom with key id: ", hxid_e0);
     } else {
@@ -121,6 +122,7 @@ const Helper = (props) => {
     <Fragment>
       <div id="helpToggle" class={style.helpToggle}>
          <a class={style.helpButn} id="helpButn" onClick={toggleBtnx}><i></i></a>
+         {iniHelp && <p style="text-indent:0;" class="triangle-right top" id="help_tooltips">Open Helper<br/>使用小幫手</p>}
       </div>
       { render_xarrows({helpclass: helpClass}) }
     </Fragment>

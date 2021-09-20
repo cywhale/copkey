@@ -23,10 +23,13 @@ class Taxonkey extends React.Component {
 const Copkey = (props) => {
   const { ctxt } = props;
   const toHelp = useHelp(useCallback(state => state.toHelp, []));
+  const iniHelp= useHelp(useCallback(state => state.iniHelp, []));
 
   let helpClass;
-  if (toHelp) {
-    helpClass=`${style.fade} ${style.gohelp}`;
+  if (iniHelp) {
+    helpClass=`${style.fade}`;
+  } else if (toHelp) {
+    helpClass=`${style.gohelp}`;
   } else {
     helpClass=`${style.container}`
   }

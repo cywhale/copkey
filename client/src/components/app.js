@@ -3,7 +3,7 @@ import { Router } from 'preact-router';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools'
 import Sidebar from 'async!./Sidebar';
-import Home from 'async!./Home'
+import Home from 'async!./Home';
 import style from './style/style_app';
 
 const queryClient = new QueryClient();
