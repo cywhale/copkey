@@ -100,14 +100,19 @@ const Helper = (props) => {
         document.getElementById('rightarea')
     ))
   };
-/*
+
   useEffect(() => {
     if (toHelp) {
-      setIsOpen(true)
+      //setIsOpen(true)
+      let els = document.querySelectorAll("#helpContainer div")
+      if (els.length>0) {
+        for(let i=0; i < els.length; i++) {
+          els[i].style.zIndex = 1005;
+        }
+      }
     }
-    console.log("In helper, now toHelp: ", toHelp);
   }, [toHelp]);
-*/
+
   let helpClass;
   if (!toHelp) {
     helpClass=`${style.helpContainer} ${style.notshown}`;

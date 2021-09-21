@@ -42,15 +42,15 @@ const Copimg = (props) => {
     if (fsub.length == f2.length) {
       f2.forEach((el, idx, arr) => {
         arr[idx] = '<div style="display:table">' + //if use Carousel
-          arr[idx].replace(
+          arr[idx] + //.replace(
             // /\<a data-fancybox=(.*)class=\"fbox\"/g,
               //'<Fancybox>{parse(
             //  '<a data-fancybox="gallery"' // ' + 'data-caption="' + fsub[idx] + '"'
             //).replace(
-              /img src=\"\/assets\/img\/species/g, 'img src="/assets/img/sp_thumb'
+            //  /img src=\"\/assets\/img\/species/g, 'img src="/assets/img/sp_thumb'
           //).replace(
           //  /border=\"0\"\s*\/\>/g, '/></Fancybox>'
-            ) + //if use Carousel
+          //  ) + //if use Carousel
         '<br><br>' + fsub[idx] + '</div>'
       });
     }

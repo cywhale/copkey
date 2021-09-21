@@ -37,6 +37,14 @@ const spkeyschema = new Schema({
         docn: {
                 type: Number,
                 required: false
+        },
+        page: {
+                type: Number,
+                required: false
+        },
+        kcnt: {
+                type: Number,
+                required: false
         }
 });
 

@@ -5,7 +5,7 @@ import { useQuery, useQueryClient } from 'react-query';
 import Copkey from 'async!../Copkey';
 
 const UserSearch = (props) => {
-  const { search, onSearch } = props;
+  const { query, search, onSearch } = props;
   const [state, setState] = useState({
     init: false, //initial searching
   });
@@ -23,27 +23,29 @@ const UserSearch = (props) => {
     // return(data.data[key].reduce((acc, cur) => { return(acc + cur["ctxt"])}, "").replace(/img\//g,'/img/species/'))
     //} //.replace(/^(<\/div>)/g,''); //.replace(/class/g, 'className');
     let ctxt = data.data[key].reduce((acc, cur) => { return(acc + cur["ctxt"] + "\\n") }, "")
-                 .replace(/img\//g,'/assets/img/species/').replace(/\.(jpg|jpeg)/g, '.png')
-                 .replace(/a class=/g, 'a data-fancybox="gallery" class=');
+                 //.replace(/img\//g,'/assets/img/species/').replace(/\.(jpg|jpeg)/g, '.png') //no need in newer version data stored in mongo 20210921
+                 //.replace(/a class=/g, 'a data-fancybox="gallery" class=');
 
     let keyx = (ctxt.match(/\<div (class=\"kblk|id=\"genus_|id=\"species_)(.*)\/p\>\<\/div\>(\<br\>)*/g)||[''])[0]
                  .replace(/\\n/g,'');
-    let figx = (ctxt.match(/\<div id=\"fig_(.*)\/span\>\<\/div\>(\\n)*/g) || [""])[0]; //split that feed into Fancybox
+    let figx = (ctxt.match(/\<div id=\"figs_(.*)\/span\>\<\/div\>(\\n)*/g) || [""])[0]; //split that feed into Fancybox
 
     return({key: keyx, fig: figx});
   };
 
-  const waitInitData = useCallback(() => {
+  const waitInitData = useCallback((query) => {
   //return(queryClient.getQueryData("init")); //prefetchQuery may later than you want it, then undefined!
   /*let r = queryCache.find("init"); //It's a whole cache object
     if (r) {
        return Promise.resolve(r);
     }*/
-    const fetchingInit = async () => {
-      await Promise.resolve(queryClient.fetchQuery("init", async () => {
-          const res = await fetch(searchx + "init");
+    let querystr = ((query && query.page && query.page!=="")? '?page=' + query.page : 'init');
+
+    const fetchingInit = async (qstr) => {
+      await Promise.resolve(queryClient.fetchQuery(qstr, async () => {
+          const res = await fetch(searchx + qstr);
           if (!res.ok) {
-            throw new Error('Error: Network response was not ok when fetchingInit... ')
+            throw new Error('Error: Network response was not ok when fetchingInit: ' + qstr)
           }
           return res.json()
         }, {
@@ -53,7 +55,8 @@ const UserSearch = (props) => {
       ).then((data) => {
         //console.log("Result just got from init fetch: ", data);
         if (data) {
-          let ctxt = trans_htmltxt(data, "init")
+          let qkey = ((qstr.substring(0,1) === "?")? qstr.substring(1,qstr.indexOf("=")) : qstr);
+          let ctxt = trans_htmltxt(data, qkey)
           setResult((prev) => ({
             ...prev,
             spkey: ctxt
@@ -67,13 +70,13 @@ const UserSearch = (props) => {
       })
     };
 
-    fetchingInit();
+    fetchingInit(querystr);
   }, []);
 
   useEffect(() => {
     //if (!state.init) {}
-    waitInitData();
-  },[waitInitData]);
+    waitInitData(query);
+  },[waitInitData, query]);
 
 
   const render_search = () => {
@@ -128,6 +131,7 @@ const UserSearch = (props) => {
 
     let ctent;
     if (NotFound) { // Fragment(result.spkey)
+      //console.log("Note: using previous result", state.init);
       ctent = result.spkey
     } else {
       ctent = ctxt

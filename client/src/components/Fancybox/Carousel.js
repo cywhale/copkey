@@ -1,10 +1,7 @@
 import { useRef, useEffect } from "preact/hooks";
 //import React from "preact/compat";
 import { Carousel as NativeCarousel } from "@fancyapps/ui/dist/carousel.esm.js";
-
-import(/* webpackMode: "lazy" */
-       /* webpackPrefetch: true */
-       "@fancyapps/ui/dist/carousel.css");
+// Note @fancyapps/ui/dist/carousel.css should load before style_fancy.scss, so make it load in Home
 import(/* webpackMode: "lazy" */
        /* webpackPrefetch: true */
        "../../style/style_fancy.scss");

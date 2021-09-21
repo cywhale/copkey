@@ -16,6 +16,8 @@ type Spkeyq {
         sex: String
         ctxt: String
         docn: Int
+        page: Int
+        kcnt: Int
 }
 `
 

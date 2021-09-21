@@ -11,6 +11,9 @@ import Popup from 'async!./Compo/Popup';
 import(/* webpackMode: "lazy" */
        /* webpackPrefetch: true */
        '../style/style_ctrlcompo');
+import(/* webpackMode: "lazy" */
+       /* webpackPrefetch: true */
+       "@fancyapps/ui/dist/carousel.css");
 
 const Home = () => {
   const searchx = process.env.NODE_ENV === 'production'? 'species/' : 'specieskey/';
@@ -148,9 +151,9 @@ const Home = () => {
         loaded: true,
       }));
     }
-    let hash = hashstate.hash.toLowerCase()
+    let hash = hashstate.hash; //.toLowerCase()
     if (hash !== '' && !hashstate.handling) {
-      if (hash === "#search" || hash.substring(0,4) === "#fig" || hash === "#close") {
+      if (hash === "#search" || hash.substring(0,5) === "#fig_" || hash === "#close") {
         setHashState((prev) => ({
           ...prev,
           handling: true,
@@ -160,12 +163,27 @@ const Home = () => {
       //}
     } else if (hashstate.handling) {
       console.log("simu el.click for hashstate handling: ", hash);
-      if (hash.substring(0,4) === "#fig") {
-
-        setFigx((prev) => ({
-          ...prev,
-          popup: true,
-        }));
+      if (hash.substring(0,5) === "#fig_") {
+        let spx = hash.substring(5);
+        let spt = spx.split(/\_/);
+        if (spt.length == 2) {
+          spx = spx + '_01'; //add a number fo species, but we don't validate species yet
+        }
+        if (spt.length >= 2) {
+          let hstr='<a data-fancybox="gallery"><img src="/assets/img/species/' + spx + '.png" border="0" /></a>';
+          setFigx((prev) => ({
+            ...prev,
+            popup: true,
+            html: hstr,
+          }));
+        } /*else {
+          const el = document.querySelector('#element')
+          const topPos = el.getBoundingClientRect().top + window.pageYOffset
+          window.scrollTo({
+            top: topPos, // scroll so that the element is at the top of the view
+            behavior: 'smooth' // smooth scroll
+          })
+        }*/
       }
     /*let el;
       if (hashstate.hash === "#search") {
@@ -186,8 +204,7 @@ const Home = () => {
     }
   },[appstate.loaded, hashstate]); //, prefetchInit
 
-  let teststr='<a data-fancybox="gallery" href="#figs_Acartia_bilobata_004"><img src="/assets/img/species/0004_Acartia_bilobata_004.png" border="0" /></a>';
-
+  //let teststr='<a data-fancybox="gallery" href="#figs_Acartia_bilobata_004"><img src="/assets/img/species/0004_Acartia_bilobata_004.png" border="0" /></a>';
   return(
     <Fragment>
       <div id="homediv" onClick={kickInitHelper}>
@@ -205,10 +222,10 @@ const Home = () => {
           </div>
           <MultiSelectSort />
         </div>
-        <UserSearch search={search} onSearch={setSearch} />
+        <UserSearch query={querystr.par} search={search} onSearch={setSearch} />
         <Helper />
       </div>
-      { figx.popup && <Popup ctxt={teststr} onClose={closePopup} /> }
+      { figx.popup && <Popup ctxt={figx.html} onClose={closePopup} /> }
     </Fragment>
   );
 };

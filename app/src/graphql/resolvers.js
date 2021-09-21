@@ -15,11 +15,10 @@ const resolvers = {
                   const out = await Spkey.find({$or:[{"unikey": key}, {"taxon": {$regex: spx, $options: "ix"}}]});
                   return out;
                 },
-
                 page: async (_, obj, ctx) => {
                   const { p } = obj;
                   //ctx.reply.log.info("GraphQL to find page: " + p)
-                  const keyx = await Spkey.find({"docn":p})
+                  const keyx = await Spkey.find({"page":p}, null, {sort: {kcnt: 1}}) //asc, desc, ascending, descending, 1, or -1
                   return keyx
                 },
 		key: async (_, obj, ctx) => {

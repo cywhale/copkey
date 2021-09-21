@@ -39,6 +39,7 @@
 }
 @media screen and (max-width: 450px) {
   .doc_epithets { font-size: 0.9em;}
+  .leader { font-size: 1.1rem; }
 } 
 
 .leader > span:first-child::after, .leader > span:nth-child(2):before {
@@ -133,7 +134,6 @@
   margin-top: 0;
 }
 
-/* Cosmetic only */
 #easyPaginate {width:100%;}
 #easyPaginate img {display:block;margin-bottom:10px;}
 .easyPaginateNav {margin-left:0.5%;}
