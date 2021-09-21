@@ -7,9 +7,10 @@ library(magrittr)
 
 key_src_dir <- "D:/ODB/Data/shih/shih_5_202107/Key"
 web_dir <- "www_sp/"
-web_img <- paste0(web_dir, "img/")
+web_img <- paste0(web_dir, "assets/img/species/")
 doc_imgdir <- "doc/sp_key_zip/"
 #skipLine <- 4L
+page_length_def <- 30L
 
 #webCite <- "from the website <a href='https://copepodes.obs-banyuls.fr/en/' target='_blank'>https://copepodes.obs-banyuls.fr/en/</a> managed by Razouls, C., F. de Bovée, J. Kouwenberg, & N. Desreumaux (2015-2017)"
 #options(useFancyQuotes = FALSE)
@@ -197,7 +198,7 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
 }
 
 read_docx_row <- function (ctentxt) {
-  x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctentxt))))
+  x <-gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctentxt)))))
   tt <- which(is.na(x) | x=="")
   if (any(tt)) return("")
   
@@ -214,6 +215,7 @@ dfk <- data.table(fidx=integer(),
                   subfig=character(), caption=character(), citation=character(),
                   flushed=character(), ## flushed means flush figs in a row
                   blkx=integer(), docn=integer(), rid=character(), ### blkx: counter of block of fig, docn: nth document
+                  kcnt=integer(), tokcnt=integer(), page=integer(), ## tokcnt: correspond to kcnt in dtk
                   xdtk=character(), taxon=character(), subgen=character(),
                   genus=character(), family=character()) #rid link to dtk, xdtk link to key of dtk
 
@@ -224,14 +226,17 @@ dtk <- data.table(rid=integer(), unikey=character(), ckey=character(),
                   taxon=character(), abbrev_taxon=character(), fullname=character(),
                   subgen=character(), genus=character(), family=character(), 
                   epithets=character(), keystr=character(), ctxt=character(), fkey=character(),
-                  sex=character(), docn=integer()) #, keyword=character()) #, page=integer())
+                  sex=character(), docn=integer(), kcnt=integer(), #counter of key+fig to split page
+                  page=integer())
 
 doclst <- list.files(key_src_dir, pattern="^Key?(.*).docx$",full.names = T)
 cntg <- 0L
-cntg_fig <- 0L
+cntg_fig<- 0L
 blk_cnt <- 0L
+page_cnt<- 1L
+pre_kcnt<- 0L
+keycnt <- 0L
 #docfile <- doclst[1]
-
 
 for (docfile in doclst[1:4]) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
@@ -325,14 +330,15 @@ for (docfile in doclst[1:4]) {
                     gsub(paste0("(?!\\()", gen_name, "(?!\\))"), "", x, perl = T)))) 
       },simplify = T, USE.NAMES = F) %>% paste(collapse=", ") #Some (Subgen) == gen_name cannot be filtered
   #for example: c("(Acartia) abc", "Acartia ddd") -> "(Acartia) abc" "ddd" 
+  keycnt <- keycnt + 1L;
   
   dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0("genus_", gen_name), 
-                                       ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
-                                       figs=NA_character_, type=NA_integer_, nkey=NA_integer_, 
-                                       taxon=NA_character_, abbrev_taxon=NA_character_, fullname=NA_character_,
-                                       subgen=NA_character_, genus=gen_name, family=fam_name, epithets=epi_list, 
-                                       keystr=NA_character_, ctxt=epitxt, fkey=NA_character_, 
-                                       sex=NA_character_, docn=cntg))) #, keyword=NA_character_)))
+                              ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
+                              figs=NA_character_, type=NA_integer_, nkey=NA_integer_, 
+                              taxon=NA_character_, abbrev_taxon=NA_character_, fullname=NA_character_,
+                              subgen=NA_character_, genus=gen_name, family=fam_name, epithets=epi_list, 
+                              keystr=NA_character_, ctxt=epitxt, fkey=NA_character_, 
+                              sex=NA_character_, docn=cntg, kcnt=keycnt, page=page_cnt)))
   tstL <- nrow(ctent)
 
   epiall <- trimx(gsub("\\((?:.*)\\)", "", unlist(tstrsplit(dtk[rid==0 & genus==gen_name & family==fam_name,]$epithets, ","), use.names = F)))
@@ -359,7 +365,7 @@ for (docfile in doclst[1:4]) {
   fig_exclude <- "\\(F\\,\\s*M\\)|\\(1\\,f\\)" #exclude pattern in title/main: (F,M)
   
   while (i<=tstL) {
-    x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i]))))
+    x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))
 
     tt <- which(is.na(x) | x=="")
     if (any(tt)) {
@@ -668,6 +674,7 @@ for (docfile in doclst[1:4]) {
           }
         }
         xc <- paste0(xc,'</div>') #202109 no need for delaying output </div> 
+        keycnt <- keycnt + 1L
         
         dtk <- rbindlist(list(dtk,data.table(rid=i, unikey=paste0(gen_name, "_", keyx),
                                              ckey= keyx, subkey= subkeyx, pkey= prekeyx,
@@ -675,7 +682,7 @@ for (docfile in doclst[1:4]) {
                                              taxon=xsp, abbrev_taxon=nsp, fullname=NA_character_,
                                              subgen=subgen, genus=gen_name, family=fam_name,
                                              epithets=NA_character_, keystr=keystr, ctxt=xc, fkey=NA_character_, 
-                                             sex=xsex, docn=cntg))) #keyword=NA_character_)))
+                                             sex=xsex, docn=cntg, kcnt=keycnt, page=page_cnt)))
       } else {
         #202109 no need for delaying output </div>
         xc <- paste0('<div><p class=',dQuote(paste0(indentx, ' lxbot')), '><span class=', 
@@ -719,7 +726,8 @@ for (docfile in doclst[1:4]) {
   
   #i <- 195L #just when test first doc file #i<=232L before p.12 #i<=tstL #245L p13 #292L before p19 #351L p25
   while (fig_mode & nrow(dtk)>0 & i<=tstL) {
-    x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i]))))
+    x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", 
+             gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))
     wa <- regexpr("\\((S|s)ize",x)
     if (wa>0) {
       spname<- trimx(substr(x, 1, wa-1))
@@ -750,7 +758,7 @@ for (docfile in doclst[1:4]) {
       imgf <- c()
       imgj <- 0L
       while (within_xsp_flag) {
-        x <- gsub("^\\\t", "", gsub("^\\s+|\\s+$", "", as.character(ctent$text[i])))  
+        x <- gsub("^\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\u00A0{1,}", " ", as.character(ctent$text[i]))))  
         tt <- which(is.na(x) | gsub("Last update(?:.*)", "", x)=="") #ignore Last update:...
         if (i<tstL & any(tt)) {
           ncflag <- ncflag + 1
@@ -766,14 +774,14 @@ for (docfile in doclst[1:4]) {
           } 
         } else {
           ncflag <- 0L
-          xt <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i])))))
+          xt <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i]))))))
           if (length(subfig)==0 & fig_title=="" & (!is.na(xt) & trimx(gsub(fig_exclude,"",xt)) != spname)) { #(any(subfig=="")) {
             subfig <- gsub("\\s*\\,\\s*", ", ", #make Sewell,1914 -> Sewell, 1914 with the same format
                         trimx(unlist(tstrsplit(x, '\\s{2,}|\\t'), use.names = F))) #note that sometimes pattern has: "a1   b2 & c3", split to "a1" "b2 & c3" 
             i <- i + 1L
             next
           } else if (!is.na(x) & fig_title=="") {
-            x <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i])))))
+            x <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i]))))))
             if (length(subfig)>0) {
               xc <- find_subfigx(x, subfig, 1L, print_info = FALSE)
               if (xc[1]>0) {
@@ -799,7 +807,7 @@ for (docfile in doclst[1:4]) {
             i <- i + 1L
             next
           } else {
-            x <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(ctent$text[i])))))
+            x <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i]))))))
             wa <- regexpr("\\((S|s)ize",x)
             xsp1 <- trimx(odbapi::sciname_simplify(x, simplify_one = T))
             if (i>=tstL | (!is.na(x) & (wa>0 | (xsp1==gen_name & imgj>0 & imgj>=length(subfig))))) { #trimx(sp2namex(x)) != xsp2)) {
@@ -837,11 +845,11 @@ for (docfile in doclst[1:4]) {
                 
                 within_xsp_flag <- FALSE #A species is completed its record, and go into next sp! 
                 
-                blk_cnt <- blk_cnt + 1
+                if (Blk_condi<2) { blk_cnt <- blk_cnt + 1 } # if Blk_condi==2 should be in the same blk to render
                 #flink <- sapply(fig_num, function(x) {
                 #  paste0("fig_", gsub("\\s", "_", xsp2), "_", padzerox(x))
                 #}, simplify = T)
-                fkeyx<- substring(gsub("www_sp\\/img\\/|\\.jpg", "", imgf), 6)
+                fkeyx<- gsub("www_sp\\/assets\\/img\\/species\\/|\\.jpg", "", imgf)
                 fnum <- gsub("_", "", gsub(gsub("\\s", "_", xsp2), "", fkeyx))
                 
                 if (length(fig_caption)==0) {
@@ -855,11 +863,12 @@ for (docfile in doclst[1:4]) {
                 }
                 
                 if (!any("female/male" %chin% dtk[x_dtk,]$sex)) {
-                  key_sex <- rbindlist(list(dtk[x_dtk, .(ckey, sex)],
+                  key_sex <- rbindlist(list(dtk[x_dtk, .(ckey, sex, kcnt)],
                                             data.table(ckey=paste(dtk[x_dtk,]$ckey, collapse = ","),
-                                                       sex="female/male")))
+                                                       sex="female/male",
+                                                       kcnt=min(dtk[x_dtk,]$kcnt))))
                 } else {
-                  key_sex <- dtk[x_dtk, .(ckey, sex)]
+                  key_sex <- dtk[x_dtk, .(ckey, sex, kcnt)]
                 }
                 
                 malekey <- ""; femalekey <- ""
@@ -870,8 +879,9 @@ for (docfile in doclst[1:4]) {
                 keymat <- chmatch(fsex, key_sex$sex) #cannot just use key_sex[chmatch(fsex, sex),]$ckey because may lost match
                 keymat[is.na(keymat)] <- chmatch("female/male", key_sex$sex)
                 ckeyx <- key_sex[keymat,]$ckey
+                tokeyx<- key_sex[keymat,]$kcnt
                 
-                fdlink <- paste0("fig_", gsub("\\s", "_", xsp2)) #, "_", paste(fnum, collapse="-"))
+                fdlink <- paste0("figs_", gsub("\\s", "_", xsp2)) #, "_", paste(fnum, collapse="-"))
 
                 if (length(fig_num)>=4) {
                   spanx <- 'nnar' ### narrow span
@@ -925,6 +935,7 @@ for (docfile in doclst[1:4]) {
                   }
                 }
                 
+                if (Blk_condi<2) { keycnt <- keycnt + 1L } #when Blk_condi==2 write to the same ctxt, so not add counter
                 dfkt <- data.table(fidx=fig_num, fkey=fkeyx,
                                    ckeyx=ckeyx, #rep(paste(dtk[x_dtk,]$ckey, collapse = ","), length(fig_num)),
                                    imgf=gsub("www_sp\\/", "", imgf), 
@@ -934,7 +945,9 @@ for (docfile in doclst[1:4]) {
                                    subfig= subfig, caption= cap_cite$cap, 
                                    citation= cap_cite$cite, #may be null, so use fill=NA
                                    flushed=rep(paste(fig_num, collapse = ","), length(fig_num)), ## flushed means flush figs in a row
-                                   blkx=blk_cnt, docn=cntg, rid=i, xdtk=paste(x_dtk, collapse=","),
+                                   blkx=blk_cnt, docn=cntg, rid=i, 
+                                   kcnt=keycnt, tokcnt=tokeyx, page=page_cnt,
+                                   xdtk=paste(x_dtk, collapse=","),
                                    taxon=xsp2, subgen=subgenx,
                                    genus=gen_name, family=fam_name) ### blkx: counter of block of fig, docn: nth document
                 
@@ -949,8 +962,9 @@ for (docfile in doclst[1:4]) {
                   ctxt0 <- paste0(paste0('\n\n<div id=', dQuote(fdlink),'><div class=', dQuote('blkfigure'),'>'), 
                              paste0('<div class=', dQuote("fig_title"),'><span class=', dQuote('spmain'), '>', italics_spname(fig_mtxt, spname),'</span></div>'),
                              mapply(function(outf,flink,cfigx,spanx) {
-                                  paste0('<span class=', dQuote(spanx), '><a class=', dQuote("fbox"), 
-                                         ' href=', dQuote(outf),
+                                  paste0('<span class=', dQuote(spanx), '><a data-fancybox=',
+                                         dQuote("gallery"), ' class=', dQuote("fbox"), 
+                                         ' href=', dQuote(paste0("#fig_", flink)), ## 20210920 modified use only hash, not link 
                                          #' data-alt=', dQuote(paste0(capx)),
                                          '><img src=',
                                          dQuote(outf), ' border=', dQuote('0'),
@@ -958,7 +972,7 @@ for (docfile in doclst[1:4]) {
                                          '>',cfigx, #' *',sp,'* ',sex,
                                          #' [&#9754;](#key_',ckeyx,') &nbsp;', fdupx,
                                          '</span></span>') ############ Only MARK duplicated imgf
-                             },outf=gsub("www_sp\\/", "", imgf), # No need www_sp/ in html link
+                             },outf=gsub("species\\/", "sp_thumb/", gsub("www_sp\\/", "", imgf)), # use thumbnail in imgsrc
                                flink=fkeyx, cfigx=xsubf, #fgcnt=fig_num,
                                MoreArgs = list(spanx=spanx), SIMPLIFY = TRUE, USE.NAMES = FALSE) %>% 
                                paste(collapse=" "),
@@ -992,7 +1006,8 @@ for (docfile in doclst[1:4]) {
                         epithets=epit, keystr=keystr, 
                         ctxt=ctxtt,
                         fkey=paste(fkeyx, collapse=","), 
-                        sex=NA_character_, docn=cntg))) #, keyword="figs"))) #figs is type =2
+                        sex=NA_character_, docn=cntg,
+                        kcnt=keycnt, page=page_cnt))) #, keyword="figs"))) #figs is type =2
                   
                 } else { #Blk_condi==2
                   dfkt <- dfk[taxon==xsp2,] #extend to all blks belong to the same species
@@ -1000,8 +1015,9 @@ for (docfile in doclst[1:4]) {
                             paste0('\n<br><br><div class=', dQuote('blkfigure'),'>'), 
                             #paste0('<div class=', dQuote("fig_title"),'><span class=', dQuote('spmain'), '>', italics_spname(fig_mtxt, spname),'</span></div>'),
                             mapply(function(outf,flink,cfigx,spanx) {
-                                paste0('<span class=', dQuote(spanx), '><a class=', dQuote("fbox"), 
-                                       ' href=', dQuote(outf),
+                                paste0('<span class=', dQuote(spanx), '><a data-fancybox=',
+                                       dQuote("gallery"), ' class=', dQuote("fbox"), 
+                                       ' href=', dQuote(paste0("#fig_", flink)), ## 20210920 modified use only hash, not link ,
                                        #' data-alt=', dQuote(paste0(capx)),
                                        '><img src=',
                                        dQuote(outf), ' border=', dQuote('0'),
@@ -1009,7 +1025,7 @@ for (docfile in doclst[1:4]) {
                                        '>',cfigx, #' *',sp,'* ',sex,
                                        #' [&#9754;](#key_',ckeyx,') &nbsp;', fdupx,
                                        '</span></span>') ############ Only MARK duplicated imgf
-                            },outf=gsub("www_sp\\/", "", imgf), # No need www_sp/ in html link
+                            },outf=gsub("species\\/", "sp_thumb/", gsub("www_sp\\/", "", imgf)), # No need www_sp/ in html link
                               flink=fkeyx, cfigx=xsubf, #fgcnt=fig_num,
                               MoreArgs = list(spanx=spanx), SIMPLIFY = TRUE, USE.NAMES = FALSE) %>% 
                             paste(collapse=" "), '</div><br><br>', #it's ends of <div class='blkfigure'>
@@ -1143,9 +1159,10 @@ for (docfile in doclst[1:4]) {
                       print(paste0("Error: Cannot get the the image file: ", imgsrc, "  Check it at i:",  i))
                       break 
                     }
-                    imgf[imgj+1L] <- paste0(web_img, padzerox(cntg_fig, 4), "_",
+                    imgf[imgj+1L] <- paste0(web_img, #padzerox(cntg_fig, 4), "_", ## modified 20210920 that no longer need numbers
                                             gsub("\\s", "_", xsp2),
-                                            "_", padzerox(doc_fign), ".jpg")
+                                            "_", padzerox(imgj+1, 2), #padzerox(doc_fign), ## modified 20210920
+                                            ".jpg") #0001_Sp_name_000x.jpg changed to -> Sp_name_01.jpg
                     if (!file.exists(imgf[imgj+1L])) {
                       system(enc2utf8(paste0("cmd.exe /c copy ", gsub("/","\\\\", imgsrc), 
                                              " ",gsub("/","\\\\",imgf[imgj+1L]))))
@@ -1210,14 +1227,80 @@ for (docfile in doclst[1:4]) {
       } #end of while within_xsp_flag
     } 
   } #end of while fig_mode
+  ######### Start Pagination #####
+  ################################
+  page_length_def <- 30
+  kinc <- seq(pre_kcnt+1, keycnt) ##keycnt increment this time
+  if (length(kinc)>=page_length_def) {
+    start_taxon <- which(dtk$kcnt>pre_kcnt & !is.na(dtk$figs))[1]
+    start_fig <- which(dtk$kcnt>pre_kcnt & dtk$type==2)[1]
+    key_num <- start_fig-1-pre_kcnt
+    if (start_taxon >= 0.5*key_num | ((key_num - start_taxon)<=page_length_def)) {
+      fig_topgx <- as.integer(unlist(tstrsplit(dtk[start_taxon,]$figs, ","), use.names = F))
+      dtk[kcnt>start_taxon, page:=page_cnt+1]
+      dfk[kcnt>start_taxon & !fidx %in% fig_topgx, page:=page_cnt+1]
+      print(paste0("Genus: ", gen_name, " split 2 page: ", page_cnt, page_cnt+1, " with key_num: ", key_num))
+      page_cnt <- page_cnt + 2
+    } else {
+      pg_len <- page_length_def - 5 ## Assume normally 30 keys have at least 5 figs appended
+      #res_kinc <- length(kinc) - start_taxon
+      pgx <- as.integer(key_num/pg_len)
+      modx<- key_num %% pg_len
+      if (modx>10) {
+        pgx <- pgx + 1 # let add one more page
+        pg_len <- as.integer(key_num/pgx)
+      }
+      pre_start <- pre_kcnt + 1
+      for (p in seq_len(pgx)) {
+        k_topgx <- seq(pre_start, ifelse(p==pgx, start_fig-1, pre_start+pg_len-1))
+        fig_topgx <- unique(as.integer(na.omit(unlist(tstrsplit(dtk[k_topgx,]$figs, ","), use.names = F))))
+        figk <- unique(dfk[fidx %in% fig_topgx,]$kcnt)
+        #check: dfk[fidx %in% fig_topgx, .(fidx,kcnt,tokcnt,rid,taxon)]
+        #check/BUT it may not equal because sex not equal
+        #if (!identical(sort(unique(na.omit(dtk[kcnt %in% k_topgx,]$taxon))), sort(unique(dtk[kcnt %in% figk,]$taxon)))) {
+        #  print(paste0("Error!! check genus: ", gen_name," Not equal taxon_list when split key/figs in pagnation: ", paste0(k_topgx, collapse=",")))  
+        #  print(paste0(sort(unique(na.omit(dtk[kcnt %in% k_topgx,]$taxon))), collapse=","))
+        #  print(paste0(sort(unique(dtk[kcnt %in% figk,]$taxon)), collapse=","))
+        #  stop("check it!")
+        #}
+        kt <- unique(c(k_topgx, figk))
+        kt <- kt[kt %in% kinc] #may overlap previous kt that been deleted, due to key/figs not 1-to-1
+        #if (any(!kt %in% kinc)) {
+        #  stop("Check pagination when k not in kinc!!")
+        #}
+        if (p>1) { #when p==1 no need to change dtk, dfk because they already set-up to this page
+          dtk[kcnt>=pre_start & kcnt %in% kt, page:=page_cnt+p-1]
+          dfk[kcnt>=pre_start & kcnt %in% kt, page:=page_cnt+p-1]
+        }
+        kinc <- kinc[!kinc %in% kt]
+        if (p<pgx) { pre_start <- pre_start+pg_len }
+      }
+      if (length(kinc)!=0) {
+        print(paste0("Error!! check genus: ", gen_name," Not totally use all keys in pages"))
+        stop("check it!!")
+      }
+      print(paste0("Genus: ", gen_name, " split ", pgx," pages: ", page_cnt,":", page_cnt+p-1, 
+                   " with key_num: ", key_num, " and pages in each group: ",
+                   paste0(dtk[,.N, by=.(page)]$N, collapse=",")))
+      page_cnt <- page_cnt + pgx
+    }
+  } else { #only one page
+    print(paste0("Genus: ", gen_name, " split only 1 page: ", page_cnt, " with key_cnt: ", length(kinc)))
+    page_cnt <- page_cnt + 1
+  }
+  pre_kcnt <- keycnt
+  print(paste0("Pagination for genus: ", gen_name, " is ok! Current key_cnt is: ", pre_kcnt,
+               " and Next doc, Page will start at: ", page_cnt))
 }  
 
+#just check
+dtk[,.N, by=.(page, docn)]
 
 cat(na.omit(dtk$ctxt), file=paste0(web_dir, "web_tmp.txt"))
 
 ## output source html_txt, fig file
 dtk1 <- copy(dtk)
-dtk1[,ctxt:=gsub("\\\n", "", gsub("\\“|\\”",'\\"', ctxt))]
+dtk1[,ctxt:=gsub("\\.jpg", ".png", gsub("\\\n", "", gsub("\\“|\\”",'\\"', ctxt)))]
 fwrite(dtk1,file="doc/newsp_htm_extract.csv")
 fwrite(dfk, file="doc/newsp_fig_extract.csv")
 
