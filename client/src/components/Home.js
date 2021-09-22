@@ -136,7 +136,9 @@ const Home = () => {
       }, false);
 
       window.addEventListener("load", (e) => { //"popstate"
-        let parx = window.location.search.replace('?', '').split('&').reduce((r,e) => (r[e.split('=')[0]] = decodeURIComponent(e.split('=')[1]), r), {});
+        let qstr = window.location.search
+        let parx = qstr.substring(qstr.indexOf('?')).replace('?', '').split('&')
+                       .reduce((r,e) => (r[e.split('=')[0]] = decodeURIComponent(e.split('=')[1]), r), {});
         //console.log("Popstate: ", parx);
         setQueryStr((prev) => ({
           ...prev,
@@ -170,7 +172,8 @@ const Home = () => {
           spx = spx + '_01'; //add a number fo species, but we don't validate species yet
         }
         if (spt.length >= 2) {
-          let hstr='<a data-fancybox="gallery"><img src="/assets/img/species/' + spx + '.png" border="0" /></a>';
+          let hstr='<a data-fancybox="gallery" href="/assets/img/species/' + spx + '.png" target="_blank"' +
+                   '><img src="/assets/img/species/' + spx + '.png" border="0" /></a>';
           setFigx((prev) => ({
             ...prev,
             popup: true,

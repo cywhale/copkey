@@ -77,20 +77,22 @@ const Helper = (props) => {
     const { helpclass } = props;
 
     let langsel = "en";
-    let hxid_e0 = iniHelp? "key_Acartia_35a": document.querySelector('[id^="key_"]').id;
-    if (hxid_e0) {
-      console.log("Find a dom with key id: ", hxid_e0);
+    let el = document.querySelector('[id^="key_"]');
+    let hxid_e0 = '';
+    if (el) {
+      hxid_e0 = el.id; //iniHelp? "key_Acartia_35a": document.querySelector('[id^="key_"]').id;
     } else {
       console.log("Warning: check not found and dom with key id");
     }
     let hxid_start = ["keyblk_help"];
     let helpx0 = {id: hxid_start[0], lang: langsel};
+    let help_enable = toHelp && hxid_e0 !== '';
     const linex = arrline2x("keyblk_help", "keyblk_help", hxid_e0, hxid_e0, 0.5, 0); //repead lines to make it more fancy?
 
     return(
       render(
         <div class={helpclass} id="helpContainer">
-          { toHelp &&
+          { help_enable &&
             <Xwrapper>
               { render_keyhelper(helpx0) }
               <Xarr2 {...linex} />
