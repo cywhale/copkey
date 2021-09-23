@@ -1,6 +1,7 @@
 import { Fragment } from 'preact';
 import { useState, useEffect, useCallback } from 'preact/hooks';
-import { useQuery, useQueryClient } from 'react-query';
+import { useInfiniteQuery, useQuery, useQueryClient } from 'react-query';
+//import useIntersectionObserver from './useIntersectionObserver';
 //import useHelp from '../Helper/useHelp';
 import Copkey from 'async!../Copkey';
 
@@ -39,7 +40,7 @@ const UserSearch = (props) => {
     if (r) {
        return Promise.resolve(r);
     }*/
-    let querystr = ((query && query.page && query.page!=="")? '?page=' + query.page : 'init');
+    let querystr = ((query && query.page && query.page!=="")? '?page=' + query.page : '?page=1'); //'init'
 
     const fetchingInit = async (qstr) => {
       await Promise.resolve(queryClient.fetchQuery(qstr, async () => {

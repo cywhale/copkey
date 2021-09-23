@@ -166,7 +166,7 @@ const client_other_config = (config, env) => {
         { //https://github.com/storybookjs/storybook/issues/1493
             test: /\.(js|jsx)$/,
             exclude: /node_modules/, //[/bower_components/, /styles/]
-	    loader: 'babel-loader',
+	    loader: 'babel-loader',  //cannot use 'use' and 'options' at the same time
             options: {
               presets: [
                 ['env', {
@@ -185,7 +185,16 @@ const client_other_config = (config, env) => {
                     ],
                     "node": "current"
                   },
+                  compact: true
                 }],
+              ],
+              plugins: [
+                  [require('babel-plugin-transform-imports'), {
+                    "lodash": {
+                      "transform": "lodash/${member}",
+                      "preventFullImport": true
+                    }
+                  }]
               ],
             }
 	    //include: path.resolve(__dirname, '../../src')
@@ -285,6 +294,13 @@ const client_other_config = (config, env) => {
             chunks: 'initial',
             minChunks: 2,
             priority: 1
+          },
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            chunks: 'all',
+            name: 'vendor',
+            priority: 2,
+            enforce: true
           }
         }
       }
