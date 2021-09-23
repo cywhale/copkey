@@ -332,7 +332,7 @@ for (docfile in doclst[1:4]) {
   #for example: c("(Acartia) abc", "Acartia ddd") -> "(Acartia) abc" "ddd" 
   keycnt <- keycnt + 1L;
   
-  dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0("genus_", gen_name), 
+  dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0(gen_name, "_0a_genus"), #to make its order in the first, #paste0("genus_", gen_name), 
                               ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
                               figs=NA_character_, type=NA_integer_, nkey=NA_integer_, 
                               taxon=NA_character_, abbrev_taxon=NA_character_, fullname=NA_character_,
@@ -547,7 +547,7 @@ for (docfile in doclst[1:4]) {
           xc <- paste0(pret,
                        '</span><span class=',dQuote('keycol'),'>',
                        paste0('<mark id=',  dQuote(marksp), 
-                              '><em><a href=', dQuote(paste0('#fig_', gsub("\\s","_", xsp))), '>', xsp, '</a></em></mark></span></p>'))
+                              '><em><a href=', dQuote(paste0('#figs_', gsub("\\s","_", xsp))), '>', xsp, '</a></em></mark></span></p>'))
           
         } else if (subgen!="" | nxtk!=0L) {
           if (grepl("\\,", subgen)) { #with multiple subgenus
@@ -882,6 +882,7 @@ for (docfile in doclst[1:4]) {
                 tokeyx<- key_sex[keymat,]$kcnt
                 
                 fdlink <- paste0("figs_", gsub("\\s", "_", xsp2)) #, "_", paste(fnum, collapse="-"))
+                fukey <- paste0(gsub("\\s", "_", xsp2), "_xx_fig") # make unikey in order
 
                 if (length(fig_num)>=4) {
                   spanx <- 'nnar' ### narrow span
@@ -998,7 +999,7 @@ for (docfile in doclst[1:4]) {
                     ctxtt <- paste0(ctxt0, ctxt1)
                   }
                   dtk <- rbindlist(list(dtk, 
-                      data.table(rid=i, unikey=fdlink,
+                      data.table(rid=i, unikey=fukey, #fdlink,
                         ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
                         figs=paste(fig_num, collapse = ","), type=2L, nkey=NA_integer_, 
                         taxon=xsp2, abbrev_taxon=dtk[x_dtk[1],]$abbrev_taxon, fullname=full_name,
@@ -1295,6 +1296,7 @@ for (docfile in doclst[1:4]) {
 
 #just check
 dtk[,.N, by=.(page, docn)]
+which(duplicated(dtk$unikey) | duplicated(dtk$unikey, fromLast = T))
 
 cat(na.omit(dtk$ctxt), file=paste0(web_dir, "web_tmp.txt"))
 
