@@ -16,6 +16,54 @@ export default async function spquery (fastify, opts, next) {
               keystr: { type: 'string' },
               ctxt: { type: 'string' }
             }; */ // if not use graphql
+    fastify.get('/page', (req, reply) => {
+    /*const get_parx = (qstr) => {
+          let withq = qstr.indexOf('?');
+          if (withq>=0) {
+            return qstr.substring(qstr.indexOf('?')).replace('?', '').split('&').reduce((r,e) => (r[e.split('=')[0]] = decodeURIComponent(e.split('=')[1]).replace(/\s/g, "\\\s"), r), {});
+          }
+          return decodeURIComponent(qstr).replace(/\s/g, "\\\s")
+      }
+    */
+      let kobj={}
+      let parm = req.query
+    //req.log.info("Query string: " + req.query)
+    //let parm = get_parx(req.query)
+    //if (parm != null && parm.constructor.name === "Object") {
+      if (typeof parm.taxon !== 'undefined') { kobj["sp"] = parm.taxon }
+      if (typeof parm.first !== 'undefined') { kobj["first"] = parseInt(parm.first) }
+      if (typeof parm.last !== 'undefined')  { kobj["last"] = parseInt(parm.last) }
+      if (typeof parm.after !== 'undefined') { kobj["after"] = parm.after }
+      if (typeof parm.before !== 'undefined'){ kobj["before"] = parm.before }
+    //}
+      req.log.info("GraphQL to find sp: " + kobj.sp)
+      req.log.info("GraphQL to find first: " + kobj.first)
+
+      if (kobj !== {}) {
+        const pqry = `query ($sp: String!, $first: Int, $last: Int, $after: String, $before: String) {
+                     infq(sp: $sp, first: $first, last: $last, after: $after, before: $before)
+              {
+                totalCount
+                pageInfo {
+                  num
+                  hasNextPage
+                  hasPreviousPage
+                }
+                edges {
+                  node {
+                    unikey
+                    ctxt
+                  }
+                  cursor
+                }
+              }
+        }`
+        return reply.graphql(pqry, null, kobj)
+      } else {
+        return {}
+      }
+    })
+
     fastify.get('/', {
       schema: {
         query: {
