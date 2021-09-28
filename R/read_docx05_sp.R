@@ -332,7 +332,7 @@ for (docfile in doclst[1:4]) {
   #for example: c("(Acartia) abc", "Acartia ddd") -> "(Acartia) abc" "ddd" 
   keycnt <- keycnt + 1L;
   
-  dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0(gen_name, "_0a_genus"), #to make its order in the first, #paste0("genus_", gen_name), 
+  dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0(gen_name, "_00a_genus"), #to make its order in the first, #paste0("genus_", gen_name), 
                               ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
                               figs=NA_character_, type=NA_integer_, nkey=NA_integer_, 
                               taxon=NA_character_, abbrev_taxon=NA_character_, fullname=NA_character_,
@@ -675,8 +675,10 @@ for (docfile in doclst[1:4]) {
         }
         xc <- paste0(xc,'</div>') #202109 no need for delaying output </div> 
         keycnt <- keycnt + 1L
+        keyt <- as.integer(gsub('[a-z]','', keyx))
+        ukey <- paste0(gen_name, "_", padzerox(keyt, 2), subkeyx)
         
-        dtk <- rbindlist(list(dtk,data.table(rid=i, unikey=paste0(gen_name, "_", keyx),
+        dtk <- rbindlist(list(dtk,data.table(rid=i, unikey=ukey, #paste0(gen_name, "_", keyx),
                                              ckey= keyx, subkey= subkeyx, pkey= prekeyx,
                                              figs=NA_character_, type=nxttype, nkey=nxtk, 
                                              taxon=xsp, abbrev_taxon=nsp, fullname=NA_character_,
@@ -882,7 +884,22 @@ for (docfile in doclst[1:4]) {
                 tokeyx<- key_sex[keymat,]$kcnt
                 
                 fdlink <- paste0("figs_", gsub("\\s", "_", xsp2)) #, "_", paste(fnum, collapse="-"))
-                fukey <- paste0(gsub("\\s", "_", xsp2), "_xx_fig") # make unikey in order
+
+                if (any(x_dtk)) {
+                  keyt <- as.integer(gsub('[a-z]','', dtk[x_dtk,]$ckey))
+                  korder <- order(keyt)
+                  keyt <- keyt[korder]
+                  skey <- dtk[x_dtk[korder],]$subkey
+                  fukey<- ""
+                  for (tti in seq_along(keyt)) {
+                    fukey <- paste0(fukey, 
+                                    paste0(ifelse(tti==1, paste0(gen_name, "_"), "_"), 
+                                           padzerox(keyt[tti], 2), skey[tti]))
+                  }
+                  fukey <- paste0(fukey, "_", trimx(gsub(gen_name, "", xsp2)), "_fig") # make unikey in order
+                } else {
+                  fukey <- paste0(gsub("\\s", "_", xsp2), "_xx_fig")
+                }
 
                 if (length(fig_num)>=4) {
                   spanx <- 'nnar' ### narrow span
@@ -998,6 +1015,7 @@ for (docfile in doclst[1:4]) {
                   } else {
                     ctxtt <- paste0(ctxt0, ctxt1)
                   }
+                  
                   dtk <- rbindlist(list(dtk, 
                       data.table(rid=i, unikey=fukey, #fdlink,
                         ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
