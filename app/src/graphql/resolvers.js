@@ -77,7 +77,7 @@ const resolvers = {
           let filter = after? data.filter(d => d.unikey > after) :  data;
           hasPreviousPage = after? true: false;
           hasNextPage = filter.length > first;
-          keyx = hasNextPage? filter.slice(0, first+1) : filter
+          keyx = hasNextPage? filter.slice(0, first) : filter
           cursor= keyx[keyx.length-1]["unikey"];
           if (!after) {
             page = 1
@@ -92,19 +92,17 @@ const resolvers = {
           let filter = before? data.filter(d => d.unikey < before) :  data;
           hasNextPage = before? true: false;
           hasPreviousPage = filter.length > last;
-          keyx = hasNextPage? filter.slice(0, last+1) : filter
+          keyx = hasPreviousPage? filter.slice(0, last) : filter
           cursor= keyx[keyx.length-1]["unikey"];
           if (!before) {
-            page = Math.floor(totalCount/last) + ((toralCount % last === 0) ? 0 : 1)
+            page = Math.floor(totalCount/last) + ((totalCount % last === 0) ? 0 : 1)
           } else {
-            curidx= data.findIndex(item => item.unikey === cursor); //it's reverse in order
-            page = Math.floor(totalCount/last) + ((toralCount % last === 0) ? 0 : 1) -
-                   Math.floor((curidx+1)/last) + (((curidx+1) % last === 0) ? 0 : 1) + 1
+            curidx= data.findIndex(item => item.unikey === before); //it's reverse in order, should use preivous cursor
+            page = Math.floor(totalCount/last) + ((totalCount % last === 0) ? 0 : 1) -
+                   Math.floor((curidx+1)/last) + (((curidx+1) % last === 0) ? 0 : 1) //+ 1 //before is previous page, no need + 1
           }
           keyx.sort((x, y) => { return x.kcnt - y.kcnt });
         }
-        ctx.reply.log.info("GraphQL to find length of keyx: " + keyx.length)
-        ctx.reply.log.info("GraphQL to find last ctxt keyx: " + keyx[keyx.length-1]["ctxt"])
 
         return {
           totalCount: totalCount,

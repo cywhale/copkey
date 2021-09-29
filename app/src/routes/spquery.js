@@ -7,16 +7,20 @@ export default async function spquery (fastify, opts, next) {
   //const { db } = fastify.mongo.mongo1;
   //const spkey = db.collection('spkey');
   //fastify.decorate('spkey', spkey);
-  /*const spkeySchema = {
-              unikey: { type: 'string' },
-              taxon: { type: 'string' },
-              genus: { type: 'string' },
-              family: { type: 'string' },
-              fullname: { type: 'string' },
-              keystr: { type: 'string' },
-              ctxt: { type: 'string' }
-            }; */ // if not use graphql
-    fastify.get('/page', (req, reply) => {
+    const pageSchema = {
+              sp: { type: 'string' },
+              first: { type: 'number' },
+              last: { type: 'number' },
+              after: { type: 'string' },
+              last: { type: 'string' },
+              //keystr: { type: 'string' },
+              //ctxt: { type: 'string' }
+            }; // if not use graphql
+    fastify.route({ //.get('/page', (req, reply) => {
+      method: ['GET', 'POST'],
+      url: '/page',
+      schema: pageSchema,
+      handler: (req, reply) => {
     /*const get_parx = (qstr) => {
           let withq = qstr.indexOf('?');
           if (withq>=0) {
@@ -25,22 +29,24 @@ export default async function spquery (fastify, opts, next) {
           return decodeURIComponent(qstr).replace(/\s/g, "\\\s")
       }
     */
-      let kobj={}
-      let parm = req.query
-    //req.log.info("Query string: " + req.query)
-    //let parm = get_parx(req.query)
-    //if (parm != null && parm.constructor.name === "Object") {
-      if (typeof parm.taxon !== 'undefined') { kobj["sp"] = parm.taxon }
-      if (typeof parm.first !== 'undefined') { kobj["first"] = parseInt(parm.first) }
-      if (typeof parm.last !== 'undefined')  { kobj["last"] = parseInt(parm.last) }
-      if (typeof parm.after !== 'undefined') { kobj["after"] = parm.after }
-      if (typeof parm.before !== 'undefined'){ kobj["before"] = parm.before }
-    //}
-      req.log.info("GraphQL to find sp: " + kobj.sp)
-      req.log.info("GraphQL to find first: " + kobj.first)
-
-      if (kobj !== {}) {
-        const pqry = `query ($sp: String!, $first: Int, $last: Int, $after: String, $before: String) {
+        let parm
+        let kobj={}
+        //req.log.info("Query method: " + req.method)
+        if (req.method==='POST') {
+          parm = req.body
+        } else {
+          parm = req.query
+        }
+      //let parm = get_parx(req.query)
+      //if (parm != null && parm.constructor.name === "Object") {
+        if (typeof parm.taxon !== 'undefined') { kobj["sp"] = parm.taxon || '' }
+        if (typeof parm.first !== 'undefined') { kobj["first"] = parseInt(parm.first) }
+        if (typeof parm.last !== 'undefined')  { kobj["last"] = parseInt(parm.last) }
+        if (typeof parm.after !== 'undefined') { kobj["after"] = parm.after }
+        if (typeof parm.before !== 'undefined'){ kobj["before"] = parm.before }
+      //}
+        if (kobj !== {}) {
+          const pqry = `query ($sp: String!, $first: Int, $last: Int, $after: String, $before: String) {
                      infq(sp: $sp, first: $first, last: $last, after: $after, before: $before)
               {
                 totalCount
@@ -51,16 +57,16 @@ export default async function spquery (fastify, opts, next) {
                 }
                 edges {
                   node {
-                    unikey
                     ctxt
                   }
                   cursor
                 }
               }
-        }`
-        return reply.graphql(pqry, null, kobj)
-      } else {
-        return {}
+          }`
+          return reply.graphql(pqry, null, kobj)
+        } else {
+          return {}
+        }
       }
     })
 
