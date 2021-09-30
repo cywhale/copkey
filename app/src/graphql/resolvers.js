@@ -36,9 +36,15 @@ const resolvers = {
 /* modified from https://jiepeng.me/2019/12/06/learning-how-to-implement-graphql-pagination */
 // ---------------------------------------------
       infq: async (_, obj, ctx) => {
-        const { sp, first, last, after, before } = obj
-
-        let spqry, keyx, cursor, curidx, page, totalCount, hasNextPage, hasPreviousPage;
+        const { taxon, first, last, after, before } = obj
+        let spqry;
+        let keyx = [];
+        let cursor = '';
+        let curidx = -1;
+        let page = 0;
+        let totalCount = 0;
+        let hasNextPage = false;
+        let hasPreviousPage = false;
         //first with after, last with before. if only first(no after)/ last(no before) get 1st/last page
         //const emptyx = {}
         if (!first && !last) {
@@ -55,7 +61,7 @@ const resolvers = {
             return;
         }
 
-        let spx = decodeURIComponent(sp).replace(/\s/g, "\\\s")
+        let spx = decodeURIComponent(taxon).replace(/\s/g, "\\\s")
         if (spx==='') {
             spqry = {}
         } else {
@@ -72,36 +78,40 @@ const resolvers = {
             const data = await Spkey.find({...spqry, {unikey:{$gt: after}}}, null,
                                           {sort: {unikey: 1}}); //, limit: first+1, sort: {kcnt: 1}});
         */
-          const data = await Spkey.find(spqry, {unikey:1, kcnt:1, ctxt:1}, {sort: {unikey: 1}}); //, limit: first+1, sort: {kcnt: 1}});
-          totalCount = data.length;
-          let filter = after? data.filter(d => d.unikey > after) :  data;
-          hasPreviousPage = after? true: false;
-          hasNextPage = filter.length > first;
-          keyx = hasNextPage? filter.slice(0, first) : filter
-          cursor= keyx[keyx.length-1]["unikey"];
-          if (!after) {
-            page = 1
-          } else {
-            curidx= data.findIndex(item => item.unikey === cursor);
-            page = Math.floor((curidx+1)/first) + (((curidx+1) % first === 0) ? 0 : 1)
+          const data = await Spkey.find(spqry, {unikey:1, kcnt:1, ctxt:1}, {sort: {unikey: 1}}) //, limit: first+1, sort: {kcnt: 1}});
+          if (data && data.length) {
+            totalCount = data.length
+            let filter = after? data.filter(d => d.unikey > after) :  data
+            hasPreviousPage = after? true: false
+            hasNextPage = filter.length > first
+            keyx = hasNextPage? filter.slice(0, first) : filter
+            cursor= keyx[keyx.length-1]["unikey"]
+            if (!after) {
+              page = 1
+            } else {
+              curidx= data.findIndex(item => item.unikey === cursor);
+              page = Math.floor((curidx+1)/first) + (((curidx+1) % first === 0) ? 0 : 1)
+            }
+            keyx.sort((x, y) => { return x.kcnt - y.kcnt })
           }
-          keyx.sort((x, y) => { return x.kcnt - y.kcnt });
         } else if (last) {
-          const data = await Spkey.find(spqry, {unikey:1, kcnt:1, ctxt:1}, {sort: {unikey: -1}}); //, limit: last+1, sort: {kcnt: 1}});
-          totalCount = data.length;
-          let filter = before? data.filter(d => d.unikey < before) :  data;
-          hasNextPage = before? true: false;
-          hasPreviousPage = filter.length > last;
-          keyx = hasPreviousPage? filter.slice(0, last) : filter
-          cursor= keyx[keyx.length-1]["unikey"];
-          if (!before) {
-            page = Math.floor(totalCount/last) + ((totalCount % last === 0) ? 0 : 1)
-          } else {
-            curidx= data.findIndex(item => item.unikey === before); //it's reverse in order, should use preivous cursor
-            page = Math.floor(totalCount/last) + ((totalCount % last === 0) ? 0 : 1) -
-                   Math.floor((curidx+1)/last) + (((curidx+1) % last === 0) ? 0 : 1) //+ 1 //before is previous page, no need + 1
+          const data = await Spkey.find(spqry, {unikey:1, kcnt:1, ctxt:1}, {sort: {unikey: -1}}) //, limit: last+1, sort: {kcnt: 1}});
+          if (data && data.length) {
+            totalCount = data.length
+            let filter = before? data.filter(d => d.unikey < before) :  data
+            hasNextPage = before? true: false
+            hasPreviousPage = filter.length > last
+            keyx = hasPreviousPage? filter.slice(0, last) : filter
+            cursor= keyx[keyx.length-1]["unikey"]
+            if (!before) {
+              page = Math.floor(totalCount/last) + ((totalCount % last === 0) ? 0 : 1)
+            } else {
+              curidx= data.findIndex(item => item.unikey === before); //it's reverse in order, should use preivous cursor
+              page = Math.floor(totalCount/last) + ((totalCount % last === 0) ? 0 : 1) -
+                     Math.floor((curidx+1)/last) + (((curidx+1) % last === 0) ? 0 : 1) //+ 1 //before is previous page, no need + 1
+            }
+            keyx.sort((x, y) => { return x.kcnt - y.kcnt })
           }
-          keyx.sort((x, y) => { return x.kcnt - y.kcnt });
         }
 
         return {
@@ -118,5 +128,5 @@ const resolvers = {
         }
       }
     }
-};
-export default resolvers;
+}
+export default resolvers

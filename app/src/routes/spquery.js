@@ -39,15 +39,16 @@ export default async function spquery (fastify, opts, next) {
         }
       //let parm = get_parx(req.query)
       //if (parm != null && parm.constructor.name === "Object") {
-        if (typeof parm.taxon !== 'undefined') { kobj["sp"] = parm.taxon || '' }
+        //if (typeof parm.taxon !== 'undefined') {
+        kobj["taxon"] = parm.taxon??'' //}
         if (typeof parm.first !== 'undefined') { kobj["first"] = parseInt(parm.first) }
         if (typeof parm.last !== 'undefined')  { kobj["last"] = parseInt(parm.last) }
         if (typeof parm.after !== 'undefined') { kobj["after"] = parm.after }
         if (typeof parm.before !== 'undefined'){ kobj["before"] = parm.before }
       //}
         if (kobj !== {}) {
-          const pqry = `query ($sp: String!, $first: Int, $last: Int, $after: String, $before: String) {
-                     infq(sp: $sp, first: $first, last: $last, after: $after, before: $before)
+          const pqry = `query ($taxon: String!, $first: Int, $last: Int, $after: String, $before: String) {
+                     infq(taxon: $taxon, first: $first, last: $last, after: $after, before: $before)
               {
                 totalCount
                 pageInfo {
