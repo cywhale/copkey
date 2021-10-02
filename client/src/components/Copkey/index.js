@@ -1,8 +1,7 @@
-//import { Fragment } from "preact";
 import React from 'preact/compat';
-import { useCallback } from "preact/hooks";
+import { useState, useEffect, useCallback } from 'preact/hooks';
 import useHelp from '../Helper/useHelp';
-import Copimg from 'async!./Copimg';
+import Copimg from './Copimg'; //cannot be async cause react cannot call "this.setState" on an unmounted component
 import (/* webpackMode: "lazy" */
         /* webpackPrefetch: true */
         "../../style/style_copkey.scss");
@@ -21,9 +20,15 @@ class Taxonkey extends React.Component {
 }
 
 const Copkey = (props) => {
-  const { ctxt } = props;
+  const { ctxt, load} = props;
+  const [childKey, setChildKey] = useState(0);
   const toHelp = useHelp(useCallback(state => state.toHelp, []));
   const iniHelp= useHelp(useCallback(state => state.iniHelp, []));
+
+  useEffect(() => { //Carousel cannot rebuild with new img if not destroy old, ref:
+      //https://stackoverflow.com/questions/52260258/reactjs-destroy-old-component-instance-and-create-new
+      if (!load) {setChildKey(prev => prev + 1)};
+  }, [load]);
 
   let helpClass;
   if (iniHelp) {
@@ -35,9 +40,10 @@ const Copkey = (props) => {
   }
 
   return (
-      <div className={helpClass} id="easySearch">
+      <div class={helpClass} id='easySearch'>
         <Taxonkey ctxt={ctxt.key} />
-        <Copimg ftxt={ctxt.fig} />
+        { props.children }
+        <Copimg ftxt={ctxt.fig} key={childKey} />
       </div>
   );
 };

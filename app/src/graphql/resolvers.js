@@ -40,6 +40,7 @@ const resolvers = {
         let spqry;
         let keyx = [];
         let cursor = '';
+        let endCursor = '';
         let curidx = -1;
         let page = 0;
         let totalCount = 0;
@@ -85,11 +86,12 @@ const resolvers = {
             hasPreviousPage = after? true: false
             hasNextPage = filter.length > first
             keyx = hasNextPage? filter.slice(0, first) : filter
-            cursor= keyx[keyx.length-1]["unikey"]
+            endCursor= keyx[keyx.length-1]["unikey"] //Now endCursor always a page end, and cursor always a page start
+            cursor = keyx[0]["unikey"] //so that when reverse in reading page can be right
             if (!after) {
               page = 1
             } else {
-              curidx= data.findIndex(item => item.unikey === cursor);
+              curidx = data.findIndex(item => item.unikey === cursor);
               page = Math.floor((curidx+1)/first) + (((curidx+1) % first === 0) ? 0 : 1)
             }
             keyx.sort((x, y) => { return x.kcnt - y.kcnt })
@@ -103,12 +105,16 @@ const resolvers = {
             hasPreviousPage = filter.length > last
             keyx = hasPreviousPage? filter.slice(0, last) : filter
             cursor= keyx[keyx.length-1]["unikey"]
+            endCursor = keyx[0]["unikey"] //so that when reverse in reading page can be right
+            // reverse order in keyx makes page index not consistent with in normal order
+            // keyx.sort((x, y) => x.unikey > y.unikey ? 1 : -1);
             if (!before) {
               page = Math.floor(totalCount/last) + ((totalCount % last === 0) ? 0 : 1)
             } else {
-              curidx= data.findIndex(item => item.unikey === before); //it's reverse in order, should use preivous cursor
-              page = Math.floor(totalCount/last) + ((totalCount % last === 0) ? 0 : 1) -
-                     Math.floor((curidx+1)/last) + (((curidx+1) % last === 0) ? 0 : 1) //+ 1 //before is previous page, no need + 1
+              curidx = totalCount - data.findIndex(item => item.unikey === cursor) - 1; //it's reverse in order
+            /*page = Math.floor(totalCount/last) + ((totalCount % last === 0) ? 0 : 1) -
+                     Math.floor((curidx+1)/last) + (((curidx+1) % last === 0) ? 0 : 1)*/ //+ 1 //before is previous page, no need + 1
+              page = Math.floor((curidx+1)/last) + (((curidx+1) % last === 0) ? 0 : 1)
             }
             keyx.sort((x, y) => { return x.kcnt - y.kcnt })
           }
@@ -123,7 +129,8 @@ const resolvers = {
           },
           edges: {
             node: keyx,
-            cursor: cursor
+            cursor: cursor,
+            endCursor: endCursor
           }
         }
       }

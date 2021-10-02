@@ -1,26 +1,43 @@
 import { Fragment } from 'preact';
 import { useState, useEffect, useCallback, useRef } from 'preact/hooks';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQueryClient } from 'react-query'; //useQuery
 //import useHelp from '../Helper/useHelp';
 import Copkey from 'async!../Copkey';
+import SvgLoading from 'async!../Compo/SvgLoading';
+import (/* webpackMode: "lazy" */
+        /* webpackPrefetch: true */
+        "../../style/style_usersearch.scss");
 
 const UserSearch = (props) => {
-  const { query, search, onSearch } = props;
-  const pageSize = 30;
+  const { query, search, onSearch } = props; //searched only trigger when str is set;
+  //const def_pageSize = 30;                 //isLoading when any search start and wait for result written
   const failRetry= 3;
-  const [state, setState] = useState({
-    init: false, //initial searching
-    curpage: 1,
-    queryed: {taxon:'', str:''}
-  });
+/*const [state, setState] = useState({
+    init: false, //initial searching (move upper, because useHelp need elements after first search)
+    //querystring: ''
+  });*/
   const [result, setResult] = useState({
     spkey: {key:'', fig:''},
+    taxon: 'Acartia', //initially loaded
     totalCount: 0,
     cursor: '',
+    endCursor: '',
     pageInfo: {num: 0, hasNextPage: false, hasPreviousPage: false}
   });
+/*const [page, setPage] = useState({ //pageParam move upper, searh keyword should set param with only 'first'
+    offset: 0,
+  });*/
+  const butnPrevRef = useRef(null); //use eleRef.current, instead of document.getElementById
+  const butnNextRef = useRef(null);
 
-  const searchx = process.env.NODE_ENV === 'production'? 'species/' : 'specieskey/';
+  const def_queryOpts = {
+    retry: failRetry,
+    staleTime: Infinity,
+    cacheTime: Infinity, //most data are static, need no update..
+    keepPreviousData: true
+  }
+
+  const searchPrefix = process.env.NODE_ENV === 'production'? 'species/' : 'specieskey/';
   //const toHelp = useHelp.getState().toHelp;
   //const queryCache = queryClient.getQueryCache()
   const queryClient = useQueryClient();
@@ -35,94 +52,25 @@ const UserSearch = (props) => {
     } else {
       dtk = data.data[key];
     }*/
-    let ctxt = data[key].reduce((acc, cur) => { return(acc + cur["ctxt"] + "\\n") }, "")
+    let ctxt = //data[key].reduce((acc, cur) => { return(acc + cur["ctxt"] + "\\n") }, "") //concat first make keyx overmatch because (.*) when a doc cross different genus
+               data[key].reduce((acc, cur) => { return({
+                   key: acc.key + (cur["ctxt"].match(/\<div (class=\"kblk|id=\"genus_|id=\"species_)(.*)\/p\>\<\/div\>(\<br\>)*/g)||[''])[0],
+                   fig: (acc.fig +(cur["ctxt"].match(/\<div id=\"figs_(.*)\/span\>(\<\/div\>)+(\<br\>)*/g) || [""])[0] + "\\n")
+                        .replace(/(\\n)+/g,'\\n') //needed in Copimg.js, and some additional fig append to the same figs_xxx div need separate it with \\n
+                        .replace(/\<\/div\>\<br\>\<br\>\<div class=\"blkfigure/g, '</div><br><br>\\n<div class="blkfigure')
+                 })
+               }, {key: '', fig: ''})
                  //.replace(/img\//g,'/assets/img/species/').replace(/\.(jpg|jpeg)/g, '.png') //no need in newer version data stored in mongo 20210921
                  //.replace(/a class=/g, 'a data-fancybox="gallery" class=');
-    let keyx = (ctxt.match(/\<div (class=\"kblk|id=\"genus_|id=\"species_)(.*)\/p\>\<\/div\>(\<br\>)*/g)||[''])[0]
+  /*let keyx = (ctxt.match(/\<div (class=\"kblk|id=\"genus_|id=\"species_)(.*)(?=\/p\>\<\/div\>(\<br\>)*)/g)||[''])[0]
                  .replace(/\\n/g,'');
-    let figx = (ctxt.match(/\<div id=\"figs_(.*)\/span\>\<\/div\>(\\n)*/g) || [""])[0]; //split that feed into Fancybox
-
-    return({key: keyx, fig: figx});
+    let figx = (ctxt.match(/\<div id=\"figs_(.*)(?=\/span\>\<\/div\>(\\n)*)/g) || [""])[0]; //split that feed into Fancybox
+    return({key: keyx, fig: figx});*/
+    return ctxt;
   };
 
-  const waitInitData = useCallback((query) => {
-  //return(queryClient.getQueryData("init")); //prefetchQuery may later than you want it, then undefined!
-  /*let r = queryCache.find("init"); //It's a whole cache object
-    if (r) { return Promise.resolve(r); }*/
-    let kobj = {};
-    if (query && (query.first || query.last)) {
-        //if (typeof query.taxon !== 'undefined') {
-        kobj["taxon"] = query.taxon??'' //|| '';//}
-        if (typeof query.first !== 'undefined') { kobj["first"] = parseInt(query.first) }
-        if (typeof query.last !== 'undefined')  { kobj["last"] = parseInt(query.last) }
-        if (typeof query.after !== 'undefined') { kobj["after"] = query.after }
-        if (typeof query.before !== 'undefined'){ kobj["before"] = query.before }
-    } else {
-        if (query && query.taxon) {
-          kobj = { "taxon": query.taxon, "first": pageSize }
-        } else {
-          kobj = { "taxon": "Acartia", "first": pageSize } //'init'
-        }
-    } // '?page=' + query.page : '?page=1'); //old, will be deprecated
-    let querystr = 'page?' + Object.keys(kobj).map(function(x) {
-      return x + '=' + kobj[x];
-    }).join('&')
-
-    const fetchingInit = async (qstr, pageParam) => {
-      const { taxon, ...keyParam } = pageParam;
-      let searchtxt = taxon === ''? 'All' : taxon;
-      await Promise.resolve(queryClient.fetchQuery([searchtxt, keyParam], async () => {
-          const res = await fetch(searchx + qstr);
-          if (!res.ok) {
-            throw new Error('Error: Network response was not ok when fetchingInit: ' + qstr)
-          }
-          return res.json()
-        }, { retry: failRetry,
-             staleTime: Infinity,
-             cacheTime: Infinity //prefetchQuery will never return data
-        })
-      ).then((data) => {
-        if (data) {
-          let dtk=data.data['infq'];
-          //let qkey = ((qstr.substring(0,1) === "?")? qstr.substring(1,qstr.indexOf("=")) : qstr);
-          let ctxt = trans_htmltxt(dtk.edges, 'node') //data, qkey
-          setResult((prev) => ({
-            ...prev,
-            spkey: ctxt,
-            totalCount: dtk.totalCount,
-            cursor: dtk.edges.cursor,
-            pageInfo: dtk.pageInfo
-          }));
-
-          setState((prev) => ({
-            ...prev,
-            init: true,
-            curpage: dtk.pageInfo.num,
-            queryed: { taxon: taxon, str: qstr }
-          }))
-        }
-      }, qstr, taxon)
-    };
-
-    fetchingInit(querystr, kobj);
-  }, []);
-
-  useEffect(() => {
-    //if (!state.init) {}
-    waitInitData(query);
-  },[waitInitData, query]);
-
-
-  const render_search = (query, keyParam) => {
-    let searchtxt = search.str === ''? 'All' : search.str;
-    //const { isLoading, isError, data, error } = useQuery(
-    const qryx = useQuery([searchtxt, keyParam], async () => {
-      const pageParam = {
-          taxon: search.str,
-          ...keyParam
-      }
-
-      const res = await fetch(searchx + 'page', {
+  const pageFetch = async (pageParam) => {
+      const res = await fetch(searchPrefix + 'page', {
         method: 'POST',
         body: JSON.stringify(pageParam),
         credentials: 'same-origin',
@@ -139,75 +87,194 @@ const UserSearch = (props) => {
         throw new Error('Error: Network response was not ok when searching... ')
       }
       return res.json()
-
-    },{ enabled: search.searched,// && state.init},
-        retry: failRetry,
-        keepPreviousData: true, //!! Note that "init" query has data.data.init not the same as spquery by name as: data.data.key !!
-        initialData: () => { //placeholderData
-          return waitInitData(query) //queryClient.getQueryData("init")
-            //(searchx.replace("/",""))
-            //?.find(d => d.name === "init")
-        }
-    }, query)
-
-    if (qryx.isError) {
-      console.log("Error when searching: ", qryx.error.message, " and Failure count: ", qryx.failureCount);
-      if (qryx.failureCount >= failRetry) {
-        alert("Warning: Nothing found or uncertain errors occurred when searching: ", searchtxt);
-        onSearch((prev) => ({
-           ...prev,
-           searched: false,
-            isLoading: false
-        }))
-      }
-    }; //not affect previous searching result
-
-    let ctxt;
-    let data = qryx.data;
-    let NotFound = true;
-    //let NotInit = false;
-    if (data && search.searched && !qryx.isError && !qryx.isLoading) {
-      if (data.data === {} || !data.data['infq'].edges.node.length) {
-          alert("Warning: Nothing found when searching: ", searchtxt);
-      } else {
-          NotFound = false;
-          ctxt = trans_htmltxt(data.data['infq'].edges, "node");
-      }
-      onSearch((prev) => ({
-          ...prev,
-          searched: false,
-          isLoading: false
-      }))
-      /*else if (result.spkey==='') {
-        NotFound = false;
-        ctxt = data.data.init.reduce((acc, cur) => { return(acc + cur["ctxt"])}, "").replace(/img\//g,'/assets/img/species/');
-      }*/
-      if (ctxt) {
-        setResult((prev) => ({
-          ...prev,
-          spkey: ctxt
-        }));
-      }
-    }
-
-    let ctent;
-    if (NotFound) { // Fragment(result.spkey)
-      //console.log("Note: using previous result", state.init);
-      ctent = result.spkey
-    } else {
-      ctent = ctxt
-    }
-
-    return(//render(<Fragment />, document.getElementById('resultxdiv'))
-      <Copkey ctxt={ctent} />
-    )
   };
+
+  const searchWrite = (data, taxon) => {
+    if (search.isLoading) {
+      const ctxt = trans_htmltxt(data.edges, "node"); //data.data['infq'].edges
+      setResult((prev) => ({
+        ...prev,
+        spkey: ctxt,
+        taxon: taxon,
+        totalCount: data.totalCount,
+        cursor: data.edges.cursor,
+        endCursor: data.edges.endCursor,
+        pageInfo: data.pageInfo
+      }));
+    }
+    onSearch((prev) => ({
+        ...prev,
+        isLoading: false
+    }))
+    console.log("Writing result of ", taxon, " for cursor: ", data.edges.cursor, data.edges.endCursor);
+
+    if (butnPrevRef.current) {
+      if (data.pageInfo.hasPreviousPage) {
+        //document.getElementById('butn_prev').disabled = false;
+        butnPrevRef.current.removeAttribute('disabled');
+      } else {
+        butnPrevRef.current.setAttribute('disabled', 'disabled');
+      }
+    }
+    if (butnNextRef.current) {
+      if (data.pageInfo.hasNextPage) {
+        butnNextRef.current.removeAttribute('disabled');
+      } else {
+        butnNextRef.current.setAttribute('disabled', 'disabled');
+      }
+    }
+  };
+
+  //useQuery hook must used inside component, here use fetchQuery //note: prefetchQuery will never return data
+  const fetchingQuery = async (taxon, keyParam) => {
+      const pageParam = { taxon: taxon, ...keyParam };
+      let searchtxt = taxon === ''? 'All' : taxon;
+      let qstr = 'page?' + //if you use 'GET' method
+                 Object.keys(pageParam).map((x) => { return x + '=' + pageParam[x] }).join('&')
+      //document.getElementById('butn_prev').disabled = true;
+      if (butnPrevRef.current) { butnPrevRef.current.setAttribute('disabled', 'disabled') }
+      if (butnNextRef.current) { butnNextRef.current.setAttribute('disabled', 'disabled') }
+
+      await Promise.resolve(queryClient.fetchQuery([searchtxt, keyParam], async () => {
+        const data = await pageFetch(pageParam);
+        await onSearch((prev) => ({
+            ...prev,
+            searched: false,
+            //isLoading: false, //after write
+        }))
+        return data;
+      }, def_queryOpts)
+      ).then((data) => {
+        if (data) {
+          let dtk=data.data['infq'];
+          //let qkey = ((qstr.substring(0,1) === "?")? qstr.substring(1,qstr.indexOf("=")) : qstr);
+
+          searchWrite(dtk, taxon);
+
+          onSearch((prev) => ({
+            ...prev,
+            init: true,
+          }))
+        }
+      }, qstr, taxon)
+  };
+
+  const fetchQueryIF = (enable, taxon, keyParam) => {
+    useEffect(() => enable && fetchingQuery(taxon, keyParam), [enable])
+  };
+
+  const waitInitData = useCallback((query) => {
+  //return(queryClient.getQueryData("init")); //prefetchQuery may later than you want it, then undefined!
+  /*let r = queryCache.find("init"); //It's a whole cache object
+    if (r) { return Promise.resolve(r); }*/
+    let kobj = {};
+    if (query && (query.first || query.last)) {
+        //if (typeof query.taxon !== 'undefined') {
+        kobj["taxon"] = query.taxon??'' //|| '';//}
+        if (typeof query.first !== 'undefined') { kobj["first"] = parseInt(query.first) }
+        if (typeof query.last !== 'undefined')  { kobj["last"] = parseInt(query.last) }
+        if (typeof query.after !== 'undefined') { kobj["after"] = query.after }
+        if (typeof query.before !== 'undefined'){ kobj["before"] = query.before }
+    } else {
+        if (query && query.taxon) {
+          kobj = { "taxon": query.taxon, "first": search.getsize }
+        } else {
+          kobj = { "taxon": "Acartia", "first": search.getsize } //'init'
+        }
+    } // '?page=' + query.page : '?page=1'); //old, will be deprecated
+    // 'GET', and now changed to use 'POST'
+    /* let querystr = 'page?' + Object.keys(kobj).map(function(x) {
+      return x + '=' + kobj[x];
+    }).join('&') */
+    onSearch((prev) => ({
+       ...prev,
+       isLoading: true
+    }))
+
+    const { taxon, ...keyParam } = kobj;
+    fetchingQuery(taxon, keyParam);
+  }, []);
+
+  useEffect(() => {
+    //if (!search.init) {
+    waitInitData(query)
+    //}
+  },[waitInitData, query]);
 /*
   let taxon = (search.str !== '' && search.searched && state.init? search.str :
               (!state.init? (query.taxon??'Acartia') : (query.taxon??'')))*/
+  const goPrevPage = () => {
+    //if (!result.pageInfo.hasPreviousPage) return;
+    onSearch((prev) => ({
+      ...prev,
+      param: {
+        last: search.getsize,
+        before: result.cursor
+      },
+      isLoading: true
+    }))
+  }
+
+  const goNextPage = () => {
+    //if (!result.pageInfo.hasNextPage) return;
+    onSearch((prev) => ({
+      ...prev,
+      param: {
+        first: search.getsize,
+        after: result.endCursor
+      },
+      isLoading: true
+    }))
+  }
+
+  const render_search = (query, keyParam) => {
+    let searching = search.str;
+    //let enable = search.searched;
+    let qtaxon = (searching === ''? result.taxon :
+                 (searching.toLowerCase() === 'all' || searching === '*'? '' : searching));
+    let searchtxt = qtaxon === ''?  'All' : qtaxon;
+   //console.log("Now search: ", qtaxon, " with param: ", keyParam);
+/* //useQuery actually cause some problems for async data loading and then update whole html
+    const qryx = useQuery([searchtxt, keyParam], async () => {
+      const pageParam = {
+          taxon: qtaxon,
+          ...keyParam
+      }
+
+      const data = await pageFetch(pageParam);
+      await onSearch((prev) => ({
+         ...prev,
+         searched: false,
+         //isLoading: false, //after write
+      }))
+
+      return data;
+    },{ ...def_queryOpts,
+        enabled: enable, // search.searched && state.init},
+        //!! Note that "init" query has data.data.init not the same as spquery by name as: data.data.key !!
+        initialData: () => { //placeholderData
+          return waitInitData(query) //queryClient.getQueryData("init")
+        }
+    }, query)
+*/
+    fetchQueryIF(search.isLoading, qtaxon, keyParam);
+    //console.log("After WriteIF Status with taxon: ", qtaxon, search.searched, search.isLoading); //, data.data['infq'].edges.cursor); //qryx.status
+    //console.log("Have prev or next: ", result.pageInfo.hasPreviousPage, result.pageInfo.hasNextPage);
+    return(
+      <SvgLoading enable={true} isLoading={search.isLoading} />
+    )
+  };
+  // only when isLoading, data write into result, and update Copkey, so that destroy old img carousel
   return (
     <Fragment>
-      {state.init && render_search(query, { first: pageSize })}
+      { render_search(query, search.param) }
+        <Copkey ctxt={result.spkey} load={search.isLoading}>
+          <div class='inlinebutn'>
+            <button class='pagebutn' id='butn_prev' ref={butnPrevRef} onClick={goPrevPage}>&#60;</button>
+            <span>{ result.pageInfo.num }</span>
+            <button class='pagebutn' id='butn_next' ref={butnNextRef} onClick={goNextPage}>&#62;</button>
+          </div>
+        </Copkey>
     </Fragment>
   )
 };

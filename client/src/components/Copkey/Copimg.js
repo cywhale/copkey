@@ -1,10 +1,9 @@
 //my codesandbox trial: https://codesandbox.io/s/fancybox-preact-demo-l4dli
-import { Fragment } from "preact";
+import { Fragment } from 'preact';
 //import React from "preact/compat";
 //import parse from "html-react-parser"; // if use Fancybox
-import DDiv from "async!../Compo/DDiv";
-import Fancybox from "async!../Fancybox";
-import Carousel from "async!../Fancybox/Carousel";
+import DDiv from '../Compo/DDiv';
+import Carousel from '../Fancybox/Carousel';
 
 const Copimg = (props) => {
   const { ftxt } = props;
@@ -23,11 +22,9 @@ const Copimg = (props) => {
         return (txt.match(/\<a data(.*)\>\<\/a\>/g) || [""])[0];
       })
       .filter((v) => v); //filter empty string
-
-   //patterns are like:
-   //</a><span id="fig_Acartia_bifilosa_001" class="spcap">Mazzocchi</span></span>
-   //</a><span id="fig_Acartia_bifilosa_002" class="spcap">Original</span></span></div><br>
-
+    //patterns are like:
+    //</a><span id="fig_Acartia_bifilosa_001" class="spcap">Mazzocchi</span></span>
+    //</a><span id="fig_Acartia_bifilosa_002" class="spcap">Original</span></span></div><br>
     let fsub = fx
       .split(/\<\/a\>/)
       .map((txt) => {
@@ -41,7 +38,7 @@ const Copimg = (props) => {
 
     if (fsub.length == f2.length) {
       f2.forEach((el, idx, arr) => {
-        arr[idx] = '<div style="display:table">' + //if use Carousel
+        arr[idx] = '<div style="display:table;text-align:center;">' + //if use Carousel
           arr[idx] + //.replace(
             // /\<a data-fancybox=(.*)class=\"fbox\"/g,
               //'<Fancybox>{parse(
@@ -71,6 +68,7 @@ const Copimg = (props) => {
         //fill: true,
         dragFree: true
     };
+
     return (
       <Fragment>
         <DDiv ctxt={ftitle} class="fig_title" />

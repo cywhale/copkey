@@ -30,6 +30,11 @@
   line-height: 1.4rem;
 }
 
+.fig_title {
+  margin: 4rem 0 2rem 0;
+  text-align: center;
+}
+
 @media screen and (max-width: 680px) { 
   h1.title { margin-top: 1rem; font-size: 1.6rem; }
   h3.subtitle { font-size: 1.2rem; }

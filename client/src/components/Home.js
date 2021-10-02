@@ -4,7 +4,6 @@ import { Fragment } from 'preact';
 import useHelp from './Helper/useHelp';
 import MultiSelectSort from 'async!./MultiSelectSort';
 import UserSearch from 'async!./UserSearch';
-import SvgLoading from 'async!./Compo/SvgLoading';
 import Helper from 'async!./Helper';
 import Popup from 'async!./Compo/Popup';
 //import draggable_element from './Compo/draggable_element';
@@ -39,10 +38,14 @@ const Home = () => {
     par: {},
   });
 
+  const def_pageSize = 30;
   const [search, setSearch] = useState({
     str: '',
+    init: false,
     searched: false,
     isLoading: false,
+    getsize: def_pageSize,
+    param: { first: def_pageSize },
   });
   const [searchSpkey, setSearchSpkey] = useState('');
 
@@ -58,7 +61,8 @@ const Home = () => {
           ...prev,
           str: searchSpkey,
           searched: true,
-          isLoading: true
+          isLoading: true,
+          param: { first: search.getsize },
         }))
       )
     } //console.log("Repeated search, dismiss it..")
@@ -207,7 +211,13 @@ const Home = () => {
     }
   },[appstate.loaded, hashstate]); //, prefetchInit
 
-  //let teststr='<a data-fancybox="gallery" href="#figs_Acartia_bilobata_004"><img src="/assets/img/species/0004_Acartia_bilobata_004.png" border="0" /></a>';
+  const render_userhelper = () => {
+    if (appstate.loaded && search.init) {
+      return <Helper />
+    }
+    return null;
+  };
+
   return(
     <Fragment>
       <div id="homediv" onClick={kickInitHelper}>
@@ -226,7 +236,7 @@ const Home = () => {
           <MultiSelectSort />
         </div>
         <UserSearch query={querystr.par} search={search} onSearch={setSearch} />
-        <Helper />
+        { render_userhelper() }
       </div>
       { figx.popup && <Popup ctxt={figx.html} onClose={closePopup} /> }
     </Fragment>

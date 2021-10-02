@@ -36,6 +36,7 @@ type PageInfo {
 type SpkeyEdge {
   node: [Spkeyq]!
   cursor: String!
+  endCursor: String!
 }
 `
 

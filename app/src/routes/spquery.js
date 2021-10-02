@@ -61,6 +61,7 @@ export default async function spquery (fastify, opts, next) {
                     ctxt
                   }
                   cursor
+                  endCursor
                 }
               }
           }`
