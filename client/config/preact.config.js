@@ -10,6 +10,7 @@ const DuplicatePackageCheckerPlugin = require("duplicate-package-checker-webpack
 const CompressionPlugin = require('compression-webpack-plugin');
 const svgToMiniDataURI = require('mini-svg-data-uri');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 // Q/A here: https://app.slack.com/client/T3NM0NCDC/C3PSVEMM5/thread/C3PSVEMM5-1616340858.005300
 // Workbox configuration options: [maximumFileSizeToCacheInBytes]. This will not have any effect, as it will only modify files that are matched via 'globPatterns'
@@ -69,6 +70,8 @@ const client_other_config = (config, env) => {
          //name: 'runtime'
        //},
        concatenateModules: true,
+       minimize: true,
+       mode: 'production',
        minimizer:
        [
          new TerserPlugin({
@@ -189,6 +192,7 @@ const client_other_config = (config, env) => {
                 }],
               ],
               plugins: [
+                  ['lodash'],
                   [require('babel-plugin-transform-imports'), {
                     "lodash": {
                       "transform": "lodash/${member}",
@@ -317,6 +321,11 @@ const baseConfig = (config, env, helpers) => {
 
 // transform https://github.com/webpack-contrib/copy-webpack-plugin/issues/6
   config.plugins.push(
+
+    new LodashModuleReplacementPlugin({
+      'collections': true,
+      'paths': true
+    }),
 
     new CopyWebpackPlugin({
       patterns: [
@@ -453,6 +462,7 @@ const baseConfig = (config, env, helpers) => {
         modernize:false
       }));
     }
+
     config.plugins.push( new BundleAnalyzerPlugin({
       analyzerMode: 'static', //disabled
       generateStatsFile: true,

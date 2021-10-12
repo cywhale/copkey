@@ -1,7 +1,7 @@
 {
   "name": "Copkey",
   "short_name": "Copkey",
-  "start_url": "./",
+  "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#00001d",

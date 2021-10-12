@@ -35,6 +35,17 @@
   text-align: center;
 }
 
+.fig_caption, .fig_cite { margin-top: 0.75rem; }
+
+.carousel_div {
+  display: table;
+  text-align: center;
+  span {
+    display: flex;
+    justify-content: center;
+  }
+}
+
 @media screen and (max-width: 680px) { 
   h1.title { margin-top: 1rem; font-size: 1.6rem; }
   h3.subtitle { font-size: 1.2rem; }
@@ -42,9 +53,16 @@
   .menutxt { display: none; } 
   .doc_epithets { width: auto; font-size: 1em;}
 }
-@media screen and (max-width: 450px) {
-  .doc_epithets { font-size: 0.9em;}
+@media screen and (max-width: 540px) {
+  .doc_epithets, .fig_caption { font-size: 0.9em;}
   .leader { font-size: 1.1rem; }
+  .carousel_div {
+    span { 
+      font-size: 0.8em;
+      display: flex;
+      justify-content: flex-start;
+    }
+  }
 } 
 
 .leader > span:first-child::after, .leader > span:nth-child(2):before {

@@ -41,18 +41,12 @@ registerRoute(
 
 
 registerRoute(
-  ({ url }) => url.pathname.startsWith("/session/"),
+  ({ url }) => url.pathname.startsWith("/species/"),
   new NetworkOnly({ //NetworkFirst
         plugins: [bgSyncPlugin]
   })
 );
 
-registerRoute(
-  ({ url }) => url.pathname.startsWith("/search/"),
-  new NetworkOnly({ //NetworkFirst
-        plugins: [bgSyncPlugin]
-  })
-);
 
 /** Preact CLI setup */
 setupRouting();
