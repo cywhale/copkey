@@ -38,7 +38,7 @@ const spkeyschema = new Schema({
                 type: Number,
                 required: false
         },
-        page: {
+        type: {
                 type: Number,
                 required: false
         },

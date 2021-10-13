@@ -31,7 +31,9 @@ const Home = () => {
   //const closeHelp = useHelp(state => state.closeHelp)
   const [hashstate, setHashState] = useState({
     handling: false,
+    scrollTop: false,
     hash: '',
+    elem: '', //store hash for scroll to element
   });
   const [querystr, setQueryStr] = useState({
     //handling: false,
@@ -54,8 +56,6 @@ const Home = () => {
 
   const trigSearch = () => {
     if (searchSpkey && searchSpkey.trim() !== '' && searchSpkey !== search.str) {
-      //history.pushState(null, null, '#search');
-      //window.dispatchEvent(new HashChangeEvent('hashchange'));
       return(
         setSearch((prev) => ({
           ...prev,
@@ -70,8 +70,6 @@ const Home = () => {
 
   const kickInitHelper = () => {
     if (iniHelp) {
-      //history.pushState(null, null, '#help');
-      //window.dispatchEvent(new HashChangeEvent('hashchange'));
       /*return(
         setAppState((prev) => ({
           ...prev,
@@ -127,7 +125,7 @@ const Home = () => {
     }));
 
     clear_uri();
-  }
+  };
 
   useEffect(() => {
 //  prefetchInit();
@@ -156,58 +154,88 @@ const Home = () => {
         ...preState,
         loaded: true,
       }));
-    }
-    let hash = hashstate.hash; //.toLowerCase()
-    if (hash !== '' && !hashstate.handling) {
-      if (hash === "#search" || hash.substring(0,5) === "#fig_" || hash === "#close") {
+    } else {
+      if (hashstate.hash === '#complete' && !hashstate.handling) {
+        console.log("Search complete and handle el, hash: ", hashstate.elem, search.isLoading);
         setHashState((prev) => ({
           ...prev,
           handling: true,
         }));
-      } //else {
-        //clear_uri();
-      //}
-    } else if (hashstate.handling) {
-      console.log("simu el.click for hashstate handling: ", hash);
-      if (hash.substring(0,5) === "#fig_") {
-        let spx = hash.substring(5);
-        let spt = spx.split(/\_/);
-        if (spt.length == 2) {
-          spx = spx + '_01'; //add a number fo species, but we don't validate species yet
-        }
-        if (spt.length >= 2) {
-          let hstr='<a data-fancybox="gallery" href="/assets/img/species/' + spx + '.png" target="_blank"' +
-                   '><img src="/assets/img/species/' + spx + '.png" border="0" /></a>';
-          setFigx((prev) => ({
+      } else if (hashstate.hash !== '' && !hashstate.handling && !search.isLoading) {
+        let el = document.querySelector(hashstate.hash);
+        if (el) {
+          setHashState((prev) => ({
             ...prev,
-            popup: true,
-            html: hstr,
+            handling: true,
+            elem: hashstate.hash,
+            scrollTop: false,
           }));
-        } /*else {
-          const el = document.querySelector('#element')
-          const topPos = el.getBoundingClientRect().top + window.pageYOffset
+        } else {
+          let parx, ukey;
+          let scrollTop = false;
+          let spt = hashstate.hash.split(/\_/);
+          let keyx= hashstate.hash.substring(0,4);
+          if (keyx === '#gen' || keyx === "#epi" || keyx === "#key") {
+            if (keyx = "#key") {
+              let nkey = parseInt(spt[2].replace(/[a-z]/g,''));
+              let nkeyx= (isNaN(nkey)? '_00a_genus' : (nkey < 10? '_0' + spt[2] : '_' + spt[2]));
+              ukey = spt[1] + nkeyx
+            } else {
+              ukey = spt[1] + '_00a_genus'
+            }
+            //it's not really a 'after' key because it should search keys which >= ukey (not > ukey))
+            //parx = {taxon: spt[1], first: search.getsize, after: ukey};
+            //scrollTop = true; // new query will be on top
+          } else if (keyx === "#tax" || keyx === "#fig") {
+            ukey = 'fig_' +  spt[1] + (spt[2]? '_'+spt[2] : ''); //fig key is not really really fig_xxx_xxx in mongo, need re-index
+            //parx = {taxon: spt[1] + (spt[2]? ' '+spt[2] : ''), first: search.getsize, after: ukey};
+          }
+          // NOT search ok would cause el is null and cannot scroll, so setting handling must wait seach completed!!
+          setHashState((prev) => ({
+            ...prev,
+            //handling: true,
+            elem: hashstate.hash,
+            scrollTop: scrollTop,
+          }));
+
+          setSearch((prev) => ({
+            ...prev,
+            str: '', //default search original taxon that had been searched
+            isLoading: true,
+            param: { key: ukey, first: search.getsize },
+          }));
+        }
+      } else if (hashstate.handling) {
+        let el;
+        if (hashstate.elem !== '') { el = document.querySelector(hashstate.elem) }
+        console.log("Hash change and scroll: ", hashstate.elem, hashstate.scrollTop, el);
+        if (el) {
+          let topPos = hashstate.scrollTop? 0 : el.getBoundingClientRect().top + window.pageYOffset;
           window.scrollTo({
             top: topPos, // scroll so that the element is at the top of the view
             behavior: 'smooth' // smooth scroll
           })
-        }*/
-      }
-    /*let el;
-      if (hashstate.hash === "#search") {
-        el = document.getElementById("tab-4");
-      } else if (hashstate.hash === "#details") {
-        el = document.getElementById("tab-3");
-      }
-      if (el) {
-        if (typeof el.click == 'function') {
-          el.click()
-        } else if(typeof el.onclick == 'function') {
-          el.onclick()
         }
-      } else if (hashstate.hash === "#close") {
-        setIsOpen(false)
-      }*/
-      clear_uri();
+        if (hashstate.elem.substring(0,4) === "#fig") {
+          let spx = hashstate.elem.substring(hashstate.elem.indexOf('_')+1);
+          let spt = spx.split(/\_/);
+          if (spt.length == 2) {
+            spx = spx + '_01'; //add a number fo species, but we don't validate species yet
+          }
+          if (spt.length >= 2) {
+            let hstr='<a data-fancybox="gallery" href="/assets/img/species/' + spx + '.png" target="_blank"' +
+                     '><img src="/assets/img/species/' + spx + '.png" border="0" /></a>';
+            setFigx((prev) => ({
+              ...prev,
+              popup: true,
+              html: hstr,
+            }));
+          }
+        }
+        clear_uri();
+      } else {
+        console.log("Check uncertain state: ", search.isLoading, hashstate);
+      }
     }
   },[appstate.loaded, hashstate]); //, prefetchInit
 

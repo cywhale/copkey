@@ -1,9 +1,7 @@
 const schema = `
 type Query {
 	key(sp: String!): [Spkeyq]!
-        infq(taxon: String!, first: Int, last: Int, after: String, before: String): SpkeyConn!
-        init: [Spkeyq]!
-        page(p: Int!): [Spkeyq]!
+        infq(taxon: String!, first: Int, last: Int, after: String, before: String, key: String): SpkeyConn!
 	keys(sp: String!): [Spkeyq]!
 }
 
@@ -17,7 +15,7 @@ type Spkeyq {
         sex: String
         ctxt: String
         docn: Int
-        page: Int
+        type: Int
         kcnt: Int
 }
 

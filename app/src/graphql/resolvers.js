@@ -8,7 +8,7 @@ const resolvers = {
 	const keys = await Spkey.find({$text: {$search: spx}})
         return keys
       },
-      init: async (_, obj) => {
+/*    init: async (_, obj) => {
         let key = "genus_Acartia"
         let spx = decodeURIComponent("Acartia bifilosa").replace(/\s/g, "\\\s")
         //let fig = "fig_Acartia_bifilosa" //{"unikey": fig}
@@ -20,7 +20,7 @@ const resolvers = {
         //ctx.reply.log.info("GraphQL to find page: " + p)
         const keyx = await Spkey.find({"page":p}, null, {sort: {kcnt: 1}}) //asc, desc, ascending, descending, 1, or -1
         return keyx
-      },
+      },*/
       key: async (_, obj, ctx) => {
         const { sp } = obj
         let spx = decodeURIComponent(sp).replace(/\s/g, "\\\s")
@@ -36,8 +36,8 @@ const resolvers = {
 /* modified from https://jiepeng.me/2019/12/06/learning-how-to-implement-graphql-pagination */
 // ---------------------------------------------
       infq: async (_, obj, ctx) => {
-        const { taxon, first, last, after, before } = obj
-        let spqry;
+        const { taxon, first, last, after, before, key } = obj
+        let spqry, data;
         let keyx = [];
         let cursor = '';
         let endCursor = '';
@@ -62,24 +62,62 @@ const resolvers = {
             return;
         }
 
-        let spx = decodeURIComponent(taxon).replace(/\s/g, "\\\s")
-        if (spx==='') {
-            spqry = {}
-        } else {
-            spqry = {$or:[
+        let spt = decodeURIComponent(taxon)
+        let spx = spt.replace(/\s/g, '\\\s')
+        let chk_if_keystr = false
+        spqry = {$or:[
                 {"taxon": {$regex: spx, $options: "ix"} },
                 {"fullname": {$regex: spx, $options: "ix"} },
                 {"genus": {$regex: spx, $options: "ix"} },
                 {"family": {$regex: spx, $options: "ix"} }
-            ]}
+        ]}
+
+        if (key) {
+          chk_if_keystr = key.indexOf(spt.split(/\s/)[0]) < 0; // if search not like 'Acartia_xxx' or 'fig_Acartia_xxx'
+          if (chk_if_keystr) {
+            let kstr = decodeURIComponent(key).replace(/\s/g, '|')
+            let qry_kstr = {"keystr": {$regex: kstr, $options: "ix"}}
+            ctx.reply.log.info("Perform keystr search: " + kstr)
+            spqry = spx === ''? qry_kstr: {...spqry, qry_kstr}
+          }
+        } else if (spx === '') {
+          spqry= {} //query all
         }
 
-        if (first) {
+        //20211012 modified: if has a key index to find, then it must be firstly re-index, then can get correct page
+        if (key) {
+          let pgsize = first || last
+          if (key.substring(0,3) === 'fig') {
+            data = await Spkey.find(spqry, {unikey:1, kcnt:1, taxon:1, type:1, ctxt:1}, {sort: {unikey: 1}})
+          } else {
+            data = await Spkey.find(spqry, {unikey:1, kcnt:1, ctxt:1}, {sort: {unikey: 1}})
+          }
+          if (data && data.length) {
+            if (chk_if_keystr) {
+              curidx = 0
+            } else if (key.substring(0,3) === 'fig') {
+              let kt = key.split(/\_/)
+              let spt= kt[1] + " " + kt[2]
+              curidx = data.findIndex(item => item.taxon === spt && item.type === 2)
+            } else {
+              curidx = data.findIndex(item => item.unikey === key)
+            }
+            totalCount = data.length
+            page = Math.floor((curidx+1)/pgsize) + (((curidx+1) % pgsize === 0) ? 0 : 1)
+            hasNextPage = page < Math.floor(totalCount/pgsize) + ((totalCount % pgsize === 0) ? 0 : 1)? true: false
+            hasPreviousPage = page > 1? true: false
+            let pstart = page === 1? 0 : (page-1) * pgsize // index must -1
+            keyx = hasNextPage? data.slice(pstart, pstart + pgsize): data.slice(pstart)
+            endCursor= keyx[keyx.length-1]["unikey"] //Now endCursor always a page end, and cursor always a page start
+            cursor = keyx[0]["unikey"] //so that when reverse in reading page can be right
+            keyx.sort((x, y) => { return x.kcnt - y.kcnt })
+          }
+        } else if (first) {
         /*if (first && after) {
             const data = await Spkey.find({...spqry, {unikey:{$gt: after}}}, null,
                                           {sort: {unikey: 1}}); //, limit: first+1, sort: {kcnt: 1}});
         */
-          const data = await Spkey.find(spqry, {unikey:1, kcnt:1, ctxt:1}, {sort: {unikey: 1}}) //, limit: first+1, sort: {kcnt: 1}});
+          data = await Spkey.find(spqry, {unikey:1, kcnt:1, ctxt:1}, {sort: {unikey: 1}}) //, limit: first+1, sort: {kcnt: 1}});
           if (data && data.length) {
             totalCount = data.length
             let filter = after? data.filter(d => d.unikey > after) :  data
@@ -89,15 +127,15 @@ const resolvers = {
             endCursor= keyx[keyx.length-1]["unikey"] //Now endCursor always a page end, and cursor always a page start
             cursor = keyx[0]["unikey"] //so that when reverse in reading page can be right
             if (!after) {
-              page = 1
+                page = 1
             } else {
-              curidx = data.findIndex(item => item.unikey === cursor);
-              page = Math.floor((curidx+1)/first) + (((curidx+1) % first === 0) ? 0 : 1)
+                curidx = data.findIndex(item => item.unikey === cursor);
+                page = Math.floor((curidx+1)/first) + (((curidx+1) % first === 0) ? 0 : 1)
             }
             keyx.sort((x, y) => { return x.kcnt - y.kcnt })
           }
         } else if (last) {
-          const data = await Spkey.find(spqry, {unikey:1, kcnt:1, ctxt:1}, {sort: {unikey: -1}}) //, limit: last+1, sort: {kcnt: 1}});
+          data = await Spkey.find(spqry, {unikey:1, kcnt:1, ctxt:1}, {sort: {unikey: -1}}) //, limit: last+1, sort: {kcnt: 1}});
           if (data && data.length) {
             totalCount = data.length
             let filter = before? data.filter(d => d.unikey < before) :  data

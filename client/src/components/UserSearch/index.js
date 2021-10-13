@@ -123,6 +123,10 @@ const UserSearch = (props) => {
         butnNextRef.current.setAttribute('disabled', 'disabled');
       }
     }
+    if (window.location.hash) {
+      history.pushState(null, null, '#complete');
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
+    }
   };
 
   //useQuery hook must used inside component, here use fetchQuery //note: prefetchQuery will never return data
@@ -175,6 +179,7 @@ const UserSearch = (props) => {
         if (typeof query.last !== 'undefined')  { kobj["last"] = parseInt(query.last) }
         if (typeof query.after !== 'undefined') { kobj["after"] = query.after }
         if (typeof query.before !== 'undefined'){ kobj["before"] = query.before }
+        if (typeof query.key !== 'undefined'){ kobj["key"] = query.key }
     } else {
         if (query && query.taxon) {
           kobj = { "taxon": query.taxon, "first": search.getsize }

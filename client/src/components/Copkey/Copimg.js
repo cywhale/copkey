@@ -9,6 +9,10 @@ const Copimg = (props) => {
   const { ftxt } = props;
 
   const fboxs = ftxt.split(/\\n/).map((fx) => {
+    if (fx === '') return null;
+    let fdiv = (fx.match(/\<div id=\"figs_(.*)\"\>\<div class=\"blk/g)||[''])[0]
+                 .replace(/(\<div id=\")|(\"\>\<div class=\"blk)/g, '');
+                 //.replace('fig_', 'figs_');
     let f1 = (fx.match(
       /\<div class=\"fig_title(.*)\/span\>\<\/div\>(\<br\>)*\<span class=\"n/g
     ) || [""])[0];
@@ -36,7 +40,7 @@ const Copimg = (props) => {
 
     let fcap = (fx.match(/\<div class=\"fig_cap(.*)\/div\>/g) || [""])[0];
 
-    if (fsub.length == f2.length) {
+    if (fsub.length == f2.length && f2.length >= 1) {
       f2.forEach((el, idx, arr) => {
         arr[idx] = '<div class="carousel_div">' + //if use Carousel
           arr[idx] + //.replace(
@@ -72,7 +76,9 @@ const Copimg = (props) => {
     return (
       <Fragment>
         <DDiv ctxt={ftitle} class="fig_title" />
-        <Carousel items={fa} options={copts} />
+        <div id={fdiv}>
+            <Carousel items={fa} options={copts} />
+        </div>
         <DDiv ctxt={fcap} class="fig_capion" />
       </Fragment>
     );

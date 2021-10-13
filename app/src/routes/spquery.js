@@ -7,12 +7,32 @@ export default async function spquery (fastify, opts, next) {
   //const { db } = fastify.mongo.mongo1;
   //const spkey = db.collection('spkey');
   //fastify.decorate('spkey', spkey);
+    const def_pageSize = 30
+    const infqry = `query ($taxon: String!, $first: Int, $last: Int, $after: String, $before: String, $key: String) {
+                    infq(taxon: $taxon, first: $first, last: $last, after: $after, before: $before, key: $key)
+              {
+                totalCount
+                pageInfo {
+                  num
+                  hasNextPage
+                  hasPreviousPage
+                }
+                edges {
+                  node {
+                    ctxt
+                  }
+                  cursor
+                  endCursor
+                }
+              }
+    }`
     const pageSchema = {
-              sp: { type: 'string' },
+              taxon: { type: 'string' },
               first: { type: 'number' },
               last: { type: 'number' },
               after: { type: 'string' },
               last: { type: 'string' },
+              key: { type: 'string' },
               //keystr: { type: 'string' },
               //ctxt: { type: 'string' }
             }; // if not use graphql
@@ -45,27 +65,10 @@ export default async function spquery (fastify, opts, next) {
         if (typeof parm.last !== 'undefined')  { kobj["last"] = parseInt(parm.last) }
         if (typeof parm.after !== 'undefined') { kobj["after"] = parm.after }
         if (typeof parm.before !== 'undefined'){ kobj["before"] = parm.before }
+        if (typeof parm.key !== 'undefined'){ kobj["key"] = parm.key }
       //}
         if (kobj !== {}) {
-          const pqry = `query ($taxon: String!, $first: Int, $last: Int, $after: String, $before: String) {
-                     infq(taxon: $taxon, first: $first, last: $last, after: $after, before: $before)
-              {
-                totalCount
-                pageInfo {
-                  num
-                  hasNextPage
-                  hasPreviousPage
-                }
-                edges {
-                  node {
-                    ctxt
-                  }
-                  cursor
-                  endCursor
-                }
-              }
-          }`
-          return reply.graphql(pqry, null, kobj)
+          return reply.graphql(infqry, null, kobj)
         } else {
           return {}
         }
@@ -77,34 +80,31 @@ export default async function spquery (fastify, opts, next) {
         query: {
           //$id: 'common_schema',
           properties: {
-            page: {
-              type: 'number'
-            }/*,
-            fig_only: {
-              type: 'boolean'
-            },
             taxon: {
               type: 'string'
+            },
+            key: {
+              type: 'string'
+            }/*,
+            page: { type: 'number' },
+            fig_only: {
+              type: 'boolean'
             }*/
           }
         }
       }
     },(req, reply) => {
       const qstr = req.query
-      let pqry; //, fqry, tqry
-      //if (typeof qstr.fig_only !== 'undefined' && qstr.fig_only==true) {}
-      if (typeof qstr.page !== 'undefined') {
-        let pg = parseInt(qstr.page);
-        req.log.info("Query use graphql with page: " + pg)
-        if (!isNaN(pg)) {
-          pqry = `query ($pg: Int!) { page(p: $pg) {ctxt} }`
-          return reply.graphql(pqry, null, {"pg": pg})
-        } else {
-          return {}
-        }
-      } else {
-        return {}
-      }
+      let kobj = {}
+      if (typeof qstr.taxon === 'undefined' && typeof qstr.key === 'undefined') return;
+
+      kobj["taxon"] = qstr.taxon??''
+      if (qstr.key && qstr.key !== ''){ kobj["key"] = qstr.key }
+      kobj["first"] = qstr.limit??def_pageSize
+      //req.log.info("Query use graphql with taxon, key: " + kobj.taxon + kobj.key)
+      //if (!isNaN(pg)) {
+      //pqry = `query ($pg: Int!) { page(p: $pg) {ctxt} }`
+      return reply.graphql(infqry, null, kobj)
     })
 
     fastify.get('/:name', /*{ //if not use graphql
@@ -141,12 +141,12 @@ export default async function spquery (fastify, opts, next) {
         }
       })*/
       let name = req.params.name
-      if (name==="init") {
-        return reply.graphql('{ init {ctxt} }')
-      }
-      const query = `query ($name: String!) { key(sp: $name) {ctxt} }` //{unikey ctxt}
+      //if (name==="init") {
+      //  return reply.graphql('{ init {ctxt} }')
+      //}
+      //const query = `query ($name: String!) { key(sp: $name) {ctxt} }` //{unikey ctxt}
       //req.log.info("Query use graphql: "+ query + " with sp: " + name)
-      return reply.graphql(query, null, {"name": name})
+      return reply.graphql(infqry, null, {"taxon": name, first: def_pageSize})
     })
 
   next()
