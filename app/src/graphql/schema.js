@@ -1,22 +1,22 @@
 const schema = `
 type Query {
-	key(sp: String!): [Spkeyq]!
-        infq(taxon: String!, first: Int, last: Int, after: String, before: String, key: String): SpkeyConn!
-	keys(sp: String!): [Spkeyq]!
+     taxontree: [TreeNode]!
+     infq(taxon: String!, first: Int, last: Int, after: String, before: String, key: String): SpkeyConn!
+     keys(sp: String!): [Spkeyq]!
 }
 
 type Spkeyq {
-	unikey: String
-	taxon: String!
-	fullname: String
-	genus: String
-        family: String
-        keystr: String
-        sex: String
-        ctxt: String
-        docn: Int
-        type: Int
-        kcnt: Int
+     unikey: String
+     taxon: String!
+     fullname: String
+     genus: String
+     family: String
+     keystr: String
+     sex: String
+     ctxt: String
+     docn: Int
+     type: Int
+     kcnt: Int
 }
 
 type SpkeyConn {
@@ -36,6 +36,22 @@ type SpkeyEdge {
   cursor: String!
   endCursor: String!
 }
-`
 
+type TreeNode {
+  label: String!
+  value: String!
+  children: [Treelevel]!
+}
+
+type Treelevel {
+  label: String!
+  value: String!
+  children: [Treeleaf]
+}
+
+type Treeleaf {
+  label: String!
+  value: String!
+}
+`
 export default schema

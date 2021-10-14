@@ -3,7 +3,7 @@ export const autoPrefix = process.env.NODE_ENV === 'production'? '/species' : '/
 //import Spkey from '../models/spkey_mongoose'; //change to use graphql by mercurius
 //import fp from 'fastify-plugin'
 
-export default async function spquery (fastify, opts, next) {
+export default async function querygql (fastify, opts, next) {
   //const { db } = fastify.mongo.mongo1;
   //const spkey = db.collection('spkey');
   //fastify.decorate('spkey', spkey);
@@ -26,6 +26,20 @@ export default async function spquery (fastify, opts, next) {
                 }
               }
     }`
+    const taxonqry = `query {
+                        taxontree {
+                          children {
+                            label
+                            value
+                            children {
+                              label
+                              value
+                            }
+                          }
+                          label
+                          value
+                        }
+                      }`
     const pageSchema = {
               taxon: { type: 'string' },
               first: { type: 'number' },
@@ -95,9 +109,13 @@ export default async function spquery (fastify, opts, next) {
       }
     },(req, reply) => {
       const qstr = req.query
-      let kobj = {}
+      if (typeof qstr.taxontree !== 'undefined') {
+        return reply.graphql(taxonqry, null, {})
+      }
+
       if (typeof qstr.taxon === 'undefined' && typeof qstr.key === 'undefined') return;
 
+      let kobj = {}
       kobj["taxon"] = qstr.taxon??''
       if (qstr.key && qstr.key !== ''){ kobj["key"] = qstr.key }
       kobj["first"] = qstr.limit??def_pageSize
@@ -152,8 +170,8 @@ export default async function spquery (fastify, opts, next) {
   next()
 }
 /*
-export default fp(spquery, {
-  name: 'spquery'
+export default fp(querygql, {
+  name: 'querygql'
 })
 */
 

@@ -2,13 +2,59 @@ import Spkey from '../models/spkey_mongoose';
 
 const resolvers = {
     Query: {
-      keys: async (_, obj) => {
-        const { sp } = obj
-        let spx = sp.replace(/\s/g, "\\\s")
-	const keys = await Spkey.find({$text: {$search: spx}})
-        return keys
+      taxontree: async (_, obj, ctx) => {
+        const keyx = await Spkey
+                           .aggregate([
+                             { $match: {"taxon": {"$ne": ""}} },
+                             { $group: {
+                               /*_id: { //null
+                                   family: "$family", //{$addToSet: "$family"}
+                                   genus: "$genus",
+                                   taxon: "$taxon"
+                                 }*/
+                                 _id: {
+                                     family: "$family",
+                                     genus: "$genus",
+                                 },
+                                 species: { $push: {
+                                       label: "$taxon",
+                                       //value: { $replaceOne: { input: "$taxon", find: " ", replacement: "_" }}
+                                   }   //add value after unwind and re-sort
+                                 }
+                             } },
+                             { $unwind: "$species"}, //Need to re-sort taxon
+                             { $sort: {"species.label":1} },
+                             { $group: {
+                                   _id: {
+                                     family: "$_id.family",
+                                     genus: "$_id.genus"
+                                   },
+                                   species: { $push: {
+                                     label: "$species.label",
+                                     value: { $replaceOne: { input: "$species.label", find: " ", replacement: "_" }}
+                                   } }
+                             } },
+                             { $sort: {"_id.genus":1} },
+                             { $group: {
+                                 _id: "$_id.family",
+                                 children: { $push: {
+                                     label: "$_id.genus",
+                                     value: "$_id.genus",
+                                     children: "$species"
+                                 } }
+                             } },
+                             { $addFields: {
+                                   value: "$_id",
+                                   label: "$_id"
+                             } },
+                             { $project: {label:"$_id", _id:0, value:1, children:1} },
+                             { $sort: {label: 1}}
+                           ]).exec()
+
+        //ctx.reply.log.info("TaxonTree find data: " + keyx.children.length)
+        return keyx
       },
-/*    init: async (_, obj) => {
+/*      init: async (_, obj) => {
         let key = "genus_Acartia"
         let spx = decodeURIComponent("Acartia bifilosa").replace(/\s/g, "\\\s")
         //let fig = "fig_Acartia_bifilosa" //{"unikey": fig}
@@ -21,9 +67,10 @@ const resolvers = {
         const keyx = await Spkey.find({"page":p}, null, {sort: {kcnt: 1}}) //asc, desc, ascending, descending, 1, or -1
         return keyx
       },*/
-      key: async (_, obj, ctx) => {
+      keys: async (_, obj, ctx) => {
         const { sp } = obj
         let spx = decodeURIComponent(sp).replace(/\s/g, "\\\s")
+      //const keyx = await Spkey.find({$text: {$search: spx}})
         const keyx = await Spkey.find({$or:[
                 {"taxon": {$regex: spx, $options: "ix"} },
                 {"fullname": {$regex: spx, $options: "ix"} },
