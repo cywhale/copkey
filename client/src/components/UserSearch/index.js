@@ -19,6 +19,7 @@ const UserSearch = (props) => {
   const [result, setResult] = useState({
     spkey: {key:'', fig:''},
     taxon: 'Acartia', //initially loaded
+    keyParam: {},
     totalCount: 0,
     cursor: '',
     endCursor: '',
@@ -89,24 +90,30 @@ const UserSearch = (props) => {
       return res.json()
   };
 
-  const searchWrite = (data, taxon) => {
-    if (search.isLoading) {
-      const ctxt = trans_htmltxt(data.edges, "node"); //data.data['infq'].edges
+  const searchWrite = (data, taxon, keyParam) => {
+    let dt = data;
+    //if (!search.init && search.isLoading) { //!!Set WriteEnable cause init search not render correctly!!
+/*    if (!data || !data.edges || !data.edges.node.length) {
+        dt = queryClient.getQueryData([taxon, keyParam]).data['infq'];
+        console.log("No data but fetched from queryClient, get nodes: ", dt.edges.node.length, " for ",taxon, " with ", keyParam);
+      }*/
+      const ctxt = trans_htmltxt(dt.edges, "node"); //data.data['infq'].edges
       setResult((prev) => ({
-        ...prev,
-        spkey: ctxt,
-        taxon: taxon,
-        totalCount: data.totalCount,
-        cursor: data.edges.cursor,
-        endCursor: data.edges.endCursor,
-        pageInfo: data.pageInfo
+          ...prev,
+          spkey: ctxt,
+          taxon: taxon,
+          keyParam: keyParam, //store keyParam for this result, but not used yet
+          totalCount: dt.totalCount,
+          cursor: dt.edges.cursor,
+          endCursor: dt.edges.endCursor,
+          pageInfo: dt.pageInfo
       }));
-    }
+      //console.log("Writing result: ", dt.edges.node.length," of ", taxon, " for cursor: ", dt.edges.cursor, dt.edges.endCursor);
+    //}
     onSearch((prev) => ({
         ...prev,
         isLoading: false
     }))
-    console.log("Writing result of ", taxon, " for cursor: ", data.edges.cursor, data.edges.endCursor);
 
     if (butnPrevRef.current) {
       if (data.pageInfo.hasPreviousPage) {
@@ -152,8 +159,7 @@ const UserSearch = (props) => {
         if (data) {
           let dtk=data.data['infq'];
           //let qkey = ((qstr.substring(0,1) === "?")? qstr.substring(1,qstr.indexOf("=")) : qstr);
-
-          searchWrite(dtk, taxon);
+          searchWrite(dtk, taxon, keyParam);
 
           onSearch((prev) => ({
             ...prev,
@@ -238,31 +244,38 @@ const UserSearch = (props) => {
     let qtaxon = (searching === ''? result.taxon :
                  (searching.toLowerCase() === 'all' || searching === '*'? '' : searching));
     let searchtxt = qtaxon === ''?  'All' : qtaxon;
-   //console.log("Now search: ", qtaxon, " with param: ", keyParam);
-/* //useQuery actually cause some problems for async data loading and then update whole html
-    const qryx = useQuery([searchtxt, keyParam], async () => {
-      const pageParam = {
+    let chk_identical = qtaxon === result.taxon && keyParam === result.keyParam;
+/* !! Set SearchEnable may cause init search perform not correctly !!
+    console.log("Check with: ", result.taxon, " with param: ", result.keyParam, " at isLoading: ", search.isLoading);
+    if (chk_identical || (!search.isLoading && result.taxon === 'Acartia' && Object.keys(result.keyParam).length === 0)) {
+      console.log("While INIT or OLD search NOT performed: ", qtaxon, " with param: ", keyParam);
+    } else {
+      console.log("Now search: ", qtaxon, " with param: ", keyParam);
+      //useQuery actually cause some problems for async data loading and then update whole html
+      const qryx = useQuery([searchtxt, keyParam], async () => {
+        const pageParam = {
           taxon: qtaxon,
           ...keyParam
-      }
-
-      const data = await pageFetch(pageParam);
-      await onSearch((prev) => ({
-         ...prev,
-         searched: false,
-         //isLoading: false, //after write
-      }))
-
-      return data;
-    },{ ...def_queryOpts,
-        enabled: enable, // search.searched && state.init},
-        //!! Note that "init" query has data.data.init not the same as spquery by name as: data.data.key !!
-        initialData: () => { //placeholderData
-          return waitInitData(query) //queryClient.getQueryData("init")
         }
-    }, query)
+
+        const data = await pageFetch(pageParam);
+        await onSearch((prev) => ({
+           ...prev,
+           searched: false,
+           //isLoading: false, //after write
+        }))
+
+        return data;
+      },{ ...def_queryOpts,
+          enabled: enable, // search.searched && state.init},
+          //!! Note that "init" query has data.data.init not the same as spquery by name as: data.data.key !!
+          initialData: () => { //placeholderData
+            return waitInitData(query) //queryClient.getQueryData("init")
+          }
+      }, query)
 */
     fetchQueryIF(search.isLoading, qtaxon, keyParam);
+    //}
     //console.log("After WriteIF Status with taxon: ", qtaxon, search.searched, search.isLoading); //, data.data['infq'].edges.cursor); //qryx.status
     //console.log("Have prev or next: ", result.pageInfo.hasPreviousPage, result.pageInfo.hasNextPage);
     return(
@@ -273,13 +286,13 @@ const UserSearch = (props) => {
   return (
     <Fragment>
       { render_search(query, search.param) }
-        <Copkey ctxt={result.spkey} load={search.isLoading}>
+      <Copkey ctxt={result.spkey} load={search.isLoading}>
           <div class='inlinebutn'>
             <button class='pagebutn' id='butn_prev' ref={butnPrevRef} onClick={goPrevPage}>&#60;</button>
             <span>{ result.pageInfo.num }</span>
             <button class='pagebutn' id='butn_next' ref={butnNextRef} onClick={goNextPage}>&#62;</button>
           </div>
-        </Copkey>
+      </Copkey>
     </Fragment>
   )
 };

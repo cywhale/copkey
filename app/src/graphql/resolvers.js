@@ -16,7 +16,7 @@ const resolvers = {
                                      family: "$family",
                                      genus: "$genus",
                                  },
-                                 species: { $push: {
+                                 species: { $addToSet: {
                                        label: "$taxon",
                                        //value: { $replaceOne: { input: "$taxon", find: " ", replacement: "_" }}
                                    }   //add value after unwind and re-sort
@@ -69,7 +69,7 @@ const resolvers = {
       },*/
       keys: async (_, obj, ctx) => {
         const { sp } = obj
-        let spx = decodeURIComponent(sp).replace(/\s/g, "\\\s")
+        let spx = decodeURIComponent(sp).replace(/(\s|\_)/g, "\\\s")
       //const keyx = await Spkey.find({$text: {$search: spx}})
         const keyx = await Spkey.find({$or:[
                 {"taxon": {$regex: spx, $options: "ix"} },
@@ -109,7 +109,7 @@ const resolvers = {
             return;
         }
 
-        let spt = decodeURIComponent(taxon)
+        let spt = decodeURIComponent(taxon).replace(/\_/g, ' ')
         let spx = spt.replace(/\s/g, '\\\s')
         let chk_if_keystr = false
         spqry = {$or:[
@@ -120,7 +120,7 @@ const resolvers = {
         ]}
 
         if (key) {
-          chk_if_keystr = key.indexOf(spt.split(/\s/)[0]) < 0; // if search not like 'Acartia_xxx' or 'fig_Acartia_xxx'
+          chk_if_keystr = key.indexOf(spt.split(/(\s|\|)/)[0]) < 0; // if search not like 'Acartia_xxx' or 'fig_Acartia_xxx'
           if (chk_if_keystr) {
             let kstr = decodeURIComponent(key).replace(/\s/g, '|')
             let qry_kstr = {"keystr": {$regex: kstr, $options: "ix"}}

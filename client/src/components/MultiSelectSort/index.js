@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'preact/hooks';
+import { options } from 'preact';
+import { useEffect, useState, useMemo } from 'preact/hooks';
 import { MultiSelectContainer } from './MultiSelectContainer';
 import(/* webpackMode: "lazy" */
        /* webpackPrefetch: true */
@@ -12,26 +13,27 @@ import data from './data.json';
 const MultiSelectSort = () => {
   const [ selected, setSelected ] = useState({
     val: [],
-    type: [],
-    format: [],
+    //type: [],
+    query: ''
   });
   const rdata = [...data];
 
+  const dispatcher = () => {
+    history.pushState(null, null, '#' + selected.query);
+    window.dispatchEvent(new HashChangeEvent('hashchange'));
+  };
+  options.debounceRendering = dispatcher => setTimeout(dispatcher, 150);
+
   const onChange = useMemo(() => (_, selectedNodes) => {
     let valx = [];
-    let typex = [];
-    let formatx = [];
-
-    const getCurrDataFormat = (item) => {
+    //let typex = [];
+/*  const getCurrDataFormat = (item) => {
       if (item.hasOwnProperty('type')) {
           typex.push(item.type);
       }
-      if (item.hasOwnProperty('format')) {
-          formatx.push(item.format);
-      }
-    };
-
-    selectedNodes.map((item) => {
+    };*/
+// old function is to select leaf node, but for this case, we only need to know top level of selected node
+/*  selectedNodes.map((item) => {
       if (item.hasOwnProperty('_children')) {
         item._children.map((child) => {
           let nodex = child.substring(6).split("-").reduce(
@@ -41,7 +43,7 @@ const MultiSelectSort = () => {
               if (leaf.hasOwnProperty('children')) {
                 return leaf.children;
               } else {
-                getCurrDataFormat(leaf);
+                //getCurrDataFormat(leaf); //get leaf property
                 return leaf.value;
               }
             },
@@ -49,7 +51,7 @@ const MultiSelectSort = () => {
           ); //rdts1-0-0-0
           if (typeof nodex !== 'string' && nodex.length>1) {
             nodex.map((item) => {
-              getCurrDataFormat(item);
+              //getCurrDataFormat(item);
               valx.push(item.value);
             });
           } else {
@@ -57,18 +59,28 @@ const MultiSelectSort = () => {
           }
         });
       } else {
-        getCurrDataFormat(item);
+        //getCurrDataFormat(item);
         valx.push(item.value);
       }
+    });*/
+    selectedNodes.map((item) => {
+        valx.push(item.value);
     });
-    console.log('Get leaf value: ', valx);
+    console.log('Get node value: ', valx);
+
     setSelected((preState) => ({
       ...preState,
       val: [...valx],
-      type: [...typex],
-      format: [...formatx]
+      //type: [...typex],
+      query: 'search=' + valx.join('|')
     }));
   }, []);
+
+  useEffect(() => {
+    if (selected.query !== '') {
+      dispatcher()
+    }
+  }, [selected.query])
 
   return(
     <div class="flex-right-div">

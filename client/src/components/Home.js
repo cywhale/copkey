@@ -156,59 +156,76 @@ const Home = () => {
       }));
     } else {
       if (hashstate.hash === '#complete' && !hashstate.handling) {
-        console.log("Search complete and handle el, hash: ", hashstate.elem, search.isLoading);
+        //console.log("Search complete and handle el, hash: ", hashstate.elem, search.isLoading);
         setHashState((prev) => ({
           ...prev,
           handling: true,
         }));
-      } else if (hashstate.hash !== '' && !hashstate.handling && !search.isLoading) {
-        let el = document.querySelector(hashstate.hash);
-        if (el) {
-          setHashState((prev) => ({
-            ...prev,
-            handling: true,
-            elem: hashstate.hash,
-            scrollTop: false,
-          }));
-        } else {
-          let parx, ukey;
-          let scrollTop = false;
-          let spt = hashstate.hash.split(/\_/);
-          let keyx= hashstate.hash.substring(0,4);
-          if (keyx === '#gen' || keyx === "#epi" || keyx === "#key") {
-            if (keyx = "#key") {
-              let nkey = parseInt(spt[2].replace(/[a-z]/g,''));
-              let nkeyx= (isNaN(nkey)? '_00a_genus' : (nkey < 10? '_0' + spt[2] : '_' + spt[2]));
-              ukey = spt[1] + nkeyx
-            } else {
-              ukey = spt[1] + '_00a_genus'
-            }
-            //it's not really a 'after' key because it should search keys which >= ukey (not > ukey))
-            //parx = {taxon: spt[1], first: search.getsize, after: ukey};
-            //scrollTop = true; // new query will be on top
-          } else if (keyx === "#tax" || keyx === "#fig") {
-            ukey = 'fig_' +  spt[1] + (spt[2]? '_'+spt[2] : ''); //fig key is not really really fig_xxx_xxx in mongo, need re-index
-            //parx = {taxon: spt[1] + (spt[2]? ' '+spt[2] : ''), first: search.getsize, after: ukey};
-          }
-          // NOT search ok would cause el is null and cannot scroll, so setting handling must wait seach completed!!
-          setHashState((prev) => ({
-            ...prev,
-            //handling: true,
-            elem: hashstate.hash,
-            scrollTop: scrollTop,
-          }));
+      } else if (!hashstate.handling && !search.isLoading) {
+        if (hashstate.hash.substring(0,8) == '#search=') {
+            setHashState((prev) => ({
+              ...prev,
+              elem: '',
+              scrollTop: true,
+            }));
 
-          setSearch((prev) => ({
-            ...prev,
-            str: '', //default search original taxon that had been searched
-            isLoading: true,
-            param: { key: ukey, first: search.getsize },
-          }));
+            setSearch((prev) => ({
+              ...prev,
+              str: hashstate.hash.substring(8).replace(/\_/g, ' '),
+              isLoading: true,
+              param: { first: search.getsize },
+            }));
+        } else if (hashstate.hash !== '') {
+          let el = document.querySelector(hashstate.hash);
+          if (el) {
+            setHashState((prev) => ({
+              ...prev,
+              handling: true,
+              elem: hashstate.hash,
+              scrollTop: false,
+            }));
+          } else {
+            let parx, ukey, spx;
+            let scrollTop = false;
+            let spt = hashstate.hash.split(/\_/);
+            let keyx= hashstate.hash.substring(0,4);
+            if (keyx === '#gen' || keyx === "#epi" || keyx === "#key") {
+              if (keyx = "#key") {
+                let nkey = parseInt(spt[2].replace(/[a-z]/g,''));
+                let nkeyx= (isNaN(nkey)? '_00a_genus' : (nkey < 10? '_0' + spt[2] : '_' + spt[2]));
+                ukey = spt[1] + nkeyx
+              } else {
+                ukey = spt[1] + '_00a_genus'
+              }
+              spx = spt[1];
+              //it's not really a 'after' key because it should search keys which >= ukey (not > ukey))
+              //parx = {taxon: spt[1], first: search.getsize, after: ukey};
+              //scrollTop = true; // new query will be on top
+            } else if (keyx === "#tax" || keyx === "#fig") {
+              ukey = 'fig_' +  spt[1] + (spt[2]? '_'+spt[2] : ''); //fig key is not really really fig_xxx_xxx in mongo, need re-index
+              //parx = {taxon: spt[1] + (spt[2]? ' '+spt[2] : ''), first: search.getsize, after: ukey};
+              spx = spt[1] + (spt[2]? ' '+spt[2] : '');
+            }
+            // NOT search ok would cause el is null and cannot scroll, so setting handling must wait seach completed!!
+            setHashState((prev) => ({
+              ...prev,
+              //handling: true,
+              elem: hashstate.hash,
+              scrollTop: scrollTop,
+            }));
+
+            setSearch((prev) => ({
+              ...prev,
+              str: spx, //'', //cannot used default search original taxon that had been searched after supporting multi-species search
+              isLoading: true,
+              param: { key: ukey, first: search.getsize },
+            }));
+          }
         }
       } else if (hashstate.handling) {
         let el;
         if (hashstate.elem !== '') { el = document.querySelector(hashstate.elem) }
-        console.log("Hash change and scroll: ", hashstate.elem, hashstate.scrollTop, el);
+        //console.log("Hash change and scroll: ", hashstate.elem, hashstate.scrollTop, el);
         if (el) {
           let topPos = hashstate.scrollTop? 0 : el.getBoundingClientRect().top + window.pageYOffset;
           window.scrollTo({
