@@ -202,8 +202,7 @@ const Home = () => {
               //parx = {taxon: spt[1], first: search.getsize, after: ukey};
               //scrollTop = true; // new query will be on top
             } else if (keyx === "#tax" || keyx === "#fig") {
-              ukey = 'fig_' +  spt[1] + (spt[2]? '_'+spt[2] : ''); //fig key is not really really fig_xxx_xxx in mongo, need re-index
-              //parx = {taxon: spt[1] + (spt[2]? ' '+spt[2] : ''), first: search.getsize, after: ukey};
+              ukey = 'fig_' +  spt[1] + (spt[2]? '_'+spt[2] : ''); //fig key is not really fig_xxx_xxx in mongo, need re-index
               spx = spt[1] + (spt[2]? ' '+spt[2] : '');
             }
             // NOT search ok would cause el is null and cannot scroll, so setting handling must wait seach completed!!

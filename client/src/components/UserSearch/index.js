@@ -70,21 +70,23 @@ const UserSearch = (props) => {
     return ctxt;
   };
 
-  const pageFetch = async (pageParam) => {
+  const pageFetch = async (pageParam, signal) => {
       const res = await fetch(searchPrefix + 'page', {
-        method: 'POST',
-        body: JSON.stringify(pageParam),
-        credentials: 'same-origin',
-        mode: 'same-origin',
-        redirect: 'follow',
-        referrer: 'no-referrer',
-        headers: {
-          'content-type': 'application/json',
-          'Accept': 'application/json'
-        }
+            method: 'POST',
+            body: JSON.stringify(pageParam),
+            credentials: 'same-origin',
+            mode: 'same-origin',
+            redirect: 'follow',
+            referrer: 'no-referrer',
+            headers: {
+              'content-type': 'application/json',
+              'Accept': 'application/json'
+            },
+            signal: signal
       });
-
       if (!res.ok) {
+        let { taxon, ...keyParam } = pageParam;
+        await queryClient.cancelQueries([taxon, keyParam]);
         throw new Error('Error: Network response was not ok when searching... ')
       }
       return res.json()
@@ -145,28 +147,59 @@ const UserSearch = (props) => {
       //document.getElementById('butn_prev').disabled = true;
       if (butnPrevRef.current) { butnPrevRef.current.setAttribute('disabled', 'disabled') }
       if (butnNextRef.current) { butnNextRef.current.setAttribute('disabled', 'disabled') }
+/*    const timeout_ctrl = new AbortController(); //timeout controller
+      const timeout = async (delay) => {
+        try {
+          await setTimeout(delay, undefined, { signal: timeout_ctrl.signal });
+          //controller.abort(); //abort cancel request controller
+          queryClient.cancelQueries([searchtxt, keyParam]);
+        } catch (error) {
+          return;
+        }
+        throw new Error(`Request aborted as it took longer than ${delay}ms`);
+      };
+*/
+      const pfetch = async () => {
+        const controller = new AbortController(); //cancel request contorller
 
-      await Promise.resolve(queryClient.fetchQuery([searchtxt, keyParam], async () => {
-        const data = await pageFetch(pageParam);
-        await onSearch((prev) => ({
+        const res = await queryClient.fetchQuery([searchtxt, keyParam], async () => {
+            const data = await pageFetch(pageParam, controller.signal);
+            await onSearch((prev) => ({
+              ...prev,
+              searched: false,
+              //isLoading: false, //after write
+            }))
+            return data;
+        }, def_queryOpts);
+        //res.finally = () => timeout_ctrl.abort();
+        res.cancel = () => controller.abort();
+        return res;
+      };
+
+      try {
+      //await Promise.race([pfetch(), timeout(1000)])
+        await Promise.resolve(pfetch())
+        .then((data) => {
+          if (data) {
+            let dtk=data.data['infq'];
+            searchWrite(dtk, taxon, keyParam);
+
+            if (!search.init) {
+              onSearch((prev) => ({
+                ...prev,
+                init: true,
+              }))
+            }
+          }
+        }, qstr, taxon)
+      } catch (error) {
+        console.log(error);
+        onSearch((prev) => ({
             ...prev,
             searched: false,
-            //isLoading: false, //after write
+            isLoading: false,
         }))
-        return data;
-      }, def_queryOpts)
-      ).then((data) => {
-        if (data) {
-          let dtk=data.data['infq'];
-          //let qkey = ((qstr.substring(0,1) === "?")? qstr.substring(1,qstr.indexOf("=")) : qstr);
-          searchWrite(dtk, taxon, keyParam);
-
-          onSearch((prev) => ({
-            ...prev,
-            init: true,
-          }))
-        }
-      }, qstr, taxon)
+      }
   };
 
   const fetchQueryIF = (enable, taxon, keyParam) => {
@@ -245,12 +278,12 @@ const UserSearch = (props) => {
                  (searching.toLowerCase() === 'all' || searching === '*'? '' : searching));
     let searchtxt = qtaxon === ''?  'All' : qtaxon;
     let chk_identical = qtaxon === result.taxon && keyParam === result.keyParam;
+  //console.log("Now search: ", qtaxon, " with param: ", keyParam);
 /* !! Set SearchEnable may cause init search perform not correctly !!
     console.log("Check with: ", result.taxon, " with param: ", result.keyParam, " at isLoading: ", search.isLoading);
     if (chk_identical || (!search.isLoading && result.taxon === 'Acartia' && Object.keys(result.keyParam).length === 0)) {
       console.log("While INIT or OLD search NOT performed: ", qtaxon, " with param: ", keyParam);
     } else {
-      console.log("Now search: ", qtaxon, " with param: ", keyParam);
       //useQuery actually cause some problems for async data loading and then update whole html
       const qryx = useQuery([searchtxt, keyParam], async () => {
         const pageParam = {
