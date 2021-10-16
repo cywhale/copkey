@@ -214,7 +214,7 @@ const Home = () => {
             }));
 
             setSearch((prev) => ({
-              ...prev,
+              ...prev,  //Note: str changed to '' will cause a server-stuck-on=searching key if multi=selected taxons and click a key not existed on current page
               str: spx, //'', //cannot used default search original taxon that had been searched after supporting multi-species search
               isLoading: true,
               param: { key: ukey, first: search.getsize },
@@ -249,9 +249,9 @@ const Home = () => {
           }
         }
         clear_uri();
-      } else {
-        console.log("Check uncertain state: ", search.isLoading, hashstate);
-      }
+      } //else {
+        //console.log("Check uncertain state: ", search.isLoading, hashstate);
+      //}
     }
   },[appstate.loaded, hashstate]); //, prefetchInit
 

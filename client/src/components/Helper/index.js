@@ -1,6 +1,6 @@
 import { render, Fragment } from 'preact';
 import { useEffect, useCallback } from "preact/hooks";
-import Xarrow, { useXarrow, Xwrapper } from 'react-xarrows';
+import Xarrow, { Xwrapper } from 'react-xarrows'; //useXarrow,
 import useHelp from '../Helper/useHelp';
 import style from '../style/style_helper.scss';
 import (/* webpackMode: "lazy" */

@@ -8,6 +8,7 @@
   ],
   "compact": true,
   "plugins": [
+    ["lodash", { "id": ["async-es"] }],
     ["transform-imports", {
       "lodash": {
         "transform": "lodash/${member}",

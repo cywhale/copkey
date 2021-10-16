@@ -86,8 +86,11 @@ const UserSearch = (props) => {
       });
       if (!res.ok) {
         let { taxon, ...keyParam } = pageParam;
-        await queryClient.cancelQueries([taxon, keyParam]);
-        throw new Error('Error: Network response was not ok when searching... ')
+        /*await queryClient.cancelQueries([taxon, keyParam]); //it works but try another reset function in react-query
+        throw new Error('Error: Network response was not ok when searching... ')*/
+        console.log('Error: Network response was not ok when searching... ');
+        queryClient.resetQueries([taxon, keyParam],
+          { exact: true, ResetOptions: {throwOnError: false, cancelRefetch: true} })
       }
       return res.json()
   };
@@ -157,8 +160,7 @@ const UserSearch = (props) => {
           return;
         }
         throw new Error(`Request aborted as it took longer than ${delay}ms`);
-      };
-*/
+      };*/
       const pfetch = async () => {
         const controller = new AbortController(); //cancel request contorller
 
@@ -277,9 +279,9 @@ const UserSearch = (props) => {
     let qtaxon = (searching === ''? result.taxon :
                  (searching.toLowerCase() === 'all' || searching === '*'? '' : searching));
     let searchtxt = qtaxon === ''?  'All' : qtaxon;
-    let chk_identical = qtaxon === result.taxon && keyParam === result.keyParam;
   //console.log("Now search: ", qtaxon, " with param: ", keyParam);
 /* !! Set SearchEnable may cause init search perform not correctly !!
+    let chk_identical = qtaxon === result.taxon && keyParam === result.keyParam;
     console.log("Check with: ", result.taxon, " with param: ", result.keyParam, " at isLoading: ", search.isLoading);
     if (chk_identical || (!search.isLoading && result.taxon === 'Acartia' && Object.keys(result.keyParam).length === 0)) {
       console.log("While INIT or OLD search NOT performed: ", qtaxon, " with param: ", keyParam);

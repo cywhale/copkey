@@ -118,7 +118,8 @@ const client_other_config = (config, env) => {
       './src/index.js'
     ];
     outputx = {...outputx,
-      path: path.resolve(__dirname, 'build')
+      path: path.resolve(__dirname, 'build'),
+      library: { name: 'reactXarrow', type: 'umd', umdNamedDefine: true }
     };
 
   } else {
@@ -141,6 +142,10 @@ const client_other_config = (config, env) => {
     entry: entryx,
     output: outputx,
     unknownContextCritical : false,
+    externals: [{
+        lodash: 'lodash',
+        'prop-types': 'prop-types',
+    }],
     amd: {
       toUrlUndefined: true
     },
@@ -160,7 +165,15 @@ const client_other_config = (config, env) => {
       mainFields: ['module', 'main'],
       alias: {
         "react": "preact-compat",
-        "react-dom": "preact-compat"
+        "react-dom": "preact-compat",
+        //'lodash-es': 'lodash', // our internal tests showed that lodash is a little bit smaller as lodash-es
+        'lodash.get': 'lodash/get',
+        'lodash.isfunction': 'lodash/isFunction',
+        'lodash.isobject': 'lodash/isObject',
+        'lodash.merge': 'lodash/merge',
+        'lodash.reduce': 'lodash/reduce',
+        'lodash.set': 'lodash/set',
+        'lodash.unset': 'lodash/unset'
       }
     },
     module: {
@@ -192,13 +205,13 @@ const client_other_config = (config, env) => {
                 }],
               ],
               plugins: [
-                  ['lodash'],
-                  [require('babel-plugin-transform-imports'), {
+                  "lodash",
+                  "transform-imports", { //require('babel-plugin-transform-imports'), {
                     "lodash": {
                       "transform": "lodash/${member}",
                       "preventFullImport": true
                     }
-                  }]
+                  }
               ],
             }
 	    //include: path.resolve(__dirname, '../../src')
@@ -323,8 +336,12 @@ const baseConfig = (config, env, helpers) => {
   config.plugins.push(
 
     new LodashModuleReplacementPlugin({
-      'collections': true,
-      'paths': true
+      caching: true,
+      cloning: true,
+      memoizing: true,
+      collections: true,
+      chaining: true,
+      paths: true
     }),
 
     new CopyWebpackPlugin({
@@ -447,6 +464,7 @@ const baseConfig = (config, env, helpers) => {
     config.plugins.push(new webpack.optimize.MinChunkSizePlugin({
         minChunkSize: 5000, // Minimum number of characters
     }));
+    //config.plugins.push(new webpack.optimize.UglifyJsPlugin() );
     config.plugins.push(new webpack.optimize.OccurrenceOrderPlugin() );
     config.plugins.push(new webpack.optimize.ModuleConcatenationPlugin());
     config.plugins.push(new webpack.NoEmitOnErrorsPlugin());
