@@ -11,6 +11,7 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const svgToMiniDataURI = require('mini-svg-data-uri');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const ShakePlugin = require('webpack-common-shake').Plugin;
 
 // Q/A here: https://app.slack.com/client/T3NM0NCDC/C3PSVEMM5/thread/C3PSVEMM5-1616340858.005300
 // Workbox configuration options: [maximumFileSizeToCacheInBytes]. This will not have any effect, as it will only modify files that are matched via 'globPatterns'
@@ -65,7 +66,7 @@ const client_other_config = (config, env) => {
     var optzx = {
        usedExports: true,
        //https://wanago.io/2018/08/13/webpack-4-course-part-seven-decreasing-the-bundle-size-with-tree-shaking/
-       //sideEffects: true, //tell Webpack don't ignore package.json sideEffect = false settings
+       sideEffects: true, //tell Webpack don't ignore package.json sideEffect = false settings
        runtimeChunk: true, //{
          //name: 'runtime'
        //},
@@ -119,7 +120,7 @@ const client_other_config = (config, env) => {
     ];
     outputx = {...outputx,
       path: path.resolve(__dirname, 'build'),
-      library: { name: 'reactXarrow', type: 'umd', umdNamedDefine: true }
+      //library: { name: 'reactXarrow', type: 'umd', umdNamedDefine: true }
     };
 
   } else {
@@ -142,10 +143,11 @@ const client_other_config = (config, env) => {
     entry: entryx,
     output: outputx,
     unknownContextCritical : false,
-    externals: [{
+/*  externals: [{
+        react: 'react',
         lodash: 'lodash',
         'prop-types': 'prop-types',
-    }],
+    }],*/
     amd: {
       toUrlUndefined: true
     },
@@ -334,14 +336,29 @@ const baseConfig = (config, env, helpers) => {
 
 // transform https://github.com/webpack-contrib/copy-webpack-plugin/issues/6
   config.plugins.push(
-
     new LodashModuleReplacementPlugin({
+      currying: true,
+      flattening: true,
+      placeholders: true,
+      shorthands: true,
       caching: true,
       cloning: true,
       memoizing: true,
       collections: true,
       chaining: true,
       paths: true
+    }),
+
+    new ShakePlugin({
+      warnings: {
+        global: true,
+        module: false
+      } /* default */,
+      /* Invoked on every deleted unused property
+      onExportDelete: (resource, property) => {},
+      // See `Limitations` section for description
+      onModuleBailout: (module, bailouts) => { ... },
+      onGlobalBailout: (bailouts) => { ... } */
     }),
 
     new CopyWebpackPlugin({

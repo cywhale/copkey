@@ -2,9 +2,10 @@
   "name": "Copkey",
   "short_name": "Copkey",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#00001d",
+  "background_color": "#000",
   "theme_color": "#00001d",
   "prefer_related_applications": false,
   "icons": [

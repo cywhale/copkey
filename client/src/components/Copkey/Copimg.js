@@ -43,7 +43,7 @@ const Copimg = (props) => {
     if (fsub.length == f2.length && f2.length >= 1) {
       f2.forEach((el, idx, arr) => {
         arr[idx] = '<div class="carousel_div">' + //if use Carousel
-          arr[idx] + //.replace(
+          arr[idx] + //.replace(/img src=\"/g, 'img data-lazy-src=\"') +
             // /\<a data-fancybox=(.*)class=\"fbox\"/g,
               //'<Fancybox>{parse(
             //  '<a data-fancybox="gallery"' // ' + 'data-caption="' + fsub[idx] + '"'
