@@ -162,8 +162,11 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
     } else if (grepl("\\sPl.", xstr)) {
       iprex <- "Pl."
     } else {
-      if (print_info) print(paste0("Warning: Detect Plate as subfig but NO Plate, Pl. in xstr, use empty prex: ", xstr))
-      iprex <- ""
+      if (print_info) {
+      # ##when just check a fig title is a caption or not, it cause error!! replace iprex to '' is dangerous!!  
+        print(paste0("Warning: Check it!! Detect Plate as subfig but NO Plate, Pl. in xstr, use empty prex: ", xstr))
+        iprex <- ""
+      }
     }
     subx <- gsub("Plate|Pl\\.", iprex, subfig)
     xsubf <- subx[idx]
@@ -208,14 +211,20 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
     if (print_info) print(paste0("Warning: Detect multiple name in subfig: ", xsubf,", use first: ", gsub("\\s*(\\&|\\/){1}(?:.*)+$", "", xsubf)))
     xsubf <- gsub("\\s*(\\&|\\/){1}(?:.*)+$", "", xsubf)
   }
+  if (grepl("^[A-Z]{1}[a-z]+(?:.*)\\.*\\,*\\s*[0-9]{4}$", xsubf)) { #match Zac et al, 1976 but caption may has T.Zac, A. ooxx, 1976
+    xsubfx <- gsub("(?![A-Z]{1}[a-z]+)(\\s|\\.|\\,)(?:.*)\\.*\\,*\\s*(?=[0-9]{4}$)", "(?:.*)",gsub("\\s*\\,\\s*", ", ", xsubf), perl=T) 
+  } else {
+    xsubfx <- gsub("\\s*\\,\\s*", ", ", xsubf)
+  } 
+    
   #chk_sub <- regexpr(paste0("(?=([A-Z]{1,1}\\.*\\s*){0,1})", xsubf), xstr, perl = T)
   if (substr(xstr, 1, 3) == substr(iprex, 1, 3) | substr(xstr, 1, nchar(xsubf)) == xsubf) {
     return(regexpr(paste0("^(([A-Z]\\.(\\-[a-z]\\.*)*\\s*){0,})",   #also can match Q.-c Chen or Q. C. Chen
-             gsub("\\s*\\,\\s*", ", ", xsubf)), xstr)) #make Sewell,1914 -> Sewell, 1914
+             xsubfx), xstr)) #make Sewell,1914 -> Sewell, 1914
   }
   return(regexpr(#20211017 to match "Shih et al. 1981: figs. 79-92. 
            paste0("^((([A-Z]\\.(\\-[a-z]\\.*)*\\s*){0,})|([A-Za-z]+\\s*(et al)\\.*\\,*\\s*[0-9]+(\\:|\\.)\\s*)}{0,})",
-                  gsub("\\s*\\,\\s*", ", ", xsubf)), xstr)) 
+             xsubfx), xstr)) 
 }
 
 read_docx_row <- function (ctentxt) {
@@ -269,7 +278,7 @@ pre_kcnt<- 0L
 keycnt <- 0L
 #docfile <- doclst[1]
 
-for (docfile in doclst[1:8]) {
+for (docfile in doclst[1:9]) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
   ctent <- docx_summary(dc0)
   key_chk_flag <- TRUE ## FALSE: means no key, only figs in this doc by means of 
@@ -322,7 +331,8 @@ for (docfile in doclst[1:8]) {
   epi_list <- trimx(gsub("\\s\\.", ".", gsub("\\s\\,", "\\,", gsub("(?![^\\,\\.])\\s*(?!^\\()(?![a-zA-Z]{1,})\\((?=[^0-9])", ", (",
               gsub("(?![a-zA-Z]{1,})\\)(?=[^\\,\\.])", ") ",     
               gsub("(?![a-zA-Z]{1,})\\,", ", ",xt, perl=T), perl=T), perl=T))))
-  titletxt <- paste0("<div id=", dQuote(paste0("genus_",gen_name))," class=", dQuote("kblk"), "><p class=", dQuote("doc_title"), ">", italics_spname(ctent[1,]$text, gen_name, gen_name), "</p></div><br><br><br>")
+  titletxt <- paste0("<div id=", dQuote(paste0("genus_",gen_name))," class=", dQuote("kblk"), "><p class=", dQuote("doc_title"), ">", 
+                italics_spname(gsub("\\(China\\sseas\\)", "occurring in the China seas", ctent[1,]$text), gen_name, gen_name), "</p></div><br><br><br>")
   
   #If no key in this doc(i.e. only figs, and only one species in this genus), we'll
   #let #span id="taxon_species_name" in this epithet span
@@ -757,14 +767,14 @@ for (docfile in doclst[1:8]) {
   }
   with_thesame_sp <- FALSE #some sp will have two different block for title, subfig, img, may due to too many figs that cannot be within a single row.
   Blk_condi <- 0 #"Normal" condition, #block(blk) belong to differnet species
-  
+  pre_imgj <- 0L 
   #i <- 195L #just when test first doc file #i<=232L before p.12 #i<=tstL #245L p13 #292L before p19 #351L p25
   while (fig_mode & nrow(dtk)>0 & i<=tstL) {
     x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", 
              gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))
     wa <- regexpr("\\((S|s)ize",x)
     if (wa>0) {
-      spname<- trimx(substr(x, 1, wa-1))
+      spname<- trimx(gsub(fig_exclude, "", substr(x, 1, wa-1)))
       sattr <- gsub("\\(Size", "(size", substr(x, wa, nchar(x)))
     } else {
       spname<- trimx(gsub(fig_exclude, "", x))
@@ -791,9 +801,10 @@ for (docfile in doclst[1:8]) {
       fig_citation <- c()
       imgf <- c()
       imgj <- 0L
+      if (!with_thesame_sp) pre_imgj <- 0L #20211019 modified fix the same sp but index of fig not added up
       while (within_xsp_flag) {
         x <- gsub("^\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\u00A0{1,}", " ", as.character(ctent$text[i]))))  
-        tt <- which(is.na(x) | gsub("Last update(?:.*)", "", x)=="") #ignore Last update:...
+        tt <- which(is.na(x) | gsub("Last update(?:.*)|\\.+|\\,+", "", x)=="") #ignore Last update:...
         if (i<tstL & any(tt)) {
           ncflag <- ncflag + 1
           if (ncflag >=31 ) { # excced one page of docx
@@ -1133,6 +1144,7 @@ for (docfile in doclst[1:8]) {
                 if (!with_thesame_sp & with_thesame_sp_flag) {
                   with_thesame_sp <- TRUE  #Next turn will be Append_Blk condition
                   with_thesame_sp_flag <- FALSE
+                  pre_imgj <- length(fnum)
                 } else { #Return to nomal condition
                   with_thesame_sp <- FALSE
                   with_thesame_sp_flag <- FALSE
@@ -1161,7 +1173,7 @@ for (docfile in doclst[1:8]) {
                 } else if (imgj >= length(subfig)) { #End of fetch subfig
                   flag_getcap <- FALSE
                 } else if ((xc[1]>0) | #(subfig[imgj+1] == substr(x, 1, nchar(subfig[imgj+1]))) | 
-                           (imgj==0 & (("Female" %chin% subfig & grepl("Female", x)) |
+                           (imgj==0 & (("Female" %chin% subfig & grepl("(F|f)emale", x)) |
                                        ("Male" %chin% subfig & grepl("Male", x))))) {
                   flag_getcap <- TRUE
                 }
@@ -1169,7 +1181,7 @@ for (docfile in doclst[1:8]) {
                   k <- 1
                   if (length(subfig)>0) {
                     if (xc[1]<0) { #subfig[imgj+1] != substr(x, 1, nchar(subfig[imgj+1]))) {
-                      if (imgj==0 & ("Female" %chin% subfig & grepl("Female", x)) &
+                      if (imgj==0 & ("Female" %chin% subfig & grepl("(F|f)emale", x)) &
                           ("Male" %chin% subfig & grepl("Male", x))) {
                         k <- 2 # one description (x) contains two subfigs
                       }
@@ -1215,7 +1227,7 @@ for (docfile in doclst[1:8]) {
                     fig_num[imgj+1] <- cntg_fig
                     docfn <- unlist(tstrsplit(docfile, "\\/"), use.names = F) %>% .[length(.)]
                     imgsrc <- paste0(doc_imgdir, 
-                                     gsub("\\s", "_", gsub("Key to the species of\\s|\\s\\(China seas\\s*[2]*\\)\\.docx", "", docfn)),
+                                     gsub("\\s", "_", gsub("Key to the species of\\s|\\s\\(China sea([s]*)\\s*[2]*\\)\\.docx", "", docfn)),
                                      "/word/media/image", doc_fign, ".jpeg")
                     if (!file.exists(imgsrc)) {
                       print(paste0("Error: Cannot get the the image file: ", imgsrc, "  Check it at i:",  i))
@@ -1223,7 +1235,7 @@ for (docfile in doclst[1:8]) {
                     }
                     imgf[imgj+1L] <- paste0(web_img, #padzerox(cntg_fig, 4), "_", ## modified 20210920 that no longer need numbers
                                             gsub("\\s", "_", xsp2),
-                                            "_", padzerox(imgj+1, 2), #padzerox(doc_fign), ## modified 20210920
+                                            "_", padzerox(imgj+1+pre_imgj, 2), #padzerox(doc_fign), ## modified 20210920
                                             ".jpg") #0001_Sp_name_000x.jpg changed to -> Sp_name_01.jpg
                     if (!file.exists(imgf[imgj+1L])) {
                       system(enc2utf8(paste0("cmd.exe /c copy ", gsub("/","\\\\", imgsrc), 
@@ -1297,7 +1309,8 @@ for (docfile in doclst[1:8]) {
     start_taxon <- which(dtk$kcnt>pre_kcnt & !is.na(dtk$figs))[1]
     start_fig <- which(dtk$kcnt>pre_kcnt & dtk$type==2)[1]
     key_num <- start_fig-1-pre_kcnt
-    if (start_taxon >= 0.5*key_num | ((key_num - start_taxon)<=page_length_def)) {
+    key_start_num <- start_taxon-1-pre_kcnt
+    if (key_start_num >= 0.5*key_num | ((key_num - key_start_num)<=page_length_def)) {
       fig_topgx <- as.integer(unlist(tstrsplit(dtk[start_taxon,]$figs, ","), use.names = F))
       dtk[kcnt>start_taxon, page:=page_cnt+1]
       dfk[kcnt>start_taxon & !fidx %in% fig_topgx, page:=page_cnt+1]
