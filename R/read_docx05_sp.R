@@ -278,7 +278,7 @@ pre_kcnt<- 0L
 keycnt <- 0L
 #docfile <- doclst[1]
 
-for (docfile in doclst[1:9]) {
+for (docfile in doclst[1:11]) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
   ctent <- docx_summary(dc0)
   key_chk_flag <- TRUE ## FALSE: means no key, only figs in this doc by means of 
@@ -723,7 +723,9 @@ for (docfile in doclst[1:9]) {
         dtk <- rbindlist(list(dtk,data.table(rid=i, unikey=ukey, #paste0(gen_name, "_", keyx),
                                              ckey= keyx, subkey= subkeyx, pkey= prekeyx,
                                              figs=NA_character_, type=nxttype, nkey=nxtk, 
-                                             taxon=xsp, abbrev_taxon=nsp, fullname=NA_character_,
+                                             taxon=xsp, 
+                                             abbrev_taxon=ifelse(nxttype==1L, paste0(substr(gen_name, 1,1), ".", gsub(gen_name, "", xsp)), nsp), #nsp, 
+                                             fullname=NA_character_,
                                              subgen=subgen, genus=gen_name, family=fam_name,
                                              epithets=NA_character_, keystr=keystr, ctxt=xc, fkey=NA_character_, 
                                              sex=xsex, docn=cntg, kcnt=keycnt, page=page_cnt)))
@@ -770,8 +772,8 @@ for (docfile in doclst[1:9]) {
   pre_imgj <- 0L 
   #i <- 195L #just when test first doc file #i<=232L before p.12 #i<=tstL #245L p13 #292L before p19 #351L p25
   while (fig_mode & nrow(dtk)>0 & i<=tstL) {
-    x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", 
-             gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))
+    x <- gsub("\\\t", "", gsub("\\’", "\'", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", 
+             gsub("\u00A0{1,}", " ", as.character(ctent$text[i]))))))
     wa <- regexpr("\\((S|s)ize",x)
     if (wa>0) {
       spname<- trimx(gsub(fig_exclude, "", substr(x, 1, wa-1)))
@@ -819,14 +821,14 @@ for (docfile in doclst[1:9]) {
           } 
         } else {
           ncflag <- 0L
-          xt <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i]))))))
+          xt <- trimx(gsub("\\\t", "", gsub("\\’", "\'", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))))
           if (length(subfig)==0 & fig_title=="" & (!is.na(xt) & trimx(gsub(fig_exclude,"",xt)) != spname)) { #(any(subfig=="")) {
             subfig <- gsub("\\s*\\,\\s*", ", ", #make Sewell,1914 -> Sewell, 1914 with the same format
                         trimx(unlist(tstrsplit(x, '\\s{2,}|\\t'), use.names = F))) #note that sometimes pattern has: "a1   b2 & c3", split to "a1" "b2 & c3" 
             i <- i + 1L
             next
           } else if (!is.na(x) & fig_title=="") {
-            x <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i]))))))
+            x <- trimx(gsub("\\\t", "", gsub("\\’", "\'", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))))
             if (length(subfig)>0) {
               xc <- find_subfigx(x, subfig, 1L, print_info = FALSE)
               if (xc[1]>0) {
@@ -852,7 +854,7 @@ for (docfile in doclst[1:9]) {
             i <- i + 1L
             next
           } else {
-            x <- trimx(gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i]))))))
+            x <- trimx(gsub("\\\t", "", gsub("\\’", "\'", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))))
             wa <- regexpr("\\((S|s)ize",x)
             xsp1 <- trimx(odbapi::sciname_simplify(x, simplify_one = T))
             if (i>=tstL | (!is.na(x) & (wa>0 | (xsp1==gen_name & imgj>0 & imgj>=length(subfig))))) { #trimx(sp2namex(x)) != xsp2)) {
@@ -1381,5 +1383,5 @@ fwrite(dtk1,file="doc/newsp_htm_extract.csv")
 fwrite(dfk, file="doc/newsp_fig_extract.csv")
 
 length(unique(na.omit(dtk$ckey))) #187
-which(!1:187 %in% unique(na.omit(dtk$ckey)))
+#which(!1:187 %in% unique(na.omit(dtk$ckey)))
 nrow(unique(dtk[!is.na(ckey)|!is.na(subkey),])) #391
