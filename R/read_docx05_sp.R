@@ -149,6 +149,7 @@ bold_spsex <- function(xstr) { #only match Male or Female
 # in first time(during find fig_title, just test if have caption but no fig title provided), don't print warning that confuse debugging
 find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
   xsubf <- subfig[idx]
+  chk_abc_flag <- FALSE
   if (grepl("(f|F)igs\\.", subfig[1])) {
     iprex <- "Figs."
   } else {
@@ -171,25 +172,36 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
     subx <- gsub("Plate|Pl\\.", iprex, subfig)
     xsubf <- subx[idx]
   } else {
+    if (identical(subfig, LETTERS[1:length(subfig)])) {
+      chk_abc_flag <- TRUE
+      xt <- subfig
+      iprex <- ""
+    }
     subx <- subfig
   }
   iprext <- gsub("\\.", "\\\\.", iprex) #the following, also can match 20d (John, 1999. plate 24)
-  xt <- as.integer(trimx(gsub("(?![0-9]+)[a-z]*", "", 
-                         gsub("\\s*\\((?:.*)\\)", "", 
-                         gsub("\\-", "", #20211017 to handle Figs. 79-92 subfig, make it to match 7992
-                         gsub(iprext, "", xsubf))), perl=T))) ## some subfig with: 1 (John, 1999. plate 24)
-  if (!is.na(xt)) {
+  if (!chk_abc_flag) {
     xt <- as.integer(trimx(gsub("(?![0-9]+)[a-z]*", "", 
-                           gsub("\\s*\\((?:.*)\\)", "",
+                           gsub("\\s*\\((?:.*)\\)", "", 
                            gsub("\\-", "", #20211017 to handle Figs. 79-92 subfig, make it to match 7992
-                           gsub(iprext, "", subx))), perl=T)))
+                           gsub(iprext, "", xsubf))), perl=T))) ## some subfig with: 1 (John, 1999. plate 24)
+  }
+  if (!is.na(xt) | chk_abc_flag) {
+    if (!chk_abc_flag) {
+      xt <- as.integer(trimx(gsub("(?![0-9]+)[a-z]*", "", 
+                             gsub("\\s*\\((?:.*)\\)", "",
+                             gsub("\\-", "", #20211017 to handle Figs. 79-92 subfig, make it to match 7992
+                             gsub(iprext, "", subx))), perl=T)))
+    }
     if (any(is.na(xt))) {
       xt <- xt[!is.na(xt)]
     }
     if (all(!is.na(xt))) {
       if (print_info) print(paste0("Warning: Detect integer: ", xsubf,", use ", iprex, ": ", paste(subx, collapse=",")))
-      xc <- sapply(xt, function(x) {regexpr(paste0(iprext,"*\\s*",x),  #20211017 to handle Figs. 79-92 subfig, make it to match 7992
-                                            gsub('(?![a-zA-Z]+)\\-(?![a-zA-Z]+)', '', xstr, perl=T))},
+      xc <- sapply(xt, function(x) {regexpr(
+              ifelse(chk_abc_flag, paste0(x, "\\."), #20211020 handle A, B, C subfig and check A., B., C. in xstr 
+                     paste0(iprext,"*\\s*",x)),  #20211017 to handle Figs. 79-92 subfig, make it to match 7992
+                   gsub('(?![a-zA-Z]+)\\-(?![a-zA-Z]+)', '', xstr, perl=T))},
                    simplify = T, USE.NAMES = F)
       if (!all(xc>0)) {
         if (print_info) {
@@ -207,9 +219,9 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
     }
   }
   
-  if (grepl("\\&|\\/", xsubf)) {
+  if (grepl("\\&|\\/|\\(", xsubf)) { #20211020 modified to match Female (Original)
     if (print_info) print(paste0("Warning: Detect multiple name in subfig: ", xsubf,", use first: ", gsub("\\s*(\\&|\\/){1}(?:.*)+$", "", xsubf)))
-    xsubf <- gsub("\\s*(\\&|\\/){1}(?:.*)+$", "", xsubf)
+    xsubf <- gsub("\\s*(\\&|\\/|\\(){1}(?:.*)+$", "", xsubf)
   }
   if (grepl("^[A-Z]{1}[a-z]+(?:.*)\\.*\\,*\\s*[0-9]{4}$", xsubf)) { #match Zac et al, 1976 but caption may has T.Zac, A. ooxx, 1976
     xsubfx <- gsub("(?![A-Z]{1}[a-z]+)(\\s|\\.|\\,)(?:.*)\\.*\\,*\\s*(?=[0-9]{4}$)", "(?:.*)",gsub("\\s*\\,\\s*", ", ", xsubf), perl=T) 
@@ -218,6 +230,9 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
   } 
     
   #chk_sub <- regexpr(paste0("(?=([A-Z]{1,1}\\.*\\s*){0,1})", xsubf), xstr, perl = T)
+  if (grepl("^((F|f)emale|(M|m)ale)", xsubfx)) {
+    return(regexpr(tolower(xsubfx), xstr))
+  }
   if (substr(xstr, 1, 3) == substr(iprex, 1, 3) | substr(xstr, 1, nchar(xsubf)) == xsubf) {
     return(regexpr(paste0("^(([A-Z]\\.(\\-[a-z]\\.*)*\\s*){0,})",   #also can match Q.-c Chen or Q. C. Chen
              xsubfx), xstr)) #make Sewell,1914 -> Sewell, 1914
@@ -278,7 +293,7 @@ pre_kcnt<- 0L
 keycnt <- 0L
 #docfile <- doclst[1]
 
-for (docfile in doclst[1:11]) {
+for (docfile in doclst[1:17]) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
   ctent <- docx_summary(dc0)
   key_chk_flag <- TRUE ## FALSE: means no key, only figs in this doc by means of 
@@ -349,11 +364,12 @@ for (docfile in doclst[1:11]) {
           if (wl2[[1]][1]>0) {
             xtx <- substr(xt1, 1, wl2[[1]][1]-1)
             for (y in seq_along(wl2[[1]])) {
-              xtx <- paste0(xtx, paste0("<a href=",dQuote(paste0("#key_",gen_name,"_",substr(xt1, wl2[[1]][y], wl2[[1]][y]+attributes(wl2[[1]])$match.length[y]-1))),
+              xtx <- gsub("\\s\\*", "*", ## sometimes has * to remark
+                       paste0(xtx, paste0("<a href=",dQuote(paste0("#key_",gen_name,"_",substr(xt1, wl2[[1]][y], wl2[[1]][y]+attributes(wl2[[1]])$match.length[y]-1))),
                             ">",substr(xt1, wl2[[1]][y], wl2[[1]][y]+attributes(wl2[[1]])$match.length[y]-1),"</a>"),
                             ifelse(y<length(wl2[[1]]), 
                               substr(xt1, wl2[[1]][y]+attributes(wl2[[1]])$match.length[y], wl2[[1]][y+1]-1),
-                              substr(xt1, wl2[[1]][y]+attributes(wl2[[1]])$match.length[y], nchar(xt1))))
+                              substr(xt1, wl2[[1]][y]+attributes(wl2[[1]])$match.length[y], nchar(xt1)))))
             }  
           } else { #if (!key_chk_flag) { #no key but may have (1/f) pattern
             xtx <- xt1
@@ -719,12 +735,14 @@ for (docfile in doclst[1:11]) {
         keycnt <- keycnt + 1L
         keyt <- as.integer(gsub('[a-z]','', keyx))
         ukey <- paste0(gen_name, "_", padzerox(keyt, 2), subkeyx)
+        ataxon <- ifelse(nxttype==1L & xsp!=gen_name & !any(grepl("\\.", nsp)), 
+                         paste0(substr(gen_name, 1,1), ".", gsub(gen_name, "", xsp)), nsp) #nsp, 
         
         dtk <- rbindlist(list(dtk,data.table(rid=i, unikey=ukey, #paste0(gen_name, "_", keyx),
                                              ckey= keyx, subkey= subkeyx, pkey= prekeyx,
                                              figs=NA_character_, type=nxttype, nkey=nxtk, 
                                              taxon=xsp, 
-                                             abbrev_taxon=ifelse(nxttype==1L, paste0(substr(gen_name, 1,1), ".", gsub(gen_name, "", xsp)), nsp), #nsp, 
+                                             abbrev_taxon=ataxon,
                                              fullname=NA_character_,
                                              subgen=subgen, genus=gen_name, family=fam_name,
                                              epithets=NA_character_, keystr=keystr, ctxt=xc, fkey=NA_character_, 
@@ -787,10 +805,11 @@ for (docfile in doclst[1:11]) {
     xsp2 <- sp2namex(spname)
     x_dtk<- which(dtk$taxon==xsp2 & dtk$type==1L)
     
-    if (key_chk_flag & !any(x_dtk)) {
-      print(paste0("Error: Check fig_mode got ?? sp: ", xsp2, " at i: ", i))
-      break
-    } else {
+    #if (key_chk_flag & !any(x_dtk)) {
+    #  print(paste0("Error: Check fig_mode got ?? sp: ", xsp2, " at i: ", i))
+    #  break
+    #} else {
+    if (TRUE) {
       within_xsp_flag <- TRUE
       i <- i + 1L
       ncflag <- 0L
@@ -909,30 +928,37 @@ for (docfile in doclst[1:11]) {
                   cap_cite[is.na(cite), cite:=ifelse(grepl("Original", cap), "Original", citex)]
                 }
                 
-                if (!any("female/male" %chin% dtk[x_dtk,]$sex)) {
-                  key_sex <- rbindlist(list(dtk[x_dtk, .(ckey, sex, kcnt)],
-                                            data.table(ckey=paste(dtk[x_dtk,]$ckey, collapse = ","),
-                                                       sex="female/male",
-                                                       kcnt=min(dtk[x_dtk,]$kcnt))))
+                if (any(x_dtk)) {
+                  if (!any("female/male" %chin% dtk[x_dtk,]$sex)) {
+                    key_sex <- rbindlist(list(dtk[x_dtk, .(ckey, sex, kcnt)],
+                                              data.table(ckey=paste(dtk[x_dtk,]$ckey, collapse = ","),
+                                                         sex="female/male",
+                                                         kcnt=min(dtk[x_dtk,]$kcnt))))
+                  } else {
+                    key_sex <- dtk[x_dtk, .(ckey, sex, kcnt)]
+                  }
                 } else {
-                  key_sex <- dtk[x_dtk, .(ckey, sex, kcnt)]
+                  key_sex <- data.table()
                 }
-                
                 malekey <- ""; femalekey <- ""
-                if (key_chk_flag) {
-                  malekey <- ifelse("male" %chin% key_sex$sex, key_sex[sex=="male",]$ckey, key_sex[sex=="female/male",]$ckey)
-                  femalekey <- ifelse("female" %chin% key_sex$sex, key_sex[sex=="female",]$ckey, key_sex[sex=="female/male",]$ckey)
-                } 
-                ktt <- chmatch(fsex, key_sex$sex)
-                if (all(is.na(ktt))) {
-                  keymat <- chmatch("female/male", key_sex$sex)
+                if (nrow(key_sex)) {
+                  if (key_chk_flag) {
+                    malekey <- ifelse("male" %chin% key_sex$sex, key_sex[sex=="male",]$ckey, key_sex[sex=="female/male",]$ckey)
+                    femalekey <- ifelse("female" %chin% key_sex$sex, key_sex[sex=="female",]$ckey, key_sex[sex=="female/male",]$ckey)
+                  } 
+                  ktt <- chmatch(fsex, key_sex$sex)
+                  if (all(is.na(ktt))) {
+                    keymat <- chmatch("female/male", key_sex$sex)
+                  } else {
+                    keymat <- ktt #cannot just use key_sex[chmatch(fsex, sex),]$ckey because may lost match
+                    keymat[is.na(keymat)] <- chmatch("female/male", key_sex$sex)
+                  }
+                  ckeyx <- key_sex[keymat,]$ckey
+                  tokeyx<- key_sex[keymat,]$kcnt
                 } else {
-                  keymat <- ktt #cannot just use key_sex[chmatch(fsex, sex),]$ckey because may lost match
-                  keymat[is.na(keymat)] <- chmatch("female/male", key_sex$sex)
+                  ckeyx <- rep(NA_character_, length(fig_num))
+                  tokeyx <- rep(NA_character_, length(fig_num))
                 }
-                ckeyx <- key_sex[keymat,]$ckey
-                tokeyx<- key_sex[keymat,]$kcnt
-                
                 fdlink <- paste0("figs_", gsub("\\s", "_", xsp2)) #, "_", paste(fnum, collapse="-"))
 
                 if (any(x_dtk)) {
@@ -1015,7 +1041,7 @@ for (docfile in doclst[1:11]) {
                                    flushed=rep(paste(fig_num, collapse = ","), length(fig_num)), ## flushed means flush figs in a row
                                    blkx=blk_cnt, docn=cntg, rid=i, 
                                    kcnt=keycnt, tokcnt=tokeyx, page=page_cnt,
-                                   xdtk=paste(x_dtk, collapse=","),
+                                   xdtk=ifelse(any(x_dtk), paste(x_dtk, collapse=","), NA_character_),
                                    taxon=xsp2, subgen=subgenx,
                                    genus=gen_name, family=fam_name) ### blkx: counter of block of fig, docn: nth document
                 
@@ -1070,7 +1096,9 @@ for (docfile in doclst[1:11]) {
                       data.table(rid=i, unikey=fukey, #fdlink,
                         ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
                         figs=paste(fig_num, collapse = ","), type=2L, nkey=NA_integer_, 
-                        taxon=xsp2, abbrev_taxon=dtk[x_dtk[1],]$abbrev_taxon, fullname=full_name,
+                        taxon=xsp2, 
+                        abbrev_taxon=ifelse(any(x_dtk),dtk[x_dtk[1],]$abbrev_taxon, paste0(substr(gen_name, 1,1), ".", gsub(gen_name, "", xsp2))), 
+                        fullname=full_name,
                         subgen=subgenx, genus=gen_name, family=fam_name,
                         epithets=epit, keystr=keystr, 
                         ctxt=ctxtt,
@@ -1115,7 +1143,7 @@ for (docfile in doclst[1:11]) {
                     fkey = paste(fkey, paste0(fkeyx, collapse=",")) 
                   )]
                 } 
-                if (key_chk_flag & (Blk_condi==0 | Blk_condi==2)) { #if next blk is the same sp (Blk_condi==1), just wait until next blk come in
+                if (key_chk_flag & any(x_dtk) & (Blk_condi==0 | Blk_condi==2)) { #if next blk is the same sp (Blk_condi==1), just wait until next blk come in
                   dtk[x_dtk, `:=`(
                     fullname = full_name,
                     subgen = subgenx,
@@ -1174,23 +1202,26 @@ for (docfile in doclst[1:11]) {
                   flag_getcap <- TRUE
                 } else if (imgj >= length(subfig)) { #End of fetch subfig
                   flag_getcap <- FALSE
-                } else if ((xc[1]>0) | #(subfig[imgj+1] == substr(x, 1, nchar(subfig[imgj+1]))) | 
-                           (imgj==0 & (("Female" %chin% subfig & grepl("(F|f)emale", x)) |
-                                       ("Male" %chin% subfig & grepl("Male", x))))) {
+                } else if (#(xc[1]>0) | #(subfig[imgj+1] == substr(x, 1, nchar(subfig[imgj+1]))) | 
+                           (imgj<=k & ((any(grepl("(F|f)emale",subfig)) & grepl("(F|f)emale", x)) |
+                                       (any(grepl("Male", subfig)) & grepl("Male", x))))) {
+                  flag_getcap <- TRUE
+                } else if (xc[1]>0 & imgj<length(subfig)) {
                   flag_getcap <- TRUE
                 }
                 if (flag_getcap) {    
                   k <- 1
                   if (length(subfig)>0) {
-                    if (xc[1]<0) { #subfig[imgj+1] != substr(x, 1, nchar(subfig[imgj+1]))) {
-                      if (imgj==0 & ("Female" %chin% subfig & grepl("(F|f)emale", x)) &
-                          ("Male" %chin% subfig & grepl("Male", x))) {
+                    #if (xc[1]<0) { #subfig[imgj+1] != substr(x, 1, nchar(subfig[imgj+1]))) {
+                    if (imgj<=k & (any(grepl("(F|f)emale",subfig)) & grepl("(F|f)emale", x)) &
+                          (any(grepl("Male", subfig)) & grepl("Male", x))) {
                         k <- 2 # one description (x) contains two subfigs
+                    } else if (xc[1]>0) {
+                      if (imgj==0 & length(xc)>1 & xc[1]>0) {
+                        k <- length(xc)
+                      } else if (imgj<length(subfig) & xc[1]>0) { #subfig[imgj+1] == substr(x, 1, nchar(subfig[imgj+1]))) {
+                        k <- imgj+1 # 2nd run for subfig[2], every time just run 1 turn because wait i+1 description in next turn
                       }
-                    } else if (imgj==0 & length(xc)>1 & xc[1]>0) {
-                      k <- length(xc)
-                    } else if (imgj<length(subfig) & xc[1]>0) { #subfig[imgj+1] == substr(x, 1, nchar(subfig[imgj+1]))) {
-                      k <- imgj+1 # 2nd run for subfig[2], every time just run 1 turn because wait i+1 description in next turn
                     }
                   }
                   if (length(xc)>1 & k>1) {
