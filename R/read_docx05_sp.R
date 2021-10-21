@@ -186,12 +186,19 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
     subx <- subfx
   } else {
     if (grepl("(f|F)igs\\.", subfx[1])) {
-      iprex <- "Figs."
+      if (any(grepl("(f|F)ig\\.", subfx))) {
+        iprex <- "Fig(s)*."
+      } else {
+        iprex <- "Figs."
+      }
     } else {
-      iprex <- "Fig."
+      if (any(grepl("(f|F)igs\\.", subfx))) {
+        iprex <- "Fig(s)*."
+      } else {
+        iprex <- "Fig."
+      }
     }
-    xstr <- gsub("\\sfig\\.", " Fig.", gsub("\\sfigs\\.", " Figs.", 
-                                            gsub("\\splate", " Plate", xstr)))
+    xstr <- gsub("\\sfig\\.", " Fig.", gsub("\\sfigs\\.", " Figs.", gsub("\\splate", " Plate", xstr)))
     if (any(grepl("Plate|Pl\\.", subfx))) {
       if (grepl("\\sPlate", xstr)) {
         iprex <- "Plate"
@@ -228,7 +235,7 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
     if (!chk_abc_flag & !chk_traits) {
       xt <- as.integer(trimx(gsub("(?![0-9]+)[a-z]*", "", 
                              gsub("\\s*\\((?:.*)\\)", "",
-                             gsub("\\-", "", #20211017 to handle Figs. 79-92 subfig, make it to match 7992
+                             gsub("\\-|\\/", "", #20211017 to handle Figs. 79-92 or Figs. 12/14 subfig, make it to match 7992
                              gsub(iprext, "", subx))), perl=T)))
     }
     if (any(is.na(xt))) {
@@ -240,7 +247,7 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
               ifelse(chk_traits, x,
                 ifelse(chk_abc_flag, paste0(x, "\\."), #20211020 handle A, B, C subfig and check A., B., C. in xstr 
                   paste0(iprext,"*\\s*",x))),  #20211017 to handle Figs. 79-92 subfig, make it to match 7992
-                   gsub('(?![a-zA-Z]+)\\-(?![a-zA-Z]+)', '', xstr, perl=T))},
+                   gsub('(?![a-zA-Z]+)(\\-|\\/)(?![a-zA-Z]+)', '', xstr, perl=T))},
                    simplify = T, USE.NAMES = F)
       if (!all(xc>0)) {
         if (print_info) {
@@ -339,7 +346,7 @@ pre_kcnt<- 0L
 keycnt <- 0L
 #docfile <- doclst[1]
 
-for (docfile in doclst[1:24]) {
+for (docfile in doclst[1:27]) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
   ctent <- docx_summary(dc0)
   key_chk_flag <- TRUE ## FALSE: means no key, only figs in this doc by means of 
@@ -893,6 +900,15 @@ for (docfile in doclst[1:24]) {
                       sapply(function(x) {paste0(toupper(substr(x,1,1)), substr(x,2,nchar(x)))}, simplify = T, USE.NAMES = F)
             i <- i + 1L
             next
+          } else if (length(subfig)>0 & fig_title=="" & substr(xt,1,4) %chin% c("Fig.", "Figs")) {
+            ################################### 20211022 modified, for one-more row to input subfig ###
+            print(paste0("Warning: One-more row to input subfig for sp: ", xsp2, " at i: ", i))
+            subft <- gsub("\\s*\\,\\s*", ", ", #make Sewell,1914 -> Sewell, 1914 with the same format
+                           trimx(unlist(tstrsplit(x, '\\s{2,}|\\t'), use.names = F))) %>% #note that sometimes pattern has: "a1   b2 & c3", split to "a1" "b2 & c3" 
+              sapply(function(x) {paste0(toupper(substr(x,1,1)), substr(x,2,nchar(x)))}, simplify = T, USE.NAMES = F)
+            subfig <- c(subfig, subft)
+            i <- i + 1L
+            next
           } else if (!is.na(x) & fig_title=="") {
             x <- trimx(gsub("\\\t", "", gsub("\\’", "\'", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))))
             if (length(subfig)>0) {
@@ -965,8 +981,8 @@ for (docfile in doclst[1:24]) {
                     if (substr(x,1,8)=='Original') {
                       fig_caption[imgj+1L] <- trimx(gsub("°", "&deg;", gsub("(\\.|\\:)\\s*(M|m)ale","\\1 Male",
                                                         gsub("(\\.|\\:)\\s*(F|f)emale","\\1 Female",
-                                                        gsub("(\\.|\\:)\\s*{1,}(F|f)igs.", "\\1 Figs.",
-                                                        gsub("(\\.|\\:)\\s*{1,}(F|f)ig.", "\\1 Fig.", x))))))
+                                                        gsub("(\\.|\\:)\\s*{1,}(F|f)igs\\.", "\\1 Figs.",
+                                                        gsub("((\\.|\\:)\\s*){1,}(F|f)ig\\.", "\\1 Fig.", x))))))
                       print(paste0("Note: Not normally-ended just because i==tstL? ", i==tstL, " and now use x: ",x))
                       fsex[imgj+1L] <- check_sex_info(x)
                     } else {
@@ -1368,9 +1384,17 @@ for (docfile in doclst[1:24]) {
                         }
                       } else {
                         if (grepl("(f|F)igs\\.", subfx[1])) {
-                          iprex <- "Figs."
+                          if (any(grepl("(f|F)ig\\.", subfx))) {
+                            iprex <- "Fig(s)*."
+                          } else {
+                            iprex <- "Figs."
+                          }
                         } else {
-                          iprex <- "Fig."
+                          if (any(grepl("(f|F)igs\\.", subfx))) {
+                            iprex <- "Fig(s)*."
+                          } else {
+                            iprex <- "Fig."
+                          }
                         }
                         xstr <- gsub("\\sfig\\.", " Fig.", gsub("\\sfigs\\.", " Figs.", gsub("\\splate", " Plate", x)))
                         
@@ -1385,10 +1409,22 @@ for (docfile in doclst[1:24]) {
                           }
                         } 
                         iprext <- gsub("\\.", "\\\\.", iprex)
-                        xseg <- trimx(unlist(tstrsplit(xstr, paste0("(\\s|\\.)", iprext)), use.names = F))
+                        xseg <- trimx(unlist(tstrsplit(xstr, paste0("(\\s|\\.|\\/)", iprext)), use.names = F))
+                        #### 20211022 modified that Fig.2/Fig.4 caption cause segment of Fig.2 has nothing, that should be copied from segment of Fig.4
+                        xts1 <- sapply(subfx, function(x) {
+                          grepl(paste0(gsub("\\s","(\\\\s)*", x),"\\/"), xstr)
+                        }, simplify = T, USE.NAMES = F)
+                        xtc1 <- sapply(subfx, function(x) {
+                          grepl(paste0("\\/", gsub("\\s","(\\\\s)*", x)), xstr)
+                        }, simplify = T, USE.NAMES = F)
                         if (iprex!="" & substr(xstr,1,3) != substr(iprex,1,3)) {
                           xseg0 <- xseg[1]
                           xseg <- xseg[-1] 
+                        }
+                        if (length(xseg[xts1]) == length(xseg[xtc1])) {
+                          xseg[xts1] <- paste0(xseg[xts1], rep('/',length(xseg[xts1])), xseg[xtc1])
+                        } else {
+                          stop(paste0("Error: Replace alternative segment content got trouble: ", xsp2, " at i: ", i))
                         }
                       }
                     }
@@ -1426,8 +1462,8 @@ for (docfile in doclst[1:24]) {
                     } else {
                       fig_caption[imgj+1L] <- trimx(gsub("°", "&deg;", gsub("(\\.|\\:)\\s*(M|m)ale","\\1 Male",
                                                                        gsub("(\\.|\\:)\\s*(F|f)emale","\\1 Female",
-                                                                       gsub("(\\.|\\:)\\s*{1,}(F|f)igs.", "\\1 Figs.",
-                                                                       gsub("(\\.|\\:)\\s*{1,}(F|f)ig.", "\\1 Fig.", x))))))
+                                                                       gsub("(\\.|\\:)\\s*{1,}(F|f)igs\\.", "\\1 Figs.",
+                                                                       gsub("(\\.|\\:)\\s*{1,}(F|f)ig\\.", "\\1 Fig.", x))))))
                     }
                     
                     need_fetch_fsex <- FALSE
@@ -1491,7 +1527,10 @@ for (docfile in doclst[1:24]) {
     start_fig <- which(dtk$kcnt>pre_kcnt & dtk$type==2)[1]
     key_num <- start_fig-1-pre_kcnt
     key_start_num <- start_taxon-1-pre_kcnt
-    if (key_start_num >= 0.5*key_num | ((key_num - key_start_num)<=page_length_def)) {
+    if (key_start_num<10 & (key_num - key_start_num)<=page_length_def) {
+      print(paste0("Genus: ", gen_name, " split 1 page: ", page_cnt, " with key_num: ", key_num))
+      page_cnt <- page_cnt + 1
+    } else if (key_start_num >= 0.5*key_num) {
       fig_topgx <- as.integer(unlist(tstrsplit(dtk[start_taxon,]$figs, ","), use.names = F))
       dtk[kcnt>start_taxon, page:=page_cnt+1]
       dfk[kcnt>start_taxon & !fidx %in% fig_topgx, page:=page_cnt+1]
@@ -1556,7 +1595,7 @@ which(duplicated(dtk$unikey) | duplicated(dtk$unikey, fromLast = T))
 which(duplicated(dfk$fidx) | duplicated(dfk$fidx, fromLast = T))
 
 # check caption
-# tt <- dfk[,.(taxon, fidx, subfig, caption)][, cap:=substr(dfk$caption,1,20)][, caption:=NULL]
+# tt <- dfk[,.(taxon, fidx, subfig, fsex, caption)][, cap:=substr(dfk$caption,1,20)][, caption:=NULL]
 # tt[(nrow(tt)-50):nrow(tt),]
 cat(na.omit(dtk$ctxt), file=paste0(web_dir, "web_tmp.txt"))
 
