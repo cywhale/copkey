@@ -11,7 +11,11 @@ web_img <- paste0(web_dir, "assets/img/species/")
 doc_imgdir <- "doc/sp_key_zip/"
 #skipLine <- 4L
 page_length_def <- 30L
-Traits <- c("(H|h)abitus","(M|m)outh(\\spart(s)*)*", "(L|l)eg(s)*")
+Traits <- c("(H|h)abitus","(M|m)outh(\\spart(s)*)*", "(L|l)eg(s)*[0-9\\-\\/]*", #Euaugaptilus magnus #match Legs 4/5, Undinula vulgaris 
+            "(A|a)ntenna(\\s(\\&|\\/)\\s(M|m)andible)*", "(M|m)axillule(\\,|\\/)*\\s*|(M|m)axilla((\\s)*(\\&|\\/)(\\s)*(M|m)axilliped)*") #,Legs 1-3 #Mesocalanus tenuicornis
+            #Antenna/Mandible, Maxillule/Maxilla/Maxilliped, Legs 1-3, Legs 4/5 #Undinula vulgaris
+            
+            
 
 #webCite <- "from the website <a href='https://copepodes.obs-banyuls.fr/en/' target='_blank'>https://copepodes.obs-banyuls.fr/en/</a> managed by Razouls, C., F. de Bovée, J. Kouwenberg, & N. Desreumaux (2015-2017)"
 #options(useFancyQuotes = FALSE)
@@ -173,9 +177,11 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
   if (all(grepl(traitstr, subfx))) {
     chk_traits <- TRUE
     xt <- sapply(subfx, function(x) {
-      gsub("\\s", "\\\\s",
+      gsub("\\s", "\\\\s", gsub("\\,", "\\\\,", gsub("\\-", "\\\\-", gsub("\\/", "\\\\/",
+        gsub("(?:\\/)([a-zA-Z]{1})([a-zA-Z]+)", "/(\\U\\1|\\L\\1)\\2", #make "abc/att/Mtt" -> "abc/(A|a)tt/(M|m)tt"                                                                
+        gsub("(?![a-zA-Z]+)(\\-|\\/)(?![a-zA-Z]+)", "", #to match Figs 113-116, 11/12 to integer, we don't match "-", "/", even in traits
         paste0("(", toupper(substr(x,1,1)), "|", tolower(substr(x,1,1)), ")",
-             substr(x, 2, nchar(x))))
+             substr(x, 2, nchar(x))), perl=T), perl=T)))))
     }, simplify = T, USE.NAMES = F)
     print(paste0("Warning: Use Traits as subfig: ", paste0(xt, collapse=",")))
   }
@@ -198,7 +204,8 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
         iprex <- "Fig."
       }
     }
-    xstr <- gsub("\\sfig\\.", " Fig.", gsub("\\sfigs\\.", " Figs.", gsub("\\splate", " Plate", xstr)))
+    xstr <- gsub("\\sfig\\.", " Fig.", gsub("\\sfigs\\.", " Figs.", 
+            gsub("\\spl\\.", " Pl.", gsub("\\splate", " Plate", xstr))))
     if (any(grepl("Plate|Pl\\.", subfx))) {
       if (grepl("\\sPlate", xstr)) {
         iprex <- "Plate"
@@ -273,7 +280,10 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
     xsubfx <- gsub("(?![A-Z]{1}[a-z]+)(\\s|\\.|\\,)(?:.*)\\.*\\,*\\s*(?=[0-9]{4}$)", "(?:.*)",gsub("\\s*\\,\\s*", ", ", xsubf), perl=T) 
   } else {
     xsubfx <- gsub("\\s*\\,\\s*", ", ", xsubf)
-  } 
+  }
+  if (grepl("(\\s)*et\\sal(\\.)*(\\,)*(\\s)*", xsubf)) {
+    xsubfx <- gsub("(\\s)*et\\sal(\\.)*(\\,)*(\\s)*", "((\\\\s)*et\\\\sal(\\\\.)*(\\\\,)*(\\\\s)*)*", xsubfx)
+  }
     
   #chk_sub <- regexpr(paste0("(?=([A-Z]{1,1}\\.*\\s*){0,1})", xsubf), xstr, perl = T)
   if (length(subfx)>1 & ##20211020 modified: Female/Male subfig comes out in single caption
@@ -283,7 +293,7 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
                   function(x) {regexpr(x, xstr)}, simplify = T, USE.NAMES = F))
   } else if (grepl("^(F|f)emale", xsubfx)) {
     return(regexpr("(F|f)emale", xstr))
-  } else if (grepl("^(M|m)ale", xsubfx)) {
+  } else if (grepl("^(M|m)ale", xsubfx)) { #for subfig like "Ohtsuka et al."
     return(regexpr("(?:(\\s|\\b|\\.|\\;|\\:|\\,)+)(M|m)ale", xstr))
   }
   if (substr(xstr, 1, 3) == substr(iprex, 1, 3) | substr(xstr, 1, nchar(xsubf)) == xsubf) {
@@ -346,7 +356,7 @@ pre_kcnt<- 0L
 keycnt <- 0L
 #docfile <- doclst[1]
 
-for (docfile in doclst[1:27]) {
+for (docfile in doclst[1:31]) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
   ctent <- docx_summary(dc0)
   key_chk_flag <- TRUE ## FALSE: means no key, only figs in this doc by means of 
@@ -430,7 +440,8 @@ for (docfile in doclst[1:27]) {
           #paste0("<em>", substr(x, 1, wl1-1), "</em>", xtx) 
           italics_exclude_wordx(x, "\\((fe)*male\\sunknown\\)\\s*", wl1-1, xtx)
         } else {
-          paste0("<em>", x, "</em>")
+          #paste0("<em>", x, "</em>")
+          italics_exclude_wordx(x, "\\(\\*(?:.*)\\)(\\s|\\,|$)", nchar(x), "")
         }
       }, simplify = T, USE.NAMES = F) %>% paste(collapse=", "), 
     ifelse(!key_chk_flag, paste0(" (<a href=",dQuote(paste0("#fig_",gen_name,"_", gsub("\\s*\\(.*\\)\\s*", "", epi_list))), ">figure</a>)"),""),
@@ -636,8 +647,8 @@ for (docfile in doclst[1:27]) {
               i <- i+1
               next
             } else {
-              print("Too many cutted-line! check it!")
-              break
+              stop("Error: Too many cutted-line! check it!")
+              #break
             } 
           }
           nxtk <- as.integer(gsub("…|\\.","",substr(x2,wl3+1,nchar(x2))))
@@ -1396,7 +1407,8 @@ for (docfile in doclst[1:27]) {
                             iprex <- "Fig."
                           }
                         }
-                        xstr <- gsub("\\sfig\\.", " Fig.", gsub("\\sfigs\\.", " Figs.", gsub("\\splate", " Plate", x)))
+                        xstr <- gsub("\\sfig\\.", " Fig.", gsub("\\sfigs\\.", " Figs.", 
+                                gsub("\\spl\\.", " Pl.", gsub("\\splate", " Plate", x))))
                         
                         if (any(grepl("Plate|Pl\\.", subfx))) {
                           if (grepl("\\sPlate", xstr)) {
@@ -1421,14 +1433,17 @@ for (docfile in doclst[1:27]) {
                           xseg0 <- xseg[1]
                           xseg <- xseg[-1] 
                         }
-                        if (length(xseg[xts1]) == length(xseg[xtc1])) {
+                        if (any(xts1) & any(xtc1) & length(xseg[xts1]) == length(xseg[xtc1])) {
                           xseg[xts1] <- paste0(xseg[xts1], rep('/',length(xseg[xts1])), xseg[xtc1])
-                        } else {
+                        } else if (any(xts1) & any(xtc1) & length(xseg[xts1]) != length(xseg[xtc1])) {
                           stop(paste0("Error: Replace alternative segment content got trouble: ", xsp2, " at i: ", i))
                         }
                       }
                     }
                     if (length(xseg) != length(xc)) {
+                      if (length(xseg) > length(xc)) {
+                        stop(paste0("Error: Detect subfig is integer but NOT equal segemnt! Check this str: ", xstr))
+                      }
                       print(paste0("Warning: Detect subfig is integer but NOT equal segemnt! Check this str: ", xstr))
                     }
                   } #else {
@@ -1446,7 +1461,7 @@ for (docfile in doclst[1:27]) {
                                      gsub("\\s", "_", gsub("Key to the species of\\s|\\s\\(China sea([s]*)\\s*[2]*\\)\\.docx", "", docfn)),
                                      "/word/media/image", doc_fign, ".jpeg")
                     if (!file.exists(imgsrc)) {
-                      print(paste0("Error: Cannot get the the image file: ", imgsrc, "  Check it at i:",  i))
+                      stop(paste0("Error: Cannot get the the image file: ", imgsrc, "  Check it at i:",  i))
                       break 
                     }
                     imgf[imgj+1L] <- paste0(web_img, #padzerox(cntg_fig, 4), "_", ## modified 20210920 that no longer need numbers
@@ -1490,7 +1505,11 @@ for (docfile in doclst[1:27]) {
                     }
                     imgj <- imgj + 1L
                     eachj <-eachj+ 1L
-                  }  
+                  } 
+                  ## only for debug ##############
+                  #if (length(subfig)>0) {
+                  #  if (xsp2 == "Euaugaptilus magnus" & subfig[1]=="Habitus") {stop("Debug Break!")}
+                  #}
                   i <- i + 1L
                   next
                   
@@ -1505,9 +1524,6 @@ for (docfile in doclst[1:27]) {
                   } else {
                     fig_citation[imgj] <- trimx(x)
                   }
-                  ## only for debug ##############
-                  #if (xsp2 == "Metacalanus acutioperculum") {stop("Debug Break!")}
-                  
                   i <- i+1
                   next
                 }
