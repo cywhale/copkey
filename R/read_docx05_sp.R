@@ -15,7 +15,9 @@ Traits <- c("(H|h)abitus","(M|m)outh(\\spart(s)*)*", "(L|l)eg(s)*[0-9\\-\\/]*", 
             "(A|a)ntenna(\\s(\\&|\\/)\\s(M|m)andible)*", "(M|m)axillule(\\,|\\/)*\\s*|(M|m)axilla((\\s)*(\\&|\\/)(\\s)*(M|m)axilliped)*"#, #,Legs 1-3 #Mesocalanus tenuicornis
             #Antenna/Mandible, Maxillule/Maxilla/Maxilliped, Legs 1-3, Legs 4/5 #Undinula vulgaris
             )#"(H|h)abitus(\\((F|f)emale|(M|male)\\))*") #Centropages gracilis 
-            
+Extra_epi <- C("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis")  #Paraeuchaeta          
+Fig_exclude_word <- "\\(F\\,\\s*M\\)|\\(1\\,f\\)" #exclude pattern in title/main: (F,M), (1/f)
+Special_genus <- c("Euaetideus", "Euchirella")
 
 #webCite <- "from the website <a href='https://copepodes.obs-banyuls.fr/en/' target='_blank'>https://copepodes.obs-banyuls.fr/en/</a> managed by Razouls, C., F. de Bovée, J. Kouwenberg, & N. Desreumaux (2015-2017)"
 #options(useFancyQuotes = FALSE)
@@ -34,6 +36,16 @@ padzerox <- function (x, nzero=3) {
   #if (nzero > nchar(xt)) {
     return (paste0(paste0(rep(0, nzero-nchar(xt)), collapse=""), xt))
   #}
+}
+
+read_docx_row <- function (ctentxt, nocheck=FALSE) {
+  x <- gsub("\\\t", "", gsub("\\’", "\'", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctentxt))))))
+  if (nocheck) return(x)
+  
+  tt <- which(is.na(x) | trimx(gsub("Last update(?:.*)|\\.+|\\,+", "", x))=="")
+  if (any(tt)) return("")
+  
+  return(x)  
 }
 
 sp2namex <- function(spname, trim_subgen=TRUE) {
@@ -73,7 +85,7 @@ italics_spname <- function(xstr, spname, genus="") {
   chk_sp3 <- regexpr(gsub("\\s","\\\\s",gsub("\\)","\\\\)",gsub("\\(","\\\\(",xspt))),xstr)
   #chk_gsp <- regexpr(paste0("(A|a)s\\s",xsp1,"(\\s[a-z]{1,}(\\s|\\.))"),xstr) #if detect "As Acartia hongi" substr need +3
   #special genus pattern #"Euaetideus"
-  spe_gen <- c(xsp1, "Euaetideus", "Euchirella")
+  spe_gen <- c(xsp1, Special_genus)
   chk_gsp <- gregexpr(paste0("(", paste(spe_gen, collapse="|"),")(\\s[a-z]{1,}(\\s|\\.))"),xstr)
   chk_abbrev <- gregexpr(paste0(substr(gen_name, 1, 1),"\\.\\s[a-z]{3,}(?!(\\s|\\.|\\(|\\)|\\,|\\:|$))"), xstr, perl = T)
    
@@ -126,6 +138,26 @@ italics_spname <- function(xstr, spname, genus="") {
   }
   str2 <- gsub("<\\/em>\\s<em>", " ", str1)
   return(str2)
+}
+
+italics_wordx <- function (x, skip_word="", subto=nchar(x), append="", include="") {
+  xs1 <- substr(x, 1, subto)
+  xs2 <- ""
+  if (skip_word==""|grepl(skip_word, xs1)) {
+    xst <- trimx(gsub(skip_word, "", xs1))
+    if (nchar(xst) < nchar(xs1)) {
+      xs2 <- substr(xs1, nchar(xst)+1, nchar(xs1))
+    } 
+    if (xs2 !="" & include != "") {
+      xs2 <- gsub(include, "<em>\\1</em>", xs2) #### Note include should be a string like "(aaa|bbb|ccc)"
+      return (paste0("<em>", xst, "</em>", xs2, append))
+    } else if (xs2 =="" & include != "") {
+      xst <- gsub(include, "<em>\\1</em>", xst)
+      return (paste0(xst, append))
+    }
+  } else {
+    return (paste0("<em>", xs1, "</em>", append))
+  }
 }
 
 check_sex_info <- function (x) {
@@ -312,34 +344,6 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
              xsubfx), xstr)) 
 }
 
-read_docx_row <- function (ctentxt) {
-  x <-gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctentxt)))))
-  tt <- which(is.na(x) | x=="")
-  if (any(tt)) return("")
-  
-  return(x)  
-}
-
-italics_exclude_wordx <- function (x, skip_word, subto, append="", include="") {
-  xs1 <- substr(x, 1, subto)
-  xs2 <- ""
-  if (skip_word==""|grepl(skip_word, xs1)) {
-    xst <- trimx(gsub(skip_word, "", xs1))
-    if (nchar(xst) < nchar(xs1)) {
-      xs2 <- substr(xs1, nchar(xst)+1, nchar(xs1))
-    } 
-    if (xs2 !="" & include != "") {
-      xs2 <- gsub(include, "<em>\\1</em>", xs2) #### Note include should be a string like "(aaa|bbb|ccc)"
-      return (paste0("<em>", xst, "</em>", xs2, append))
-    } else if (xs2 =="" & include != "") {
-      xst <- gsub(include, "<em>\\1</em>", xst)
-      return (paste0(xst, append))
-    }
-  } else {
-    return (paste0("<em>", xs1, "</em>", append))
-  }
-}
-
 ###############################################################################################
 #### Used to store figs <-> fig_file mapping
 dfk <- data.table(fidx=integer(), 
@@ -413,7 +417,7 @@ for (docfile in doclst[1:42]) {
     i <- i+1
     xt <- read_docx_row(ctent$text[i])
     if (xt=="") {
-      print(paste0("Error: cannot read epi_list, check format: ", docfile))
+      stop(paste0("Error: cannot read epi_list, check format: ", docfile))
       break
     }
   }
@@ -422,7 +426,8 @@ for (docfile in doclst[1:42]) {
   #20210903 modifed: New version after 0902 add epi_link after epithets i.e. (Acanthoarcartia) bifilosa(35a/40a/f)
   #  so need to detect (?=[^0-9]) not a epi_link
   #epithets list #insert spacing between (subgenus)epithets,epithets
-  epi_list <- trimx(gsub("\\s\\.", ".", gsub("\\s\\,", "\\,", gsub("(?![^\\,\\.])\\s*(?!^\\()(?![a-zA-Z]{1,})\\((?=[^0-9])", ", (",
+  epi_list <- trimx(gsub("\\s\\.", ".", gsub("\\s\\,", "\\,", 
+              gsub("(?![^\\,\\.])\\s*(?!^\\()(?![a-zA-Z]{1,})\\((?=[^0-9])", ", (",
               gsub("(?![a-zA-Z]{1,})\\)(?=[^\\,\\.])", ") ",     
               gsub("(?![a-zA-Z]{1,})\\,", ", ",xt, perl=T), perl=T), perl=T))))
   epithets <- unlist(tstrsplit(gsub("\\(\\*(?:.*)\\)", "", ##(trim remark by *)
@@ -469,13 +474,13 @@ for (docfile in doclst[1:42]) {
             xtx <- xt1
           }
           #paste0("<em>", substr(x, 1, wl1-1), "</em>", xtx) 
-          italics_exclude_wordx(x, "\\((fe)*male\\sunknown\\)\\s*", wl1-1, xtx)
+          italics_wordx(x, "\\((fe)*male\\sunknown\\)\\s*", wl1-1, xtx)
         } else {
           #paste0("<em>", x, "</em>")
-          italics_exclude_wordx(x, "\\(\\*(?:.*)\\)(\\s|\\,|$)", nchar(x), "")
+          italics_wordx(x, "\\(\\*(?:.*)\\)(\\s|\\,|$)", nchar(x), "")
         }
       }, simplify = T, USE.NAMES = F) %>% paste(collapse=", "),
-      italics_exclude_wordx(nota, "", nchar(nota), include=epistr)), 
+      italics_wordx(nota, "", nchar(nota), include=epistr)), 
     ifelse(!key_chk_flag, paste0(" (<a href=",dQuote(paste0("#fig_",gen_name,"_", gsub("\\s*\\(.*\\)\\s*", "", epi_list))), ">figure</a>)"),""),
     "</p></div><br><br><br>\n\n")
     
@@ -511,10 +516,9 @@ for (docfile in doclst[1:42]) {
   xsex_flag <- FALSE #during sex decision key splitting, don't decide sex
   #init_flag <- TRUE #just a flag to initially <div> to replace skipLine+1
   doc_fign<- 0 ## cntg_fig is counter of all fig num in total docs (stored in fig_num), doc_fign just for one doc file
-  fig_exclude <- "\\(F\\,\\s*M\\)|\\(1\\,f\\)" #exclude pattern in title/main: (F,M)
   
   while (i<=tstL) {
-    x <- gsub("\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))
+    x <- read_docx_row(ctent$text[i], nocheck = TRUE)
 
     tt <- which(is.na(x) | x=="")
     if (any(tt)) {
@@ -881,18 +885,17 @@ for (docfile in doclst[1:42]) {
   pre_imgj <- 0L 
   #i <- 195L #just when test first doc file #i<=232L before p.12 #i<=tstL #245L p13 #292L before p19 #351L p25
   while (fig_mode & nrow(dtk)>0 & i<=tstL) {
-    x <- gsub("\\\t", "", gsub("\\’", "\'", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", 
-             gsub("\u00A0{1,}", " ", as.character(ctent$text[i]))))))
+    x <- read_docx_row(ctent$text[i], nocheck = TRUE)
     wa <- regexpr("\\((S|s)ize",x)
     if (wa>0) {
-      spname<- trimx(gsub(fig_exclude, "", substr(x, 1, wa-1)))
+      spname<- trimx(gsub(Fig_exclude_word, "", substr(x, 1, wa-1)))
       sattr <- gsub("\\(Size", "(size", substr(x, wa, nchar(x)))
     } else {
-      spname<- trimx(gsub(fig_exclude, "", x))
+      spname<- trimx(gsub(Fig_exclude_word, "", x))
       sattr <- ""
     }
     
-    fig_main <- trimx(gsub(fig_exclude, "", x)) #changed to full_name + sattr with link to ckey when stored in dtk ctxt
+    fig_main <- trimx(gsub(Fig_exclude_word, "", x)) #changed to full_name + sattr with link to ckey when stored in dtk ctxt
     xsp2 <- sp2namex(spname)
     x_dtk<- which(dtk$taxon==xsp2 & dtk$type==1L)
     
@@ -915,9 +918,9 @@ for (docfile in doclst[1:42]) {
       imgj <- 0L
       if (!with_thesame_sp) pre_imgj <- 0L #20211019 modified fix the same sp but index of fig not added up
       while (within_xsp_flag) {
-        x <- gsub("^\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\u00A0{1,}", " ", as.character(ctent$text[i]))))  
-        tt <- which(is.na(x) | gsub("Last update(?:.*)|\\.+|\\,+", "", x)=="") #ignore Last update:...
-        if (i<tstL & any(tt)) {
+        x <- read_docx_row(ctent$text[i])
+        #tt <- which(is.na(x) | gsub("Last update(?:.*)|\\.+|\\,+", "", x)=="") #ignore Last update:...
+        if (i<tstL & x=="") { #any(tt)) {
           ncflag <- ncflag + 1
           if (ncflag >=31 ) { # excced one page of docx
             print(paste0("Warning: Too many NuLL rows, check it at i: ", i))
@@ -931,24 +934,28 @@ for (docfile in doclst[1:42]) {
           } 
         } else {
           ncflag <- 0L
-          xt <- trimx(gsub("\\\t", "", gsub("\\’", "\'", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))))
-          if (length(subfig)==0 & fig_title=="" & (!is.na(xt) & trimx(gsub(fig_exclude,"",xt)) != spname)) { #(any(subfig=="")) {
+          #xt <- x #trimx(gsub("\\\t", "", gsub("\\’", "\'", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))))
+          if (length(subfig)==0 & fig_title=="" & trimx(gsub(Fig_exclude_word,"",x)) != spname) { #!is.na(xt) &  #(any(subfig=="")) {
+            ### NOT the same read_doc_row ## ONLY trim leading spacing or \\t
+            xss <- gsub("^\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))) 
             subfig <- gsub("\\s*\\,\\s*", ", ", #make Sewell,1914 -> Sewell, 1914 with the same format
-                        trimx(unlist(tstrsplit(x, '\\s{2,}|\\t'), use.names = F))) %>% #note that sometimes pattern has: "a1   b2 & c3", split to "a1" "b2 & c3" 
+                        trimx(unlist(tstrsplit(xss, '\\s{2,}|\\t'), use.names = F))) %>% #note that sometimes pattern has: "a1   b2 & c3", split to "a1" "b2 & c3" 
                       sapply(function(x) {paste0(toupper(substr(x,1,1)), substr(x,2,nchar(x)))}, simplify = T, USE.NAMES = F)
             i <- i + 1L
             next
-          } else if (length(subfig)>0 & fig_title=="" & substr(xt,1,4) %chin% c("Fig.", "Figs")) {
+          } else if (length(subfig)>0 & fig_title=="" & substr(x,1,4) %chin% c("Fig.", "Figs")) {
             ################################### 20211022 modified, for one-more row to input subfig ###
             print(paste0("Note particularily: One-more row to input subfig for sp: ", xsp2, " at i: ", i))
+            xss <- gsub("^\\\t", "", gsub("^\\s+|\\s+$", "", gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))) 
             subft <- gsub("\\s*\\,\\s*", ", ", #make Sewell,1914 -> Sewell, 1914 with the same format
-                           trimx(unlist(tstrsplit(x, '\\s{2,}|\\t'), use.names = F))) %>% #note that sometimes pattern has: "a1   b2 & c3", split to "a1" "b2 & c3" 
+                           trimx(unlist(tstrsplit(xss, '\\s{2,}|\\t'), use.names = F))) %>% #note that sometimes pattern has: "a1   b2 & c3", split to "a1" "b2 & c3" 
               sapply(function(x) {paste0(toupper(substr(x,1,1)), substr(x,2,nchar(x)))}, simplify = T, USE.NAMES = F)
             subfig <- c(subfig, subft)
             i <- i + 1L
             next
-          } else if (!is.na(x) & fig_title=="") {
-            x <- trimx(gsub("\\\t", "", gsub("\\’", "\'", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))))
+          } else if (fig_title=="") { #!is.na(x) &
+            #DONT change x in subfig, or elsewhere, then NO need to read it again! #20211024 modified
+            #x <- trimx(gsub("\\\t", "", gsub("\\’", "\'", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))))
             if (length(subfig)>0) {
               xc <- find_subfigx(x, subfig, 1L, print_info = FALSE)
               if (xc[1]>0) {
@@ -957,34 +964,33 @@ for (docfile in doclst[1:42]) {
                 next #Note i cannot add 1 and let it go to fig_caption detection
               }
             }
-            
-            x <- gsub(fig_exclude, "", x)  
-            if (x!=spname) {
-              print(paste0("Warning: Not equal fig title with spname: ", spname, " check it fig_titile: ", x, "  at i:",  i))
-              tt <- sp2namex(x)
+            xt <- gsub(Fig_exclude_word, "", x) ##DONT change x in subfig, or elsewhere
+            if (xt!=spname) {
+              print(paste0("Warning: Not equal fig title with spname: ", spname, " check it fig_titile: ", xt, "  at i:",  i))
+              tt <- sp2namex(xt)
               if (tt!=xsp2) {
-                print(paste0("Error: Not equal short fig title with taxon, check it fig_title: ", x, "  at i:",  i))
+                print(paste0("Error: Not equal short fig title with taxon, check it fig_title: ", xt, "  at i:",  i))
                 break
               } else {
-                fig_title <- x
+                fig_title <- xt
               }
             } else {
-              fig_title <- x
+              fig_title <- xt
             }
             i <- i + 1L
             next
-          } else {
-            x <- trimx(gsub("\\\t", "", gsub("\\’", "\'", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))))
+          } else { ##DONT change x in subfig, or elsewhere
+            #x <- read_docx_row(ctent$text[i], nocheck = T)  #trimx(gsub("\\\t", "", gsub("\\’", "\'", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))))
             wa <- regexpr("\\((S|s)ize",x)
             xsp1 <- trimx(odbapi::sciname_simplify(x, simplify_one = T))
             if (i>=tstL | (!is.na(x) & (wa>0 | (xsp1==gen_name & imgj>0 & imgj>=length(subfig))))) { #trimx(sp2namex(x)) != xsp2)) {
               if (!is.na(wa) & wa<0) {
-                spt <- trimx(gsub(fig_exclude, "", x))
+                spt <- trimx(gsub(Fig_exclude_word, "", x))
               } else {
                 spt<- trimx(substr(x, 1, wa-1))
               }
               with_thesame_sp_flag <- FALSE
-              if (i>=tstL | (!is.na(x) & (spt != spname | (spt == spname & imgj>0 & imgj>=length(subfig))))) {
+              if (i>=tstL | (spt != spname | (spt == spname & imgj>0 & imgj>=length(subfig)))) { #!is.na(x) &
                 if (i>=tstL) {
                   print(paste0("End of doc: ", docfile))
                 } else if (spt != spname) {
