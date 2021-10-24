@@ -51,7 +51,7 @@
     "node-sass": "5.0.0",
     "optimize-plugin": "^1.0.0",
     "path": "^0.12.7",
-    "preact-cli": "3.3.0",
+    "preact-cli": "3.3.1",
     "preact-render-to-string": "5.1.19",
     "sass-loader": "10.1.1",
     "sirv": "^1.0.7",
@@ -73,14 +73,14 @@
     "xmlhttprequest": "^1.8.0"
   },
   "dependencies": {
-    "@fancyapps/ui": "4.0.5",
+    "@fancyapps/ui": "4.0.7",
     "preact": "10.5.15",
     "preact-router": "^3.2.1",
     "react-draggable": "^4.4.4",
     "react-dropdown-tree-select": "^2.5.1",
-    "react-query": "^3.27.0",
+    "react-query": "3.28.0",
     "react-xarrows": "^2.0.2",
-    "zustand": "3.5.13"
+    "zustand": "3.6.0"
   },
   "jest": {
     "preset": "jest-preset-preact",
