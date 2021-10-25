@@ -1660,7 +1660,8 @@ cat(na.omit(dtk$ctxt), file=paste0(web_dir, "web_tmp.txt"))
 
 ## output source html_txt, fig file
 dtk1 <- copy(dtk)
-dtk1[,ctxt:=gsub("\\.jpg", ".png", gsub("\\\n", "", gsub("\\“|\\”",'\\"', ctxt)))]
+dtk1[,ctxt:=#gsub("\\.jpg", ".png",  #try just use jpg #20211024
+            gsub("\\\n", "", gsub("\\“|\\”",'\\"', ctxt))]
 fwrite(dtk1,file="doc/newsp_htm_extract.csv")
 fwrite(dfk, file="doc/newsp_fig_extract.csv")
 
