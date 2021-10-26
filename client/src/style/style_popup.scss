@@ -3,12 +3,13 @@
   width: auto;
   max-width: 95%;
   height: auto;
-  top: 5%;
+  top: 10%;
   left: 0;
   margin: auto 15px;
   padding-bottom: 10px;
   border-radius: 10px;
   background-color: rgba(20,17,100,0.25);
+  overscroll-behavior: contain;
 }
 .popup_inner {
   left: 2%;

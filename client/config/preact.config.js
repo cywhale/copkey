@@ -11,7 +11,7 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const svgToMiniDataURI = require('mini-svg-data-uri');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-const ShakePlugin = require('webpack-common-shake').Plugin;
+//const ShakePlugin = require('webpack-common-shake').Plugin;
 
 // Q/A here: https://app.slack.com/client/T3NM0NCDC/C3PSVEMM5/thread/C3PSVEMM5-1616340858.005300
 // Workbox configuration options: [maximumFileSizeToCacheInBytes]. This will not have any effect, as it will only modify files that are matched via 'globPatterns'
@@ -227,18 +227,21 @@ const client_other_config = (config, env) => {
           }],
         },
         {
-            test: /\.(png|gif|xml|json)$/, //|svg
+            test: /\.(png|jpe?g|gif|xml|json)$/i, //|svg
             use: [{ loader: 'url-loader',
-                    options: { limit: 30 * 1024 }
+                    options: {
+                      limit: 30 * 1024,
+                      //esModule: false
+                    }
                  }]
         },
-        {
-            test: /\.(jpg|jpeg)$/,
-            use: [{ loader: 'file-loader?name=[path][name].[ext]'}]
-        },
+      /*{
+            test: /\.(jpg|jpeg)$/i,
+            use: [{ loader: 'file-loader'}] //?name=[path][name].[ext]
+        },*/
         {
           test: /\.(jpe?g|png|gif|svg|webp)$/i,
-          type: 'asset',
+          type: 'asset/resource',
         },
         {
             test: /\.(css|scss)$/,
@@ -349,17 +352,17 @@ const baseConfig = (config, env, helpers) => {
       paths: true
     }),
 
-    new ShakePlugin({
-      warnings: {
-        global: true,
-        module: false
-      } /* default */,
+//    new ShakePlugin({
+//      warnings: {
+//        global: true,
+//        module: false
+//      } /* default */,
       /* Invoked on every deleted unused property
       onExportDelete: (resource, property) => {},
       // See `Limitations` section for description
       onModuleBailout: (module, bailouts) => { ... },
       onGlobalBailout: (bailouts) => { ... } */
-    }),
+//    }),
 
     new CopyWebpackPlugin({
       patterns: [
@@ -372,8 +375,8 @@ const baseConfig = (config, env, helpers) => {
 
     new ImageminPlugin({
       cacheFolder: path.resolve(__dirname, 'cache'),
-      test: /\.(jpe?g|png|gif|svg)$/i,
-      jpegtran: { progressive: true, arithmetic: true },
+      test: /\.(png|gif|svg)$/i, //jpe?g
+      //jpegtran: { progressive: true, arithmetic: true },
       optipng: { optimizationLevel: 5 },
       gifsicle: { interlaced: true, optimizationLevel: 3 },
       svgo: {plugins: [{removeViewBox: false}] },

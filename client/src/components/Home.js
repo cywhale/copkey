@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'preact/hooks';
-import { Fragment } from 'preact';
+import { Fragment } from 'preact'; //options
 //import { useQueryClient } from 'react-query'
 import useHelp from './Helper/useHelp';
 import MultiSelectSort from 'async!./MultiSelectSort';
@@ -18,6 +18,7 @@ const Home = () => {
   const searchx = process.env.NODE_ENV === 'production'? 'species/' : 'specieskey/';
   const [appstate, setAppState] = useState({
     loaded: false,
+    //scrollPos: document.documentElement.scrollTop??0,
   });
 
   const [figx, setFigx] = useState({
@@ -31,7 +32,8 @@ const Home = () => {
   //const closeHelp = useHelp(state => state.closeHelp)
   const [hashstate, setHashState] = useState({
     handling: false,
-    scrollTop: false,
+    handlend: true,
+    scrollPos: 0,
     hash: '',
     elem: '', //store hash for scroll to element
   });
@@ -104,7 +106,22 @@ const Home = () => {
 
     fetchingData();
   }, []);
-*/
+
+  const handleTouchMove = (e) => e.preventDeafault();
+  const lockScreen = () => {
+    if (document.body.className.indexOf("noscroll") < 0) {
+      document.body.className += " noscroll";
+      document.body.addEventListener('touchmove', handleTouchMove, false);
+    }
+    console.log("Lock screen: ", document.body.className);
+  }
+  const unlockScreen = () => {
+    if (document.body.className.indexOf("noscroll") >= 0) {
+      document.body.classList.remove("noscroll");
+      document.body.removeEventListener('touchmove', handleTouchMove);
+    }
+    console.log("Unlock screen: ", document.body.className, document.body.classList);
+  }*/
   const clear_uri = () => {
     let uri = window.location.toString();
     let clean_uri = uri.substring(0, uri.indexOf("#"));
@@ -126,11 +143,21 @@ const Home = () => {
 
     clear_uri();
   };
-
+/*const enscroller = () => {
+    setAppState((prev) => ({
+        ...prev,
+        scrollPos: document.documentElement.scrollTop,
+    }))
+  };
+  options.debounceRendering = enscroller => setTimeout(enscroller, 100);
+*/
   useEffect(() => {
 //  prefetchInit();
     if (!appstate.loaded) {
+    //window.addEventListener('scroll', () => enscroller());
       window.addEventListener("hashchange", (e) => {
+        //lockScreen();
+        //window.scroll(0, appstate.scollPos);
         setHashState((prev) => ({
           ...prev,
           hash: window.location.hash,
@@ -160,13 +187,14 @@ const Home = () => {
         setHashState((prev) => ({
           ...prev,
           handling: true,
+          handlend: false,
         }));
       } else if (!hashstate.handling && !search.isLoading) {
         if (hashstate.hash.substring(0,8) == '#search=') {
             setHashState((prev) => ({
               ...prev,
               elem: '',
-              scrollTop: true,
+              scrollPos: 0, //scrollTop: true,
             }));
 
             setSearch((prev) => ({
@@ -181,12 +209,14 @@ const Home = () => {
             setHashState((prev) => ({
               ...prev,
               handling: true,
+              handlend: false,
               elem: hashstate.hash,
-              scrollTop: false,
+              //scrollTop: false,
+              scrollPos: -1, // el.getBoundingClientRect().top + window.pageYOffset
             }));
           } else {
             let parx, ukey, spx;
-            let scrollTop = false;
+            //let scrollTop = false;
             let spt = hashstate.hash.split(/\_/);
             let keyx= hashstate.hash.substring(0,4);
             if (keyx === '#gen' || keyx === "#epi" || keyx === "#key") {
@@ -210,7 +240,8 @@ const Home = () => {
               ...prev,
               //handling: true,
               elem: hashstate.hash,
-              scrollTop: scrollTop,
+              //scrollTop: scrollTop,
+              scrollPos: -1, //-1 means current hash not found, need search (still not know how to scroll)
             }));
 
             setSearch((prev) => ({
@@ -222,16 +253,39 @@ const Home = () => {
           }
         }
       } else if (hashstate.handling) {
-        let el;
-        if (hashstate.elem !== '') { el = document.querySelector(hashstate.elem) }
-        //console.log("Hash change and scroll: ", hashstate.elem, hashstate.scrollTop, el);
-        if (el) {
-          let topPos = hashstate.scrollTop? 0 : el.getBoundingClientRect().top + window.pageYOffset;
+        let el; //, hashx;
+        let to_el = 0;
+        let fig_offset = 0;
+        let to_pos= window.pageYOffset;
+        if (!hashstate.handlend & hashstate.elem !== '') {
+          if (hashstate.scrollPos != 0) {
+            el = document.querySelector(hashstate.elem)
+            if (hashstate.elem.substring(0,5) === "#fig_") {
+              fig_offset = 440; //330 is the height of thumb by imagemagick;// carousel + padding + margin > 400 pixel
+              //hashx = hashstate.elem.split(/\_/);
+              //el = document.querySelector("#figs_" + hashx[1] + '_' + hashx[2]);
+              //console.log("Hash change and prepare scrolling: ", "#figs_" + hashx[1] + '_' + hashx[2], el);
+            } //else {
+              //el = document.querySelector(hashstate.elem)
+            //}
+            to_pos = el.getBoundingClientRect().top + window.pageYOffset - fig_offset;
+          } else {
+            to_pos = 0
+          }
+          //console.log("Now to scroll(before unlock): ", to_pos);
           window.scrollTo({
-            top: topPos, // scroll so that the element is at the top of the view
-            behavior: 'smooth' // smooth scroll
+              top: to_pos, // scroll so that the element is at the top of the view
+              behavior: 'smooth' // smooth scroll
           })
         }
+        //unlockScreen();
+        setHashState((prev) => ({ // otherwise, this elseif may enter multple times, cause wrong scrolling
+            ...prev,
+            handlend: true,
+            scrollPos: to_pos,
+        }));
+        clear_uri();
+
         if (hashstate.elem.substring(0,4) === "#fig") {
           let spx = hashstate.elem.substring(hashstate.elem.indexOf('_')+1);
           let spt = spx.split(/\_/);
@@ -239,8 +293,8 @@ const Home = () => {
             spx = spx + '_01'; //add a number fo species, but we don't validate species yet
           }
           if (spt.length >= 2) {
-            let hstr='<a data-fancybox="gallery" href="/assets/img/species/' + spx + '.png" target="_blank"' +
-                     '><img src="/assets/img/species/' + spx + '.png" border="0" /></a>';
+            let hstr='<a data-fancybox="gallery" href="/assets/img/species/' + spx + '.jpg" target="_blank"' +
+                     '><img src="/assets/img/species/' + spx + '.jpg" border="0" /></a>';
             setFigx((prev) => ({
               ...prev,
               popup: true,
@@ -248,12 +302,11 @@ const Home = () => {
             }));
           }
         }
-        clear_uri();
       } //else {
-        //console.log("Check uncertain state: ", search.isLoading, hashstate);
+         //console.log("Check uncertain state: ", search.isLoading, hashstate);
       //}
     }
-  },[appstate.loaded, hashstate]); //, prefetchInit
+  },[appstate.loaded, hashstate.hash, hashstate.handling]); //, prefetchInit
 
   const render_userhelper = () => {
     if (appstate.loaded && search.init) {

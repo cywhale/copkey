@@ -80,6 +80,8 @@ input[type="submit"] {
 	flex-grow: 1;
 }
 
+.noscroll { overflow: hidden; }
+
 [aria-label] {
   position: relative;
 }
