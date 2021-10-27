@@ -35,7 +35,7 @@
   text-align: center;
 }
 
-.fig_caption, .fig_cite { margin-top: 0.75rem; }
+.fig_capion, .fig_cite { margin-top: 0.75rem; }
 
 .carousel_div {
   display: table;
@@ -55,7 +55,7 @@
   .doc_epithets { width: auto; font-size: 1em;}
 }
 @media screen and (max-width: 540px) {
-  .doc_epithets, .fig_caption { font-size: 0.9em;}
+  .doc_epithets, .fig_capion { font-size: 0.9em;}
   .leader { font-size: 1.1rem; }
   .carousel_div {
     span { 
