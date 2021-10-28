@@ -58,7 +58,7 @@ const UserSearch = (props) => {
                    key: acc.key + (cur["ctxt"].match(/\<div (class=\"kblk|id=\"genus_|id=\"species_)(.*)\/p\>\<\/div\>(\<br\>)*/g)||[''])[0],
                    fig: (acc.fig +(cur["ctxt"].match(/\<div id=\"figs_(.*)\/span\>(\<\/div\>)+(\<br\>)*/g) || [""])[0] + "\\n")
                         .replace(/(\\n)+/g,'\\n') //needed in Copimg.js, and some additional fig append to the same figs_xxx div need separate it with \\n
-                        .replace(/\<\/div\>\<br\>\<br\>\<div class=\"blkfigure/g, '</div><br><br>\\n<div class="blkfigure')
+                        .replace(/\<\/div\>(\<br\>){2,4}\<div class=\"blkfigure/g, '</div><br><br>\\n<div class="blkfigure')
                  })
                }, {key: '', fig: ''})
                  //.replace(/img\//g,'/assets/img/species/').replace(/\.(jpg|jpeg)/g, '.png') //no need in newer version data stored in mongo 20210921

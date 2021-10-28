@@ -10,9 +10,6 @@ const Copimg = (props) => {
 
   const fboxs = ftxt.split(/\\n/).map((fx) => {
     if (fx === '') return null;
-    let fdiv = (fx.match(/\<div id=\"figs_(.*)\"\>\<div class=\"blk/g)||[''])[0]
-                 .replace(/(\<div id=\")|(\"\>\<div class=\"blk)/g, '');
-                 //.replace('fig_', 'figs_');
     let f1 = (fx.match(
       /\<div class=\"fig_title(.*)\/span\>\<\/div\>(\<br\>)*\<span class=\"n/g
     ) || [""])[0];
@@ -61,6 +58,13 @@ const Copimg = (props) => {
           return acc + cur;
       }, "") */
       //.replace(/(border=\"0\" |class=\"fbox\" )/g, '')
+    let fdiv = (fx.match(/\<div id=\"figs_(.*)\"\>\<div class=\"blk/g)||[''])[0]
+                 .replace(/(\<div id=\")|(\"\>\<div class=\"blk)/g, '');
+                 //.replace('fig_', 'figs_');
+    let fdivprops = {class: "fig_carousel"};
+    if (fdiv !== '') {
+      fdivprops = {id: fdiv, ...fdivprops}
+    }
     /*  <Fancybox options={Hash: false, preventCaptionOverlap: true}>
           {parse(fa, { library: require("preact") })}
         </Fancybox>
@@ -75,11 +79,11 @@ const Copimg = (props) => {
 
     return (
       <Fragment>
-        <DDiv ctxt={ftitle} class="fig_title" />
-        <div id={fdiv}>
+        {ftitle!=="" && <DDiv ctxt={ftitle} class="fig_title" />}
+        <div {...fdivprops}>
             <Carousel items={fa} options={copts} />
         </div>
-        <DDiv ctxt={fcap} class="fig_capion" />
+        <DDiv ctxt={fcap} class="fig_caption" />
       </Fragment>
     );
   });
