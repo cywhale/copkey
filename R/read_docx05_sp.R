@@ -17,8 +17,10 @@ Traits <- c("(H|h)abitus","(M|m)outh(\\spart(s)*)*", "(L|l)eg(s)*[0-9\\-\\/]*", 
             )#"(H|h)abitus(\\((F|f)emale|(M|male)\\))*") #Centropages gracilis 
 Extra_epi <- C("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis")  #Paraeuchaeta          
 Fig_exclude_word <- "\\(F\\,\\s*M\\)|\\(1\\,f\\)" #exclude pattern in title/main: (F,M), (1/f)
-Special_genus <- c("Euaetideus", "Euchirella")
-
+Special_genus <- c("Euaetideus", "Euchirella", "Euchaeta", "Forma", "Pachyptilus",
+                   "Euaugaptilus", "Pseudochirella", "")
+Species_groups<- c("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis") #Paraeuchaetas spp.
+Sp_grps_str <- paste0("(",paste0(Species_groups,collapse="|"),")")
 #webCite <- "from the website <a href='https://copepodes.obs-banyuls.fr/en/' target='_blank'>https://copepodes.obs-banyuls.fr/en/</a> managed by Razouls, C., F. de Bovée, J. Kouwenberg, & N. Desreumaux (2015-2017)"
 #options(useFancyQuotes = FALSE)
 # some unicode should be replaced: <U+00A0> by " ", dQuote() by "
@@ -226,7 +228,9 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
     iprext <- "\\*"
     subx <- subfx
   } else {
-    if (grepl("(f|F)igs\\.", subfx[1])) {
+    if (all(grepl("Taf\\.", subfx))) {
+      iprex <- "Taf."
+    } else if (grepl("(f|F)igs\\.", subfx[1])) {
       if (any(grepl("(f|F)ig\\.", subfx))) {
         iprex <- "Fig(s)*."
       } else {
@@ -292,10 +296,11 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
                    gsub('(?![a-zA-Z]+)(\\-|\\/)(?![a-zA-Z]+)', '', xstr, perl=T))},
                    simplify = T, USE.NAMES = F)
       if (!all(xc>0)) {
-        if (print_info) {
+        if (print_info) { ### Note print_info is a special mode that actually exec find_subfig, not only check
           print(paste0("Warning: Detect subfig is integer but not all found: ", 
                        paste(subfx, collapse=","), " and founded: ", paste(xc, collapse=","), 
                        " Check this str: ", xstr))
+          xc <- xc[xc>0]
         }
       }
       return (xc)
@@ -376,7 +381,7 @@ pre_kcnt<- 0L
 keycnt <- 0L
 #docfile <- doclst[1]
 
-for (docfile in doclst[1:42]) {
+for (docfile in doclst[1:43]) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
   ctent <- docx_summary(dc0)
   key_chk_flag <- TRUE ## FALSE: means no key, only figs in this doc by means of 
@@ -670,7 +675,7 @@ for (docfile in doclst[1:42]) {
           pret <- paste0(pret, keystr)
           
         } else {
-          wl3 <- regexpr("(?:(…+\\.*\\s*|\\.{2,}…*\\s*))[0-9]+$",x2)
+          wl3 <- regexpr("(?:(…+\\.*\\s*|\\.{2,}…*\\s*))([0-9]+|\\?)$",x2) #genus Paraeuchaeta has uncertain male key #20211031
           
           if (wl3<0) {
             if (!st_conti_flag) {
@@ -682,14 +687,25 @@ for (docfile in doclst[1:42]) {
               #break
             } 
           }
-          nxtk <- as.integer(gsub("…|\\.","",substr(x2,wl3+1,nchar(x2))))
-          stopifnot(!any(is.na(nxtk)))
+          nxtstr <- gsub("…|\\.","",substr(x2,wl3+1,nchar(x2)))
+          if (nxtstr == "?") {
+            nxtk <- NA_integer_
+            print(paste0("Warning: Nxtk is ? at i: ", i, " when key: ", keyx, " for genus: ", gen_name))
+          } else {
+            nxtk <- as.integer(nxtstr)
+            stopifnot(!any(is.na(nxtk)))
+          }
           nxttype <- 0L
+          nxtlink<-ifelse(is.na(nxtk), #if is.na(nxtk), stop at current key
+                          paste0('<a href=', dQuote(paste0('#key_', gen_name, "_", keyx)), '>', '?','</a>'),
+                          paste0('<a href=', dQuote(paste0('#key_', gen_name, "_", nxtk,'a')), '>', nxtk,'</a>'))
           if (keystr=="") { #no subgen, so no keystr fetched
             keystr <- trimx(gsub("\\.\\s*$", "", gsub("…|\\.{2,}", "", substr(x2, 1, wl3))))
             pret <- paste0(pret, keystr)
           }
         }
+        #20211031 add a function to italic species groups
+        pret <- italics_wordx(pret, include=Sp_grps_str) 
         
         if (nxttype==1L) {
           if (!is.na(xsex) & xsex %chin% c("female", "male")) {
@@ -702,7 +718,7 @@ for (docfile in doclst[1:42]) {
                        paste0('<mark id=',  dQuote(marksp), 
                               '><em><a href=', dQuote(paste0('#figs_', gsub("\\s","_", xsp))), '>', xsp, '</a></em></mark></span></p>'))
           
-        } else if (subgen!="" | nxtk!=0L) {
+        } else if (subgen!="" | is.na(nxtk) | nxtk!=0L) { #20211031 add nxtk_str=? #Paraeuchaeta
           if (grepl("\\,", subgen)) { #with multiple subgenus
             subgx <- trimx(unlist(tstrsplit(subgen, ","), use.names = F))
             subgen<- paste(subgx, collapse=", ") #to make format consistently
@@ -714,7 +730,8 @@ for (docfile in doclst[1:42]) {
               paste0('(', xc0, ')'),
               #using markdown
               #paste0('[', nxtk, '](#key_', gen_name, "_", nxtk,'a)'), 
-              paste0('<a href=', dQuote(paste0('#key_', gen_name, "_", nxtk,'a')), '>', nxtk,'</a>'), 
+              #paste0('<a href=', dQuote(paste0('#key_', gen_name, "_", nxtk,'a')), '>', nxtk, '</a>'), 
+              nxtlink, #20211031 modified for nxtk can be ?
               '</span></p>')
           } else {
             xc <- paste0(#gsub("…|\\.{2,}|…\\.{1,}|\\.{1,}…","",
@@ -723,7 +740,8 @@ for (docfile in doclst[1:42]) {
               ifelse(subgen=="", "", paste0('<mark id=',dQuote(paste0('subgen_', subgen)),'>(<em>', subgen, '</em>)</mark>')),
               #using markdown
               #paste0('[', nxtk, '](#key_', gen_name, "_", nxtk,'a)'),
-              paste0('<a href=', dQuote(paste0('#key_', gen_name, "_", nxtk,'a')), '>', nxtk,'</a>'), 
+              #paste0('<a href=', dQuote(paste0('#key_', gen_name, "_", nxtk,'a')), '>', nxtk,'</a>'), 
+              nxtlink, #20211031 modified for nxtk can be ?
               '</span></p>')
           }
         } else {
@@ -746,12 +764,12 @@ for (docfile in doclst[1:42]) {
       }
 
       if (substr(keystr,1,6)=="Female") {
-        female_start <- nxtk
+        female_start <- ifelse(is.na(nxtk), 999, nxtk) #for a very large nxtk, so that it never achieve
         xsex_flag <- TRUE
         print(paste0("Note: Female key after: ", nxtk, " of genus: ", gen_name, " at i: ", i))
       }
       if (substr(keystr,1,4)=="Male") {
-        male_start <- nxtk
+        male_start <- ifelse(is.na(nxtk), 999, nxtk) #for a very large nxtk, so that it never achieve
         xsex_flag <- TRUE
         print(paste0("Note: Male key after: ", nxtk, " of genus: ", gen_name, " at i: ", i))
       }
@@ -873,7 +891,7 @@ for (docfile in doclst[1:42]) {
     print(paste0("Checking fig_mode: ", fig_mode))
     chkt <- dtk[!is.na(taxon) & type==1L, .(taxon, sex, type)]
     if (any(duplicated(chkt))) {
-      stop(paste0("Error: Duplicated taxon, sex. Check it: ", 
+      print(paste0("!!Warning!! Check may be Error: Duplicated taxon, sex. Check it: ", 
                    paste0(chkt[duplicated(chkt),]$taxon, collapse=", "),
                    " of genus: ", gen_name))
     }
@@ -1076,7 +1094,9 @@ for (docfile in doclst[1:42]) {
                 }
                 
                 if (any(x_dtk)) {
-                  if (!any("female/male" %chin% dtk[x_dtk,]$sex)) {
+                  if (!any("female/male" %chin% dtk[x_dtk,]$sex) &&
+                      "female" %chin% dtk[x_dtk,]$sex &&
+                      "male" %chin% dtk[x_dtk,]$sex) {
                     key_sex <- rbindlist(list(dtk[x_dtk, .(ckey, sex, kcnt)],
                                               data.table(ckey=paste(dtk[x_dtk,]$ckey, collapse = ","),
                                                          sex="female/male",
@@ -1090,8 +1110,8 @@ for (docfile in doclst[1:42]) {
                 malekey <- ""; femalekey <- ""
                 if (nrow(key_sex)) {
                   if (key_chk_flag) {
-                    malekey <- ifelse("male" %chin% key_sex$sex, key_sex[sex=="male",]$ckey, key_sex[sex=="female/male",]$ckey)
-                    femalekey <- ifelse("female" %chin% key_sex$sex, key_sex[sex=="female",]$ckey, key_sex[sex=="female/male",]$ckey)
+                    malekey <- ifelse("male" %chin% key_sex$sex, key_sex[sex=="male",]$ckey[1], key_sex[sex=="female/male",]$ckey[1])
+                    femalekey <- ifelse("female" %chin% key_sex$sex, key_sex[sex=="female",]$ckey[1], key_sex[sex=="female/male",]$ckey[1])
                   } 
                   ktt <- chmatch(fsex, key_sex$sex)
                   if (all(is.na(ktt))) {
@@ -1165,14 +1185,14 @@ for (docfile in doclst[1:42]) {
                     fig_main = paste0(full_name, " ", sattr)
                     fig_mtxt = paste0(full_name, " ",
                                       gsub("(\\;\\s*|\\s)(M|m)ale\\:*\\,*\\s*", 
-                                           ifelse(malekey=="", "; male, ", paste0("; <a href=", dQuote(paste0("#key_",gen_name,"_",malekey)), ">male</a>, ")), 
-                                           gsub("\\s*(F|f)emale\\:*\\,*\\s*", 
-                                                ifelse(femalekey=="", " female, ", paste0(" <a href=", dQuote(paste0("#key_",gen_name,"_",femalekey)), ">female</a>, ")), sattr)))
+                                        ifelse(is.na(malekey) || malekey=="", "; male, ", paste0("; <a href=", dQuote(paste0("#key_",gen_name,"_",malekey)), ">male</a>, ")), 
+                                        gsub("\\s*(F|f)emale\\:*\\,*\\s*", 
+                                          ifelse(is.na(femalekey) || femalekey=="", " female, ", paste0(" <a href=", dQuote(paste0("#key_",gen_name,"_",femalekey)), ">female</a>, ")), sattr)))
                   } else {
                     fig_main = full_name
                     fig_mtxt = paste0(full_name,
-                                      ifelse(femalekey=="", "", paste0(" (<a href=", dQuote(paste0("#key_",gen_name,"_",femalekey)), ">female</a>", ifelse(malekey=="", ")", "; "))),
-                                      ifelse(malekey=="", "", paste0(ifelse(femalekey==""," (", ""), "<a href=", dQuote(paste0("#key_",gen_name,"_",malekey)), ">male</a>)"))) 
+                                      ifelse(is.na(femalekey) || femalekey=="", "", paste0(" (<a href=", dQuote(paste0("#key_",gen_name,"_",femalekey)), ">female</a>", ifelse(is.na(malekey) || malekey=="", ")", "; "))),
+                                      ifelse(is.na(malekey) || malekey=="", "", paste0(ifelse(is.na(femalekey) || femalekey==""," (", ""), "<a href=", dQuote(paste0("#key_",gen_name,"_",malekey)), ">male</a>)"))) 
                   }
                 }
                 
@@ -1433,7 +1453,9 @@ for (docfile in doclst[1:42]) {
                           xseg <- xseg[-1] 
                         }
                       } else {
-                        if (grepl("(f|F)igs\\.", subfx[1])) {
+                        if (all(grepl("Taf\\.", subfx))) {
+                          iprex <- "Taf."
+                        } else if (grepl("(f|F)igs\\.", subfx[1])) {
                           if (any(grepl("(f|F)ig\\.", subfx))) {
                             iprex <- "Fig(s)*."
                           } else {
