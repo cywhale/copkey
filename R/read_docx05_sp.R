@@ -18,7 +18,7 @@ Traits <- c("(H|h)abitus","(M|m)outh(\\spart(s)*)*", "(L|l)eg(s)*[0-9\\-\\/]*", 
 Extra_epi <- C("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis")  #Paraeuchaeta          
 Fig_exclude_word <- "\\(F\\,\\s*M\\)|\\(1\\,f\\)" #exclude pattern in title/main: (F,M), (1/f)
 Special_genus <- c("Euaetideus", "Euchirella", "Euchaeta", "Forma", "Pachyptilus",
-                   "Euaugaptilus", "Pseudochirella", "")
+                   "Euaugaptilus", "Pseudochirella")
 Species_groups<- c("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis") #Paraeuchaetas spp.
 Sp_grps_str <- paste0("(",paste0(Species_groups,collapse="|"),")")
 #webCite <- "from the website <a href='https://copepodes.obs-banyuls.fr/en/' target='_blank'>https://copepodes.obs-banyuls.fr/en/</a> managed by Razouls, C., F. de Bovée, J. Kouwenberg, & N. Desreumaux (2015-2017)"
@@ -1107,7 +1107,7 @@ for (docfile in doclst[1:43]) {
                 } else {
                   key_sex <- data.table()
                 }
-                malekey <- ""; femalekey <- ""
+                malekey <- ""; femalekey <- ""; keymat <- c()
                 if (nrow(key_sex)) {
                   if (key_chk_flag) {
                     malekey <- ifelse("male" %chin% key_sex$sex, key_sex[sex=="male",]$ckey[1], key_sex[sex=="female/male",]$ckey[1])
@@ -1644,11 +1644,19 @@ for (docfile in doclst[1:43]) {
         #if (any(!kt %in% kinc)) {
         #  stop("Check pagination when k not in kinc!!")
         #}
+        kinc <- kinc[!kinc %in% kt]
+        if (p==pgx & length(kinc)!=0) {
+          kt1 <- which(dtk$kcnt %in% kinc & grepl("\\_xx\\_", dtk$unikey)) #& dtk$genus==gen_name
+          #kt1 <- kt1[kt1 %in% kinc]
+          if (any(kt1)) {
+            kt <- c(kt, kt1)
+            kinc <- kinc[!kinc %in% kt1]
+          }
+        }
         if (p>1) { #when p==1 no need to change dtk, dfk because they already set-up to this page
           dtk[kcnt>=pre_start & kcnt %in% kt, page:=page_cnt+p-1]
           dfk[kcnt>=pre_start & kcnt %in% kt, page:=page_cnt+p-1]
         }
-        kinc <- kinc[!kinc %in% kt]
         if (p<pgx) { pre_start <- pre_start+pg_len }
       }
       if (length(kinc)!=0) {
