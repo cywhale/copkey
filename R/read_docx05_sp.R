@@ -19,7 +19,9 @@ Extra_epi <- C("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis")  
 Fig_exclude_word <- "\\(F\\,\\s*M\\)|\\(1\\,f\\)" #exclude pattern in title/main: (F,M), (1/f)
 Special_genus <- c("Euaetideus", "Euchirella", "Euchaeta", "Forma", "Pachyptilus",
                    "Euaugaptilus", "Pseudochirella")
-Species_groups<- c("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis") #Paraeuchaetas spp.
+Species_groups<- c("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis", #Paraeuchaetas spp.
+                   "spinifrons", "papilliger", "fistulosus", "abyssalis" #Heterorhabdus spp. 
+                   )
 Sp_grps_str <- paste0("(",paste0(Species_groups,collapse="|"),")")
 #webCite <- "from the website <a href='https://copepodes.obs-banyuls.fr/en/' target='_blank'>https://copepodes.obs-banyuls.fr/en/</a> managed by Razouls, C., F. de Bovée, J. Kouwenberg, & N. Desreumaux (2015-2017)"
 #options(useFancyQuotes = FALSE)
@@ -381,7 +383,7 @@ pre_kcnt<- 0L
 keycnt <- 0L
 #docfile <- doclst[1]
 
-for (docfile in doclst[1:43]) {
+for (docfile in doclst[1:50]) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
   ctent <- docx_summary(dc0)
   key_chk_flag <- TRUE ## FALSE: means no key, only figs in this doc by means of 
@@ -987,7 +989,7 @@ for (docfile in doclst[1:43]) {
               print(paste0("Warning: Not equal fig title with spname: ", spname, " check it fig_titile: ", xt, "  at i:",  i))
               tt <- sp2namex(xt)
               if (tt!=xsp2) {
-                print(paste0("Error: Not equal short fig title with taxon, check it fig_title: ", xt, "  at i:",  i))
+                stop(paste0("Error: Not equal short fig title with taxon, check it fig_title: ", xt, "  at i:",  i))
                 break
               } else {
                 fig_title <- xt
@@ -1684,8 +1686,10 @@ which(duplicated(dtk$unikey) | duplicated(dtk$unikey, fromLast = T))
 which(duplicated(dfk$fidx) | duplicated(dfk$fidx, fromLast = T))
 
 # check caption
-# tt <- dfk[,.(taxon, fidx, subfig, fsex, caption)][, cap:=substr(dfk$caption,1,20)][, caption:=NULL]
+tt <- dfk[,.(taxon, fidx, subfig, fsex, caption)][, cap:=substr(dfk$caption,1,20)][, caption:=NULL]
 # tt[(nrow(tt)-50):nrow(tt),]
+tt1 <- unique(dtk$unikey)
+tt1[grepl("xx",tt1)]
 cat(na.omit(dtk$ctxt), file=paste0(web_dir, "web_tmp.txt"))
 
 ## output source html_txt, fig file

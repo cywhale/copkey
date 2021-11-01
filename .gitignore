@@ -92,3 +92,5 @@ static/cmd/font*/
 **/web_tmp.txt
 .Rproj.user
 client/src/template.html
+doc/newsp_htm_extract.csv
+doc/newsp_fig_extract.csv
