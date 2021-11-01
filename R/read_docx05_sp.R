@@ -12,13 +12,13 @@ doc_imgdir <- "doc/sp_key_zip/"
 #skipLine <- 4L
 page_length_def <- 30L
 Traits <- c("(H|h)abitus","(M|m)outh(\\spart(s)*)*", "(L|l)eg(s)*[0-9\\-\\/]*", #Euaugaptilus magnus #match Legs 4/5, Undinula vulgaris 
-            "(A|a)ntenna(\\s(\\&|\\/)\\s(M|m)andible)*", "(M|m)axillule(\\,|\\/)*\\s*|(M|m)axilla((\\s)*(\\&|\\/)(\\s)*(M|m)axilliped)*"#, #,Legs 1-3 #Mesocalanus tenuicornis
+            "(A|a)ntenna(\\s(\\&|\\/)\\s(M|m)andible)*", "(M|m)axillule(\\,|\\/)*\\s*|(M|m)axilla((\\s)*(\\&|\\/)(\\s)*(M|m)axilliped)*", #,Legs 1-3 #Mesocalanus tenuicornis
             #Antenna/Mandible, Maxillule/Maxilla/Maxilliped, Legs 1-3, Legs 4/5 #Undinula vulgaris
-            )#"(H|h)abitus(\\((F|f)emale|(M|male)\\))*") #Centropages gracilis 
+            "(H|h)abitus(\\((F|f)emale|(M|male)\\))*") #Nullosetigera auctiseta #Centropages gracilis 
 Extra_epi <- C("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis")  #Paraeuchaeta          
 Fig_exclude_word <- "\\(F\\,\\s*M\\)|\\(1\\,f\\)" #exclude pattern in title/main: (F,M), (1/f)
 Special_genus <- c("Euaetideus", "Euchirella", "Euchaeta", "Forma", "Pachyptilus",
-                   "Euaugaptilus", "Pseudochirella")
+                   "Euaugaptilus", "Pseudochirella", "Phyllopus")
 Species_groups<- c("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis", #Paraeuchaetas spp.
                    "spinifrons", "papilliger", "fistulosus", "abyssalis" #Heterorhabdus spp. 
                    )
@@ -279,7 +279,7 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
                            gsub("\\-", "", #20211017 to handle Figs. 79-92 subfig, make it to match 7992
                            gsub(iprext, "", xsubf))), perl=T))) ## some subfig with: 1 (John, 1999. plate 24)
   }
-  if (!is.na(xt) | chk_abc_flag | chk_traits) {
+  if (!is.na(xt[1]) | chk_abc_flag | chk_traits) {
     if (!chk_abc_flag & !chk_traits) {
       xt <- as.integer(trimx(gsub("(?![0-9]+)[a-z]*", "", 
                              gsub("\\s*\\((?:.*)\\)", "",
@@ -383,7 +383,7 @@ pre_kcnt<- 0L
 keycnt <- 0L
 #docfile <- doclst[1]
 
-for (docfile in doclst[1:50]) {
+for (docfile in doclst[1:53]) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
   ctent <- docx_summary(dc0)
   key_chk_flag <- TRUE ## FALSE: means no key, only figs in this doc by means of 
