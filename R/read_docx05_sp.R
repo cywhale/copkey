@@ -18,7 +18,8 @@ Traits <- c("(H|h)abitus","(M|m)outh(\\spart(s)*)*", "(L|l)eg(s)*[0-9\\-\\/]*", 
 Extra_epi <- C("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis")  #Paraeuchaeta          
 Fig_exclude_word <- "\\(F\\,\\s*M\\)|\\(1\\,f\\)" #exclude pattern in title/main: (F,M), (1/f)
 Special_genus <- c("Euaetideus", "Euchirella", "Euchaeta", "Forma", "Pachyptilus",
-                   "Euaugaptilus", "Pseudochirella", "Phyllopus")
+                   "Euaugaptilus", "Pseudochirella", "Phyllopus", "Paracalanus",
+                   "Acrocalanus")
 Species_groups<- c("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis", #Paraeuchaetas spp.
                    "spinifrons", "papilliger", "fistulosus", "abyssalis" #Heterorhabdus spp. 
                    )
@@ -383,7 +384,7 @@ pre_kcnt<- 0L
 keycnt <- 0L
 #docfile <- doclst[1]
 
-for (docfile in doclst[1:53]) {
+for (docfile in doclst[1:55]) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
   ctent <- docx_summary(dc0)
   key_chk_flag <- TRUE ## FALSE: means no key, only figs in this doc by means of 
@@ -895,7 +896,7 @@ for (docfile in doclst[1:53]) {
     if (any(duplicated(chkt))) {
       print(paste0("!!Warning!! Check may be Error: Duplicated taxon, sex. Check it: ", 
                    paste0(chkt[duplicated(chkt),]$taxon, collapse=", "),
-                   " of genus: ", gen_name))
+                   " after importing genus: ", gen_name))
     }
   } else {
     print(paste0("No key mode, and check fig_mode: ", fig_mode))
