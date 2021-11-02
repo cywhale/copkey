@@ -15,6 +15,7 @@ Traits <- c("(H|h)abitus","(M|m)outh(\\spart(s)*)*", "(L|l)eg(s)*[0-9\\-\\/]*", 
             "(A|a)ntenna(\\s(\\&|\\/)\\s(M|m)andible)*", "(M|m)axillule(\\,|\\/)*\\s*|(M|m)axilla((\\s)*(\\&|\\/)(\\s)*(M|m)axilliped)*", #,Legs 1-3 #Mesocalanus tenuicornis
             #Antenna/Mandible, Maxillule/Maxilla/Maxilliped, Legs 1-3, Legs 4/5 #Undinula vulgaris
             "(H|h)abitus(\\((F|f)emale|(M|male)\\))*") #Nullosetigera auctiseta #Centropages gracilis 
+traitstr <- paste0("(",paste0(Traits, collapse="|"), ")")
 Extra_epi <- C("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis")  #Paraeuchaeta          
 Fig_exclude_word <- "\\(F\\,\\s*M\\)|\\(1\\,f\\)" #exclude pattern in title/main: (F,M), (1/f)
 Special_genus <- c("Euaetideus", "Euchirella", "Euchaeta", "Forma", "Pachyptilus",
@@ -210,7 +211,7 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
   chk_abc_flag <- FALSE
   chk_traits <- FALSE
   xt <- NA
-  traitstr <- paste0("(",paste0(Traits, collapse="|"), ")")
+  #traitstr <- paste0("(",paste0(Traits, collapse="|"), ")")
   if (all(grepl(traitstr, subfx))) { #| #Tried to modify it to match both Female/Male with Traits, But temporarily not do it #Centropages gracilis
       ################################ Because we may lost Female/Male info, which would only in 1st xseg ###     
       #(any(grepl(traitstr, subfx)) & all(grepl("^(F|f)emale|^(M|m)ale", subfx[!grepl(traitstr, subfx)])))) {
@@ -291,7 +292,7 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
       xt <- xt[!is.na(xt)]
     }
     if (length(xt)>0 & all(!is.na(xt))) {
-      if (print_info) print(paste0("Note: Detect integer: ", xsubf,", use ", iprex, ": ", paste(subx, collapse=",")))
+      if (print_info) print(paste0("Note: Detect muti-subfigures: ", xsubf,", use ", ifelse(chk_abc_flag | chk_traits, "", iprex), " ", paste(subx, collapse=",")))
       xc <- sapply(xt, function(x) {regexpr(
               ifelse(chk_traits, x,
                 ifelse(chk_abc_flag, paste0(x, "\\."), #20211020 handle A, B, C subfig and check A., B., C. in xstr 
@@ -300,7 +301,7 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
                    simplify = T, USE.NAMES = F)
       if (!all(xc>0)) {
         if (print_info) { ### Note print_info is a special mode that actually exec find_subfig, not only check
-          print(paste0("Warning: Detect subfig is integer but not all found: ", 
+          print(paste0("Warning: Detect multi subfigs but not all found: ", 
                        paste(subfx, collapse=","), " and founded: ", paste(xc, collapse=","), 
                        " Check this str: ", xstr))
           xc <- xc[xc>0]
@@ -384,7 +385,7 @@ pre_kcnt<- 0L
 keycnt <- 0L
 #docfile <- doclst[1]
 
-for (docfile in doclst[1:55]) {
+for (docfile in doclst[1:66]) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
   ctent <- docx_summary(dc0)
   key_chk_flag <- TRUE ## FALSE: means no key, only figs in this doc by means of 
@@ -1403,15 +1404,23 @@ for (docfile in doclst[1:55]) {
                     }
                   }
                   if (length(xc)>1 & k>(imgj+1)) {
-                    traitstr <- paste0("(",paste0(Traits, collapse="|"), ")")
+                    #traitstr <- paste0("(",paste0(Traits, collapse="|"), ")")
                     if (all(grepl(traitstr, subfx))) {
                       #chk_traits <- TRUE
                       print(paste0("Note particularily: Use Traits in taxon: ", xsp2, " at i: ", i))
                       
+                      #xt <- sapply(subfx, function(x) {
+                      #  gsub("\\s", "\\\\s",
+                      #       paste0("(", toupper(substr(x,1,1)), "|", tolower(substr(x,1,1)), ")",
+                      #              substr(x, 2, nchar(x))))
+                      #}, simplify = T, USE.NAMES = F)
                       xt <- sapply(subfx, function(x) {
-                        gsub("\\s", "\\\\s",
-                             paste0("(", toupper(substr(x,1,1)), "|", tolower(substr(x,1,1)), ")",
-                                    substr(x, 2, nchar(x))))
+                        #gsub("\\(M\\|m\\)ale", "(?:(\\\\s|\\\\b|\\\\.|\\\\;|\\\\:|\\\\,)+)(M|m)ale",
+                        gsub("\\s", "\\\\s", gsub("\\,", "\\\\,", gsub("\\-", "\\\\-", gsub("\\/", "\\\\/",
+                        gsub("(?:\\/)([a-zA-Z]{1})([a-zA-Z]+)", "/(\\U\\1|\\L\\1)\\2", #make "abc/att/Mtt" -> "abc/(A|a)tt/(M|m)tt"                                                                
+                        #gsub("(?![a-zA-Z]+)(\\-|\\/)(?![a-zA-Z]+)", "", #to match Figs 113-116, 11/12 to integer, we don't match "-", "/", even in traits
+                          paste0("(", toupper(substr(x,1,1)), "|", tolower(substr(x,1,1)), ")",
+                                 substr(x, 2, nchar(x))), perl=T), perl=T))))
                       }, simplify = T, USE.NAMES = F)
                       xseg <- trimx(unlist(tstrsplit(x, 
                                              paste0("(", paste0(xt, collapse="|"), ")")), 
@@ -1433,8 +1442,9 @@ for (docfile in doclst[1:55]) {
                         xseg <- xseg[-1]
                       }
                     } else if (all(grepl("^(Female|Male)",subfx))) {
-                      xseg <- trimx(unlist(tstrsplit(x, 
-                                                     paste0("(", paste0(c("(F|f)emale", "(?:(\\s|\\b|\\.|\\;|\\:|\\,)+)(M|m)ale"), collapse="|"), ")")), 
+                      xseg <- trimx(unlist(tstrsplit(x, #20211102 not match female/male at end of sentence: e.g. Scales: same as for female. #Labidocera detruncata
+                                                     paste0("(", paste0(c("(F|f)emale(?!\\.*$)", "(?:(\\s|\\b|\\.|\\;|\\:|\\,)+)(M|m)ale(?!\\.*$)"), collapse="|"), ")"),
+                                                     perl=T), 
                                            use.names = F))
                       if (substr(x,1,6) != "Female" & substr(x,1,4) != "Male") {
                         xseg0 <- xseg[1]
