@@ -20,7 +20,7 @@ Extra_epi <- C("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis")  
 Fig_exclude_word <- "\\(F\\,\\s*M\\)|\\(1\\,f\\)" #exclude pattern in title/main: (F,M), (1/f)
 Special_genus <- c("Euaetideus", "Euchirella", "Euchaeta", "Forma", "Pachyptilus",
                    "Euaugaptilus", "Pseudochirella", "Phyllopus", "Paracalanus",
-                   "Acrocalanus")
+                   "Acrocalanus", "Schmackeria")
 Species_groups<- c("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis", #Paraeuchaetas spp.
                    "spinifrons", "papilliger", "fistulosus", "abyssalis" #Heterorhabdus spp. 
                    )
@@ -69,11 +69,33 @@ sp2namex <- function(spname, trim_subgen=TRUE) {
   return(xsp2)
 }
 
+italics_wordx <- function (x, skip_word="", subto=nchar(x), append="", include="") {
+  xs1 <- substr(x, 1, subto)
+  xs2 <- ""
+  if (skip_word==""|grepl(skip_word, xs1)) {
+    xst <- trimx(gsub(skip_word, "", xs1))
+    if (nchar(xst) < nchar(xs1)) {
+      xs2 <- substr(xs1, nchar(xst)+1, nchar(xs1))
+    } 
+    if (xs2 !="" & include != "") {
+      xs2 <- gsub(include, "<em>\\1</em>", xs2) #### Note include should be a string like "(aaa|bbb|ccc)"
+      return (paste0("<em>", xst, "</em>", xs2, append))
+    } else if (xs2 =="" & include != "") {
+      xst <- gsub(include, "<em>\\1</em>", xst)
+      return (paste0(xst, append))
+    }
+  } else {
+    return (paste0("<em>", xs1, "</em>", append))
+  }
+}
+
 italics_spname <- function(xstr, spname, genus="") {
   if (is.na(spname) | trimx(spname)=="") return (xstr)
   xsp2 <- sp2namex(spname)
   xspt <- sp2namex(spname, trim_subgen=FALSE)
   xsp1 <- odbapi::sciname_simplify(spname, simplify_one = T) #get a old alternative spname in caption
+  spe_gen <- unique(c(xsp1, Special_genus))
+  
   if (is.na(genus) | genus=="") {
     genus <- xsp1
   }
@@ -83,7 +105,10 @@ italics_spname <- function(xstr, spname, genus="") {
   }
   
   if (only_genus_flag) {
-    return (gsub(genus, paste0("<em>",genus,"</em>"),xstr))
+    return ( #gsub(genus, paste0("<em>",genus,"</em>"),xstr))
+      # for adding notation after titletxt #Pseudodiaptomus 
+      italics_wordx(xstr, include= paste0("(",paste0(spe_gen, collapse="|"),")"))
+    )
   }
   
   chk_sp1 <- regexpr(gsub("\\s","\\\\s",gsub("\\)","\\\\)",gsub("\\(","\\\\(",spname))),xstr)
@@ -91,7 +116,6 @@ italics_spname <- function(xstr, spname, genus="") {
   chk_sp3 <- regexpr(gsub("\\s","\\\\s",gsub("\\)","\\\\)",gsub("\\(","\\\\(",xspt))),xstr)
   #chk_gsp <- regexpr(paste0("(A|a)s\\s",xsp1,"(\\s[a-z]{1,}(\\s|\\.))"),xstr) #if detect "As Acartia hongi" substr need +3
   #special genus pattern #"Euaetideus"
-  spe_gen <- c(xsp1, Special_genus)
   chk_gsp <- gregexpr(paste0("(", paste(spe_gen, collapse="|"),")(\\s[a-z]{1,}(\\s|\\.))"),xstr)
   chk_abbrev <- gregexpr(paste0(substr(gen_name, 1, 1),"\\.\\s[a-z]{3,}(?!(\\s|\\.|\\(|\\)|\\,|\\:|$))"), xstr, perl = T)
    
@@ -146,26 +170,6 @@ italics_spname <- function(xstr, spname, genus="") {
   return(str2)
 }
 
-italics_wordx <- function (x, skip_word="", subto=nchar(x), append="", include="") {
-  xs1 <- substr(x, 1, subto)
-  xs2 <- ""
-  if (skip_word==""|grepl(skip_word, xs1)) {
-    xst <- trimx(gsub(skip_word, "", xs1))
-    if (nchar(xst) < nchar(xs1)) {
-      xs2 <- substr(xs1, nchar(xst)+1, nchar(xs1))
-    } 
-    if (xs2 !="" & include != "") {
-      xs2 <- gsub(include, "<em>\\1</em>", xs2) #### Note include should be a string like "(aaa|bbb|ccc)"
-      return (paste0("<em>", xst, "</em>", xs2, append))
-    } else if (xs2 =="" & include != "") {
-      xst <- gsub(include, "<em>\\1</em>", xst)
-      return (paste0(xst, append))
-    }
-  } else {
-    return (paste0("<em>", xs1, "</em>", append))
-  }
-}
-
 check_sex_info <- function (x) {
   if (grepl("((?:(\\s|\\b|\\.|\\;|\\:|\\,)+)(M|m)ale)|(^(M|m)ale)", x)) {
     if (grepl("(F|f)emale", x)) {
@@ -210,13 +214,23 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
   subfx <- trimx(gsub("\\((?:.*)\\)", "", subfig[idx:length(subfig)]))
   chk_abc_flag <- FALSE
   chk_traits <- FALSE
+  length_traits <- 0L
   xt <- NA
   #traitstr <- paste0("(",paste0(Traits, collapse="|"), ")")
-  if (all(grepl(traitstr, subfx))) { #| #Tried to modify it to match both Female/Male with Traits, But temporarily not do it #Centropages gracilis
+  if (all(grepl(traitstr, subfx))) {
+    chk_traits <- TRUE
+    length_traits <- length(subfx)
+  } else if (length(subfx)>=3 & all(grepl(traitstr, subfx[1:(length(subfx)-1)]))) { 
+    #if only last subfig not trait, sometimes, e.g. Original, let it pass #Pseudodiaptomus serricaudatus
+    chk_traits <- TRUE
+    length_traits <- length(subfx)-1
+  }
+  if (chk_traits) {
+  #if (all(grepl(traitstr, subfx))) { #| #Tried to modify it to match both Female/Male with Traits, But temporarily not do it #Centropages gracilis
       ################################ Because we may lost Female/Male info, which would only in 1st xseg ###     
       #(any(grepl(traitstr, subfx)) & all(grepl("^(F|f)emale|^(M|m)ale", subfx[!grepl(traitstr, subfx)])))) {
-    chk_traits <- TRUE
-    xt <- sapply(subfx, function(x) {
+    #chk_traits <- TRUE
+    xt <- sapply(subfx[1:length_traits], function(x) {
       #gsub("\\(M\\|m\\)ale", "(?:(\\\\s|\\\\b|\\\\.|\\\\;|\\\\:|\\\\,)+)(M|m)ale",
       gsub("\\s", "\\\\s", gsub("\\,", "\\\\,", gsub("\\-", "\\\\-", gsub("\\/", "\\\\/",
         gsub("(?:\\/)([a-zA-Z]{1})([a-zA-Z]+)", "/(\\U\\1|\\L\\1)\\2", #make "abc/att/Mtt" -> "abc/(A|a)tt/(M|m)tt"                                                                
@@ -328,9 +342,21 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
   if (grepl("(\\s)*et\\sal(\\.)*(\\,)*(\\s)*", xsubf)) {
     xsubfx <- gsub("(\\s)*et\\sal(\\.)*(\\,)*(\\s)*", "((\\\\s)*et\\\\sal(\\\\.)*(\\\\,)*(\\\\s)*)*", xsubfx)
   }
-    
+
+  if (length(subfx)>1 & ##20211102 Fig. 4A-E/G/H Fig. 4I-L/N/O #Pseudodiaptomus inopinus
+      all(grepl("^Fig(s)*\\.", subfx))) {
+    xc <- sapply(subfx, function(x) {regexpr(x, xstr)}, simplify = T, USE.NAMES = F)
+    if (!all(xc>0)) {
+      if (print_info) { ### Note print_info is a special mode that actually exec find_subfig, not only check
+        print(paste0("Warning: Detect multi subfigs with 'Fig.' but not all found: ", 
+                     paste(subfx, collapse=","), " and founded: ", paste(xc, collapse=","), 
+                     " Check this str: ", xstr))
+        xc <- xc[xc>0]
+      }
+    }
+    return (xc)
+  } else if (length(subfx)>1 & ##20211020 modified: Female/Male subfig comes out in single caption
   #chk_sub <- regexpr(paste0("(?=([A-Z]{1,1}\\.*\\s*){0,1})", xsubf), xstr, perl = T)
-  if (length(subfx)>1 & ##20211020 modified: Female/Male subfig comes out in single caption
        #((grepl("^(F|f)emale", xsubfx) & grepl("^(M|m)ale", subfx[2])) |
        #(grepl("^(M|m)ale", xsubfx) & grepl("^(F|f)emale", subfx[2])))){ 
        all(grepl("^(F|f)emale|^(M|m)ale", subfx))) {
@@ -385,11 +411,13 @@ pre_kcnt<- 0L
 keycnt <- 0L
 #docfile <- doclst[1]
 
-for (docfile in doclst[1:66]) {
+for (docfile in doclst[1:68]) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
   ctent <- docx_summary(dc0)
   key_chk_flag <- TRUE ## FALSE: means no key, only figs in this doc by means of 
   key_chk_pat <- "Key to the species of " # setting correct start pattern in a docx
+  Male_only_sp <- c() ### 20211102 add to force these sp to Male
+  Female_only_sp <- c() # 20211102 add to force these sp to Female #Rhincalanus 
   
   fn <- tstrsplit(docfile, "/") %>% .[[length(.)]]
   lfn <- regexpr("^(Key to the species of\\s)(?:[a-zA-Z]{1,})\\s", fn)
@@ -451,6 +479,11 @@ for (docfile in doclst[1:66]) {
   titletxt <- paste0("<div id=", dQuote(paste0("genus_",gen_name))," class=", dQuote("kblk"), "><p class=", dQuote("doc_title"), ">", 
                 italics_spname(gsub("(in\\sChina\\ssea(s)*|\\(China\\ssea(s)*\\))(\\:)*", "occurring in the China seas", ctent[1,]$text), gen_name, gen_name), "</p></div><br><br><br>")
   
+  if (grepl("\\(\\*(F|f)emale\\sonly\\)$", epi_list)) {
+    Female_only_sp <- "all"
+  } else if (grepl("\\(\\*(M|m)ale\\sonly\\)$", epi_list)) {
+    Male_only_sp <- "all"
+  }  
   #If no key in this doc(i.e. only figs, and only one species in this genus), we'll
   #let #span id="taxon_species_name" in this epithet span
   nota_wl <- regexpr("\\(\\*(?:.*)\\)\\s*$", epi_list)
@@ -891,6 +924,16 @@ for (docfile in doclst[1:66]) {
   }
   
   if (key_chk_flag) {
+    #20211102 added a female/male only flag
+    if (length(Female_only_sp) & female_start < 0 & !both_sexflag) {
+      print(paste0("Warning! Sex info will be changed. Check it: We find Female_only comment for genus: ", gen_name))
+      dtk[genus==gen_name & !is.na(taxon) & type==1L, sex:="female"]
+    }
+    if (length(Male_only_sp) & male_start < 0 & !both_sexflag) {
+      print(paste0("Warning! Sex info will be changed. Check it: We find Male_only comment for genus: ", gen_name))
+      dtk[genus==gen_name & !is.na(taxon) & type==1L, sex:="male"]
+    }
+    
     dtk[nrow(dtk), ctxt:=paste0(dtk[nrow(dtk),]$ctxt, '<br><br>\n\n')] #202109 no need for delaying output </div>
     print(paste0("Checking fig_mode: ", fig_mode))
     chkt <- dtk[!is.na(taxon) & type==1L, .(taxon, sex, type)]
