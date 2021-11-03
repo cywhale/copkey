@@ -20,7 +20,7 @@ Extra_epi <- C("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis")  
 Fig_exclude_word <- "\\(F\\,\\s*M\\)|\\(1\\,f\\)" #exclude pattern in title/main: (F,M), (1/f)
 Special_genus <- c("Euaetideus", "Euchirella", "Euchaeta", "Forma", "Pachyptilus",
                    "Euaugaptilus", "Pseudochirella", "Phyllopus", "Paracalanus",
-                   "Acrocalanus", "Schmackeria")
+                   "Acrocalanus", "Schmackeria", "Oothrix")
 Species_groups<- c("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis", #Paraeuchaetas spp.
                    "spinifrons", "papilliger", "fistulosus", "abyssalis" #Heterorhabdus spp. 
                    )
@@ -231,13 +231,16 @@ find_subfigx <- function(xstr, subfig, idx, print_info=TRUE) {
       #(any(grepl(traitstr, subfx)) & all(grepl("^(F|f)emale|^(M|m)ale", subfx[!grepl(traitstr, subfx)])))) {
     #chk_traits <- TRUE
     xt <- sapply(subfx[1:length_traits], function(x) {
-      #gsub("\\(M\\|m\\)ale", "(?:(\\\\s|\\\\b|\\\\.|\\\\;|\\\\:|\\\\,)+)(M|m)ale",
+      #gsub("(\\s|\\\\s)*\\(((F|f)emale|(M|m)ale)\\)$", "", 
       gsub("\\s", "\\\\s", gsub("\\,", "\\\\,", gsub("\\-", "\\\\-", gsub("\\/", "\\\\/",
         gsub("(?:\\/)([a-zA-Z]{1})([a-zA-Z]+)", "/(\\U\\1|\\L\\1)\\2", #make "abc/att/Mtt" -> "abc/(A|a)tt/(M|m)tt"                                                                
         gsub("(?![a-zA-Z]+)(\\-|\\/)(?![a-zA-Z]+)", "", #to match Figs 113-116, 11/12 to integer, we don't match "-", "/", even in traits
         paste0("(", toupper(substr(x,1,1)), "|", tolower(substr(x,1,1)), ")",
-             substr(x, 2, nchar(x))), perl=T), perl=T))))) #)
+             substr(x, 2, nchar(x))), perl=T), perl=T))))) #))
     }, simplify = T, USE.NAMES = F)
+    #if (length_traits < length(subfx)) { #so that it can match both Traits/other attr, e.g. subfig = "Habitus (Female)" "Mouth parts" "Legs"  "Male"
+    #  xt[length_traits+1] = subfx[length_traits+1] #But NOTE: it has risk that xseg may have wrong segments or wrong sex info that should check it.
+    #}
     print(paste0("Note particularily: Use Traits as subfig: ", paste0(xt, collapse=",")))
   }
   
@@ -411,7 +414,7 @@ pre_kcnt<- 0L
 keycnt <- 0L
 #docfile <- doclst[1]
 
-for (docfile in doclst[1:68]) {
+for (docfile in doclst[1:79]) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
   ctent <- docx_summary(dc0)
   key_chk_flag <- TRUE ## FALSE: means no key, only figs in this doc by means of 
@@ -467,12 +470,13 @@ for (docfile in doclst[1:68]) {
               gsub("(?![^\\,\\.])\\s*(?!^\\()(?![a-zA-Z]{1,})\\((?=[^0-9])", ", (",
               gsub("(?![a-zA-Z]{1,})\\)(?=[^\\,\\.])", ") ",     
               gsub("(?![a-zA-Z]{1,})\\,", ", ",xt, perl=T), perl=T), perl=T))))
-  epithets <- unlist(tstrsplit(gsub("\\(\\*(?:.*)\\)", "", ##(trim remark by *)
+  epithets <- unlist(tstrsplit(gsub("\\(\\*(?:.*)\\)|\\*", "", ##(trim remark by *)
                                     epi_list), "(\\,|\\.)\\s*"), use.names = F) %>%
     sapply(function(x) {trimx(gsub("\\,$","",gsub("\\([0-9]+(?:.*)\\)(\\.|\\,|\\s|$)", ",", 
                               gsub(paste0("(?!\\()", gen_name, "(?!\\))"), "", x, perl = T)))) 
-    },simplify = T, USE.NAMES = F) %>% paste(collapse=", ") #Some (Subgen) == gen_name cannot be filtered
+    },simplify = T, USE.NAMES = F) %>% paste0(collapse=", ")#Some (Subgen) == gen_name cannot be filtered
   #for example: c("(Acartia) abc", "Acartia ddd") -> "(Acartia) abc" "ddd" 
+  epithets <- trimx(gsub("\\,\\s*$", "", epithets))
   
   epistr <- paste0("(", gsub("\\,\\s", "|", epithets), ")") #"(crassus|dentatus|longiceps....)"
   
@@ -538,7 +542,13 @@ for (docfile in doclst[1:68]) {
   tstL <- nrow(ctent)
 
   epiall <- trimx(gsub("\\((?:.*)\\)", "", unlist(tstrsplit(dtk[rid==0 & genus==gen_name & family==fam_name,]$epithets, ","), use.names = F)))
-  print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
+  epiall <- epiall[epiall!="*"]
+  if (any(grepl("[^[:alnum:][:space:]]+", epiall))) {
+    stop(paste0("Syntax Error in genus: ", gen_name, " ", paste(epiall, collapse=", ")))
+    break
+  } else {
+    print(paste0("We have these sp: ", gen_name, " ", paste(epiall, collapse=", ")))
+  }
 
   #i = skipLine+1L
   st_conti_flag <- FALSE
@@ -1023,7 +1033,7 @@ for (docfile in doclst[1:68]) {
             #x <- trimx(gsub("\\\t", "", gsub("\\’", "\'", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))))
             if (length(subfig)>0) {
               xc <- find_subfigx(x, subfig, 1L, print_info = FALSE)
-              if (xc[1]>0) {
+              if (length(xc)>0 & xc[1]>0) {
                 print(paste0("Note particularily: No fig title provided but detect subfig, use default spname in sp: ", spname))
                 fig_title <- spname
                 next #Note i cannot add 1 and let it go to fig_caption detection
@@ -1427,7 +1437,7 @@ for (docfile in doclst[1:68]) {
                            (any(grepl("^Female",subfig)) & grepl("(F|f)emale", x)) |
                            (any(grepl("^Male", subfig)) & grepl("(?:(\\s|\\b|\\.|\\;|\\:|\\,)+)(M|m)ale", x))) {
                   flag_getcap <- TRUE
-                } else if (xc[1]>0 & imgj<length(subfig)) {
+                } else if (length(xc)>0 & xc[1]>0 & imgj<length(subfig)) {
                   flag_getcap <- TRUE
                 }
                 if (flag_getcap) {    
@@ -1438,7 +1448,7 @@ for (docfile in doclst[1:68]) {
                     if (all(grepl("^(Female|Male)",subfx)) & grepl("(F|f)emale|(?:(\\s|\\b|\\.|\\;|\\:|\\,)+)(M|m)ale", x)) {
                         #(all(grepl("^Male", subfx)) & grepl("(?:(\\s|\\b|\\.|\\;|\\:|\\,)+)(M|m)ale", x))) {
                         k <- imgj + length(subfx) # one description (x) contains two subfigs
-                    } else if (xc[1]>0) {
+                    } else if (length(xc)>0 & xc[1]>0) {
                       #if (length(xc)>1) {
                       k <- imgj + length(xc)
                       #} else if (imgj<length(subfig)) { #subfig[imgj+1] == substr(x, 1, nchar(subfig[imgj+1]))) {
@@ -1448,29 +1458,50 @@ for (docfile in doclst[1:68]) {
                   }
                   if (length(xc)>1 & k>(imgj+1)) {
                     #traitstr <- paste0("(",paste0(Traits, collapse="|"), ")")
+                    chk_traits <- FALSE
+                    length_traits <- 0L
                     if (all(grepl(traitstr, subfx))) {
-                      #chk_traits <- TRUE
+                      chk_traits <- TRUE
+                      length_traits <- length(subfx)
+                    } else if (length(subfx)>=3 & all(grepl(traitstr, subfx[1:(length(subfx)-1)]))) { 
+                      #if only last subfig not trait, sometimes, e.g. Original, let it pass #Pseudodiaptomus serricaudatus
+                      chk_traits <- TRUE
+                      length_traits <- length(subfx)-1
+                    }
+                    if (chk_traits) { #all(grepl(traitstr, subfx))) {
                       print(paste0("Note particularily: Use Traits in taxon: ", xsp2, " at i: ", i))
-                      
                       #xt <- sapply(subfx, function(x) {
                       #  gsub("\\s", "\\\\s",
                       #       paste0("(", toupper(substr(x,1,1)), "|", tolower(substr(x,1,1)), ")",
                       #              substr(x, 2, nchar(x))))
                       #}, simplify = T, USE.NAMES = F)
-                      xt <- sapply(subfx, function(x) {
+                      xt <- sapply(subfx[1:length_traits], function(x) {
                         #gsub("\\(M\\|m\\)ale", "(?:(\\\\s|\\\\b|\\\\.|\\\\;|\\\\:|\\\\,)+)(M|m)ale",
+                        gsub("(\\s|\\\\s)*\\(((F|f)emale|(M|m)ale)\\)$", "", 
                         gsub("\\s", "\\\\s", gsub("\\,", "\\\\,", gsub("\\-", "\\\\-", gsub("\\/", "\\\\/",
                         gsub("(?:\\/)([a-zA-Z]{1})([a-zA-Z]+)", "/(\\U\\1|\\L\\1)\\2", #make "abc/att/Mtt" -> "abc/(A|a)tt/(M|m)tt"                                                                
                         #gsub("(?![a-zA-Z]+)(\\-|\\/)(?![a-zA-Z]+)", "", #to match Figs 113-116, 11/12 to integer, we don't match "-", "/", even in traits
                           paste0("(", toupper(substr(x,1,1)), "|", tolower(substr(x,1,1)), ")",
-                                 substr(x, 2, nchar(x))), perl=T), perl=T))))
+                                 substr(x, 2, nchar(x))), perl=T), perl=T)))))
                       }, simplify = T, USE.NAMES = F)
+                      #if (length_traits < length(subfx)) {
+                      #  xt[length_traits+1] = subfx[length_traits+1] #so that it can match both Traits/other attr, e.g. subfig = "Habitus (Female)" "Mouth parts" "Legs"  "Male"
+                      #}
                       xseg <- trimx(unlist(tstrsplit(x, 
                                              paste0("(", paste0(xt, collapse="|"), ")")), 
                                            use.names = F))
                       if (!any(grepl(xt[1], substr(x,1,nchar(xseg[1]))))) {
                         xseg0 <- xseg[1]
                         xseg <- xseg[-1] 
+                      }
+                      if (#length_traits < length(subfx) & 
+                          length(xseg) == length(xt)) {
+                        gsext <- grep("\\(((F|f)emale|(M|m)ale)\\)", subfx)
+                        #if (grepl("^(Female|Male)", xt[length_traits+1])) { #tstrsplit would cause sex info lost, paste it again.
+                        if (any(gsext)) {
+                          #xseg[length_traits+1] <- paste0(xt[length_traits+1], xseg[length_traits+1])
+                          xseg[gsext] <- paste0(subfx[gsext], xseg[gsext])
+                        }
                       }
                       #xseg <- mapply(function(xs,subx) {
                       #  paste0(subx, xs)
