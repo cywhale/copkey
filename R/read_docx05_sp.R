@@ -414,7 +414,7 @@ pre_kcnt<- 0L
 keycnt <- 0L
 #docfile <- doclst[1]
 
-for (docfile in doclst[1:79]) {
+for (docfile in doclst[1:81]) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
   ctent <- docx_summary(dc0)
   key_chk_flag <- TRUE ## FALSE: means no key, only figs in this doc by means of 
@@ -478,7 +478,9 @@ for (docfile in doclst[1:79]) {
   #for example: c("(Acartia) abc", "Acartia ddd") -> "(Acartia) abc" "ddd" 
   epithets <- trimx(gsub("\\,\\s*$", "", epithets))
   
-  epistr <- paste0("(", gsub("\\,\\s", "|", epithets), ")") #"(crassus|dentatus|longiceps....)"
+  epistr <- paste0("(", gsub("\\(", "\\(\\\\(", 
+                        gsub("\\)\\s", "\\\\)\\\\s\\)\\*",
+                        gsub("\\,\\s", "|", epithets))), ")") #"(crassus|dentatus|longiceps....)"
   
   titletxt <- paste0("<div id=", dQuote(paste0("genus_",gen_name))," class=", dQuote("kblk"), "><p class=", dQuote("doc_title"), ">", 
                 italics_spname(gsub("(in\\sChina\\ssea(s)*|\\(China\\ssea(s)*\\))(\\:)*", "occurring in the China seas", ctent[1,]$text), gen_name, gen_name), "</p></div><br><br><br>")
@@ -676,8 +678,10 @@ for (docfile in doclst[1:79]) {
       }
         
       if (!withinCurrKey) {
-        mat_subgen1 = paste0("((?:…*\\.*\\s*)(\\()(?:[A-Z][a-z]{1,}(.*)\\)))|", 
-                               "((?:…+\\.*\\s*)([A-Z])(?:[a-z]{1,}(?:…+|\\.+)))")
+        #mat_subgen1 = paste0("(?:…*\\.*\\s*)((\\()(?:[A-Z][a-z]{1,}(.*)\\))|", 
+        #                       "([A-Z])(?:[a-z]{1,}(?:…+|\\.+)))") #20211103 modified for ............Tortanus (Tortanus) barbatus
+        mat_subgen1 = paste0("(?:…*\\.*\\s*)(?<!",gen_name,"\\s)\\((?:[A-Z][a-z]{1,}(.*)\\))|",
+                             "(?:…+\\.*\\s*)([A-Z])(?:[a-z]{1,}(?:…+|\\.+))")
         # cannot match spacing because may a species name, not subgenus (only one word)
         # i.e. cannot match (but can match ...(Subgenus Euacartia))...)
         # regexpr(mat_subgenus, "of urosomites smooth…………....……………………Euacartia …..28", perl=T)
@@ -700,10 +704,10 @@ for (docfile in doclst[1:79]) {
       
       if (!withinCurrKey) {
         #try to find species 
-        mat_sp1 = paste0("(?:(…+\\.*\\s*…*|\\.{2,}…*\\s*))(([A-Z])\\.\\s*|", gen_name, "\\s)[a-z]{1,}$")
+        mat_sp1 = paste0("(?:(…+\\.*\\s*…*|\\.{2,}…*\\s*))(([A-Z])\\.\\s*|", gen_name, "\\s)(\\([A-Z][a-z]{1,}\\)\\s)*[a-z]{1,}$")
         wl3 <- regexpr(mat_sp1, x2, perl=T)
         if (wl3>0) {
-          nsp <- gsub("\\.", "\\. ", gsub("^\\.", "", gsub("…|\\.{2,}|\\s(?![a-z]+)", "", substr(x2, wl3+1, nchar(x2)), perl=T))) #equal wl2s+attributes(wl2s)$match.length-1)   
+          nsp <- gsub("\\.", "\\. ", gsub("^\\.", "", gsub("…|\\.{2,}|\\s(?![\\(\\)a-z]+)", "", substr(x2, wl3+1, nchar(x2)), perl=T))) #equal wl2s+attributes(wl2s)$match.length-1)   
           print(paste0("Find end SP: ", nsp, " in i, keyx: ", i, ", ", keyx, " with equal end: ", nchar(x2)==wl3+attributes(wl3)$match.length-1))
           nxttype <- 1L
           if (substr(nsp,1,2)==paste0(substr(gen_name, 1, 1), ".")) {
@@ -714,10 +718,12 @@ for (docfile in doclst[1:79]) {
               print(paste0("Warning and Check it: Not equal genus name when get end species: ", nsp, " for genus: ", gen_name, " at i: ", i))
               xsp <- gsub(xt, gen_name, nsp)
             } else {
-              xsp <- nsp
+              xsp <- odbapi::sciname_simplify(nsp, simplify_two=T, trim.subgen = T)
             }
           }
           epithet <- gsub(paste0(gen_name, " "), "", xsp)
+          subgen <- trimx(gsub(paste0(paste0("(?!\\()(",gsub("\\s","|", xsp),")(?!\\))"),"|\\(|\\)"), "",
+                          odbapi::sciname_simplify(nsp, trim.subgen = F, simplify_two = T), perl = T))
           keystr <- gsub("\\.$", "", trimx(gsub("…|\\.{2,}", "", substr(x2, 1, wl3))))
           pret <- paste0(pret, keystr)
           
@@ -763,7 +769,7 @@ for (docfile in doclst[1:79]) {
           xc <- paste0(pret,
                        '</span><span class=',dQuote('keycol'),'>',
                        paste0('<mark id=',  dQuote(marksp), 
-                              '><em><a href=', dQuote(paste0('#figs_', gsub("\\s","_", xsp))), '>', xsp, '</a></em></mark></span></p>'))
+                              '><em><a href=', dQuote(paste0('#figs_', gsub("\\s","_", xsp))), '>', nsp, '</a></em></mark></span></p>'))
           
         } else if (subgen!="" | is.na(nxtk) | nxtk!=0L) { #20211031 add nxtk_str=? #Paraeuchaeta
           if (grepl("\\,", subgen)) { #with multiple subgenus
@@ -896,7 +902,9 @@ for (docfile in doclst[1:79]) {
         keyt <- as.integer(gsub('[a-z]','', keyx))
         ukey <- paste0(gen_name, "_", padzerox(keyt, 2), subkeyx)
         ataxon <- ifelse(nxttype==1L & xsp!=gen_name & !any(grepl("\\.", nsp)), 
-                         paste0(substr(gen_name, 1,1), ".", gsub(gen_name, "", xsp)), nsp) #nsp, 
+                         trimx(paste0(substr(gen_name, 1,1), ".",
+                                ifelse(!is.na(subgen) & subgen!="", paste0(" (",substr(subgen, 1, 1),".) "), ""),
+                                gsub(gen_name, "", xsp))), nsp) #nsp, 
         
         dtk <- rbindlist(list(dtk,data.table(rid=i, unikey=ukey, #paste0(gen_name, "_", keyx),
                                              ckey= keyx, subkey= subkeyx, pkey= prekeyx,
@@ -1500,7 +1508,7 @@ for (docfile in doclst[1:79]) {
                         #if (grepl("^(Female|Male)", xt[length_traits+1])) { #tstrsplit would cause sex info lost, paste it again.
                         if (any(gsext)) {
                           #xseg[length_traits+1] <- paste0(xt[length_traits+1], xseg[length_traits+1])
-                          xseg[gsext] <- paste0(subfx[gsext], xseg[gsext])
+                          xseg[gsext] <- paste0(gsub("^(?:.*)*\\(|\\)", "", subfx[gsext]), xseg[gsext])
                         }
                       }
                       #xseg <- mapply(function(xs,subx) {
@@ -1752,7 +1760,7 @@ for (docfile in doclst[1:79]) {
       }
       print(paste0("Genus: ", gen_name, " split ", pgx," pages: ", page_cnt,":", page_cnt+p-1, 
                    " with key_num: ", key_num, " and pages in each group: ",
-                   paste0(dtk[,.N, by=.(page)]$N, collapse=",")))
+                   paste0(dtk[genus==gen_name, .N, by=.(page)]$N, collapse=",")))
       page_cnt <- page_cnt + pgx
     }
   } else { #only one page
