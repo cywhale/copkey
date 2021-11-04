@@ -556,7 +556,7 @@ for (docfile in doclst[1:81]) {
   st_conti_flag <- FALSE
   keyx <- ""; prekeyx <- ""; subkeyx <- ""
   pret <- ""
-  subgen <- ""
+  subgenk <- ""
   keystr <- ""
   nxtk <- 0L; nxttype <- 0L; #0: integer key, 1: sp name 
   nsp <- ""; xsp <- ""; epithet <- ""
@@ -689,8 +689,8 @@ for (docfile in doclst[1:81]) {
         wl2 <- regexpr(mat_subgen1, x2, perl=T)
       
         if (wl2>0) {
-          subgen <- gsub("\\(Subgenus |\\(Subgen |\\(|\\)|…|\\.|\\s", "", substr(x2, wl2+1, wl2+attributes(wl2)$match.length-1))
-          print(paste0("Find Subgenus: ", subgen, " in i, keyx: ", i, ", ", keyx))
+          subgenk <- gsub("\\(Subgenus |\\(Subgen |\\(|\\)|…|\\.|\\s", "", substr(x2, wl2+1, wl2+attributes(wl2)$match.length-1))
+          print(paste0("Find Subgenus: ", subgenk, " in i, keyx: ", i, ", ", keyx))
         
           keystr <- trimx(gsub("\\.\\s*$", "", gsub("…|\\.{2,}", "", substr(x2, 1, wl2))))
           pret <- paste0(pret, keystr)
@@ -722,7 +722,7 @@ for (docfile in doclst[1:81]) {
             }
           }
           epithet <- gsub(paste0(gen_name, " "), "", xsp)
-          subgen <- trimx(gsub(paste0(paste0("(?!\\()(",gsub("\\s","|", xsp),")(?!\\))"),"|\\(|\\)"), "",
+          subgenk <- trimx(gsub(paste0(paste0("(?!\\()(",gsub("\\s","|", xsp),")(?!\\))"),"|\\(|\\)"), "",
                           odbapi::sciname_simplify(nsp, trim.subgen = F, simplify_two = T), perl = T))
           keystr <- gsub("\\.$", "", trimx(gsub("…|\\.{2,}", "", substr(x2, 1, wl3))))
           pret <- paste0(pret, keystr)
@@ -771,10 +771,10 @@ for (docfile in doclst[1:81]) {
                        paste0('<mark id=',  dQuote(marksp), 
                               '><em><a href=', dQuote(paste0('#figs_', gsub("\\s","_", xsp))), '>', nsp, '</a></em></mark></span></p>'))
           
-        } else if (subgen!="" | is.na(nxtk) | nxtk!=0L) { #20211031 add nxtk_str=? #Paraeuchaeta
-          if (grepl("\\,", subgen)) { #with multiple subgenus
-            subgx <- trimx(unlist(tstrsplit(subgen, ","), use.names = F))
-            subgen<- paste(subgx, collapse=", ") #to make format consistently
+        } else if (subgenk!="" | is.na(nxtk) | nxtk!=0L) { #20211031 add nxtk_str=? #Paraeuchaeta
+          if (grepl("\\,", subgenk)) { #with multiple subgenus
+            subgx <- trimx(unlist(tstrsplit(subgenk, ","), use.names = F))
+            subgenk<- paste(subgx, collapse=", ") #to make format consistently
             
             xc0 <- do.call(function(x) {paste0('<mark id=',dQuote(paste0('subgen_', x)),'><em>', x, '</em></mark>')}, list(subgx)) %>%
               paste(collapse=",&nbsp;")
@@ -790,7 +790,7 @@ for (docfile in doclst[1:81]) {
             xc <- paste0(#gsub("…|\\.{2,}|…\\.{1,}|\\.{1,}…","",
               #ifelse(st_conti_flag, xc, substr(xc,1,nchar(xc)-stt))),
               pret, '</span>&nbsp;<span class=',dQuote('keycol'),'>', 
-              ifelse(subgen=="", "", paste0('<mark id=',dQuote(paste0('subgen_', subgen)),'>(<em>', subgen, '</em>)</mark>')),
+              ifelse(subgenk=="", "", paste0('<mark id=',dQuote(paste0('subgen_', subgenk)),'>(<em>', subgenk, '</em>)</mark>')),
               #using markdown
               #paste0('[', nxtk, '](#key_', gen_name, "_", nxtk,'a)'),
               #paste0('<a href=', dQuote(paste0('#key_', gen_name, "_", nxtk,'a')), '>', nxtk,'</a>'), 
@@ -879,7 +879,7 @@ for (docfile in doclst[1:81]) {
       nxtk <- ifelse(nxtk==0L, NA_integer_, nxtk) 
       nsp <- ifelse(nsp=="", NA_character_, nsp)
       xsp <- ifelse(xsp=="", NA_character_, xsp)
-      subgen <- ifelse(subgen=="", NA_character_, subgen)
+      subgenk <- ifelse(subgenk=="", NA_character_, subgenk)
 
       if (!withinCurrKey) {
         if (!kflag) {
@@ -903,7 +903,7 @@ for (docfile in doclst[1:81]) {
         ukey <- paste0(gen_name, "_", padzerox(keyt, 2), subkeyx)
         ataxon <- ifelse(nxttype==1L & xsp!=gen_name & !any(grepl("\\.", nsp)), 
                          trimx(paste0(substr(gen_name, 1,1), ".",
-                                ifelse(!is.na(subgen) & subgen!="", paste0(" (",substr(subgen, 1, 1),".) "), ""),
+                                ifelse(!is.na(subgenk) & subgenk!="", paste0(" (",substr(subgenk, 1, 1),".) "), ""),
                                 gsub(gen_name, "", xsp))), nsp) #nsp, 
         
         dtk <- rbindlist(list(dtk,data.table(rid=i, unikey=ukey, #paste0(gen_name, "_", keyx),
@@ -912,7 +912,7 @@ for (docfile in doclst[1:81]) {
                                              taxon=xsp, 
                                              abbrev_taxon=ataxon,
                                              fullname=NA_character_,
-                                             subgen=subgen, genus=gen_name, family=fam_name,
+                                             subgen=subgenk, genus=gen_name, family=fam_name,
                                              epithets=NA_character_, keystr=keystr, ctxt=xc, fkey=NA_character_, 
                                              sex=xsex, docn=cntg, kcnt=keycnt, page=page_cnt)))
       } else {
@@ -925,11 +925,11 @@ for (docfile in doclst[1:81]) {
         dtk[nrow(dtk), ctxt:=paste0(xc0, xc)]
       }
     
-      #if (nxttype==1L | subgen != "" | nxtk != 0L) {
+      #if (nxttype==1L | subgenk != "" | nxtk != 0L) {
       st_conti_flag <- FALSE
       keyx <- ""; prekeyx <- ""; subkeyx <- ""
       pret <- ""
-      subgen <- ""
+      subgenk <- ""
       keystr <- ""
       nxttype <- 0L; nxtk <- 0L
       nsp <- ""; xsp <- ""; epithet <- ""
@@ -1274,7 +1274,7 @@ for (docfile in doclst[1:81]) {
                                    blkx=blk_cnt, docn=cntg, rid=i, 
                                    kcnt=keycnt, tokcnt=tokeyx, page=page_cnt,
                                    xdtk=ifelse(any(x_dtk), paste(x_dtk, collapse=","), NA_character_),
-                                   taxon=xsp2, subgen=subgenx,
+                                   taxon=xsp2, subgen=ifelse(subgenx=="", NA_character_, subgenx),
                                    genus=gen_name, family=fam_name) ### blkx: counter of block of fig, docn: nth document
                 
                 dfk <- rbindlist(list(dfk, dfkt), fill = TRUE) 
@@ -1332,7 +1332,8 @@ for (docfile in doclst[1:81]) {
                         taxon=xsp2, 
                         abbrev_taxon=ifelse(any(x_dtk),dtk[x_dtk[1],]$abbrev_taxon, paste0(substr(gen_name, 1,1), ".", gsub(gen_name, "", xsp2))), 
                         fullname=full_name,
-                        subgen=subgenx, genus=gen_name, family=fam_name,
+                        subgen=ifelse(subgenx=="", NA_character_, subgenx), 
+                        genus=gen_name, family=fam_name,
                         epithets=epit, keystr=keystr, 
                         ctxt=ctxtt,
                         fkey=paste(fkeyx, collapse=","), 
@@ -1355,7 +1356,8 @@ for (docfile in doclst[1:81]) {
                                        '>',cfigx, #' *',sp,'* ',sex,
                                        #' [&#9754;](#key_',ckeyx,') &nbsp;', fdupx,
                                        '</span></span>') ############ Only MARK duplicated imgf
-                            },outf=gsub("species\\/", "sp_thumb/", gsub("www_sp\\/", "", imgf)), # No need www_sp/ in html link
+                            },#outf=gsub("species\\/", "sp_thumb/", gsub("www_sp\\/", "", imgf)), # No need www_sp/ in html link
+                              outf=gsub("assets\\/img\\/species\\/", "https://bio.odb.ntu.edu.tw/pub/copkey/sp_thumb/", gsub("www_sp\\/", "", imgf)),
                               flink=fkeyx, cfigx=xsubf, #fgcnt=fig_num,
                               MoreArgs = list(spanx=spanx), SIMPLIFY = TRUE, USE.NAMES = FALSE) %>% 
                             paste(collapse=" "), '</div><br><br>', #it's ends of <div class='blkfigure'>
@@ -1379,7 +1381,7 @@ for (docfile in doclst[1:81]) {
                 if (key_chk_flag & any(x_dtk) & (Blk_condi==0 | Blk_condi>=2)) { #if next blk is the same sp (Blk_condi==1), just wait until next blk come in
                   dtk[x_dtk, `:=`(
                     fullname = full_name,
-                    subgen = subgenx,
+                    subgen = ifelse(is.na(subgen) & !is.na(subgenx) & subgenx != "", subgenx, subgen),
                     epithets = epit, 
                     figs = sapply(sex, function(x) {
                       if (!is.na(x) && x=="male") {
