@@ -37,18 +37,17 @@ export default async function (fastify, opts) {
         defaultSrc: ["'self'", "https:"],
         frameSrc: [
           "'self'",
-          'https://nodeeco.firebaseapp.com/',
           'https://ecodata.odb.ntu.edu.tw',
-          'https://eco.odb.ntu.edu.tw',
+          'https://bio.odb.ntu.edu.tw',
           'https://odbsso.oc.ntu.edu.tw/'
         ],
         scriptSrc: ["'self'", "https:", "'unsafe-eval'"],
-        //'https://eco.odb.ntu.edu.tw',
+        //'https://bio.odb.ntu.edu.tw',
         //'https://ecodata.odb.ntu.edu.tw',
         //'https://odbsso.oc.ntu.edu.tw/',
         //],
         connectSrc: ["'self'", "https:"],
-        //'https://eco.odb.ntu.edu.tw',
+        //'https://bio.odb.ntu.edu.tw',
         //'https://ecodata.odb.ntu.edu.tw',
         //'https://odbsso.oc.ntu.edu.tw/'
         //],

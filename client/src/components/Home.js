@@ -293,8 +293,10 @@ const Home = () => {
             spx = spx + '_01'; //add a number fo species, but we don't validate species yet
           }
           if (spt.length >= 2) {
-            let hstr='<a data-fancybox="gallery" href="/assets/img/species/' + spx + '.jpg" target="_blank"' +
-                     '><img src="/assets/img/species/' + spx + '.jpg" border="0" /></a>';
+            //let hstr='<a data-fancybox="gallery" href="/assets/img/species/' + spx + '.jpg" target="_blank"' +
+            //         '><img src="/assets/img/species/' + spx + '.jpg" border="0" /></a>';
+            let hstr='<a data-fancybox="gallery" href="https://bio.odb.ntu.edu.tw/pub/copkey/species/' + spx + '.jpg" target="_blank"' +
+                     '><img src="https://bio.odb.ntu.edu.tw/pub/copkey/species/' + spx + '.jpg" border="0" /></a>';
             setFigx((prev) => ({
               ...prev,
               popup: true,

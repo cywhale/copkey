@@ -1,6 +1,6 @@
 import webpack from 'webpack';
 import path from 'path';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
+//import CopyWebpackPlugin from 'copy-webpack-plugin'; //"6.4.1"
 const { merge } = require('webpack-merge');
 const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -363,7 +363,7 @@ const baseConfig = (config, env, helpers) => {
       onModuleBailout: (module, bailouts) => { ... },
       onGlobalBailout: (bailouts) => { ... } */
 //    }),
-
+/*
     new CopyWebpackPlugin({
       patterns: [
       {
@@ -372,7 +372,7 @@ const baseConfig = (config, env, helpers) => {
       }
       ]
     }),
-
+*/
     new ImageminPlugin({
       cacheFolder: path.resolve(__dirname, 'cache'),
       test: /\.(png|gif|svg)$/i, //jpe?g
