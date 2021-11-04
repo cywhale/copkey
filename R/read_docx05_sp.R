@@ -1298,7 +1298,8 @@ for (docfile in doclst[1:81]) {
                                          '>',cfigx, #' *',sp,'* ',sex,
                                          #' [&#9754;](#key_',ckeyx,') &nbsp;', fdupx,
                                          '</span></span>') ############ Only MARK duplicated imgf
-                             },outf=gsub("species\\/", "sp_thumb/", gsub("www_sp\\/", "", imgf)), # use thumbnail in imgsrc
+                             },#outf=gsub("species\\/", "sp_thumb/", gsub("www_sp\\/", "", imgf)), # use thumbnail in imgsrc
+                               outf=gsub("assets\\/img\\/species\\/", "https://bio.odb.ntu.edu.tw/pub/copkey/sp_thumb/", gsub("www_sp\\/", "", imgf)),
                                flink=fkeyx, cfigx=xsubf, #fgcnt=fig_num,
                                MoreArgs = list(spanx=spanx), SIMPLIFY = TRUE, USE.NAMES = FALSE) %>% 
                                paste(collapse=" "),
