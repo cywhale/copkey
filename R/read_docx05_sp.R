@@ -722,11 +722,18 @@ for (docfile in doclst[1:81]) {
             }
           }
           epithet <- gsub(paste0(gen_name, " "), "", xsp)
-          subgenk <- trimx(gsub(paste0(paste0("(?!\\()(",gsub("\\s","|", xsp),")(?!\\))"),"|\\(|\\)"), "",
-                          odbapi::sciname_simplify(nsp, trim.subgen = F, simplify_two = T), perl = T))
-          keystr <- gsub("\\.$", "", trimx(gsub("…|\\.{2,}", "", substr(x2, 1, wl3))))
-          pret <- paste0(pret, keystr)
-          
+          if (!is.na(subgenk) & subgenk!=""){
+            print(paste0("Note particularily: Both subgen & species exist in one key: ", subgenk, " and sp: ", nsp, " at i: ", i))
+            keystr <- paste0(keystr, " (Subgenus ", subgenk, ")")
+            pret <- paste0(pret, " (Subgenus ", subgenk, ")")
+            Species_groups <- unique(c(Species_groups, subgenk)) #for italic styling of subgenu
+            Sp_grps_str <- paste0("(",paste0(Species_groups,collapse="|"),")")
+          } else { #Normal situation
+            subgenk <- trimx(gsub(paste0(paste0("(?!\\()(",gsub("\\s","|", xsp),")(?!\\))"),"|\\(|\\)"), "",
+                                  odbapi::sciname_simplify(nsp, trim.subgen = F, simplify_two = T), perl = T))
+            keystr <- gsub("\\.$", "", trimx(gsub("…|\\.{2,}", "", substr(x2, 1, wl3))))
+            pret <- paste0(pret, keystr)
+          }
         } else {
           wl3 <- regexpr("(?:(…+\\.*\\s*|\\.{2,}…*\\s*))([0-9]+|\\?)$",x2) #genus Paraeuchaeta has uncertain male key #20211031
           
