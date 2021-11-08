@@ -106,12 +106,17 @@ const Helper = (props) => {
   useEffect(() => {
     if (toHelp) {
       //setIsOpen(true)
+      let el = document.getElementById("rightarea")
+      el.style.zIndex = 2;
       let els = document.querySelectorAll("#helpContainer div")
       if (els.length>0) {
         for(let i=0; i < els.length; i++) {
           els[i].style.zIndex = 1005;
         }
       }
+    } else {
+      let el = document.getElementById("rightarea")
+      el.style.zIndex = -1;
     }
   }, [toHelp]);
 

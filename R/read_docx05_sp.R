@@ -22,8 +22,9 @@ Special_genus <- c("Euaetideus", "Euchirella", "Euchaeta", "Forma", "Pachyptilus
                    "Euaugaptilus", "Pseudochirella", "Phyllopus", "Paracalanus",
                    "Acrocalanus", "Schmackeria", "Oothrix")
 Species_groups<- c("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis", #Paraeuchaetas spp.
-                   "spinifrons", "papilliger", "fistulosus", "abyssalis" #Heterorhabdus spp. 
-                   )
+                   "spinifrons", "papilliger", "fistulosus", "abyssalis", #Heterorhabdus spp. 
+                   "Schmackera" #Pseudodiaptomus spp.
+                  )
 Sp_grps_str <- paste0("(",paste0(Species_groups,collapse="|"),")")
 #webCite <- "from the website <a href='https://copepodes.obs-banyuls.fr/en/' target='_blank'>https://copepodes.obs-banyuls.fr/en/</a> managed by Razouls, C., F. de Bovée, J. Kouwenberg, & N. Desreumaux (2015-2017)"
 #options(useFancyQuotes = FALSE)

@@ -1,0 +1,133 @@
+/* https://codepen.io/prasannaFE/pen/qbQOBJ https://codepen.io/thierry/pen/gPoWxj
+   https://codepen.io/andornagy/pen/RNeydj */
+.nav-tabs {
+  position: relative;
+}
+
+:root {  
+  --base-tab-width: 5.9em;
+  --bias-a: 0.1em;
+  --bias-b: 0.2em;
+}
+
+.nav-tabs > h2 {
+    position: absolute;
+    padding: 14px 16px;
+    margin: 0;
+    top: 0;
+    color: #fff;
+    font-size: 1em;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    /*max-width: calc(var(--base-tab-width) + var(--bias-a));*/
+    width: calc(var(--base-tab-width) + var(--biias-a));
+}
+
+.nav-tabs:hover > h2 {
+  outline: none !important;
+}
+
+label.tablab {
+    max-width: var(--base-tab-width);
+    width: var(--base-tab-width);
+    position: absolute;
+    padding: 24px 20px;
+    border-radius: 10px;
+    z-index: 1;
+}
+
+label.tablab:hover {
+    cursor: pointer;
+}
+
+label.tablab ~ label.tablab {
+    position: absolute;
+    top: 0;
+}
+
+input[name="tabs"] {
+    opacity: 0;
+    width: var(--base-tab-width);
+}
+
+label.tablab + input ~ input {
+    position: absolute;
+    top: 0;
+}
+
+.nav-tabs > h2 ~ h2 {
+    position: absolute;
+    top: 0;
+}
+
+.nav-tabs label.tablab:nth-child(1), .nav-tabs input:nth-child(2), .nav-tabs h2:nth-child(3) {
+    left: var(--bias-b);
+}
+
+.nav-tabs label.tablab:nth-child(5), .nav-tabs input:nth-child(6)  {
+    left: calc(var(--base-tab-width) + var(--bias-b));
+}
+
+.nav-tabs h2:nth-child(7)  {
+    left: calc(var(--base-tab-width) + var(--bias-a) + var(--bias-b));
+}
+
+.nav-tabs label.tablab:nth-child(9), .nav-tabs input:nth-child(10) {
+    left: calc(var(--base-tab-width) * 2 + var(--bias-b));
+}
+
+.nav-tabs h2:nth-child(11) {
+    left: calc((var(--base-tab-width) + var(--bias-a)) * 2 + var(--bias-b));
+}
+
+.nav-tabs label.tablab:nth-child(13), .nav-tabs input:nth-child(14) {
+    left: calc(var(--base-tab-width) * 3 + var(--bias-b));
+}
+
+.nav-tabs h2:nth-child(15) {
+    left: calc((var(--base-tab-width) + var(--bias-a)) * 3 + var(--bias-b));
+}
+
+input[name="tabs"]:focus + h2 {
+    outline: 1px dotted #000;
+    outline-offset: 10px;
+}
+
+input[name="tabs"]:checked + h2 {
+    background: rgba(0, 25, 40, 0.8);
+    border-radius: 5px;
+}
+
+input + h2 + div {
+    position: absolute !important;
+    clip: rect(1px, 1px, 1px, 1px);
+
+    padding: 0 !important;
+    border: 0 !important;
+    height: 1px !important;
+    width: 1px !important;
+    overflow: hidden;
+}
+
+input:checked + h2 + div {
+    position: static !important;
+    padding: 0.25em !important;
+    height: auto !important;
+    width: auto !important;
+    min-width: 20.5em !important;
+}
+
+@media screen and (max-width: 680px) {
+  :root {
+    --base-tab-width: 4.95em;
+    --bias-a: 0.75em;
+    --bias-b: 0.1em;
+  }
+
+  .nav-tabs > h2 {
+    font-size: 0.85em;
+    padding: 14px 10px;
+  }
+}
+

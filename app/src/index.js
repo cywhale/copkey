@@ -27,6 +27,7 @@ const startServer = async () => {
       http2: true,
       trustProxy: true,
       https: {key, cert, allowHTTP1},
+      requestTimeout: 5000,
       logger: true
   })
 

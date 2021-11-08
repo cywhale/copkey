@@ -47,9 +47,10 @@ const Home = () => {
     str: '',
     init: false,
     searched: false,
+    keycheck: false,
     isLoading: false,
     getsize: def_pageSize,
-    param: { first: def_pageSize },
+    param: { keystr: false, first: def_pageSize },
   });
   const [searchSpkey, setSearchSpkey] = useState('');
 
@@ -64,10 +65,18 @@ const Home = () => {
           str: searchSpkey,
           searched: true,
           isLoading: true,
-          param: { first: search.getsize },
+          param: { keystr: search.keycheck, first: search.getsize },
         }))
       )
     } //console.log("Repeated search, dismiss it..")
+  };
+
+  const toggleKeystrSearch = e => {
+    let checked = !search.keycheck;
+    setSearch((prev) => ({
+        ...prev,
+        keycheck: checked,
+    }))
   };
 
   const kickInitHelper = () => {
@@ -201,7 +210,7 @@ const Home = () => {
               ...prev,
               str: hashstate.hash.substring(8).replace(/\_/g, ' '),
               isLoading: true,
-              param: { first: search.getsize },
+              param: { keystr: search.keycheck, first: search.getsize },
             }));
         } else if (hashstate.hash !== '') {
           let el = document.querySelector(hashstate.hash);
@@ -248,7 +257,7 @@ const Home = () => {
               ...prev,  //Note: str changed to '' will cause a server-stuck-on=searching key if multi=selected taxons and click a key not existed on current page
               str: spx, //'', //cannot used default search original taxon that had been searched after supporting multi-species search
               isLoading: true,
-              param: { key: ukey, first: search.getsize },
+              param: { key: ukey, keystr: false, first: search.getsize },
             }));
           }
         }
@@ -323,10 +332,14 @@ const Home = () => {
         <div class="headdiv">
           <div class="float-left-div">
               <p class="flexpspan">
-                <label for="spkeysearch" style="color:grey" />
+                <label for="spkeysearch" style="color:grey;" />
                 <input type="search" id="spkeysearch" name="spkeysearch" placeholder="Search species key"
                    onInput={(e) => { setSearchSpkey(e.target.value) }} />
                 <button class="ctrlbutn" id="keysearchbutn" onClick={trigSearch}>Search</button>
+                <label for="keystrsearch" style="margin-top:10px;">
+                  <input type="checkbox" id="keystrsearch" aria-label="Enable searching identification key string"
+                         checked={search.keycheck} onClick={toggleKeystrSearch} />
+                </label>
               </p>
               { iniHelp &&
                 <p style="text-indent:0;" class="triangle-right top" id="search_tooltips">Search taxon for its identification key<br/>搜尋物種分類檢索，輸入物種名</p>

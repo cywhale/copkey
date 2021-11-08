@@ -1,13 +1,13 @@
 const schema = `
 type Query {
      taxontree: [TreeNode]!
-     infq(taxon: String!, first: Int, last: Int, after: String, before: String, key: String): SpkeyConn!
+     infq(taxon: String, keystr: Boolean, first: Int, last: Int, after: String, before: String, key: String): SpkeyConn
      keys(sp: String!): [Spkeyq]!
 }
 
 type Spkeyq {
      unikey: String
-     taxon: String!
+     taxon: String
      fullname: String
      genus: String
      family: String
@@ -20,21 +20,21 @@ type Spkeyq {
 }
 
 type SpkeyConn {
-  totalCount: Int!
-  pageInfo: PageInfo!
-  edges: SpkeyEdge!
+  totalCount: Int
+  pageInfo: PageInfo
+  edges: SpkeyEdge
 }
 
 type PageInfo {
-  num: Int!
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
+  num: Int
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
 }
 
 type SpkeyEdge {
-  node: [Spkeyq]!
-  cursor: String!
-  endCursor: String!
+  node: [Spkeyq]
+  cursor: String
+  endCursor: String
 }
 
 type TreeNode {

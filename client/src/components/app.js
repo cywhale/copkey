@@ -2,7 +2,7 @@
 import { Router } from 'preact-router';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools'
-import Sidebar from 'async!./Sidebar';
+import TabModal from 'async!./TabModal';
 import Home from 'async!./Home';
 import style from './style/style_app';
 
@@ -17,7 +17,7 @@ const App = (props) => {
         <div path='/' class={style.home}>
           <div style="display:flex;">
             <div class={style.right_area} id="rightarea" />
-            <Sidebar />
+            <TabModal />
             <h1>Copkey App</h1>
           </div>
           <QueryClientProvider client={queryClient}>

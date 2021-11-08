@@ -254,6 +254,7 @@ const UserSearch = (props) => {
     onSearch((prev) => ({
       ...prev,
       param: {
+        keystr: search.keycheck,
         last: search.getsize,
         before: result.cursor
       },
@@ -266,6 +267,7 @@ const UserSearch = (props) => {
     onSearch((prev) => ({
       ...prev,
       param: {
+        keystr: search.keycheck,
         first: search.getsize,
         after: result.endCursor
       },

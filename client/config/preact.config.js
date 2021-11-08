@@ -17,7 +17,7 @@ const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 // Workbox configuration options: [maximumFileSizeToCacheInBytes]. This will not have any effect, as it will only modify files that are matched via 'globPatterns'
 
 const tryOptimize = false;
-const OptimizePlugin = require('optimize-plugin');
+//const OptimizePlugin = require('optimize-plugin');
 
 // mode
 const testenv = {NODE_ENV: process.env.NODE_ENV};
@@ -490,8 +490,7 @@ const baseConfig = (config, env, helpers) => {
     config.plugins.push(new webpack.NoEmitOnErrorsPlugin());
     // Try to dedupe duplicated modules, if any:
     config.plugins.push( new DuplicatePackageCheckerPlugin() );
-
-
+/*
     if (tryOptimize) {
       config.plugins.push( new OptimizePlugin({
         concurrency: 8,
@@ -500,7 +499,7 @@ const baseConfig = (config, env, helpers) => {
         modernize:false
       }));
     }
-
+*/
     config.plugins.push( new BundleAnalyzerPlugin({
       analyzerMode: 'static', //disabled
       generateStatsFile: true,
