@@ -396,15 +396,16 @@ dfk <- data.table(fidx=integer(),
                   xdtk=character(), taxon=character(), subgen=character(),
                   genus=character(), family=character()) #rid link to dtk, xdtk link to key of dtk
 
-#Note: figs is type=2
+#Note: figs is type=2 ## 20211109 try convert keystr to json
 dtk <- data.table(rid=integer(), unikey=character(), ckey=character(), 
                   subkey=character(), pkey=character(),
                   figs=character(), type=integer(), nkey=integer(), 
                   taxon=character(), abbrev_taxon=character(), fullname=character(),
                   subgen=character(), genus=character(), family=character(), 
-                  epithets=character(), keystr=character(), ctxt=character(), fkey=character(),
+                  epithets=character(), keystr=toJSON(character()), ctxt=character(), fkey=character(),
                   sex=character(), docn=integer(), kcnt=integer(), #counter of key+fig to split page
                   page=integer())
+dtk <- dtk[-1]
 
 doclst <- list.files(key_src_dir, pattern="^Key?(.*).docx$",full.names = T)
 cntg <- 0L
@@ -537,10 +538,12 @@ for (docfile in doclst[1:81]) {
   
   dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0(gen_name, "_00a_genus"), #to make its order in the first, #paste0("genus_", gen_name), 
                               ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
-                              figs=NA_character_, type=NA_integer_, nkey=NA_integer_, 
+                              figs=NA_character_, type=-1, nkey=NA_integer_, 
                               taxon=NA_character_, abbrev_taxon=NA_character_, fullname=NA_character_,
                               subgen=NA_character_, genus=gen_name, family=fam_name, epithets=epithets, 
-                              keystr=NA_character_, ctxt=epitxt, fkey=NA_character_, 
+                              #keystr=NA_character_,
+                              keystr=toJSON({}),
+                              ctxt=epitxt, fkey=NA_character_, 
                               sex=NA_character_, docn=cntg, kcnt=keycnt, page=page_cnt)))
   tstL <- nrow(ctent)
 
@@ -921,7 +924,9 @@ for (docfile in doclst[1:81]) {
                                              abbrev_taxon=ataxon,
                                              fullname=NA_character_,
                                              subgen=subgenk, genus=gen_name, family=fam_name,
-                                             epithets=NA_character_, keystr=keystr, ctxt=xc, fkey=NA_character_, 
+                                             epithets=NA_character_, 
+                                             keystr=toJSON(keystr), #keystr=keystr, 
+                                             ctxt=xc, fkey=NA_character_, 
                                              sex=xsex, docn=cntg, kcnt=keycnt, page=page_cnt)))
       } else {
         #202109 no need for delaying output </div>
@@ -1342,7 +1347,8 @@ for (docfile in doclst[1:81]) {
                         fullname=full_name,
                         subgen=ifelse(subgenx=="", NA_character_, subgenx), 
                         genus=gen_name, family=fam_name,
-                        epithets=epit, keystr=keystr, 
+                        epithets=epit, 
+                        keystr=toJSON(fig_caption), #keystr=keystr, 
                         ctxt=ctxtt,
                         fkey=paste(fkeyx, collapse=","), 
                         sex=NA_character_, docn=cntg,
@@ -1381,9 +1387,11 @@ for (docfile in doclst[1:81]) {
                             },simplify = TRUE, USE.NAMES = FALSE) %>% paste(collapse="<br>"),
                             '</div><br><br>',  ifelse(i==tstL, "<br><br>\n\n", "")) # This </div> ends with <div id="fig_species_name">
                   
+                  fig_capx <- unique(na.omit(c(dfk[blkx==blk_cnt,]$caption, fig_caption)))
                   dtk[nrow(dtk), `:=`(
                     ctxt = ctxtt,
-                    fkey = paste(fkey, paste0(fkeyx, collapse=",")) 
+                    fkey = paste(fkey, paste0(fkeyx, collapse=",")),
+                    keystr=ifelse(length(fig_capx)>0, toJSON(fig_capx), toJSON({}))
                   )]
                 } 
                 if (key_chk_flag & any(x_dtk) & (Blk_condi==0 | Blk_condi>=2)) { #if next blk is the same sp (Blk_condi==1), just wait until next blk come in
