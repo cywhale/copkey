@@ -4,6 +4,7 @@ library(odbapi)
 library(data.table)
 library(magrittr)
 #library(stringr)
+library(jsonlite)
 
 key_src_dir <- "D:/ODB/Data/shih/shih_5_202107/Key"
 web_dir <- "www_sp/"
@@ -1307,6 +1308,7 @@ for (docfile in doclst[1:81]) {
                                          #' data-alt=', dQuote(paste0(capx)),
                                          '><img src=',
                                          dQuote(outf), ' border=', dQuote('0'),
+                                         ' alt=', dQuote(full_name),
                                          ' /></a><span id=', dQuote(paste0("fig_",flink)), ' class=', dQuote('spcap'),
                                          '>',cfigx, #' *',sp,'* ',sex,
                                          #' [&#9754;](#key_',ckeyx,') &nbsp;', fdupx,
@@ -1366,6 +1368,7 @@ for (docfile in doclst[1:81]) {
                                        #' data-alt=', dQuote(paste0(capx)),
                                        '><img src=',
                                        dQuote(outf), ' border=', dQuote('0'),
+                                       ' alt=', dQuote(full_name),
                                        ' /></a><span id=', dQuote(paste0("fig_",flink)), ' class=', dQuote('spcap'),
                                        '>',cfigx, #' *',sp,'* ',sex,
                                        #' [&#9754;](#key_',ckeyx,') &nbsp;', fdupx,

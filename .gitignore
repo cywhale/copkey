@@ -94,3 +94,6 @@ static/cmd/font*/
 client/src/template.html
 doc/newsp_htm_extract.csv
 doc/newsp_fig_extract.csv
+doc/New*.docx
+doc/img
+doc/img2
