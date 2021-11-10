@@ -535,7 +535,7 @@ for (docfile in doclst[1:81]) {
     ifelse(!key_chk_flag, paste0(" (<a href=",dQuote(paste0("#fig_",gen_name,"_", gsub("\\s*\\(.*\\)\\s*", "", epi_list))), ">figure</a>)"),""),
     "</p></div><br><br><br>\n\n")
     
-  keycnt <- keycnt + 1L;
+  keycnt <- keycnt + 1L
   
   dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0(gen_name, "_00a_genus"), #to make its order in the first, #paste0("genus_", gen_name), 
                               ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,

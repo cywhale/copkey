@@ -1,5 +1,5 @@
-## Versuib 5: for Genus key, that integrated with species key
-## 20211110 -------------------------------------------------
+## Versuib 5: for Genus key, that integrated with species key, Note change markdown -> HTML
+## 20211110 --------------------------------------------------------------------------------
 ## Version 2: try to maintain the compatibility with version 1
 ## Version 3: move blkfigure into sidebar, sidebar can turn on/off, will not consistent with the behaviors of previous version
 ## Version 4: Still have some bugs 1. if sp name have a spacing btw dots and name cause italitic mark * have additional spacing
@@ -70,6 +70,15 @@ trimx <- function (x) {
   gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", as.character(x)))
 }
 
+padzerox <- function (x, nzero=3) {
+  xt <- as.character(x)
+  if (is.na(xt)) return(NA_character_)
+  if (nzero <= 1 | nzero <= nchar(xt)) return(xt)
+  #if (nzero > nchar(xt)) {
+  return (paste0(paste0(rep(0, nzero-nchar(xt)), collapse=""), xt))
+  #}
+}
+
 ########## find file name according to fig in key #####################
 find_Figfilex <- function (figxt, ftent, imglst, Vers=IndexVers) {
   #require(odbapi)
@@ -83,7 +92,7 @@ find_Figfilex <- function (figxt, ftent, imglst, Vers=IndexVers) {
         print(paste0("No fig provided, only in REF: ", trimx(dt[idx[[1]],]$Remarks), "...in i: ", i))
       }
       return(list(fidx=idx, imgf=NA_integer_, 
-                  sex=NA_character_, body=NA_character_, remark=trimx(dt[idx[[1]],]$Remarks)))
+                  fsex=NA_character_, body=NA_character_, remark=trimx(dt[idx[[1]],]$Remarks)))
     }
     
     sp <- dt[idx[[1]],]$Taxon
@@ -112,7 +121,7 @@ find_Figfilex <- function (figxt, ftent, imglst, Vers=IndexVers) {
       #}
     }
     if (vers>1L) { 
-      return(list(fidx=idx, imgf=idx, sex=sex, body=body, remark=NA_character_))
+      return(list(fidx=idx, imgf=idx, fsex=sex, body=body, remark=NA_character_))
       
     } else {
       tt <- grep(gsub("\\s","_",sciname_simplify(gsub("\\(|\\)","",sp), simplify_two = TRUE)), imglst)
@@ -136,10 +145,10 @@ find_Figfilex <- function (figxt, ftent, imglst, Vers=IndexVers) {
       }
       
       if (all(is.na(tt))) return(list(fidx=idx, imgf=NA_integer_, 
-                                      sex=sex, body=body, remark=NA_character_))
+                                      fsex=sex, body=body, remark=NA_character_))
       
       if (any(!is.na(tt)) & length(tt)==1) {
-        return(list(fidx=idx, imgf=tt, sex=sex, body=body, remark=NA_character_))
+        return(list(fidx=idx, imgf=tt, fsex=sex, body=body, remark=NA_character_))
       }
       
       if (!is.na(body)) {
@@ -173,28 +182,28 @@ find_Figfilex <- function (figxt, ftent, imglst, Vers=IndexVers) {
       if (any(tt1)) {
         if (length(tt1)>1) {
           tt2 <- chklatest(xv$date[tt1], xv$vers[tt1])
-          return(list(fidx=idx, imgf=tt[tt1[tt2]], sex=sex, body=body, 
+          return(list(fidx=idx, imgf=tt[tt1[tt2]], fsex=sex, body=body, 
                       remark=paste(tt[tt1], collapse = ",")))
         } else {
-          return(list(fidx=idx, imgf=tt[tt1], sex=sex, body=body, remark=NA_character_))
+          return(list(fidx=idx, imgf=tt[tt1], fsex=sex, body=body, remark=NA_character_))
         }
       } else if (any(!is.na(bt1)) | any(!is.na(st1))) {
         if (any(!is.na(bt1))) {
           cat("Warning Img: Body match, but no sex match in figx: ", x, " sp: ",sp,"\n")
           
           tt2 <- chklatest(xv$date[bt1], xv$vers[bt1])
-          return(list(fidx=idx, imgf=tt[bt1[tt2]], sex=sex, body=body, 
+          return(list(fidx=idx, imgf=tt[bt1[tt2]], fsex=sex, body=body, 
                       remark=paste(tt[bt1], collapse = ",")))
         }
         if (length(st1)==1) {
-          return(list(fidx=idx, imgf=tt[st1], sex=sex, body=body, remark=paste(tt, collapse = ",")))
+          return(list(fidx=idx, imgf=tt[st1], fsex=sex, body=body, remark=paste(tt, collapse = ",")))
         }
         tt2 <- chklatest(xv$date[st1], xv$vers[st1])
-        return(list(fidx=idx, imgf=tt[st1[tt2]], sex=sex, body=body, remark=paste(tt[st1], collapse = ",")))
+        return(list(fidx=idx, imgf=tt[st1[tt2]], fsex=sex, body=body, remark=paste(tt[st1], collapse = ",")))
         
       } else {
         tt1 <- chklatest(xv$date, xv$vers)
-        return(list(fidx=idx, imgf=tt[tt1], sex=sex, body=body, remark=paste(tt, collapse = ",")))
+        return(list(fidx=idx, imgf=tt[tt1], fsex=sex, body=body, remark=paste(tt, collapse = ",")))
       }
       #idx <- grep(paste(c(paste0("^",x,","),paste0(",",x,"$")), collapse="|"), dt$Fig)
       #if (any(idx)) return(idx[[1]])
@@ -211,7 +220,7 @@ inTesting <- FALSE  ### please change it to FALSE when generate HTML finally
 
 #page lcnt, fcnt No need use dynamic pagination, BUT, change to reset after every align with text and fig 20190126
 lcnt <- 0L; fcnt <- 0L; page <- 1L #word count and line count (text:lcnt, fig:fcnt) 
-insRow<-c()  ########### insert fig in right row of dtk
+insRow<-c()  ########### insert fig in right row of gtk
 insBlkId<-c() ########## insert a block in HTML code
 ## indBlkcnt<-c()########## insert Nth block 
 WaitFlush<- c(FALSE) ### Wait Next primary key and flush out stacked Number of figs (before that primary key)!!
@@ -223,33 +232,24 @@ withinCurrKey <- FALSE # Within one major key, in version3, those figs within wi
 st_conti_flag <- FALSE # line cutted by longer dots, and continue to next line
 fig_conti_flag<- FALSE # figs stacked in st_keep
 st_keep <- data.table(xfig = integer(), xkey = integer(), blkx = integer(), case = integer())
+gkeycnt <- 1L
+ukeyPrex <- "00a_genus_" #"Calanoid_"
 
-dtk <- data.table(rid=integer(), unikey=character(), ckey=integer(), 
+gtk <- data.table(rid=integer(), unikey=character(), ckey=integer(), 
              subkey=character(), pkey=integer(),
              figs=character(), type=integer(), nkey=integer(), 
              taxon=character(), keystr=toJSON(character()),
              ctxt=character(), fkey=character(),
-             sex=character(), kcnt=integer(), 
-             body=character(), keyword=character()) #, page=integer())
-dtk <- dtk[-1]
-
-dfk <- data.table(fidx=integer(), 
-                  fkey=character(), ckeyx=character(),
-                  imgf=character(), fsex=character(), 
-                  main=character(), title=character(),
-                  subfig=character(), caption=character(), citation=character(),
-                  flushed=character(), ## flushed means flush figs in a row
-                  blkx=integer(), docn=integer(), rid=character(), ### blkx: counter of block of fig, docn: nth document
-                  kcnt=integer(), tokcnt=integer(), page=integer(), ## tokcnt: correspond to kcnt in dtk
-                  xdtk=character(), taxon=character(), subgen=character(),
-                  genus=character(), family=character()) #rid link to dtk, xdtk link to key of dtk
+             sex=character(), kcnt=integer())
+             #body=character(), keyword=character()) #, page=integer())
+gtk <- gtk[-1]
 
 #### Used to store figs <-> fig_file mapping
-dfk <- data.table(fidx=integer(),
+gfk <- data.table(fidx=integer(),
                   fkey=character(), ckeyx=character(),
                   imgf=integer(), fsex=character(), 
                   body=character(), remark=character(), fdup=character(), # the imgf had been used (diff figx, use the same imgf)
-                  flushed=integer(),  blkx=integer(), ## flushed means if flushed to ctxt already (1, otherwise 0)
+                  flushed=integer(),  ## flushed means if flushed to ctxt already (1, otherwise 0)
                   case=integer(), blkx=integer(), ### case: blkfigure or not; blkx: counter of block of fig flushed into block
                   kcnt=integer(), tokcnt=integer(), 
                   xdtk=character(), taxon=character())
@@ -293,18 +293,21 @@ while (i<=tstL) { #nrow(ctent)) {
       if (attributes(wl)$match.length>0) {
         keyx <- as.integer(substr(x,wl,wl+attributes(wl)$match.length-2L)) 
         stopifnot(!any(is.na(keyx))) ## because HTML no more support <a name...> for anchor, we use font id to be catched
-        if (IndexVers==1L) {
-          pret <- paste0(pret,'<br><p class=leader><span class=',dQuote('keycol'),'>',
+        #if (IndexVers==1L) {
+        #  pret <- paste0(pret,'<br><p class=', dQuote('leader'), 
+        #                 '><span class=',dQuote('keycol'),'>',
+        #                 '<mark id=', dQuote(paste0('key_', keyx)), '>', keyx, '</mark> ')
+        #} else if (i== skipLine+1L) {
+          pret <- paste0('<div class=', dQuote('kblk'),'><p class=', dQuote('leader'), 
+                         '><span class=',dQuote('keycol'),'>',
                          '<mark id=', dQuote(paste0('key_', keyx)), '>', keyx, '</mark> ')
-        } else if (i== skipLine+1L) {
-          pret <- paste0('<div class=kblk><p class=leader><span class=',dQuote('keycol'),'>',
-                         '<mark id=', dQuote(paste0('key_', keyx)), '>', keyx, '</mark> ')
-        } else {
-          ### 20191015 modified to put </div> in previous dtk, so I can flush image earilier because <div>...</div> cannot be broken
-          ### dtk[nrow(dtk), ctxt:=paste0(ctxt,'</div>')] ## previous change is wrong because maginnote should be inside <div>..</div>
-          pret <- paste0(pret,'</div><div class=kblk><p class=leader><span class=',dQuote('keycol'),'>',
-                         '<mark id=', dQuote(paste0('key_', keyx)), '>', keyx, '</mark> ')
-        }
+        #} else {
+          ### 20191015 modified to put </div> in previous gtk, so I can flush image earilier because <div>...</div> cannot be broken
+          ### gtk[nrow(gtk), ctxt:=paste0(ctxt,'</div>')] ## previous change is wrong because maginnote should be inside <div>..</div>
+        #pret <- paste0(pret,'</div><div class=', dQuote('kblk'),'><p class=', dQuote('leader'), 
+        #                 '><span class=',dQuote('keycol'),'>',
+        #                 '<mark id=', dQuote(paste0('key_', keyx)), '>', keyx, '</mark> ')
+        #}
         stcnt<- nchar(pret)+1L #move pointer to next start in a statment
         x1<- substr(x,wl+attributes(wl)$match.length-1L, nchar(x))
         xc<- paste0(pret,x1) #HTML results
@@ -392,7 +395,7 @@ while (i<=tstL) { #nrow(ctent)) {
         #        insBlkcnt <- c(insBlkcnt, max(insBlkcnt)+1L)
         #      }
       } else {
-        pret<- do.call(function(x) {paste0('[',x,'](#fig_',x,')')}, list(figt)) %>%
+        pret<- do.call(function(x) {paste0('<a href=', dQuote(paste0('#fig_',x)), '>',x, '</a>')}, list(figt)) %>%
           paste(collapse=", ")
       } 
       
@@ -484,12 +487,12 @@ while (i<=tstL) { #nrow(ctent)) {
       }
       
       pret0s <- sapply(xspx, function(x) {
-        ifelse(substr(x, nchar(x)-1L, nchar(x))=="ae", '**', '*')
+        ifelse(substr(x, nchar(x)-1L, nchar(x))=="ae", 'strong>', 'em>')
       }, simplify = TRUE, USE.NAMES = FALSE)
       
       pret<- do.call(function(x, pres, sex) {paste0('<mark id=',dQuote(paste0(ifelse(is.na(sex),'taxon_', paste0(sex,'_')), 
                                                                               gsub("\\s","_",x))),
-                                                    '>', pres, x, pres, ifelse(is.na(sex),"",ifelse(sex=="female","♀","♂")),
+                                                    '><', pres, x, '</', pres, ifelse(is.na(sex),"",ifelse(sex=="female","♀","♂")),
                                                     '</mark>')}, 
                      list(x=trimx(xspx), pres=pret0s, sex=xsex)) %>% paste(collapse=" & ")
       
@@ -503,7 +506,8 @@ while (i<=tstL) { #nrow(ctent)) {
     
     xc<-paste0(gsub("…|\\.{2,}|…\\.{1,}|\\.{1,}…","",ifelse(st_conti_flag, xc, substr(xc,1,nchar(xc)-stt))),
                '</span><span class=',dQuote('keycol'),'>',
-               ifelse(nxttype==0L, paste0('[', nxtk, '](#key_',nxtk,')'), 
+               ifelse(nxttype==0L, 
+                      paste0('<a href=',dQuote(paste0('#key_',nxtk)), '>', nxtk, '</a>'), 
                       paste0('<mark id=', 
                              dQuote(paste0(ifelse(all(is.na(xsex)),'taxon_',paste0(xsex,"_")),paste(unlist(tstrsplit(nsp,'\\s')),collapse='_'))), '>*', nsp, '*</mark>')),
                ifelse(all(is.na(xsex)),"",ifelse(xsex=="female","♀","♂")),'</span></p>')
@@ -536,7 +540,7 @@ while (i<=tstL) { #nrow(ctent)) {
     
     if (!kflag) {
       if (IndexVers==1L) {
-        xc <- paste0('<p class=leader><span class=', #ifelse(prekeyx>0, dQuote('keycol pad4'), dQuote('keycol pad1')), 
+        xc <- paste0('<p class=', dQuote('leader'), '><span class=', #ifelse(prekeyx>0, dQuote('keycol pad4'), dQuote('keycol pad1')), 
                      dQuote(paste0('keycol ', padx)), '>', xc)
         #paste(rep("&nbsp;",ifelse(prekeyx>0, 9L, 3L)),collapse=""), xc)
       } else {
@@ -547,18 +551,19 @@ while (i<=tstL) { #nrow(ctent)) {
       xc <- gsub("<p class(.*?)><span", paste0('<p class=',dQuote(paste0('leader ', indentx)),'><span'), xc)
     }
   } 
+  xc <- paste0(xc,'</div>')
   
   if ((i==tstL & !inTesting) | (kflag & !st_conti_flag & WaitFlush[1])) {
     if (is.na(x) | x=="") {
       xc <- ""
       figx <- NA_character_
     }
-    if (i==tstL & !inTesting) {
-      xc <- paste0(xc,"</div>")
-    }
+    #if (i==tstL & !inTesting) {
+    #  xc <- paste0(xc,"</div>")
+    #}
     
-    if (WaitFlush[1] | (nrow(dfk)>0 & any(dfk[!is.na(imgf),]$flushed==0L))) {
-      if (nrow(dfk[!is.na(imgf) & flushed==0L,])==1 & nrow(st_keep)==1 & any(is.na(figx))) {
+    if (WaitFlush[1] | (nrow(gfk)>0 & any(gfk[!is.na(imgf),]$flushed==0L))) {
+      if (nrow(gfk[!is.na(imgf) & flushed==0L,])==1 & nrow(st_keep)==1 & any(is.na(figx))) {
         rgtflush_flag <- TRUE  ###
         blkflush_flag <- FALSE ### 20191015 modified, so that we can pipe fig more earlier
       } else {
@@ -566,7 +571,7 @@ while (i<=tstL) { #nrow(ctent)) {
       }
       #if (IndexVers<=2) 
       print(paste0("Check insRow correct: ", paste(insRow,collapse=","), " with i: ", i, " with key: ", keyx))
-      insRow[1] <- nrow(dtk) ## update insert Row number just before current key (still not in dtk)
+      insRow[1] <- nrow(gtk) ## update insert Row number just before current key (still not in gtk)
     ########################################### Ver3: all figs in sidebar, so insRow will be earlier when figx found
     }
   }  
@@ -583,9 +588,9 @@ while (i<=tstL) { #nrow(ctent)) {
 ## Case 3: if pret_case==0L but too-much right-side figs, we stacked 2 or 3 figs and flushed in main-column
 ## Case 4: if previous case is pret_case==0L and still WaitFlush or fig_conti_flag, but now pret_case==1L comes,
 ##         Just flushed the stacked fig in right-side and pieped the block of current case (pret_case==1L)      
-  if (!any(is.na(figx)) & nrow(dfk)>0) {
-    chkfx <- sapply(figx, function(x) match(x, dfk[!is.na(imgf),]$fidx))
-    if (any(!is.na(chkfx))) { ## already mapping dfk, no need to query again
+  if (!any(is.na(figx)) & nrow(gfk)>0) {
+    chkfx <- sapply(figx, function(x) match(x, gfk[!is.na(imgf),]$fidx))
+    if (any(!is.na(chkfx))) { ## already mapping gfk, no need to query again
       figx <- figx[-which(!is.na(chkfx))]
     } 
     if (length(figx)==0) figx <- NA_integer_
@@ -611,10 +616,10 @@ while (i<=tstL) { #nrow(ctent)) {
        WaitFlush[1] <- FALSE
        if (blkflush_flag | nrow(st_keep)>1 | length(figx)>1) {
          blkflush_flag <- TRUE
-         #dfk[fidx %in% st_keep[case==0L,]$xfig, blkx:=max(blkx)+1]
+         #gfk[fidx %in% st_keep[case==0L,]$xfig, blkx:=max(blkx)+1]
        } else {
          rgtflush_flag <- TRUE ### Case 4: flush figs in right-side column!
-         dfk[fidx %in% st_keep[case==0L,]$xfig, blkx:=0L]
+         gfk[fidx %in% st_keep[case==0L,]$xfig, blkx:=0L]
        }
      }
      if (!WaitFlush[1]) {
@@ -625,16 +630,16 @@ while (i<=tstL) { #nrow(ctent)) {
          figx <- sort(unique(na.omit(c(st_keep$xfig,figx))))  ## flush out figs link that kept in st_keep 
          fig_conti_flag <- FALSE
          WaitFlush[1] <- TRUE
-         insRow <- c(insRow, nrow(dtk)+1L)
+         insRow <- c(insRow, nrow(gtk)+1L)
        } else { ############################## Case 3 pipe
          print(paste0("... Piping figs in st_keep in i: ",i, " with figs: ", paste(figx, collapse=",")))
          if (!rgtflush_flag & !blkflush_flag) {
            fig_conti_flag <- TRUE
          }
-         #if (nrow(dtk)==0) {
+         #if (nrow(gtk)==0) {
          # insRow[1] <- 1
          if (kflag) {
-          insRow[1] <- nrow(dtk)+1L #Ver3: insRow will be earlier ## Note <p>marginnote</p> must inside <div kblk></div>
+          insRow[1] <- nrow(gtk)+1L #Ver3: insRow will be earlier ## Note <p>marginnote</p> must inside <div kblk></div>
          }
        }
      } else if (WaitFlush[1] & (IndexVers<=2 | kflag)) { #if (WaitFlush[1] & pret_case!=0L & !rgtflush_flag) { #### Case 2, 2a pipe
@@ -649,7 +654,7 @@ while (i<=tstL) { #nrow(ctent)) {
          fig_conti_flag <- TRUE
          WaitFlush <- c(WaitFlush, FALSE)
        }
-       insRow <- c(insRow, nrow(dtk)+1L)
+       insRow <- c(insRow, nrow(gtk)+1L)
      }
    } else {
      #if (!blkflush_flag) {
@@ -660,11 +665,11 @@ while (i<=tstL) { #nrow(ctent)) {
 
     
   if (any(!is.na(figx)) & length(figx)>=1) { ## Normal cases
-    chkfx <- sapply(figx, function(x) match(x, dfk$fidx))
-    if (any(!is.na(chkfx))) { ## already mapping dfk, no need to query again
+    chkfx <- sapply(figx, function(x) match(x, gfk$fidx))
+    if (any(!is.na(chkfx))) { ## already mapping gfk, no need to query again
       figxt <- figx[-which(!is.na(chkfx))]
       
-      dfk[fidx %in% figx[which(!is.na(chkfx))] & flushed==0, ckeyx:=keyx] ##update fig/cur_key mapping
+      gfk[fidx %in% figx[which(!is.na(chkfx))] & flushed==0, ckeyx:=keyx] ##update fig/cur_key mapping
     } else {
       figxt <- figx
     }
@@ -672,24 +677,25 @@ while (i<=tstL) { #nrow(ctent)) {
     if (length(figxt)>=1) {
       fdt <- find_Figfilex(figxt, ftent, imglst) ##### Find fig file in imglst
       
-      if (any(is.na(fdt$sex)) & !all(is.na(xsex))) {
+      if (any(is.na(fdt$fsex)) & !all(is.na(xsex))) {
         print(paste0("Warning: Not found sex info in Table, but actually in Key doc, sp: ", 
                      paste(na.omit(c(nsp,xsp)),collapse=","), " in i: ", i))
-        if (nrow(fdt[is.na(sex),])!= length(xsex)) {
+        if (nrow(fdt[is.na(fsex),])!= length(xsex)) {
           print(paste0("Warning: Cannot determine sex in fdt, i: ", i,
                        " for xsex: ", paste(xsex, collapse = ",")))
         } else {
-          fdt[is.na(sex), sex:=xsex]
+          fdt[is.na(fsex), fsex:=xsex]
         }
       }
-##### fdt' imgf may appear in previous dfk and had been flushed #############################################      
+##### fdt imgf may appear in previous gfk and had been flushed #############################################      
       fdt[,fdup:=""] 
-      if (nrow(dfk)>0) {
-        fdt %<>% .[imgf %in% dfk[!is.na(imgf),]$imgf, fdup:="DUP"] ## still plot, but mark it in this version
+      if (nrow(gfk)>0) {
+        fdt %<>% .[imgf %in% gfk[!is.na(imgf),]$imgf, fdup:="DUP"] ## still plot, but mark it in this version
       }
       
-      dfk <- rbindlist(list(dfk, fdt[,`:=`(flushed=0L, ckeyx=keyx, case=pret_case,
-                                           blkx=ifelse(rgtflush_flag, 0L, max(st_keep$blkx)))]))
+      gfk <- rbindlist(list(gfk, fdt[,`:=`(flushed=0L, ckeyx=keyx, case=pret_case,
+                                           blkx=ifelse(rgtflush_flag, 0L, max(st_keep$blkx)),
+                                           fkey=NA_character_, kcnt=0L, tokcnt=0L, xdtk=NA_character_, taxon=xsp)]))
       if (any(is.na(fdt$imgf))) {
         print(paste0("Check img file corresponding is NA in i: ", i))
         print(paste(fdt[is.na(imgf),]$fidx, collapse=","))
@@ -697,7 +703,7 @@ while (i<=tstL) { #nrow(ctent)) {
       ####### 
       ####### Re-determine plot status, since fig numbuer may NA and changed, cannot fit into 2-column block        
       if (any(is.na(fdt$imgf)) | length(figxt)!=length(figx) | ## fig number changed
-          !any(dfk[!is.na(imgf),]$flushed==0L)) { ## No figs available, so that delete in st_keep
+          !any(gfk[!is.na(imgf),]$flushed==0L)) { ## No figs available, so that delete in st_keep
         if (any(is.na(fdt$imgf)) & fig_conti_flag) {
           st_keep %<>% .[!xfig %in% fdt[is.na(imgf),]$fidx,]
           tt <- sort(unique(na.omit(c(st_keep$xfig,figx[!figx %in% fdt[is.na(imgf),]$fidx]))))
@@ -708,40 +714,42 @@ while (i<=tstL) { #nrow(ctent)) {
             }
             WaitFlush[1] <- TRUE
           }
-        } else if (!any(dfk[!is.na(imgf),]$flushed==0L)) {
+        } else if (!any(gfk[!is.na(imgf),]$flushed==0L)) {
           st_keep <- data.table(xfig=integer(), xkey=integer(), blkx=integer(), case=integer())  ### clear NA data
           #fblk_flag <- FALSE; 
           fig_conti_flag <- FALSE; rgtflush_flag <- FALSE; blkflush_flag <- FALSE
           WaitFlush <- c(FALSE); insBlkId <- c(); insRow <- c();
           
         } #else if (pret_case==0L & length(figxt)!=length(figx) & !rgtflush_flag &
-          #         nrow(dfk[!is.na(imgf) & flushed==0L,])==1L) {
+          #         nrow(gfk[!is.na(imgf) & flushed==0L,])==1L) {
           #st_keep <- rbindlist(list(st_keep, 
           #                          data.table(xfig=figxt, 
-          #                                     xkey=dfk[match(figxt,fidx),]$ckeyx)))
+          #                                     xkey=gfk[match(figxt,fidx),]$ckeyx)))
           #fig_conti_flag <- TRUE; WaitFlush[1] <- FALSE
           ##fblk_flag <- TRUE ############### Wait next chance to flush, keep in st_keep
         #}
       }
     }
   }
-  xf <- data.table(rid=integer(), ckey=integer(), 
+  xf <- data.table(rid=integer(), unikey=character(), ckey=integer(), 
                    subkey=character(), pkey=integer(),
                    figs=character(), type=integer(), nkey=integer(), 
-                   taxon=character(), ctxt=character(), fkey=character(),
-                   sex=character(), body=character(), keyword=character(), fidx=integer()) #20191014 modified to re-order xf 
-  
+                   taxon=character(), keystr=toJSON(character()), ctxt=character(), fkey=character(),
+                   sex=character(), kcnt=integer(), 
+                   #body=character(), keyword=character(), 
+                   fidx=integer()) #20191014 modified to re-order xf 
+  xf <- xf[-1]
 #### plot immediately, Output Fig HTML code  
-  fig_dt <- dfk[FALSE,]
-  if ((rgtflush_flag | blkflush_flag) & any(dfk[!is.na(imgf),]$flushed==0L)) { 
+  fig_dt <- gfk[FALSE,]
+  if ((rgtflush_flag | blkflush_flag) & any(gfk[!is.na(imgf),]$flushed==0L)) { 
 
     if (rgtflush_flag) {
       if (!blkflush_flag) {
-        fig_dt <- dfk[!is.na(imgf) & flushed==0L & case==0L,]
+        fig_dt <- gfk[!is.na(imgf) & flushed==0L & case==0L,]
         fig_dt[,flushed:=1L]
       } else {
-        if (nrow(dfk[!is.na(imgf) & flushed==0L & case==0L & blkx==0L,])>0) {
-          fig_dt <- dfk[!is.na(imgf) & flushed==0L & case==0L & blkx==0L,]
+        if (nrow(gfk[!is.na(imgf) & flushed==0L & case==0L & blkx==0L,])>0) {
+          fig_dt <- gfk[!is.na(imgf) & flushed==0L & case==0L & blkx==0L,]
           fig_dt[,flushed:=1L]
         } else {
           rgtflush_flag <- FALSE ##it means figxt!=figx, duplicated figx (had been outputted) is used in previous statement
@@ -750,12 +758,12 @@ while (i<=tstL) { #nrow(ctent)) {
     } 
     if (blkflush_flag) {
       fig_dt <- rbindlist(list(fig_dt, 
-                               dfk[!is.na(imgf) & flushed==0L & blkx==(blkcnt+1L),] %>% .[,flushed:=2L]))  
+                               gfk[!is.na(imgf) & flushed==0L & blkx==(blkcnt+1L),] %>% .[,flushed:=2L]))  
       
     }
     if (nrow(fig_dt)>0) {
       #################### Ouput Figure HTML Function ##############################
-      ####### Both not in dfk, but they are using the same imgf, not detected in previous code
+      ####### Both not in gfk, but they are using the same imgf, not detected in previous code
       tdup <- which(duplicated(fig_dt$imgf))
       if (any(tdup)) {
         fidx_dup <- fig_dt$fidx[tdup]
@@ -764,10 +772,10 @@ while (i<=tstL) { #nrow(ctent)) {
         print(paste0("Duplicate link to fig: ", paste(link_dup, collapse=",")))
         stopifnot(all(!is.na(link_dup)))
         ################################# ## still plot, but mark it in this version ##################
-        #dfk[fidx %in% fig_dt[tdup,]$fidx, flushed:=99L] #fig_dt[tdup,]$flushed] ## the duplicated plot actually not plotted 
+        #gfk[fidx %in% fig_dt[tdup,]$fidx, flushed:=99L] #fig_dt[tdup,]$flushed] ## the duplicated plot actually not plotted 
         #fig_dt %<>% .[-tdup,] 
         ################################# ## temporarily only mark it 
-        dfk[fidx %in% fig_dt[tdup,]$fidx, fdup:="DUP"]
+        gfk[fidx %in% fig_dt[tdup,]$fidx, fdup:="DUP"]
         fig_dt[tdup, fdup:="DUP"]
       }
       
@@ -908,7 +916,7 @@ while (i<=tstL) { #nrow(ctent)) {
                                  ' /></a><span id=', dQuote(flink), ' class=', dQuote('spnote'),
                                  '>Fig.',cfigx,' *',sp,'* ',sex,' [&#9754;](#key_',ckeyx,') &nbsp;',
                                  fdupx, endimgt),'```\n\n', sep="\n"), ############ Only MARK duplicated imgf
-               fkey=flink, sex=sex, body=body, keyword=NA_character_, fidx=min(idx1))
+               fkey=flink, fsex=sex, body=body, keyword=NA_character_, fidx=min(idx1))
         }, x=ft[idx1], sp=spt[idx1], sex=sxt[idx1], 
            body=fig_dt[idx1,]$body, flink=flink[idx1], outf=outf[idx1], 
            ckeyx=fig_dt[idx1,]$ckeyx, cfigx=fig_dt[idx1,]$fidx,  fdupx=fig_dt[idx1,]$fdup,
@@ -917,11 +925,11 @@ while (i<=tstL) { #nrow(ctent)) {
         idx1 <- c()
       }
       ##############################################################################
-      dfk[fidx %in% fig_dt[idx1,]$fidx, flushed:=1L]  
-      dfk[fidx %in% fig_dt[idx2,]$fidx, flushed:=2L]  
+      gfk[fidx %in% fig_dt[idx1,]$fidx, flushed:=1L]  
+      gfk[fidx %in% fig_dt[idx2,]$fidx, flushed:=2L]  
       setorder(xf, fidx)
      
-      pgRemain = pageLine-(nrow(dtk)-(page-1L)*pageLine) ## How many rows remain for this page
+      pgRemain = pageLine-(nrow(gtk)-(page-1L)*pageLine) ## How many rows remain for this page
       if (length(idx2)>0) { 
         if (spanx=="ntrd") {
           addft <- as.integer((length(idx2)-1)/3.0)+1L
@@ -1021,33 +1029,35 @@ while (i<=tstL) { #nrow(ctent)) {
   }
 
   xf[, fidx:=NULL] #20191014 modified
-  if (blkflush_flag & length(insRow)>0 & nrow(dtk)>1) {
-    dtk <- rbindlist(list(dtk,data.table(rid=i, ckey= keyx, 
+  ukeyx <- paste0(ukeyPrex, padzerox(keyx, 3))
+  if (blkflush_flag & length(insRow)>0 & nrow(gtk)>1) {
+    gtk <- rbindlist(list(gtk,data.table(rid=i, unikey=ukeyx, ckey=keyx, 
                                      subkey= letters[subkeyx], pkey= prekeyx,
                                      figs=paste0(figx, collapse=","),
                                      type=nxttype, nkey=nxtk, 
                                      taxon=ifelse(!is.na(nsp), nsp, paste(xsp, collapse=",")),
+                                     keystr=toJSON(keyt),
                                      ctxt=xc, fkey=NA_character_, 
                                      sex=ifelse(all(is.na(sex)), NA_character_, paste(sex, collapse=",")),
-                                     body=body, keyword=keyt)))
+                                     kcnt=gkeycnt))) #, body=body, keyword=keyt)))
     if (length(insRow)==0) {
-      dtk <- rbindlist(list(dtk, xf)) ## original old case
+      gtk <- rbindlist(list(gtk, xf)) ## original old case
     } else {
       if (insRow[1]==1) {  ############# 20191014 modified
-      #  dtk <- rbindlist(list(xf, dtk))
-        dtk <- rbindlist(list(dtk, xf)) ## original old case
+      #  gtk <- rbindlist(list(xf, gtk))
+        gtk <- rbindlist(list(gtk, xf)) ## original old case
       } else 
-      if (insRow[1]>=nrow(dtk)) {
-        print(paste0("Error: Insert Row: ", insRow[1], " is Larger than nrow(dtk): ", nrow(dtk), " in i: ", i))
-        dtk <- rbindlist(list(dtk,xf))
+      if (insRow[1]>=nrow(gtk)) {
+        print(paste0("Error: Insert Row: ", insRow[1], " is Larger than nrow(gtk): ", nrow(gtk), " in i: ", i))
+        gtk <- rbindlist(list(gtk,xf))
       } else {
-        dtk <- rbindlist(list(dtk[1:insRow[1],],xf,dtk[(insRow[1]+1L):nrow(dtk),]))
+        gtk <- rbindlist(list(gtk[1:insRow[1],],xf,gtk[(insRow[1]+1L):nrow(gtk),]))
       }
       insRow <- insRow[-1]
     }
   } else {
     if (kflag) { ## if major key flag found, should place key ahead of image to end with </div>
-      dtk <- rbindlist(list(dtk,
+      gtk <- rbindlist(list(gtk,
                             data.table(rid=i, ckey= keyx, 
                                        subkey= letters[subkeyx], pkey= prekeyx,
                                        figs=paste0(figx, collapse=","),
@@ -1058,23 +1068,23 @@ while (i<=tstL) { #nrow(ctent)) {
                                        body=body, keyword=keyt)#, xf
       ))
       if (length(insRow)==0) {
-        dtk <- rbindlist(list(dtk, xf)) ## original old case
+        gtk <- rbindlist(list(gtk, xf)) ## original old case
       } else {
         if (insRow[1]==1) {  ############# 20191014 modified
-      #   dtk <- rbindlist(list(xf, dtk))
-          dtk <- rbindlist(list(dtk, xf)) ## original old case
+      #   gtk <- rbindlist(list(xf, gtk))
+          gtk <- rbindlist(list(gtk, xf)) ## original old case
         } else {
-          if (insRow[1]>=nrow(dtk)) {
-            print(paste0("Error: Insert Row: ", insRow[1], " is Larger than nrow(dtk): ", nrow(dtk), " in i: ", i))
-            dtk <- rbindlist(list(dtk,xf))
+          if (insRow[1]>=nrow(gtk)) {
+            print(paste0("Error: Insert Row: ", insRow[1], " is Larger than nrow(gtk): ", nrow(gtk), " in i: ", i))
+            gtk <- rbindlist(list(gtk,xf))
           } else {
-            dtk <- rbindlist(list(dtk[1:insRow[1],],xf,dtk[(insRow[1]+1L):nrow(dtk),]))
+            gtk <- rbindlist(list(gtk[1:insRow[1],],xf,gtk[(insRow[1]+1L):nrow(gtk),]))
           }
         }      
         insRow <- insRow[-1]
       }
     } else {
-      dtk <- rbindlist(list(dtk,xf,
+      gtk <- rbindlist(list(gtk,xf,
                             data.table(rid=i, ckey= keyx, 
                                        subkey= letters[subkeyx], pkey= prekeyx,
                                        figs=paste0(figx, collapse=","),
@@ -1094,11 +1104,11 @@ while (i<=tstL) { #nrow(ctent)) {
   if (any(!is.na(fidx_dup))) {
     print(paste0("Find dup... i: ", i))
     
-#    do.call(function(fidx_dup,link_dup,dtk) {
-#      dupx<-grep(paste0("fig_",fidx_dup), dtk$ctxt)
+#    do.call(function(fidx_dup,link_dup,gtk) {
+#      dupx<-grep(paste0("fig_",fidx_dup), gtk$ctxt)
 #      stopifnot(any(dupx))
-#      dtk[dupx, ctxt:=gsub(paste0("fig_",fidx_dup), paste0("fig_",link_dup), ctxt)]
-#    }, args=list(fidx_dup=fidx_dup, link_dup=link_dup, dtk=dtk)) 
+#      gtk[dupx, ctxt:=gsub(paste0("fig_",fidx_dup), paste0("fig_",link_dup), ctxt)]
+#    }, args=list(fidx_dup=fidx_dup, link_dup=link_dup, gtk=gtk)) 
   }
 ################################# 
   pret <- ""
@@ -1127,7 +1137,7 @@ while (i<=tstL) { #nrow(ctent)) {
   }
   if (st_conti_flag) st_conti_flag <- FALSE
   
-  if (page<(1L+as.integer((nrow(dtk)-1)/pageLine))) {
+  if (page<(1L+as.integer((nrow(gtk)-1)/pageLine))) {
     if (!cnt_rst_flag) {
       lcnt <- 0L ## Reset operation is done in the previous code...
       fcnt <- 0L
@@ -1142,14 +1152,14 @@ while (i<=tstL) { #nrow(ctent)) {
 }
 
 
-cat(na.omit(dtk$ctxt), file="www/bak/web_tmp.txt")
+cat(na.omit(gtk$ctxt), file="www/bak/web_tmp.txt")
 
 ## output source fig file
-fwrite(dfk[!is.na(imgf), ] %>% .[,srcf:=imglst[imgf]] %>% .[,.(fidx, srcf)], file="www/bak/src_figfile_list.csv")
+fwrite(gfk[!is.na(imgf), ] %>% .[,srcf:=imglst[imgf]] %>% .[,.(fidx, srcf)], file="www/bak/src_figfile_list.csv")
 
-length(unique(na.omit(dtk$ckey))) #187
-which(!1:187 %in% unique(na.omit(dtk$ckey)))
+length(unique(na.omit(gtk$ckey))) #187
+which(!1:187 %in% unique(na.omit(gtk$ckey)))
 
-nrow(unique(dtk[!is.na(ckey)|!is.na(subkey),])) #391
+nrow(unique(gtk[!is.na(ckey)|!is.na(subkey),])) #391
 
-length(unique(na.omit(dtk$taxon))) #203 (but some taxon nsp is xxx (aaa & bbb), still not subdivided 20180130)
+length(unique(na.omit(gtk$taxon))) #203 (but some taxon nsp is xxx (aaa & bbb), still not subdivided 20180130)
