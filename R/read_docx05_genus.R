@@ -234,14 +234,16 @@ fig_conti_flag<- FALSE # figs stacked in st_keep
 st_keep <- data.table(xfig = integer(), xkey = integer(), blkx = integer(), case = integer())
 gkeycnt <- 1L
 ukeyPrex <- "00a_genus_" #"Calanoid_"
+#typeBase<- 10L #type = type + typeBase
 
-gtk <- data.table(rid=integer(), unikey=character(), ckey=integer(), 
-             subkey=character(), pkey=integer(),
+gtk <- data.table(rid=integer(), unikey=character(), ckey=character(), # integer-> character, consistent with sp
+             subkey=character(), pkey=character(), ##################### 20211110
              figs=character(), type=integer(), nkey=integer(), 
              taxon=character(), keystr=toJSON(character()),
              ctxt=character(), fkey=character(),
-             sex=character(), kcnt=integer())
-             #body=character(), keyword=character()) #, page=integer())
+             sex=character(), docn=integer(), kcnt=integer()) ########### docn always 0
+             #body=character(), keyword=character()) #, #######keyword -> keystr
+             #page=integer())
 gtk <- gtk[-1]
 
 #### Used to store figs <-> fig_file mapping
@@ -695,7 +697,9 @@ while (i<=tstL) { #nrow(ctent)) {
       
       gfk <- rbindlist(list(gfk, fdt[,`:=`(flushed=0L, ckeyx=keyx, case=pret_case,
                                            blkx=ifelse(rgtflush_flag, 0L, max(st_keep$blkx)),
-                                           fkey=NA_character_, kcnt=0L, tokcnt=0L, xdtk=NA_character_, taxon=xsp)]))
+                                           fkey=NA_character_, kcnt=0L, tokcnt=0L, xdtk=NA_character_, taxon=xsp)]),
+                       use.names=TRUE)
+      
       if (any(is.na(fdt$imgf))) {
         print(paste0("Check img file corresponding is NA in i: ", i))
         print(paste(fdt[is.na(imgf),]$fidx, collapse=","))
@@ -731,11 +735,11 @@ while (i<=tstL) { #nrow(ctent)) {
       }
     }
   }
-  xf <- data.table(rid=integer(), unikey=character(), ckey=integer(), 
-                   subkey=character(), pkey=integer(),
+  xf <- data.table(rid=integer(), unikey=character(), ckey=character(), 
+                   subkey=character(), pkey=character(),
                    figs=character(), type=integer(), nkey=integer(), 
                    taxon=character(), keystr=toJSON(character()), ctxt=character(), fkey=character(),
-                   sex=character(), kcnt=integer(), 
+                   sex=character(), docn=integer(), kcnt=integer(), 
                    #body=character(), keyword=character(), 
                    fidx=integer()) #20191014 modified to re-order xf 
   xf <- xf[-1]
@@ -796,7 +800,7 @@ while (i<=tstL) { #nrow(ctent)) {
         if (!file.exists(paste0("www/img/",outf[j]))) {
           cat("copy file from img: ", outf[j])
           system(enc2utf8(paste0("cmd.exe /c copy ", gsub("/","\\\\",paste0("D:/R/copkey/",fn[j])), 
-                                 " ",gsub("/","\\\\",paste0("D:/R/copkey/www/img/",outf[j])))))
+                                 " ",gsub("/","\\\\",paste0("D:/proj/copkey/www_sp/assets/img/genus/",outf[j])))))
         }
       }
       if (IndexVers==1L) {
