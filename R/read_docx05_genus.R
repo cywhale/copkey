@@ -1,6 +1,6 @@
 ## Versuib 5: for Genus key, that integrated with species key, Note change markdown -> HTML
 ## 20211110 --------------------------------------------------------------------------------
-## Version 2: try to maintain the compatibility with version 1
+## 20211110 (Deleted) Version 2: try to maintain the compatibility with version 1
 ## Version 3: move blkfigure into sidebar, sidebar can turn on/off, will not consistent with the behaviors of previous version
 ## Version 4: Still have some bugs 1. if sp name have a spacing btw dots and name cause italitic mark * have additional spacing
 ##            bug 1 in New_Version_Key.docs is at 48(43) and the spacing is before Metacalanus
@@ -225,14 +225,16 @@ insBlkId<-c() ########## insert a block in HTML code
 ## indBlkcnt<-c()########## insert Nth block 
 WaitFlush<- c(FALSE) ### Wait Next primary key and flush out stacked Number of figs (before that primary key)!!
 blkflush_flag<- FALSE ## Now flush block of figs!!
-blkcnt <- 0L; ########## blocks ID (how many times we flush out blocks of figs)
+gblk_cnt <- 0L; ########## blocks ID (how many times we flush out blocks of figs)
 rgtflush_flag<- FALSE ## Flush figs in right-side column
 keyx <- 0L; subkeyx <- 1L; padx = "pad1"; indentx = "indent2"
 withinCurrKey <- FALSE # Within one major key, in version3, those figs within will merge into block(blk) figs
 st_conti_flag <- FALSE # line cutted by longer dots, and continue to next line
 fig_conti_flag<- FALSE # figs stacked in st_keep
-st_keep <- data.table(xfig = integer(), xkey = integer(), blkx = integer(), case = integer())
+st_keep <- data.table(xfig = integer(), xkey = integer(), blkx = integer(), case = integer(),
+                      xdiv = character()) #202111 add to give it in a div id "00a_genus_unikeyxx_figs_00x"
 gkeycnt <- 1L
+xdiv_id <- ""
 ukeyPrex <- "00a_genus_" #"Calanoid_"
 #typeBase<- 10L #type = type + typeBase
 
@@ -387,12 +389,13 @@ while (i<=tstL) { #nrow(ctent)) {
       } else {
         figx <- figt
       }
+      xdiv_id <- paste0(ukeyPrex,"figs_", padzerox(gblk_cnt+1, 3))
       
       if (pret_case == 1L) {
         pret<- paste0('[',tt,'](#figblk_',tt,')')
         insBlkId <- c(insBlkId, paste0('figblk_',tt))
         #      if (length(insBlkcnt)==0) {
-        #        insBlkcnt <- c(blkcnt+1L)
+        #        insBlkcnt <- c(gblk_cnt+1L)
         #      } else {
         #        insBlkcnt <- c(insBlkcnt, max(insBlkcnt)+1L)
         #      }
@@ -584,7 +587,7 @@ while (i<=tstL) { #nrow(ctent)) {
 ############################################################################################
 ## Case 1: if pret_case==1L: Find blk-fig by author (figs. xx-yy), piped them and flush before next primary key
 ## Case 2: if pret_cast==1L and WaitFlush==TRUE, means next blk comes, and previous one still not flushed-out yet
-##         We still need to piped them in next blkcnt ID
+##         We still need to piped them in next gblk_cnt ID
 ## Case 2a:if too much figs already in right-side, and pret_case==0L, we can wait until previous blk is going to
 ##         be flushed (blkflush_flag set) and pipe these new figs in new block
 ## Case 3: if pret_case==0L but too-much right-side figs, we stacked 2 or 3 figs and flushed in main-column
@@ -626,8 +629,10 @@ while (i<=tstL) { #nrow(ctent)) {
      }
      if (!WaitFlush[1]) {
        tt <- nrow(st_keep) + length(figx)
-       st_keep <- rbindlist(list(st_keep, 
-                                 data.table(xfig=figx, xkey=nxtk, blkx=blkcnt+1L, case=pret_case)))
+       st_keep <- rbindlist(list(
+                    st_keep, 
+                    data.table(xfig=figx, xkey=nxtk, blkx=gblk_cnt+1L, case=pret_case,
+                               xdiv=xdiv_id)))
        if (IndexVers<=2 & (tt %% 2 == 0L | tt %% 3 == 0L | pret_case!=0L)) {
          figx <- sort(unique(na.omit(c(st_keep$xfig,figx))))  ## flush out figs link that kept in st_keep 
          fig_conti_flag <- FALSE
@@ -648,7 +653,8 @@ while (i<=tstL) { #nrow(ctent)) {
        print(paste0("Warning: 2-nd block comes and pipe fig in st_keep in i: ",i, " with figs: ",
                     paste(figx, collapse=",")))
        st_keep <- rbindlist(list(st_keep, 
-                                 data.table(xfig=figx, xkey=nxtk, blkx=max(st_keep$blkx)+1L, case=pret_case)))
+                                 data.table(xfig=figx, xkey=nxtk, blkx=max(st_keep$blkx)+1L, case=pret_case,
+                                            xdiv=xdiv_id)))
        if (IndexVers<=2 & (pret_case!=0L | length(figx) %% 2 == 0L | length(figx) %% 3 == 0L)) {
          fig_conti_flag <- FALSE
          WaitFlush <- c(WaitFlush, TRUE)
@@ -697,7 +703,9 @@ while (i<=tstL) { #nrow(ctent)) {
       
       gfk <- rbindlist(list(gfk, fdt[,`:=`(flushed=0L, ckeyx=keyx, case=pret_case,
                                            blkx=ifelse(rgtflush_flag, 0L, max(st_keep$blkx)),
-                                           fkey=NA_character_, kcnt=0L, tokcnt=0L, xdtk=NA_character_, taxon=xsp)]),
+                                           fkey=NA_character_, 
+                                           kcnt=insRow+1, tokcnt=insRow, xdtk=as.character(insRow), 
+                                           taxon=NA_character_)]),
                        use.names=TRUE)
       
       if (any(is.na(fdt$imgf))) {
@@ -714,7 +722,7 @@ while (i<=tstL) { #nrow(ctent)) {
           if (length(tt)>=2 & (length(tt) %% 2 == 0L | length(tt) %% 3 == 0L)) {
             fig_conti_flag <-FALSE
             if (nrow(st_keep)>0) {
-              st_keep %<>% .[blkx>(blkcnt+1L),] ## flush it!
+              st_keep %<>% .[blkx>(gblk_cnt+1L),] ## flush it!
             }
             WaitFlush[1] <- TRUE
           }
@@ -762,7 +770,7 @@ while (i<=tstL) { #nrow(ctent)) {
     } 
     if (blkflush_flag) {
       fig_dt <- rbindlist(list(fig_dt, 
-                               gfk[!is.na(imgf) & flushed==0L & blkx==(blkcnt+1L),] %>% .[,flushed:=2L]))  
+                               gfk[!is.na(imgf) & flushed==0L & blkx==(gblk_cnt+1L),] %>% .[,flushed:=2L]))  
       
     }
     if (nrow(fig_dt)>0) {
@@ -797,9 +805,9 @@ while (i<=tstL) { #nrow(ctent)) {
       flink <- paste0("fig_", fig_dt$fidx) #figx) 
       
       for (j in seq_along(outf)) {
-        if (!file.exists(paste0("www/img/",outf[j]))) {
+        if (!file.exists(paste0("www_sp/assets/img/genus/",outf[j]))) {
           cat("copy file from img: ", outf[j])
-          system(enc2utf8(paste0("cmd.exe /c copy ", gsub("/","\\\\",paste0("D:/R/copkey/",fn[j])), 
+          system(enc2utf8(paste0("cmd.exe /c copy ", gsub("/","\\\\",paste0("D:/proj/copkey/",fn[j])), 
                                  " ",gsub("/","\\\\",paste0("D:/proj/copkey/www_sp/assets/img/genus/",outf[j])))))
         }
       }
@@ -828,6 +836,10 @@ while (i<=tstL) { #nrow(ctent)) {
         spt<- sciname_simplify(ft, simplify_two = TRUE)
         sxt<-rep("",length(spt))
       }
+      gfk[!is.na(imgf) & flushed==0L & fidx %in% fig_dt$fidx,
+          `:=`(taxon=spt, fkey=flink, remark=gsub("\\.jpg", "", outf))] 
+      
+      
       #################### Output Fig HTML code ####################################################
       if (blkflush_flag & rgtflush_flag & any(0L %in% fig_dt[flushed==2L,]$case)) { 
         if (nrow(fig_dt) %% 2 == 0 | nrow(fig_dt) %% 3 == 0) {
@@ -844,7 +856,8 @@ while (i<=tstL) { #nrow(ctent)) {
       if (blkflush_flag & nrow(fig_dt[flushed==2L,])>0) {
         idx2 <- which(fig_dt$flushed==2L)
         if (length(insBlkId)==0) {
-          insBlkId <- c(paste0("fig_",paste(c(fig_dt[idx2,]$fidx[1],fig_dt[idx2,]$fidx[length(idx2)]), collapse="-")))
+          #insBlkId <- c(paste0("fig_",paste(c(fig_dt[idx2,]$fidx[1],fig_dt[idx2,]$fidx[length(idx2)]), collapse="-")))
+          insBlkId <- st_keep[xfig %in% fig_dt[idx2,]$fidx,]$xdiv[1]
         }
         if (IndexVers<=2L & length(idx2) %% 3 == 0) {
           spanx <- 'ntrd' ### narrow span
@@ -853,58 +866,45 @@ while (i<=tstL) { #nrow(ctent)) {
         } else { ############ otherwise, 2 figs in a line, use wider span
           spanx <- 'ntwo'
         }
-        if (IndexVers<=2L) {
-          xf <- data.table(rid=i, ckey=NA_integer_, subkey=NA_character_, pkey=NA_integer_,
-                           figs=paste(fig_dt[idx2,]$fidx,collapse=","),  type=NA_integer_, nkey=NA_integer_, 
-                           taxon=paste(spt[idx2],collapse=","),
-                           ctxt=paste(paste0('\n<br><p class=', dQuote('blkfigure'),'>'), 
-                                      mapply(function(outf,flink,cfigx,sp,sex,ckeyx,spanx,fdupx) {
-                                        paste0('<span id=', dQuote(insBlkId[1]),' class=', dQuote(spanx), '><a class=', dQuote("fbox"), 
-                                               ' href=', dQuote(paste0('img/',outf)),'><img src=',
-                                               dQuote(paste0('img/',outf)), ' border=', dQuote('0'),
-                                               ' /></a><span id=', dQuote(flink), ' class=', dQuote('spnote'),
-                                               '>Fig.',cfigx,' *',sp,'* ',sex,' [&#9754;](#key_',ckeyx,') &nbsp;',
-                                               fdupx,'</span></span>') ############ Only MARK duplicated imgf
-                                      },outf=outf[idx2], flink=flink[idx2], cfigx=fig_dt[idx2,]$fidx, 
-                                      sp=spt[idx2], sex=sxt[idx2], ckeyx=fig_dt[idx2,]$ckeyx, fdupx=fig_dt[idx2,]$fdup,
-                                      MoreArgs = list(spanx=spanx), SIMPLIFY = TRUE, USE.NAMES = FALSE) %>% 
-                                        paste(collapse="\n"),'</p><br>', sep="\n"),
-                           fkey=paste(flink[idx2], collapse=","),
-                           sex=paste(sxt[idx2], collapse=","), 
-                           body=paste(fig_dt[idx2,]$body, collapse=","), 
-                           keyword=NA_character_, fidx=min(idx2))
-          insBlkId <- insBlkId[-1]
-        } else {
-          ############################# Ver3: add fig captions from file (fcap)
-          caps <- mapply(function(x, sp, fcap, webCite) {
+
+        ############################# Ver3: add fig captions from file (fcap)
+        caps <- mapply(function(x, sp, fcap, webCite) {
             paste0("<em>",sp,"</em>, ",
                     ifelse(is.na(fcap[Fig==x,]$characters),"",fcap[Fig==x,]$characters),
                     ifelse(is.na(fcap[Fig==x,]$ext),"", paste0("<br>",fcap[Fig==x,]$citation, ", ", webCite)))
           }, x=fig_dt[idx2, ]$imgf, sp=spt[idx2], 
              MoreArgs = list(fcap=fcap, webCite=webCite), SIMPLIFY = TRUE, USE.NAMES = FALSE)
-          
-          xf <- data.table(rid=i, ckey=NA_integer_, subkey=NA_character_, pkey=NA_integer_,
-                           figs=paste(fig_dt[idx2,]$fidx,collapse=","),  type=NA_integer_, nkey=NA_integer_, 
-                           taxon=paste(spt[idx2],collapse=","),
-                           ctxt=paste(paste0('\n\n```{marginfigure}\n','<span class=', dQuote('blkfigure'),'>'), 
-                                      mapply(function(outf,flink,cfigx,sp,sex,ckeyx,spanx,fdupx,capx) {
-                                        paste0('<span id=', dQuote(insBlkId[1]),' class=', dQuote(spanx), '><a class=', dQuote("fbox"), 
-                                               ' href=', dQuote(paste0('img/',outf)),
-                                               ' data-alt=', dQuote(paste0(capx)),' /><img src=',
-                                               dQuote(paste0('img/',outf)), ' border=', dQuote('0'),
-                                               ' /></a><span id=', dQuote(flink), ' class=', dQuote('spnote'),
-                                               '>Fig.',cfigx,' *',sp,'* ',sex,' [&#9754;](#key_',ckeyx,') &nbsp;',
-                                               fdupx,'</span></span>') ############ Only MARK duplicated imgf
+        fig_title <- paste0('Classification key: #<a href=', dQuote(paste0("#key_", fig_dt[idx2,]$ckeyx[1])),
+                            '>', fig_dt[idx2,]$ckeyx[1], '</a> (Next key: #<a href=', 
+                            dQuote(paste0("#key_", st_keep[xfig %in% fig_dt[idx2,]$fidx,]$xkey[1])), 
+                            '>', st_keep[xfig %in% fig_dt[idx2,]$fidx,]$xkey[1], '</a>)')  
+        xf <- data.table(rid=i, unikey=insBlkId,
+                         ckey=NA_integer_, subkey=NA_character_, pkey=NA_integer_,
+                         figs=paste(fig_dt[idx2,]$fidx,collapse=","),  type=NA_integer_, nkey=NA_integer_, 
+                         taxon=paste(spt[idx2],collapse=","),
+                         ctxt=paste(paste0('<div id=', dQuote(insBlkId), '><div class=', dQuote('blkfigure'),'>'),
+                                    paste0('<div class=', dQuote('fig_title'), '><span class=', dQuote('spmain'), '>',
+                                           fig_title, '</span></div>'),
+                                    mapply(function(outf,flink,cfigx,#sp,sex,
+                                                    ckeyx,spanx,#fdupx,
+                                                    capx) {
+                                        paste0('<span class=', dQuote(spanx), '><a data-fancybox=', dQuote('gallery'), 
+                                               ' class=', dQuote("fbox"), 
+                                               ' href=', dQuote(paste0('#',flink)),
+                                               '><img src=',
+                                               dQuote(paste0('https://bio.odb.ntu.edu.tw/pub/copkey/gthumb/',outf)), ' border=', dQuote('0'),
+                                               ' /></a><span id=', dQuote(flink), ' class=', dQuote('spcap'),
+                                               '>Fig.',cfigx,'. ',capx,'</span></span>') ############ Only MARK duplicated imgf
                                       },outf=outf[idx2], flink=flink[idx2], cfigx=fig_dt[idx2,]$fidx, 
-                                      sp=spt[idx2], sex=sxt[idx2], ckeyx=fig_dt[idx2,]$ckeyx, fdupx=fig_dt[idx2,]$fdup,
+                                      #sp=spt[idx2], sex=sxt[idx2], ckeyx=fig_dt[idx2,]$ckeyx, fdupx=fig_dt[idx2,]$fdup,
                                       capx=caps, MoreArgs = list(spanx=spanx), SIMPLIFY = TRUE, USE.NAMES = FALSE) %>% 
-                                        paste(collapse="\n"),'</span>','```\n\n', sep="\n"),
+                                        paste(collapse=""),'</div>','<br><br>', sep=""),
                            fkey=paste(flink[idx2], collapse=","),
                            sex=paste(sxt[idx2], collapse=","), 
                            body=paste(fig_dt[idx2,]$body, collapse=","), 
                            keyword=NA_character_, fidx=min(idx2))
-          insBlkId <- insBlkId[-1]
-        }
+        insBlkId <- insBlkId[-1]
+        
       } else {
         idx2 <- c()
       }
@@ -1135,9 +1135,9 @@ while (i<=tstL) { #nrow(ctent)) {
     }
     if (withinCurrKey) withinCurrKey<-FALSE
     if (nrow(st_keep)>0) {
-      st_keep %<>% .[blkx>(blkcnt+1L),] ##if pret_case==1, and no consecutive blkfigs, nrow(st_keep) should 0
+      st_keep %<>% .[blkx>(gblk_cnt+1L),] ##if pret_case==1, and no consecutive blkfigs, nrow(st_keep) should 0
     }
-    blkcnt <- blkcnt + 1L
+    gblk_cnt <- gblk_cnt + 1L
   }
   if (st_conti_flag) st_conti_flag <- FALSE
   
