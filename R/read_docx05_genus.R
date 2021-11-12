@@ -233,7 +233,7 @@ st_conti_flag <- FALSE # line cutted by longer dots, and continue to next line
 fig_conti_flag<- FALSE # figs stacked in st_keep
 st_keep <- data.table(xfig = integer(), xkey = integer(), blkx = integer(), case = integer(),
                       xdiv = character()) #202111 add to give it in a div id "00a_genus_unikeyxx_figs_00x"
-gkeycnt <- 1L
+#gkeycnt <- 1L
 xdiv_id <- ""
 ukeyPrex <- "00a_genus_" #"Calanoid_"
 #typeBase<- 10L #type = type + typeBase
@@ -243,8 +243,8 @@ gtk <- data.table(rid=integer(), unikey=character(), ckey=character(), # integer
              figs=character(), type=integer(), nkey=integer(), 
              taxon=character(), keystr=toJSON(character()),
              ctxt=character(), fkey=character(),
-             sex=character(), docn=integer(), kcnt=integer()) ########### docn always 0
-             #body=character(), keyword=character()) #, #######keyword -> keystr
+             sex=character())#, docn=integer(), kcnt=integer()) ######## docn always 0
+             #body=character(), keyword=character()) #, ####### keyword -> keystr
              #page=integer())
 gtk <- gtk[-1]
 
@@ -255,8 +255,9 @@ gfk <- data.table(fidx=integer(),
                   body=character(), remark=character(), fdup=character(), # the imgf had been used (diff figx, use the same imgf)
                   flushed=integer(),  ## flushed means if flushed to ctxt already (1, otherwise 0)
                   case=integer(), blkx=integer(), ### case: blkfigure or not; blkx: counter of block of fig flushed into block
-                  kcnt=integer(), tokcnt=integer(), 
-                  xdtk=character(), taxon=character())
+                  #kcnt=integer(), tokcnt=integer(), 
+                  #xdtk=character(), 
+                  taxon=character())
 i = skipLine+1L
 prekeyx <- 0L
 pret <- ""
@@ -372,13 +373,13 @@ while (i<=tstL) { #nrow(ctent)) {
     ############## Some fig label scattered in the long sentences.. need find them independently
     while (st_fig_find) {
       #figt<- tstrsplit(gsub("\\.|\\s","",substr(x1t,attributes(wl1)$match.length-1, attributes(wl2)$match.length-1L)), ",") %>%
-      tt <- substr(x1t,wl1+attributes(wl1)$match.length, wl2+attributes(wl2)$match.length-2L)
-      if (grepl('-',tt)) {
-        figt <- tstrsplit(tt,"-") %>% unlist(use.names = F) %>% trimx() %>% as.integer() 
+      fnt <- substr(x1t,wl1+attributes(wl1)$match.length, wl2+attributes(wl2)$match.length-2L)
+      if (grepl('-',fnt)) {
+        figt <- tstrsplit(fnt,"-") %>% unlist(use.names = F) %>% trimx() %>% as.integer() 
         figt <- seq(figt[1], figt[length(figt)])
         pret_case <- 1L ## different HTML code for (fig. 35-37) (it means figs 35,36,37)
       } else {
-        figt <- tstrsplit(gsub("\\.|\\s","",tt), ",") %>% unlist(use.names = F) %>% trimx() %>% as.integer()
+        figt <- tstrsplit(gsub("\\.|\\s","",fnt), ",") %>% unlist(use.names = F) %>% trimx() %>% as.integer()
         pret_case <- 0L #default: it's for (fig. 35,36)
       }
       stopifnot(all(!is.na(figt)))
@@ -389,20 +390,24 @@ while (i<=tstL) { #nrow(ctent)) {
       } else {
         figx <- figt
       }
-      xdiv_id <- paste0(ukeyPrex,"figs_", padzerox(gblk_cnt+1, 3))
+      xdiv_id <- paste0("figs_", 
+                 paste0(sapply(figx, function(x) {padzerox(x,3)}, simplify = T, USE.NAMES = F), collapse="_"))
+      xdiv_uk <- paste0(ukeyPrex, xdiv_id) #unikey
       
       if (pret_case == 1L) {
-        pret<- paste0('[',tt,'](#figblk_',tt,')')
-        insBlkId <- c(insBlkId, paste0('figblk_',tt))
+        pret<- paste0('<a href=', dQuote(paste0('#',xdiv_id)),'>', fnt,'</a>')
+        insBlkId <- c(insBlkId, xdiv_id) #paste0('figblk_',fnt)
         #      if (length(insBlkcnt)==0) {
         #        insBlkcnt <- c(gblk_cnt+1L)
         #      } else {
         #        insBlkcnt <- c(insBlkcnt, max(insBlkcnt)+1L)
         #      }
       } else {
-        pret<- do.call(function(x) {paste0('<a href=', dQuote(paste0('#fig_',x)), '>',x, '</a>')}, list(figt)) %>%
-          paste(collapse=", ")
-      } 
+        #pret<- do.call(function(x) {paste0('<a href=', dQuote(paste0('#fig_',x)), '>',x, '</a>')}, list(figt)) %>% paste(collapse=", ")
+        pret<- do.call(function(x) {
+            paste0('<a href=', dQuote(paste0('#',xdiv_id,'-',x)), '>',x, '</a>')
+          }, list(figt)) %>% paste(collapse=", ")
+      } #Note that #figs_001_002-1 <- "-1" not match when try to find dom, only for open the real image (Fig001)
       
       #x2<-substr(x1t,attributes(wl2)$match.length+1L, nchar(x1t))
       x2<- substr(x1t,wl2+attributes(wl2)$match.length, nchar(x1t))
@@ -549,7 +554,8 @@ while (i<=tstL) { #nrow(ctent)) {
                      dQuote(paste0('keycol ', padx)), '>', xc)
         #paste(rep("&nbsp;",ifelse(prekeyx>0, 9L, 3L)),collapse=""), xc)
       } else {
-        xc <- paste0('<p class=',dQuote(paste0('leader ', indentx)),'><span class=',
+        xc <- paste0('<div ckass=',dQuote('kblk'), 
+                     '><p class=',dQuote(paste0('leader ', indentx)),'><span class=',
                      dQuote(paste0('keycol ', padx)), '>', xc)
       }
     } else if (IndexVers>1L) { ## need insert indention in new version
@@ -704,7 +710,7 @@ while (i<=tstL) { #nrow(ctent)) {
       gfk <- rbindlist(list(gfk, fdt[,`:=`(flushed=0L, ckeyx=keyx, case=pret_case,
                                            blkx=ifelse(rgtflush_flag, 0L, max(st_keep$blkx)),
                                            fkey=NA_character_, 
-                                           kcnt=insRow+1, tokcnt=insRow, xdtk=as.character(insRow), 
+                                           #kcnt=insRow+1, tokcnt=insRow, xdtk=as.character(insRow), 
                                            taxon=NA_character_)]),
                        use.names=TRUE)
       
@@ -747,7 +753,7 @@ while (i<=tstL) { #nrow(ctent)) {
                    subkey=character(), pkey=character(),
                    figs=character(), type=integer(), nkey=integer(), 
                    taxon=character(), keystr=toJSON(character()), ctxt=character(), fkey=character(),
-                   sex=character(), docn=integer(), kcnt=integer(), 
+                   sex=character(), #docn=integer(), kcnt=integer(), 
                    #body=character(), keyword=character(), 
                    fidx=integer()) #20191014 modified to re-order xf 
   xf <- xf[-1]
@@ -792,16 +798,8 @@ while (i<=tstL) { #nrow(ctent)) {
       }
       
       fn <- imglst[fig_dt$imgf]
-      if (IndexVers==1L) {
-        outf<-gsub("(P[0-9]+)_([0-9])","\\1-\\2",
-              gsub("-f","_f", gsub("-m","_m",   ## -female, -male to _female _male in file names
-              gsub("_\\.","\\.",gsub("^\\s{1,}|^_{1,}|\\s+$|_+$","",
-              gsub("_{1,}|[^P0-9a-zA-Z]-{1,}","_",gsub("\\s{1,}|&","_",
-              gsub("\\(|\\)|\\;|[^PAMx_\\-][0-9]{1,}|[0-9]{0,}\\.[0-9]{1,}mm|doc/img/","",
-              gsub("♀|Female","female",gsub("♂|Male","male",fn))))))))), perl=TRUE)  
-      } else {
-        outf<-gsub("\\s{1,}","_",substr(fn,22,nchar(fn)))
-      }
+      outf<-gsub("\\s{1,}","_",substr(fn,22,nchar(fn)))
+
       flink <- paste0("fig_", fig_dt$fidx) #figx) 
       
       for (j in seq_along(outf)) {
@@ -811,13 +809,9 @@ while (i<=tstL) { #nrow(ctent)) {
                                  " ",gsub("/","\\\\",paste0("D:/proj/copkey/www_sp/assets/img/genus/",outf[j])))))
         }
       }
-      if (IndexVers==1L) {
-        ft <- sapply(outf, function(outf) {paste(unlist(tstrsplit(gsub("\\.jpg|\\(|\\)","",outf),"_|-")), collapse=" ")},
+
+      ft <- sapply(outf, function(outf) {paste(unlist(tstrsplit(gsub("Fig[0-9]{1,}_|\\.jpg|\\(|\\)","",outf),"_|-")), collapse=" ")},
                    simplify = T, USE.NAMES = F)
-      } else {
-        ft <- sapply(outf, function(outf) {paste(unlist(tstrsplit(gsub("Fig[0-9]{1,}_|\\.jpg|\\(|\\)","",outf),"_|-")), collapse=" ")},
-                     simplify = T, USE.NAMES = F)
-      }
 #### Extract SPname ans SEXinfo ########################            
       if (any(grepl("female|male", ft))) {
         spt<- sciname_simplify(gsub(paste(c("female|male|(P|Mx)?[0-9]+", termList$name), collapse="(\\s|$)|\\b"),"",ft),
@@ -862,7 +856,7 @@ while (i<=tstL) { #nrow(ctent)) {
         if (IndexVers<=2L & length(idx2) %% 3 == 0) {
           spanx <- 'ntrd' ### narrow span
         } else if (IndexVers>2L & length(idx2) == 1) {
-          spanx <- 'thumbnail'
+          spanx <- 'nfig'
         } else { ############ otherwise, 2 figs in a line, use wider span
           spanx <- 'ntwo'
         }
@@ -874,15 +868,18 @@ while (i<=tstL) { #nrow(ctent)) {
                     ifelse(is.na(fcap[Fig==x,]$ext),"", paste0("<br>",fcap[Fig==x,]$citation, ", ", webCite)))
           }, x=fig_dt[idx2, ]$imgf, sp=spt[idx2], 
              MoreArgs = list(fcap=fcap, webCite=webCite), SIMPLIFY = TRUE, USE.NAMES = FALSE)
+        fig_kstr <- gsub("<((\\/)*em|br)>", "", caps)
         fig_title <- paste0('Classification key: #<a href=', dQuote(paste0("#key_", fig_dt[idx2,]$ckeyx[1])),
                             '>', fig_dt[idx2,]$ckeyx[1], '</a> (Next key: #<a href=', 
                             dQuote(paste0("#key_", st_keep[xfig %in% fig_dt[idx2,]$fidx,]$xkey[1])), 
                             '>', st_keep[xfig %in% fig_dt[idx2,]$fidx,]$xkey[1], '</a>)')  
-        xf <- data.table(rid=i, unikey=insBlkId,
+        xf <- data.table(rid=i, unikey=paste0(ukeyPrex, insBlkId),
                          ckey=NA_integer_, subkey=NA_character_, pkey=NA_integer_,
-                         figs=paste(fig_dt[idx2,]$fidx,collapse=","),  type=NA_integer_, nkey=NA_integer_, 
+                         figs=paste(fig_dt[idx2,]$fidx,collapse=","),  type=2, nkey=NA_integer_, 
                          taxon=paste(spt[idx2],collapse=","),
-                         ctxt=paste(paste0('<div id=', dQuote(insBlkId), '><div class=', dQuote('blkfigure'),'>'),
+                         keystr=toJSON(paste0(fig_kstr, collapse="; ")),
+                         ctxt=paste(paste0('<div id=', dQuote(insBlkId), 
+                                           '><div class=', dQuote('blkfigure'),'>'),
                                     paste0('<div class=', dQuote('fig_title'), '><span class=', dQuote('spmain'), '>',
                                            fig_title, '</span></div>'),
                                     mapply(function(outf,flink,cfigx,#sp,sex,
@@ -898,11 +895,15 @@ while (i<=tstL) { #nrow(ctent)) {
                                       },outf=outf[idx2], flink=flink[idx2], cfigx=fig_dt[idx2,]$fidx, 
                                       #sp=spt[idx2], sex=sxt[idx2], ckeyx=fig_dt[idx2,]$ckeyx, fdupx=fig_dt[idx2,]$fdup,
                                       capx=caps, MoreArgs = list(spanx=spanx), SIMPLIFY = TRUE, USE.NAMES = FALSE) %>% 
-                                        paste(collapse=""),'</div>','<br><br>', sep=""),
+                                        paste(collapse=""),
+                                    '</div>',  #</div blkfigure>
+                                    '</div><br><br>', sep=""), #</div figs_xxx>
                            fkey=paste(flink[idx2], collapse=","),
                            sex=paste(sxt[idx2], collapse=","), 
-                           body=paste(fig_dt[idx2,]$body, collapse=","), 
-                           keyword=NA_character_, fidx=min(idx2))
+                           #body=paste(fig_dt[idx2,]$body, collapse=","), 
+                           #keyword=NA_character_, 
+                           #docn=0, #kcnt=gkeycnt,
+                           fidx=paste0(idx2, collapse=",")) #min(idx2))
         insBlkId <- insBlkId[-1]
         
       } else {
@@ -910,21 +911,44 @@ while (i<=tstL) { #nrow(ctent)) {
       }
       if (rgtflush_flag & nrow(fig_dt[flushed==1L,])>0) { ## if not put fig in block, but in right side, each fig is a unique HTML quote by marginfigure
         idx1 <- which(fig_dt$flushed==1L)
-        
-        xf <- rbindlist(list(xf,rbindlist(mapply(function(x, sp, sex, body, flink, outf, ckeyx, cfigx, fdupx, itx) {
-          list(rid=itx, ckey=NA_integer_, subkey=NA_character_, pkey=NA_integer_,
-               figs=cfigx,  type=NA_integer_, nkey=NA_integer_, taxon=sp,
-               ctxt=paste('\n\n```{marginfigure}', 
-                          paste0(preimgt, dQuote("fbox"), ' href=', dQuote(paste0('img/',outf)),'><img src=',
-                                 dQuote(paste0('img/',outf)), ' border=', dQuote('0'),
-                                 ' /></a><span id=', dQuote(flink), ' class=', dQuote('spnote'),
-                                 '>Fig.',cfigx,' *',sp,'* ',sex,' [&#9754;](#key_',ckeyx,') &nbsp;',
-                                 fdupx, endimgt),'```\n\n', sep="\n"), ############ Only MARK duplicated imgf
-               fkey=flink, fsex=sex, body=body, keyword=NA_character_, fidx=min(idx1))
-        }, x=ft[idx1], sp=spt[idx1], sex=sxt[idx1], 
-           body=fig_dt[idx1,]$body, flink=flink[idx1], outf=outf[idx1], 
+        fdivx<- st_keep[xfig %in% fig_dt[idx1,]$fidx,]$xdiv
+        nxtkx<- st_keep[xfig %in% fig_dt[idx1,]$fidx,]$xkey
+
+        xf <- rbindlist(list(xf,rbindlist(mapply(function(x, idx, fdiv, nxtk, imgx, sp, sex, #body, 
+                                                          flink, outf, ckeyx, cfigx, fdupx, itx) {
+          capx <- paste0("<em>",sp,"</em>, ",
+                    ifelse(is.na(fcap[Fig==imgx,]$characters),"",fcap[Fig==imgx,]$characters),
+                    ifelse(is.na(fcap[Fig==imgx,]$ext),"", paste0("<br>",fcap[Fig==imgx,]$citation, ", ", webCite)))
+          fig_kstr <- gsub("<((\\/)*em|br)>", "", capx)
+          fig_title <- paste0('Classification key: #<a href=', dQuote(paste0("#key_", ckeyx)),
+                              '>', ckeyx, '</a> (Next key: #<a href=', 
+                              dQuote(paste0("#key_", nxtk)), 
+                              '>', nxtk, '</a>)')  
+          return(
+          list(rid=itx, unikey=paste0(ukeyPrex, fdiv),
+               ckey=NA_integer_, subkey=NA_character_, pkey=NA_integer_,
+               figs=cfigx,  type=2, nkey=NA_integer_, taxon=sp,
+               keystr=fig_kstr,
+               ctxt=paste(paste0('<div id=', dQuote(fdiv), 
+                                 '><div class=', dQuote('blkfigure'),'>'),
+                          paste0('<div class=', dQuote('fig_title'), '><span class=', dQuote('spmain'), '>',
+                                 fig_title, '</span></div>'),
+                          paste0('<span class=', dQuote('nfig'), '><a data-fancybox=', dQuote('gallery'), 
+                                 ' class=', dQuote("fbox"), ' href=', 
+                                 dQuote(paste0('#',flink)),'><img src=',
+                                 dQuote(paste0('https://bio.odb.ntu.edu.tw/pub/copkey/gthumb/',outf)), 
+                                 ' border=', dQuote('0'),
+                                 ' /></a><span id=', dQuote(flink), ' class=', dQuote('spcap'),
+                                 '>Fig.',cfigx,'. ',capx,'</span></span></div></div><br><br>'), sep=""), ############ Only MARK duplicated imgf
+                   fkey=flink, sex=sex, #body=body, keyword=NA_character_, 
+                   fidx=idx)
+          )
+        }, x=ft[idx1], idx=idx1, fdiv=fdivx, nxtk=nxtkx, imgx=fig_dt[idx1, ]$imgf,
+           sp=spt[idx1], sex=sxt[idx1], 
+          # body=fig_dt[idx1,]$body, 
+        flink=flink[idx1], outf=outf[idx1], 
            ckeyx=fig_dt[idx1,]$ckeyx, cfigx=fig_dt[idx1,]$fidx,  fdupx=fig_dt[idx1,]$fdup,
-        MoreArgs = list(itx=i), SIMPLIFY = FALSE))))
+        MoreArgs = list(itx=i), SIMPLIFY = FALSE))), use.names = T)
       } else {
         idx1 <- c()
       }
@@ -1042,62 +1066,71 @@ while (i<=tstL) { #nrow(ctent)) {
                                      taxon=ifelse(!is.na(nsp), nsp, paste(xsp, collapse=",")),
                                      keystr=toJSON(keyt),
                                      ctxt=xc, fkey=NA_character_, 
-                                     sex=ifelse(all(is.na(sex)), NA_character_, paste(sex, collapse=",")),
-                                     kcnt=gkeycnt))) #, body=body, keyword=keyt)))
+                                     sex=ifelse(all(is.na(sex)), NA_character_, paste(sex, collapse=","))
+                                     #docn=0, kcnt=gkeycnt
+                                     )),use.names = T) #, body=body, keyword=keyt)))
+    #gkeycnt <- gkeycnt+1
     if (length(insRow)==0) {
-      gtk <- rbindlist(list(gtk, xf)) ## original old case
+      gtk <- rbindlist(list(gtk, xf), use.names = T) ## original old case
     } else {
       if (insRow[1]==1) {  ############# 20191014 modified
       #  gtk <- rbindlist(list(xf, gtk))
-        gtk <- rbindlist(list(gtk, xf)) ## original old case
+        gtk <- rbindlist(list(gtk, xf), use.names = T) ## original old case
       } else 
       if (insRow[1]>=nrow(gtk)) {
         print(paste0("Error: Insert Row: ", insRow[1], " is Larger than nrow(gtk): ", nrow(gtk), " in i: ", i))
-        gtk <- rbindlist(list(gtk,xf))
+        gtk <- rbindlist(list(gtk,xf), use.names = T)
       } else {
-        gtk <- rbindlist(list(gtk[1:insRow[1],],xf,gtk[(insRow[1]+1L):nrow(gtk),]))
+        gtk <- rbindlist(list(gtk[1:insRow[1],],xf,gtk[(insRow[1]+1L):nrow(gtk),]), use.names = T)
       }
       insRow <- insRow[-1]
     }
   } else {
     if (kflag) { ## if major key flag found, should place key ahead of image to end with </div>
       gtk <- rbindlist(list(gtk,
-                            data.table(rid=i, ckey= keyx, 
+                            data.table(rid=i, unikey=ukeyx, ckey= keyx, 
                                        subkey= letters[subkeyx], pkey= prekeyx,
                                        figs=paste0(figx, collapse=","),
                                        type=nxttype, nkey=nxtk, 
                                        taxon=ifelse(!is.na(nsp), nsp, paste(xsp, collapse=",")),
+                                       keystr=toJSON(keyt),
                                        ctxt=xc, fkey=NA_character_, 
-                                       sex=ifelse(all(is.na(sex)), NA_character_, paste(sex, collapse=",")),
-                                       body=body, keyword=keyt)#, xf
-      ))
+                                       sex=ifelse(all(is.na(sex)), NA_character_, paste(sex, collapse=","))#,
+                                       #body=body, keyword=keyt)#, xf
+                                       #docn=0, kcnt=gkeycnt)
+      )), use.names = T)
+      #gkeycnt <- gkeycnt+1
+      
       if (length(insRow)==0) {
-        gtk <- rbindlist(list(gtk, xf)) ## original old case
+        gtk <- rbindlist(list(gtk, xf), use.names = T) ## original old case
       } else {
         if (insRow[1]==1) {  ############# 20191014 modified
       #   gtk <- rbindlist(list(xf, gtk))
-          gtk <- rbindlist(list(gtk, xf)) ## original old case
+          gtk <- rbindlist(list(gtk, xf), use.names = T) ## original old case
         } else {
           if (insRow[1]>=nrow(gtk)) {
             print(paste0("Error: Insert Row: ", insRow[1], " is Larger than nrow(gtk): ", nrow(gtk), " in i: ", i))
-            gtk <- rbindlist(list(gtk,xf))
+            gtk <- rbindlist(list(gtk,xf), use.names = T)
           } else {
-            gtk <- rbindlist(list(gtk[1:insRow[1],],xf,gtk[(insRow[1]+1L):nrow(gtk),]))
+            gtk <- rbindlist(list(gtk[1:insRow[1],],xf,gtk[(insRow[1]+1L):nrow(gtk),]), use.names = T)
           }
         }      
         insRow <- insRow[-1]
       }
     } else {
       gtk <- rbindlist(list(gtk,xf,
-                            data.table(rid=i, ckey= keyx, 
+                            data.table(rid=i, unikey=ukeyx, ckey= keyx, 
                                        subkey= letters[subkeyx], pkey= prekeyx,
                                        figs=paste0(figx, collapse=","),
                                        type=nxttype, nkey=nxtk, 
                                        taxon=ifelse(!is.na(nsp), nsp, paste(xsp, collapse=",")),
+                                       keystr=toJSON(keyt),
                                        ctxt=xc, fkey=NA_character_, 
-                                       sex=ifelse(all(is.na(sex)), NA_character_, paste(sex, collapse=",")),
-                                       body=body, keyword=keyt)
-      ))    
+                                       sex=ifelse(all(is.na(sex)), NA_character_, paste(sex, collapse=","))#,
+                                       #body=body, keyword=keyt)
+                                       #docn=0, kcnt=gkeycnt)
+      )), use.names = T)
+      #gkeycnt <- gkeycnt+1
     }
   }
     
