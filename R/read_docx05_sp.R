@@ -1811,6 +1811,7 @@ cat(na.omit(dtk$ctxt), file=paste0(web_dir, "web_tmp.txt"))
 dtk1 <- copy(dtk)
 dtk1[,ctxt:=#gsub("\\.jpg", ".png",  #try just use jpg #20211024
             gsub("\\\n", "", gsub("\\“|\\”",'\\"', ctxt))]
+dtk1[,kcnt:=kcnt+1000L] #### 2021114 let genus key in front of species key
 fwrite(dtk1,file="doc/newsp_htm_extract.csv")
 fwrite(dfk, file="doc/newsp_fig_extract.csv")
 
