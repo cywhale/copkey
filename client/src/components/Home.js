@@ -6,7 +6,6 @@ import MultiSelectSort from 'async!./MultiSelectSort';
 import UserSearch from 'async!./UserSearch';
 import Helper from 'async!./Helper';
 import Popup from 'async!./Compo/Popup';
-//import draggable_element from './Compo/draggable_element';
 import(/* webpackMode: "lazy" */
        /* webpackPrefetch: true */
        '../style/style_ctrlcompo');
@@ -81,14 +80,6 @@ const Home = () => {
 
   const kickInitHelper = () => {
     if (iniHelp) {
-      /*return(
-        setAppState((prev) => ({
-          ...prev,
-          iniHelp: false,
-          toHelp: false,
-        }))
-      )*/
-      //closeHelp();
       useHelp.getState().closeHelp();
     }
   };
@@ -114,23 +105,7 @@ const Home = () => {
     };
 
     fetchingData();
-  }, []);
-
-  const handleTouchMove = (e) => e.preventDeafault();
-  const lockScreen = () => {
-    if (document.body.className.indexOf("noscroll") < 0) {
-      document.body.className += " noscroll";
-      document.body.addEventListener('touchmove', handleTouchMove, false);
-    }
-    console.log("Lock screen: ", document.body.className);
-  }
-  const unlockScreen = () => {
-    if (document.body.className.indexOf("noscroll") >= 0) {
-      document.body.classList.remove("noscroll");
-      document.body.removeEventListener('touchmove', handleTouchMove);
-    }
-    console.log("Unlock screen: ", document.body.className, document.body.classList);
-  }*/
+  }, []);*/
   const clear_uri = () => {
     let uri = window.location.toString();
     let clean_uri = uri.substring(0, uri.indexOf("#"));
@@ -152,14 +127,7 @@ const Home = () => {
 
     clear_uri();
   };
-/*const enscroller = () => {
-    setAppState((prev) => ({
-        ...prev,
-        scrollPos: document.documentElement.scrollTop,
-    }))
-  };
-  options.debounceRendering = enscroller => setTimeout(enscroller, 100);
-*/
+
   useEffect(() => {
 //  prefetchInit();
     if (!appstate.loaded) {
@@ -183,9 +151,7 @@ const Home = () => {
           par: parx,
         }));
       }, false);
-/*    let drag_opts = { dom: ".popup", dragArea: '.popup' };
-      draggable_element(drag_opts);
-*/
+
       setAppState((preState) => ({
         ...preState,
         loaded: true,
@@ -224,25 +190,41 @@ const Home = () => {
               scrollPos: -1, // el.getBoundingClientRect().top + window.pageYOffset
             }));
           } else {
-            let parx, ukey, spx;
+            let parx, ukey, nkey, spx;
             //let scrollTop = false;
             let spt = hashstate.hash.split(/\_/);
             let keyx= hashstate.hash.substring(0,4);
-            if (keyx === '#gen' || keyx === "#epi" || keyx === "#key") {
+            if ((keyx === '#tax' && spt.length === 2) || keyx === '#gen' || keyx === "#epi" || keyx === "#key") {
               if (keyx = "#key") {
-                let nkey = parseInt(spt[2].replace(/[a-z]/g,''));
-                let nkeyx= (isNaN(nkey)? '_00a_genus' : (nkey < 10? '_0' + spt[2] : '_' + spt[2]));
-                ukey = spt[1] + nkeyx
+              //20211115 add to detect genus: key_1 -> 00a_genus_001a
+                if (spt.length === 2 && !isNaN(parseInt(spt[1]))) { //for e.g. key_005
+                  nkey = parseInt(spt[1]);
+                  ukey = '00a_genus_' + (nkey < 10? '00' + spt[1] :
+                                        (nkey < 100? '0' + spt[1] : spt[1])) + 'a';
+                  spx = '';
+                } else {
+                  let epi = spt[2]??'';
+                  nkey = parseInt(epi.replace(/[a-z]/g,''));
+                  let nkeyx= (isNaN(nkey)? '_00a_genus' : (nkey < 10? '_0' + spt[2] : '_' + spt[2]));
+                  ukey = spt[1] + nkeyx
+                  spx = spt[1]
+                }
               } else {
                 ukey = spt[1] + '_00a_genus'
+                spx = spt[1]
               }
-              spx = spt[1];
+              console.log("Hash change: try search ukey: ", ukey, " and taxon: ", spx);
               //it's not really a 'after' key because it should search keys which >= ukey (not > ukey))
               //parx = {taxon: spt[1], first: search.getsize, after: ukey};
               //scrollTop = true; // new query will be on top
-            } else if (keyx === "#tax" || keyx === "#fig") {
-              ukey = 'fig_' +  spt[1] + (spt[2]? '_'+spt[2] : ''); //fig key is not really fig_xxx_xxx in mongo, need re-index
-              spx = spt[1] + (spt[2]? ' '+spt[2] : '');
+            } else if ((keyx === "#tax" && spt[2]) || keyx === "#fig") {
+              if (keyx === '#fig' && spt.length == 2 && !isNaN(parseInt(spt[1]))) { //2021115 for genus
+                ukey = '00a_genus_figs(?:.*)' + (nkey < 10? '00' + spt[1] : (nkey < 100? '0' + spt[1] : spt[1])) + '((?:.*)|$)'
+                spx = ''
+              } else {
+                ukey = 'fig_' +  spt[1] + (spt[2]? '_'+spt[2] : ''); //fig key is not really fig_xxx_xxx in mongo, need re-index
+                spx = spt[1] + (spt[2]? ' '+spt[2] : '');
+              }
             }
             // NOT search ok would cause el is null and cannot scroll, so setting handling must wait seach completed!!
             setHashState((prev) => ({

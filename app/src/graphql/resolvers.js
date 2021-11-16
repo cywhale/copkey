@@ -5,7 +5,8 @@ const resolvers = {
       taxontree: async (_, obj, ctx) => {
         const keyx = await Spkey
                            .aggregate([
-                             { $match: {"taxon": {"$ne": ""}} },
+                             { $match: {$and:[{"taxon": {"$nin": [null, ""]}}, //{"$ne": ""}
+                                              {"genus": {"$nin": [null, ""]}}]} },
                              { $group: {
                                /*_id: { //null
                                    family: "$family", //{$addToSet: "$family"}
@@ -96,8 +97,7 @@ const resolvers = {
         //const emptyx = {}
         if (!first && !last) {
             ctx.reply.log.info("Pagination should have one argument: first or last");
-            //data = await emptyx;
-            return //result;
+            return
         }
         if (first && last) {
             ctx.reply.log.info("Pagination cannot have both arguments: first & last")
@@ -111,30 +111,26 @@ const resolvers = {
         let spt = decodeURIComponent(taxon).replace(/\_/g, ' ')
         let spx = spt.replace(/\s/g, '\\\s')
         let chk_if_keystr = false
-        spqry = {$or:[
+
+        if (key && key.substring(0,3)=='00a') {
+            ctx.reply.log.info("Perform genus search: " + key)
+            spqry= { "kcnt": {"$lt": 1000} }
+        } else {
+          spqry = {$or:[
                 {"taxon": {$regex: spx, $options: "ix"} },
                 {"fullname": {$regex: spx, $options: "ix"} },
                 {"genus": {$regex: spx, $options: "ix"} },
                 {"family": {$regex: spx, $options: "ix"} }
-        ]}
+          ]}
 
-        /*if (key || keystr) { //Cancel this func, use key, keystr both got confused. key now only for #fig_xxx #key_xxx
-          if (key && key.indexOf(spt.split(/(\s|\|)/)[0]) < 0) { // if search not like 'Acartia_xxx' or 'fig_Acartia_xxx'
-            //let kstr = decodeURIComponent(key).replace(/\s/g, '|')
-            //change to use Spkey.find({$text: {$search: key}}) with keystr been text-indexed
-            //let qry_kstr = {"keystr": {$regex: kstr, $options: "ix"}}
-            let qry_kstr = {$text: {$search: key}}
-            spqry = spx === ''? qry_kstr: {...spqry, qry_kstr} //spqry is an OR operation, with AND keystr searching
-            ctx.reply.log.info("Perform keystr search: " + key)
-          } else */
-        if (keystr && spx !== '') { //if checkbox of keystr is enabled, then search input (as taxon) will be treated as string to be keystr-searching
+          if (keystr && spx !== '') { //if checkbox of keystr is enabled, then search input (as taxon) will be treated as string to be keystr-searching
             spqry = //{$or:[
                     {$text: {$search: spt}} //, //All OR operation
                     //{"unikey": /genus/g}]}
             ctx.reply.log.info("Perform keystr search: " + spt)
-        //}
-        } else if (spx === '') {
-          spqry= {} //query all
+          } else if (spx === '') {
+            spqry= {} //query all
+          }
         }
 
         //20211012 modified: if has a key index to find, then it must be firstly re-index, then can get correct page

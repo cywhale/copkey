@@ -10,26 +10,18 @@ import(/* webpackMode: "lazy" */
        '../../style/style_modal_tab.scss');
 
 const TabModal = (props) => {
-  const [ isOpen, setIsOpen ] = useState(true);
+  const [ isOpen, setIsOpen ] = useState(false);
   const [ loaded, setLoaded ] = useState(false);
-//const [ genus, setGenus] = useState(false); //only disable at initial-load, after that, always enable
-//const [ oview, setOview] = useState(false); //the same as above (can be merged to one -> use loaded, if test ok
 
   const iniHelp= useHelp(useCallback(state => state.iniHelp, []));
   const toggleBtnx = () => {
     if (isOpen && iniHelp) {
       useHelp.getState().closeHelp();
-    }/*
-    if (isOpen) {
-      setGenus(false);
-      setOview(false);
-    }*/
+    }
     setIsOpen(!isOpen)
   }
   const closeBtnx = () => {
     setIsOpen(false);
-    //setGenus(false);
-    //setOview(false);
     if (iniHelp) {
       useHelp.getState().closeHelp();
     }
@@ -42,11 +34,6 @@ const TabModal = (props) => {
     } }
   }*/
   const tabCheckListenx = (tabid, adjust=true) => {
-  /*if (tabid=="tab-2") {
-      setGenus(true);
-    } else if (tabid=="tab-3") {
-      setOview(true);
-    }*/
     let elchk = document.getElementById(tabid);
     elchk.addEventListener('change', function() {
       let elo= document.getElementById("ctrl");
@@ -86,20 +73,13 @@ const TabModal = (props) => {
       document.getElementById('tab-1').checked = true; // give a default
       tabCheckListenx('tab-1', false);
       tabCheckListenx('tab-2');
-      tabCheckListenx('tab-3');
+      tabCheckListenx('tab-3', false);
       tabCheckListenx('tab-4', false);
 /*    document.addEventListener("DOMContentLoaded", (e) => {
          loadIframex();
       });*/
       setLoaded(true);
-    }/*else {
-      if (!genus) {
-        setGenus(true);
-      }
-      if (!oview) {
-        setOview(true);
-      }
-    }*/
+    }
   },[loaded]);
 
   let modalClass;
@@ -130,7 +110,7 @@ const TabModal = (props) => {
           <div class="nav-tabs">
             <label class={tabClass} for="tab-1" tabindex="0" />
             <input id="tab-1" type="radio" name="tabs" aria-hidden="true" />
-            <h2 data-toggle="tab">Species</h2>
+            <h2 data-toggle="tab">Guides</h2>
               <div class={style.ctrlwrapper}>
                   <section class={style.ctrlsect}>
                     <div class={colClass}>
@@ -143,29 +123,31 @@ const TabModal = (props) => {
               </div>
             <label class={tabClass} for="tab-2" tabindex="1" />
             <input id="tab-2" type="radio" name="tabs" aria-hidden="true" />
-            <h2 data-toggle="tab">Genus</h2>
-              <div class={style.ctrlwrapper}>
-                  <section class={style.ctrlsect}>
-                     {loaded && <TabInframe ifrid="tab2ifr" enable={loaded} srcurl="https://bio.odb.ntu.edu.tw/copkey"/>}
-                  </section>
-              </div>
-            <label class={tabClass} for="tab-3" tabindex="2" />
-            <input id="tab-3" type="radio" name="tabs" aria-hidden="true" />
             <h2 data-toggle="tab">Overview</h2>
               <div class={style.ctrlwrapper}>
                   <section class={style.ctrlsect}>
                     <div class={colClass}>
-                      {loaded && <TabInframe ifrid="tab3ifr" enable={loaded} srcurl="https://bio.odb.ntu.edu.tw/copbook"/>}
+                      {loaded && <TabInframe ifrid="tab2ifr" enable={loaded} srcurl="https://bio.odb.ntu.edu.tw/copbook"/>}
+                    </div>
+                  </section>
+              </div>
+            <label class={tabClass} for="tab-3" tabindex="2" />
+            <input id="tab-3" type="radio" name="tabs" aria-hidden="true" />
+            <h2 data-toggle="tab">Others</h2>
+              <div class={style.ctrlwrapper}>
+                  <section class={style.ctrlsect}>
+                    <div class={colClass}>
+                      <div id="resultxdiv"> Test 3-1</div>
                     </div>
                   </section>
               </div>
             <label class={tabClass} for="tab-4" tabindex="3" />
             <input id="tab-4" type="radio" name="tabs" aria-hidden="true" />
-            <h2 data-toggle="tab">Others</h2>
+            <h2 data-toggle="tab">About</h2>
               <div class={style.ctrlwrapper}>
                   <section class={style.ctrlsect}>
                     <div class={colClass}>
-                      <div id="resultxdiv"> Test 4-1</div>
+                      <div> Author page (to be conti.)</div>
                     </div>
                   </section>
               </div>
