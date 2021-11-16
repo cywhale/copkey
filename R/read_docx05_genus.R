@@ -680,14 +680,18 @@ while (i<=tstL) { #nrow(ctent)) {
       
       fn <- imglst[fig_dt$imgf]
       outf<-gsub("\\s{1,}","_",substr(fn,22,nchar(fn)))
+      #### 20211117 modified "Fig001_Labidocera_sinilobata_female.jpg" --> fig001.jpg
+      #### otherwise, cannot use #fig_k -> get Fig00k_xxxxx.jpg. Can only get fig00k.jpg
+      jpgf<-paste0(tolower(substr(outf, 1, 6)), ".jpg")
 
       flink <- paste0("fig_", fig_dt$fidx) #figx) 
       
       for (j in seq_along(outf)) {
-        if (!file.exists(paste0("www_sp/assets/img/genus/",outf[j]))) {
+        if (!file.exists(paste0("www_sp/assets/img/genus/",jpgf[j]))) { #outf[j]
           cat("copy file from img: ", outf[j])
           system(enc2utf8(paste0("cmd.exe /c copy ", gsub("/","\\\\",paste0("D:/proj/copkey/",fn[j])), 
-                                 " ",gsub("/","\\\\",paste0("D:/proj/copkey/www_sp/assets/img/genus/",outf[j])))))
+                               ##" ",gsub("/","\\\\",paste0("D:/proj/copkey/www_sp/assets/img/genus/",outf[j])))))
+                                 " ",gsub("/","\\\\",paste0("D:/proj/copkey/www_sp/assets/img/genus/",jpgf[j])))))
         }
       }
 
@@ -712,7 +716,7 @@ while (i<=tstL) { #nrow(ctent)) {
         sxt<-rep("",length(spt))
       }
       gfk[!is.na(imgf) & flushed==0L & fidx %in% fig_dt$fidx,
-          `:=`(taxon=spt, fkey=flink, remark=gsub("\\.jpg", "", outf))] 
+          `:=`(taxon=spt, fkey=flink, remark=gsub("\\_", " ", gsub("^Fig[0-9]{3}\\_", "", gsub("\\.jpg", "", outf))))] 
       
       
       #################### Output Fig HTML code ####################################################
@@ -762,13 +766,13 @@ while (i<=tstL) { #nrow(ctent)) {
         
         fig_kstr <- gsub("<((\\/)*em|br)>", "", caps)
         fig_nsp  <- na.omit(st_keep[xfig %in% fig_dt[idx2, ]$fidx,]$nsp)
-        fig_ckey <- paste0(sapply(unique(fig_dt[idx2,]$ckeyx), function(x) {
+        fig_ckey <- paste0(sapply(na.omit(unique(fig_dt[idx2,]$ckeyx)), function(x) {
           paste0('<a href=', dQuote(paste0('#key_', x)), '>', x, '</a>')
         }, simplify = T, USE.NAMES = F), collapse=', ')
         fig_title <- paste0('Classification key: ', fig_ckey,
-                            ifelse(!all(is.na(fig_nsp) && fig_nsp==''),
+                            ifelse(!all(is.na(fig_nsp) | fig_nsp==''),
                               gsub("\\,\\s$", "", paste0(', and related genus: ',
-                                paste0(sapply(fig_nsp, function(x) {        
+                                paste0(sapply(na.omit(unique(fig_nsp)), function(x) {        
                                   paste0('<em><a href=', 
                                          dQuote(paste0('#genus_', x)), '>', x, '</a></em>')
                                 }, simplify = T, USE.NAMES = F), collapse=", "))), ''))
@@ -791,14 +795,15 @@ while (i<=tstL) { #nrow(ctent)) {
                                                dQuote(paste0('https://bio.odb.ntu.edu.tw/pub/copkey/gthumb/',outf)), ' border=', dQuote('0'),
                                                ' alt=', dQuote(gsub("<((\\/)*em|br)>", "", capx)), 
                                                ' /></a><span id=', dQuote(flink), ' class=', dQuote('spcap'),
-                                               '>Fig.',cfigx,'. ',capx,'</span></span>') ############ Only MARK duplicated imgf
-                                      },outf=outf[idx2], flink=flink[idx2], cfigx=fig_dt[idx2,]$fidx, 
+                                               '>Fig. ',cfigx,' ',capx,'</span></span>') ############ Only MARK duplicated imgf
+                                      },outf=jpgf[idx2], flink=flink[idx2], cfigx=fig_dt[idx2,]$fidx, 
                                       #sp=spt[idx2], sex=sxt[idx2], ckeyx=fig_dt[idx2,]$ckeyx, fdupx=fig_dt[idx2,]$fdup,
                                       capx=caps, MoreArgs = list(spanx=spanx), SIMPLIFY = TRUE, USE.NAMES = FALSE) %>% 
                                         paste(collapse=""),
                                     '</div><br><br>',  #</div blkfigure>
+                                    #ifelse(cites!='', 
                                     paste0('<div class=', dQuote('fig_cite'), '><span class=', dQuote('spcap'), '>', 
-                                           cites,'</span></div>'),
+                                           cites,'</span></div>'), #''),
                                     '</div><br><br>', sep=""), #</div figs_xxx>
                            fkey=paste(flink[idx2], collapse=","),
                            sex=paste(sxt[idx2], collapse=","), 
@@ -854,7 +859,7 @@ while (i<=tstL) { #nrow(ctent)) {
                                  ' border=', dQuote('0'),
                                  ' alt=', dQuote(gsub("<((\\/)*em|br)>", "", capx)), 
                                  ' /></a><span id=', dQuote(flink), ' class=', dQuote('spcap'),
-                                 '>Fig.',cfigx,'. ',capx,'</span></span></div><br><br>',
+                                 '>Fig. ',cfigx,' ',capx,'</span></span></div><br><br>',
                                  paste0('<div class=', dQuote('fig_cite'), '><span class=', dQuote('spcap'), '>', 
                                         citex,'</span></div>'),
                                  '</div><br><br>'), sep=""), ############ Only MARK duplicated imgf
@@ -865,7 +870,7 @@ while (i<=tstL) { #nrow(ctent)) {
            imgx=fig_dt[idx1,]$imgf, fnsp=fig_nsp,
            sp=spt[idx1], sex=sxt[idx1], 
           # body=fig_dt[idx1,]$body, 
-        flink=flink[idx1], outf=outf[idx1], 
+        flink=flink[idx1], outf=jpgf[idx1], 
            ckeyx=fig_dt[idx1,]$ckeyx, cfigx=fig_dt[idx1,]$fidx,  fdupx=fig_dt[idx1,]$fdup,
         MoreArgs = list(itx=i), SIMPLIFY = FALSE))), use.names = T)
       } else {
@@ -1123,6 +1128,15 @@ nrow(unique(gtk[!is.na(ckey)|!is.na(subkey),])) #391
 length(unique(na.omit(gtk$taxon))) #203 (but some taxon nsp is xxx (aaa & bbb), still not subdivided 20180130)
 
 gtk1 <- copy(gtk)
+gtk1 <- rbindlist(list(data.table(rid=0, unikey="00a_genus_00a", 
+                                  ckey=NA_character_, # integer-> character, consistent with sp
+                                  subkey=NA_character_, pkey=NA_character_, ##################### 20211110
+                                  figs=NA_character_, type=-1, nkey=NA_integer_, 
+                                  taxon="Calanoida", keystr=toJSON("Genera of Calanoid copepods"),
+                                  ctxt=paste0('<div id=', dQuote("genus_Calanoida"), ' class=', dQuote('kblk'), 
+                                              '><p class=', dQuote('doc_title'), '>Key to the genera of Calanoid copepods</p></div>'),
+                                  fkey=NA_character_, sex=NA_character_),
+                       gtk1))
 gtk1[,ctxt:=gsub("\\\n", "", gsub("\\“|\\”",'\\"', ctxt))]
 gtk1[,`:=`(docn=0, kcnt=.I)]
 fwrite(gtk1,file="doc/newgen_htm_extract.csv")
