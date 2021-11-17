@@ -526,15 +526,15 @@ while (i<=tstL) { #nrow(ctent)) {
        ############################## Case 3 pipe
        print(paste0("... Piping figs in st_keep in i: ",i, " with figs: ", paste(figx, collapse=",")))
        if (!rgtflush_flag & !blkflush_flag) {
-         if (i==tstL & !inTesting) {
+         #if (i==tstL & !inTesting) { ## 20211117 modified: let it always flush after st_keep get data
            if (nrow(st_keep)>1) {
              blkflush_flag <- TRUE
-           } else {
+           } else { #if (nrow(st_keep)>0) {
              rgtflush_flag <- TRUE 
            }
-         } else {
-           fig_conti_flag <- TRUE
-         }
+         #} else {
+         #   fig_conti_flag <- TRUE # 20211117 modified: let it always flush after st_keep get data
+         #}
        }
        #if (nrow(gtk)==0) {
        # insRow[1] <- 1
