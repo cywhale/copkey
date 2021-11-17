@@ -112,7 +112,7 @@ const resolvers = {
         let spx = spt.replace(/\s/g, '\\\s')
         let chk_if_keystr = false
 
-        if (key && key.substring(0,3)=='00a') {
+        if (key && key.substring(0,3) === '00a') {
             ctx.reply.log.info("Perform genus search: " + key)
             spqry= { "kcnt": {"$lt": 1000} }
         } else {
@@ -136,7 +136,8 @@ const resolvers = {
         //20211012 modified: if has a key index to find, then it must be firstly re-index, then can get correct page
         if (key) {
           let pgsize = first || last
-          if (key.substring(0,3) === 'fig') {
+          let fig_flag = key.match(/fig/g)? true : false
+          if (fig_flag) {
             data = await Spkey.find(spqry, {unikey:1, kcnt:1, taxon:1, type:1, ctxt:1}, {sort: {unikey: 1}})
           } else {
             data = await Spkey.find(spqry, {unikey:1, kcnt:1, ctxt:1}, {sort: {unikey: 1}})
@@ -144,10 +145,15 @@ const resolvers = {
           if (data && data.length) {
             if (chk_if_keystr) {
               curidx = 0
-            } else if (key.substring(0,3) === 'fig') {
-              let kt = key.split(/\_/)
-              let spt= kt[1] + " " + kt[2]
-              curidx = data.findIndex(item => item.taxon === spt && item.type === 2)
+            } else if (fig_flag) {
+              if (key.substring(0,3) === 'fig') {
+                let kt = key.split(/\_/)
+                let spt= kt[1] + " " + kt[2]
+                curidx = data.findIndex(item => item.taxon === spt && item.type === 2)
+              } else {
+                let kt = new RegExp(key, 'gi')
+                curidx = data.findIndex(item => item.unikey.match(kt)? true : false)
+              }
             } else {
               curidx = data.findIndex(item => item.unikey === key)
             }

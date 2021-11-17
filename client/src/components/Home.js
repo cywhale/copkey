@@ -128,6 +128,34 @@ const Home = () => {
     clear_uri();
   };
 
+  const openPopup = () => {
+    if (hashstate.elem.substring(0,4) === "#fig") {
+      let spx = hashstate.elem.substring(hashstate.elem.indexOf('_')+1);
+      let spt = spx.split(/\_/);
+      let dir = 'species'
+      if (spt.length == 2 && !isNaN(parseInt(spt[1]))) {
+        let nkey = parseInt(spt[1])
+        spx = 'fig' + (nkey < 10? '00' + spt[1] : (nkey < 100? '0' + spt[1] : spt[1]));
+        dir = 'genus';
+      } else if (spt.length == 2) {
+        spx = spx + '_01'; //add a number fo species, but we don't validate species yet
+      }
+      if (spt.length >= 2) {
+        //let hstr='<a data-fancybox="gallery" href="/assets/img/species/' + spx + '.jpg" target="_blank"' +
+        //         '><img src="/assets/img/species/' + spx + '.jpg" border="0" /></a>';
+        let hstr='<a data-fancybox="gallery" href="https://bio.odb.ntu.edu.tw/pub/copkey/' +
+                 dir + '/' + spx + '.jpg" target="_blank"' +
+                 '><img src="https://bio.odb.ntu.edu.tw/pub/copkey/' +
+                 dir + '/' + spx + '.jpg" border="0" /></a>';
+        setFigx((prev) => ({
+          ...prev,
+          popup: true,
+          html: hstr,
+        }));
+      }
+    }
+  }
+
   useEffect(() => {
 //  prefetchInit();
     if (!appstate.loaded) {
@@ -189,6 +217,8 @@ const Home = () => {
               //scrollTop: false,
               scrollPos: -1, // el.getBoundingClientRect().top + window.pageYOffset
             }));
+            // Note 20211117 genus fig has the same span name as key, so when it's found, it will only scroll, not open, need handle it
+            openPopup();
           } else {
             let parx, ukey, nkey, spx;
             //let scrollTop = false;
@@ -219,7 +249,7 @@ const Home = () => {
               //scrollTop = true; // new query will be on top
             } else if ((keyx === "#tax" && spt[2]) || keyx === "#fig") {
               if (keyx === '#fig' && spt.length == 2 && !isNaN(parseInt(spt[1]))) { //2021115 for genus
-                ukey = '00a_genus_figs(?:.*)' + (nkey < 10? '00' + spt[1] : (nkey < 100? '0' + spt[1] : spt[1])) + '((?:.*)|$)'
+                ukey = '00a_genus.*figs.*' + (nkey < 10? '00' + spt[1] : (nkey < 100? '0' + spt[1] : spt[1])) + '.*'
                 spx = ''
               } else {
                 ukey = 'fig_' +  spt[1] + (spt[2]? '_'+spt[2] : ''); //fig key is not really fig_xxx_xxx in mongo, need re-index
@@ -276,28 +306,8 @@ const Home = () => {
             scrollPos: to_pos,
         }));
         clear_uri();
-
-        if (hashstate.elem.substring(0,4) === "#fig") {
-          let spx = hashstate.elem.substring(hashstate.elem.indexOf('_')+1);
-          let spt = spx.split(/\_/);
-          if (spt.length == 2) {
-            spx = spx + '_01'; //add a number fo species, but we don't validate species yet
-          }
-          if (spt.length >= 2) {
-            //let hstr='<a data-fancybox="gallery" href="/assets/img/species/' + spx + '.jpg" target="_blank"' +
-            //         '><img src="/assets/img/species/' + spx + '.jpg" border="0" /></a>';
-            let hstr='<a data-fancybox="gallery" href="https://bio.odb.ntu.edu.tw/pub/copkey/species/' + spx + '.jpg" target="_blank"' +
-                     '><img src="https://bio.odb.ntu.edu.tw/pub/copkey/species/' + spx + '.jpg" border="0" /></a>';
-            setFigx((prev) => ({
-              ...prev,
-              popup: true,
-              html: hstr,
-            }));
-          }
-        }
-      } //else {
-         //console.log("Check uncertain state: ", search.isLoading, hashstate);
-      //}
+        openPopup();
+      }
     }
   },[appstate.loaded, hashstate.hash, hashstate.handling]); //, prefetchInit
 
