@@ -251,7 +251,7 @@ const Home = () => {
                 parx = { key: ukey, keystr: false, mode: modex, first: search.getsize };
               } else {
                 //ukey = spt[1] + '_00a_genus' //if just search taxon, can be removed
-                modex= 'species';
+                modex= keyx === '#tax' && spt.length === 2? 'genus' : 'species';
                 spx = spt[1]
                 parx = { keystr: false, mode: modex, first: search.getsize };
               }
