@@ -526,15 +526,15 @@ while (i<=tstL) { #nrow(ctent)) {
        ############################## Case 3 pipe
        print(paste0("... Piping figs in st_keep in i: ",i, " with figs: ", paste(figx, collapse=",")))
        if (!rgtflush_flag & !blkflush_flag) {
-         #if (i==tstL & !inTesting) { ## 20211117 modified: let it always flush after st_keep get data
+         if ((i==tstL & !inTesting) | (nrow(st_keep)>=2)) { ## 20211117 modified: let it always flush after st_keep get data
            if (nrow(st_keep)>1) {
              blkflush_flag <- TRUE
            } else { #if (nrow(st_keep)>0) {
              rgtflush_flag <- TRUE 
            }
-         #} else {
-         #   fig_conti_flag <- TRUE # 20211117 modified: let it always flush after st_keep get data
-         #}
+         } else {
+            fig_conti_flag <- TRUE # 20211117 modified: let it always flush after st_keep get data
+         }
        }
        #if (nrow(gtk)==0) {
        # insRow[1] <- 1
@@ -750,8 +750,8 @@ while (i<=tstL) { #nrow(ctent)) {
 
         ############################# Ver3: add fig captions from file (fcap)
         caps <- mapply(function(x, sp, fcap) { #, webCite) {
-            paste0("<em>",sp,"</em>, ",
-                    ifelse(is.na(fcap[Fig==x,]$characters),"",fcap[Fig==x,]$characters))#,
+            paste0("<em>",sp,"</em>",
+                    ifelse(is.na(fcap[Fig==x,]$characters),"", gsub("(\\s)*\\,(\\s)*", " ", paste0(" ",fcap[Fig==x,]$characters))))#,
                     #ifelse(is.na(fcap[Fig==x,]$ext),"", paste0("<br>",fcap[Fig==x,]$citation, ", ", webCite)))
           }, x=fig_dt[idx2, ]$imgf, sp=spt[idx2], 
              MoreArgs = list(fcap=fcap), #webCite=webCite), 
@@ -829,8 +829,8 @@ while (i<=tstL) { #nrow(ctent)) {
         xf <- rbindlist(list(xf,rbindlist(mapply(function(x, idx, fdiv, #nxtk, 
                                                           imgx, fnsp, sp, sex, #body, 
                                                           flink, outf, ckeyx, cfigx, fdupx, itx) {
-          capx <- paste0("<em>",sp,"</em>, ",
-                    ifelse(is.na(fcap[Fig==imgx,]$characters),"",fcap[Fig==imgx,]$characters))#,
+          capx <- paste0("<em>",sp,"</em>",
+                    ifelse(is.na(fcap[Fig==imgx,]$characters),"", gsub("(\\s)*\\,(\\s)*", " ", paste0(" ",fcap[Fig==imgx,]$characters))))#,
                     #ifelse(is.na(fcap[Fig==imgx,]$ext),"", paste0("<br>",fcap[Fig==imgx,]$citation, ", ", webCite)))
           ctx <- ifelse(is.na(fcap[Fig==imgx,]$ext),"", paste0(fcap[Fig==imgx,]$citation, ", ", webCite))
           citex <- ifelse(ctx=="", "", paste0("Fig. ", imgx, ". ", ctx))
