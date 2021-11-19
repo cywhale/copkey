@@ -750,7 +750,7 @@ while (i<=tstL) { #nrow(ctent)) {
 
         ############################# Ver3: add fig captions from file (fcap)
         caps <- mapply(function(x, sp, fcap) { #, webCite) {
-            paste0("<em>",sp,"</em>",
+            paste0("<em>",sp,".</em>",
                     ifelse(is.na(fcap[Fig==x,]$characters),"", gsub("(\\s)*\\,(\\s)*", " ", paste0(" ",fcap[Fig==x,]$characters))))#,
                     #ifelse(is.na(fcap[Fig==x,]$ext),"", paste0("<br>",fcap[Fig==x,]$citation, ", ", webCite)))
           }, x=fig_dt[idx2, ]$imgf, sp=spt[idx2], 
@@ -795,7 +795,7 @@ while (i<=tstL) { #nrow(ctent)) {
                                                dQuote(paste0('https://bio.odb.ntu.edu.tw/pub/copkey/gthumb/',outf)), ' border=', dQuote('0'),
                                                ' alt=', dQuote(gsub("<((\\/)*em|br)>", "", capx)), 
                                                ' /></a><span id=', dQuote(flink), ' class=', dQuote('spcap'),
-                                               '>Fig. ',cfigx,' ',capx,'</span></span>') ############ Only MARK duplicated imgf
+                                               '>Fig. ',cfigx,'. ',capx,'</span></span>') ############ Only MARK duplicated imgf
                                       },outf=jpgf[idx2], flink=flink[idx2], cfigx=fig_dt[idx2,]$fidx, 
                                       #sp=spt[idx2], sex=sxt[idx2], ckeyx=fig_dt[idx2,]$ckeyx, fdupx=fig_dt[idx2,]$fdup,
                                       capx=caps, MoreArgs = list(spanx=spanx), SIMPLIFY = TRUE, USE.NAMES = FALSE) %>% 
@@ -829,7 +829,7 @@ while (i<=tstL) { #nrow(ctent)) {
         xf <- rbindlist(list(xf,rbindlist(mapply(function(x, idx, fdiv, #nxtk, 
                                                           imgx, fnsp, sp, sex, #body, 
                                                           flink, outf, ckeyx, cfigx, fdupx, itx) {
-          capx <- paste0("<em>",sp,"</em>",
+          capx <- paste0("<em>",sp,".</em>",
                     ifelse(is.na(fcap[Fig==imgx,]$characters),"", gsub("(\\s)*\\,(\\s)*", " ", paste0(" ",fcap[Fig==imgx,]$characters))))#,
                     #ifelse(is.na(fcap[Fig==imgx,]$ext),"", paste0("<br>",fcap[Fig==imgx,]$citation, ", ", webCite)))
           ctx <- ifelse(is.na(fcap[Fig==imgx,]$ext),"", paste0(fcap[Fig==imgx,]$citation, ", ", webCite))
@@ -859,7 +859,7 @@ while (i<=tstL) { #nrow(ctent)) {
                                  ' border=', dQuote('0'),
                                  ' alt=', dQuote(gsub("<((\\/)*em|br)>", "", capx)), 
                                  ' /></a><span id=', dQuote(flink), ' class=', dQuote('spcap'),
-                                 '>Fig. ',cfigx,' ',capx,'</span></span></div><br><br>',
+                                 '>Fig. ',cfigx,'. ',capx,'</span></span></div><br><br>',
                                  paste0('<div class=', dQuote('fig_cite'), '><span class=', dQuote('spcap'), '>', 
                                         citex,'</span></div>'),
                                  '</div><br><br>'), sep=""), ############ Only MARK duplicated imgf

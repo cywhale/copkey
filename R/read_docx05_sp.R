@@ -485,9 +485,13 @@ for (docfile in doclst[1:81]) {
                         gsub("\\)\\s", "\\\\)\\\\s\\)\\*",
                         gsub("\\,\\s", "|", epithets))), ")") #"(crassus|dentatus|longiceps....)"
   
-  titletxt <- paste0("<div id=", dQuote(paste0("genus_",gen_name))," class=", dQuote("kblk"), "><p class=", dQuote("doc_title"), ">", 
+  titletxt <- gsub(paste0(gen_name,"<\\/em>"),
+                   paste0(gen_name, '</em> ', '<a class=', dQuote('lnknote'),
+                          ' href=', dQuote(paste0('#taxon_',gen_name)),
+                          '>&#9754;</a>'),
+              paste0("<div id=", dQuote(paste0("genus_",gen_name))," class=", dQuote("kblk"), "><p class=", dQuote("doc_title"), ">", 
                 italics_spname(gsub("(in\\sChina\\ssea(s)*|\\(China\\ssea(s)*\\))(\\:)*", "occurring in the China seas", ctent[1,]$text), gen_name, gen_name), "</p></div><br><br><br>")
-  
+              )
   if (grepl("\\(\\*(F|f)emale\\sonly\\)$", epi_list)) {
     Female_only_sp <- "all"
   } else if (grepl("\\(\\*(M|m)ale\\sonly\\)$", epi_list)) {
