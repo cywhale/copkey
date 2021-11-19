@@ -288,7 +288,7 @@ while (i<=tstL) { #nrow(ctent)) {
       # #}
       
       if (pret_case == 1L) { #means e.g., fig. 5-8 in key string, that link to <div figs_005_006_007_008
-        fdivx <- paste0("figs_", 
+        fdivx <- paste0("#figs_", 
                  paste0(sapply(figx, function(x) {padzerox(x,3)}, simplify = T, USE.NAMES = F), collapse="_"))
         pret<- paste0('<a href=', dQuote(fdivx),'>', fnt,'</a>')
         insBlkId <- c(insBlkId, fdivx) #paste0('figblk_',fnt)
