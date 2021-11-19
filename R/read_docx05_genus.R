@@ -439,7 +439,7 @@ while (i<=tstL) { #nrow(ctent)) {
     }
     
     if (!kflag) {
-      xc <- paste0('<div ckass=',dQuote('kblk'), 
+      xc <- paste0('<div class=',dQuote('kblk'), 
                    '><p class=',dQuote(paste0('leader ', indentx)),'><span class=',
                    dQuote(paste0('keycol ', padx)), '>', xc)
     } else { #if (IndexVers>1L) { ## need insert indention in new version
