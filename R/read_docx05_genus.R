@@ -465,7 +465,8 @@ while (i<=tstL) { #nrow(ctent)) {
         blkflush_flag <- TRUE
       }
       #if (IndexVers<=2) 
-      print(paste0("Check insRow correct: ", paste(insRow,collapse=","), " with i: ", i, " with key: ", keyx))
+      print(paste0("Check insRow correct: ", paste(insRow,collapse=","), " with i: ", i, " with key: ", keyx,
+            ' with flush flags: ', paste(rgtflush_flag, blkflush_flag, WaitFlush, gfk[nrow(gfk),]$flushed, sep=", ")))
       insRow[1] <- nrow(gtk) ## update insert Row number just before current key (still not in gtk)
     ########################################### Ver3: all figs in sidebar, so insRow will be earlier when figx found
     }
@@ -508,7 +509,7 @@ while (i<=tstL) { #nrow(ctent)) {
        print(paste0("Warning: Flush piped fig in right-column, check them in i: ",i, " with figs: ",
              paste(st_keep[case==0L,]$xfig, collapse=",")))
        fig_conti_flag <- FALSE
-       WaitFlush[1] <- FALSE
+       #WaitFlush[1] <- FALSE ## 20211120 fix to let figs pop-out when next kflag come-in
        if (blkflush_flag | nrow(st_keep)>1 | length(figx)>1) {
          blkflush_flag <- TRUE
          #gfk[fidx %in% st_keep[case==0L,]$xfig, blkx:=max(blkx)+1]
@@ -526,14 +527,17 @@ while (i<=tstL) { #nrow(ctent)) {
        ############################## Case 3 pipe
        print(paste0("... Piping figs in st_keep in i: ",i, " with figs: ", paste(figx, collapse=",")))
        if (!rgtflush_flag & !blkflush_flag) {
-         if ((i==tstL & !inTesting) | (nrow(st_keep)>=2)) { ## 20211117 modified: let it always flush after st_keep get data
+         if (i==tstL & !inTesting) { #| (nrow(st_keep)>=1 & !is.na(nsp) & nsp!="")) {
            if (nrow(st_keep)>1) {
              blkflush_flag <- TRUE
            } else { #if (nrow(st_keep)>0) {
              rgtflush_flag <- TRUE 
            }
          } else {
-            fig_conti_flag <- TRUE # 20211117 modified: let it always flush after st_keep get data
+            fig_conti_flag <- TRUE
+            #if (nrow(st_keep)>=2 & !is.na(nsp) & nsp!="") {
+            #  WaitFlush <- TRUE #modified 20211120 to flush eariler if too many figs withinCurrKey
+            #}
          }
        }
        #if (nrow(gtk)==0) {
@@ -541,10 +545,10 @@ while (i<=tstL) { #nrow(ctent)) {
        if (kflag) {
           insRow[1] <- nrow(gtk)+1L #Ver3: insRow will be earlier ## Note <p>marginnote</p> must inside <div kblk></div>
        }
-     } else if (WaitFlush[1] & (IndexVers<=2 | kflag)) { #if (WaitFlush[1] & pret_case!=0L & !rgtflush_flag) { #### Case 2, 2a pipe
+     } else if (WaitFlush[1] & kflag) { #| (withinCurrKey & fig_conti_flag))) { #if (WaitFlush[1] & pret_case!=0L & !rgtflush_flag) { #### Case 2, 2a pipe
        print(paste0("Warning: 2-nd block comes and pipe fig in st_keep in i: ",i, " with figs: ",
                     paste(figx, collapse=",")))
-       if (!is.na(nsp) && nsp!="") print(paste0("Push nsp into gfk: ", nsp, " when fidx: ", paste0(fdt$fidx, collapse=",")))
+       if (!is.na(nsp) & nsp!="") print(paste0("Push nsp into gfk: ", nsp, " when fidx: ", paste0(fdt$fidx, collapse=",")))
        st_keep <- rbindlist(list(st_keep, 
                                  data.table(xfig=figx, xkey=nxtk, blkx=max(st_keep$blkx)+1L, case=pret_case,
                                             nsp=nsp)))#xdiv=xdiv_id)))
@@ -838,7 +842,7 @@ while (i<=tstL) { #nrow(ctent)) {
           fig_kstr <- gsub("<((\\/)*em|br)>", "", capx)
           fig_title <- paste0('Classification key: #<a href=', dQuote(paste0("#key_", ckeyx)),
                               '>', ckeyx, '</a>', 
-                              ifelse(!is.na(fnsp) && fnsp!='', 
+                              ifelse(!is.na(fnsp) & fnsp!='', 
                                 paste0(', and related genus: <em><a href=', 
                                        dQuote(paste0('#genus_', fnsp)), '>', fnsp, '</a></em>'),
                                 #paste0('(Next key: #<a href=', dQuote(paste0("#key_", nxtk)), '>', nxtk, '</a>)')
@@ -1018,7 +1022,7 @@ while (i<=tstL) { #nrow(ctent)) {
                                        taxon=ifelse(!is.na(nsp), nsp, paste(xsp, collapse=",")),
                                        keystr=toJSON(keyt),
                                        ctxt=xc, fkey=NA_character_, 
-                                       sex=ifelse(all(is.na(sex) || trimx(sex)==''), NA_character_, paste(sex, collapse=","))#,
+                                       sex=ifelse(all(is.na(sex) | trimx(sex)==''), NA_character_, paste(sex, collapse=","))#,
                                        #body=body, keyword=keyt)#, xf
                                        #docn=0, kcnt=gkeycnt)
       )), use.names = T)
@@ -1049,7 +1053,7 @@ while (i<=tstL) { #nrow(ctent)) {
                                        taxon=ifelse(!is.na(nsp), nsp, paste(xsp, collapse=",")),
                                        keystr=toJSON(keyt),
                                        ctxt=xc, fkey=NA_character_, 
-                                       sex=ifelse(all(is.na(sex) || trimx(sex)==''), NA_character_, paste(sex, collapse=","))#,
+                                       sex=ifelse(all(is.na(sex) | trimx(sex)==''), NA_character_, paste(sex, collapse=","))#,
                                        #body=body, keyword=keyt)
                                        #docn=0, kcnt=gkeycnt)
       )), use.names = T)

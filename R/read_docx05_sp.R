@@ -486,7 +486,7 @@ for (docfile in doclst[1:81]) {
                         gsub("\\,\\s", "|", epithets))), ")") #"(crassus|dentatus|longiceps....)"
   
   titletxt <- gsub(paste0(gen_name,"<\\/em>"),
-                   paste0(gen_name, '</em> ', '<a class=', dQuote('lnknote'),
+                   paste0(gen_name, '</em> ', '<a aria-label=', dQuote('back to the genus key'),
                           ' href=', dQuote(paste0('#taxon_',gen_name)),
                           '>&#9754;</a>'),
               paste0("<div id=", dQuote(paste0("genus_",gen_name))," class=", dQuote("kblk"), "><p class=", dQuote("doc_title"), ">", 
