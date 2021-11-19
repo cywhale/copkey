@@ -41,7 +41,7 @@ export default async function (fastify, opts) {
     policy: {
       Query: {
         taxontree: true,
-        infq: true
+        infq: false
       }
     },
     storage: {

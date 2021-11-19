@@ -18,7 +18,7 @@ const UserSearch = (props) => {
   });*/
   const [result, setResult] = useState({
     spkey: {key:'', fig:''},
-    taxon: 'Acartia', //initially loaded
+    taxon: '', //initially loaded //2021118 change 'Acartia' to '' && mode=genus
     keyParam: {},
     totalCount: 0,
     cursor: '',
@@ -214,18 +214,18 @@ const UserSearch = (props) => {
     if (r) { return Promise.resolve(r); }*/
     let kobj = {};
     if (query && (query.first || query.last)) {
-        //if (typeof query.taxon !== 'undefined') {
-        kobj["taxon"] = query.taxon??'' //|| '';//}
-        if (typeof query.first !== 'undefined') { kobj["first"] = parseInt(query.first) }
-        if (typeof query.last !== 'undefined')  { kobj["last"] = parseInt(query.last) }
+        kobj["taxon"] = query.taxon??'';
+        kobj["mode"] = (query.mode? query.mode : (forceGenus? 'genus' : (forceSpecies? 'species' : 'All')));
+        if (typeof query.first !== 'undefined') { kobj["first"] = parseInt(query.first)??search.getsize }
+        if (typeof query.last !== 'undefined')  { kobj["last"] = parseInt(query.last??search.getsize) }
         if (typeof query.after !== 'undefined') { kobj["after"] = query.after }
         if (typeof query.before !== 'undefined'){ kobj["before"] = query.before }
         if (typeof query.key !== 'undefined'){ kobj["key"] = query.key }
     } else {
         if (query && query.taxon) {
-          kobj = { "taxon": query.taxon, "first": search.getsize }
+          kobj = { "taxon": query.taxon, "mode": "All", "first": search.getsize }
         } else {
-          kobj = { "taxon": "Acartia", "first": search.getsize } //'init'
+          kobj = { "taxon": "", "keystr": false, "mode": search.param.mode, "first": search.getsize } //'init', change "Acatia" to genus 20211118
         }
     } // '?page=' + query.page : '?page=1'); //old, will be deprecated
     // 'GET', and now changed to use 'POST'
@@ -242,9 +242,7 @@ const UserSearch = (props) => {
   }, []);
 
   useEffect(() => {
-    //if (!search.init) {
     waitInitData(query)
-    //}
   },[waitInitData, query]);
 /*
   let taxon = (search.str !== '' && search.searched && state.init? search.str :
@@ -255,6 +253,7 @@ const UserSearch = (props) => {
       ...prev,
       param: {
         keystr: search.keycheck,
+        mode: search.param.mode,
         last: search.getsize,
         before: result.cursor
       },
@@ -268,6 +267,7 @@ const UserSearch = (props) => {
       ...prev,
       param: {
         keystr: search.keycheck,
+        mode: search.param.mode,
         first: search.getsize,
         after: result.endCursor
       },

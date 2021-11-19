@@ -83,16 +83,17 @@ const resolvers = {
 /* modified from https://jiepeng.me/2019/12/06/learning-how-to-implement-graphql-pagination */
 // ---------------------------------------------
       infq: async (_, obj, ctx) => {
-        const { taxon, keystr, first, last, after, before, key } = obj
-        let spqry, data;
-        let keyx = [];
-        let cursor = '';
-        let endCursor = '';
-        let curidx = -1;
-        let page = 0;
-        let totalCount = 0;
-        let hasNextPage = false;
-        let hasPreviousPage = false;
+        const { taxon, keystr, mode, first, last, after, before, key } = obj
+        let spqry, data
+        let keyx = []
+        let cursor = ''
+        let endCursor = ''
+        let curidx = -1
+        let page = 0
+        let totalCount = 0
+        let hasNextPage = false
+        let hasPreviousPage = false
+        let modex = mode? mode.toLowerCase() : 'all'
         //first with after, last with before. if only first(no after)/ last(no before) get 1st/last page
         //const emptyx = {}
         if (!first && !last) {
@@ -110,11 +111,14 @@ const resolvers = {
 
         let spt = decodeURIComponent(taxon).replace(/\_/g, ' ')
         let spx = spt.replace(/\s/g, '\\\s')
+        let genqstr = {"kcnt": {"$lt": 1000}}
+        let spqstr = {"kcnt": {"$gte": 1000}}
         let chk_if_keystr = false
+        let gkeymode = key? key.substring(0,3) === '00a' : false
 
-        if (key && key.substring(0,3) === '00a') {
+        if (mode === "genus" || gkeymode) {
             ctx.reply.log.info("Perform genus search: " + key)
-            spqry= { "kcnt": {"$lt": 1000} }
+            spqry= genqstr
         } else {
           spqry = {$or:[
                 {"taxon": {$regex: spx, $options: "ix"} },
@@ -127,9 +131,16 @@ const resolvers = {
             spqry = //{$or:[
                     {$text: {$search: spt}} //, //All OR operation
                     //{"unikey": /genus/g}]}
-            ctx.reply.log.info("Perform keystr search: " + spt)
+            //ctx.reply.log.info("Perform keystr search: " + spt)
           } else if (spx === '') {
             spqry= {} //query all
+          }
+
+          if (mode === 'genus') {
+            spqry= {...spqry, ...genqstr}
+          } else if (mode === 'species') {
+            //ctx.reply.log.info("Perform only species search: " + spx)
+            spqry= {...spqry, ...spqstr}
           }
         }
 
@@ -177,6 +188,7 @@ const resolvers = {
                                           {sort: {unikey: 1}}); //, limit: first+1, sort: {kcnt: 1}});
         */
           data = await Spkey.find(spqry, {unikey:1, kcnt:1, ctxt:1}, {sort: {unikey: 1}}) //, limit: first+1, sort: {kcnt: 1}});
+          //ctx.reply.log.info("Perform search taxon with first ok: " + JSON.stringify(spqry))
           if (data && data.length) {
             totalCount = data.length
             let filter = after? data.filter(d => d.unikey > after) :  data

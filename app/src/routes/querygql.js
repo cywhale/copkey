@@ -8,8 +8,8 @@ export default async function querygql (fastify, opts, next) {
   //const spkey = db.collection('spkey');
   //fastify.decorate('spkey', spkey);
     const def_pageSize = 30
-    const infqry = `query ($taxon: String!, $keystr: Boolean, $first: Int, $last: Int, $after: String, $before: String, $key: String) {
-                    infq(taxon: $taxon, keystr: $keystr, first: $first, last: $last, after: $after, before: $before, key: $key)
+    const infqry = `query ($taxon: String!, $keystr: Boolean, $mode: String, $first: Int, $last: Int, $after: String, $before: String, $key: String) {
+                    infq(taxon: $taxon, keystr: $keystr, mode: $mode, first: $first, last: $last, after: $after, before: $before, key: $key)
               {
                 totalCount
                 pageInfo {
@@ -43,6 +43,7 @@ export default async function querygql (fastify, opts, next) {
     const pageSchema = {
               taxon: { type: 'string' },
               keystr:{ type: 'boolean'},
+              mode: { type: 'string' },
               first: { type: 'number' },
               last: { type: 'number' },
               after: { type: 'string' },
@@ -76,6 +77,7 @@ export default async function querygql (fastify, opts, next) {
         //if (typeof parm.taxon !== 'undefined') {
         kobj["taxon"] = parm.taxon??'' //}
         kobj["keystr"] = parm.keystr? true: false
+        kobj["mode"] = parm.mode??'all'
         if (typeof parm.first !== 'undefined') { kobj["first"] = parseInt(parm.first) }
         if (typeof parm.last !== 'undefined')  { kobj["last"] = parseInt(parm.last) }
         if (typeof parm.after !== 'undefined') { kobj["after"] = parm.after }
@@ -119,6 +121,7 @@ export default async function querygql (fastify, opts, next) {
       let kobj = {}
       kobj["taxon"] = qstr.query??''
       kobj["keystr"] = qstr.keystr? true : false
+      kobj["mode"] = qstr.mode??'all'
       //if (qstr.key && qstr.key !== ''){ kobj["key"] = qstr.key }
       kobj["first"] = qstr.limit??def_pageSize
       //req.log.info("Query use graphql with taxon, key: " + kobj.taxon + kobj.key)
@@ -166,7 +169,7 @@ export default async function querygql (fastify, opts, next) {
       //}
       //const query = `query ($name: String!) { key(sp: $name) {ctxt} }` //{unikey ctxt}
       //req.log.info("Query use graphql: "+ query + " with sp: " + name)
-      return reply.graphql(infqry, null, {"taxon": name, first: def_pageSize})
+      return reply.graphql(infqry, null, {taxon: name, keystr: false, mode: 'all', first: def_pageSize})
     })
 
   next()

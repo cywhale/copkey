@@ -1,7 +1,7 @@
 const schema = `
 type Query {
      taxontree: [TreeNode]!
-     infq(taxon: String, keystr: Boolean, first: Int, last: Int, after: String, before: String, key: String): SpkeyConn
+     infq(taxon: String, keystr: Boolean, mode: String, first: Int, last: Int, after: String, before: String, key: String): SpkeyConn
      keys(sp: String!): [Spkeyq]!
 }
 

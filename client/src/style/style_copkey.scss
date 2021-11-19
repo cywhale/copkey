@@ -46,6 +46,12 @@
     justify-content: center;
     width: 80%;
   }
+/*
+  span {
+    display: block;
+    width: 80%;
+  }
+*/
 }
 
 @media screen and (max-width: 680px) { 
@@ -55,7 +61,7 @@
   .menutxt { display: none; } 
   .doc_epithets { width: auto; font-size: 1em;}
 }
-@media screen and (max-width: 540px) {
+@media screen and (max-width: 560px) {
   .doc_epithets, .fig_caption { font-size: 0.9em;}
   .leader { font-size: 1.1rem; }
   .carousel_div {
@@ -65,6 +71,18 @@
       justify-content: flex-start;
     }
   }
+/*
+  .carousel_div {
+    span { 
+      font-size: 0.9em;
+      display: block;
+      width: 65%;
+    }
+  }
+  .carousel__slide:first-child > .carousel_div > span {
+      margin-left: -1rem;
+  }
+*/
 } 
 
 .leader > span:first-child::after, .leader > span:nth-child(2):before {
