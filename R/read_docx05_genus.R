@@ -290,7 +290,7 @@ while (i<=tstL) { #nrow(ctent)) {
       if (pret_case == 1L) { #means e.g., fig. 5-8 in key string, that link to <div figs_005_006_007_008
         fdivx <- paste0("figs_", 
                  paste0(sapply(figx, function(x) {padzerox(x,3)}, simplify = T, USE.NAMES = F), collapse="_"))
-        pret<- paste0('<a href=', dQuote(paste0('#fig_', fdivx)),'>', fnt,'</a>')
+        pret<- paste0('<a href=', dQuote(fdivx),'>', fnt,'</a>')
         insBlkId <- c(insBlkId, fdivx) #paste0('figblk_',fnt)
       } else {
         pret<- do.call(function(x) {paste0('<a href=', dQuote(paste0('#fig_',x)), '>',x, '</a>')}, list(figt)) %>% paste(collapse=", ")
@@ -389,7 +389,7 @@ while (i<=tstL) { #nrow(ctent)) {
       pret<- do.call(function(x, pres, sex) {paste0('<mark id=',dQuote(paste0(
                                                         ifelse(is.na(sex), 'taxon_', paste0(sex,'_')), 
                                                         gsub("\\s","_",x))),
-                                                    '><', pres, x, '</', pres, ifelse(is.na(sex),"",ifelse(sex=="female","♀","♂")),
+                                                    '><', pres, x, '</', pres, ifelse(is.na(sex),"",ifelse(sex=="female","&female;","&male;")),
                                                     '</mark>')}, 
                      list(x=trimx(xspx), pres=pret0s, sex=xsex)) %>% paste(collapse=" & ")
       
@@ -410,7 +410,7 @@ while (i<=tstL) { #nrow(ctent)) {
                                       'taxon_', #paste0(xsex,"_")),
                                       paste(unlist(tstrsplit(nsp,'\\s')),collapse='_'))), 
                              '><em><a href=', dQuote(paste0('#genus_', nsp)), '>', nsp, '</a></em></mark>')),
-               ifelse(all(is.na(xsex)),"",ifelse(xsex=="female","♀","♂")),'</span></p>')
+               ifelse(all(is.na(xsex)),"",ifelse(xsex=="female","&female;","&male;")),'</span></p>')
     
     if (keyx>=100 & prekeyx>=100) {
       padx = "pad8"
@@ -754,9 +754,11 @@ while (i<=tstL) { #nrow(ctent)) {
 
         ############################# Ver3: add fig captions from file (fcap)
         caps <- mapply(function(x, sp, fcap) { #, webCite) {
+            gsub("\\smale", " &male;", gsub("\\sfemale", " &female;",
             paste0("<em>",sp,".</em>",
                     ifelse(is.na(fcap[Fig==x,]$characters),"", gsub("(\\s)*\\,(\\s)*", " ", paste0(" ",fcap[Fig==x,]$characters))))#,
                     #ifelse(is.na(fcap[Fig==x,]$ext),"", paste0("<br>",fcap[Fig==x,]$citation, ", ", webCite)))
+            ))
           }, x=fig_dt[idx2, ]$imgf, sp=spt[idx2], 
              MoreArgs = list(fcap=fcap), #webCite=webCite), 
              SIMPLIFY = TRUE, USE.NAMES = FALSE)
@@ -833,9 +835,11 @@ while (i<=tstL) { #nrow(ctent)) {
         xf <- rbindlist(list(xf,rbindlist(mapply(function(x, idx, fdiv, #nxtk, 
                                                           imgx, fnsp, sp, sex, #body, 
                                                           flink, outf, ckeyx, cfigx, fdupx, itx) {
-          capx <- paste0("<em>",sp,".</em>",
+          capx <- gsub("\\smale", " &male;", gsub("\\sfemale", " &female;", 
+                  paste0("<em>",sp,".</em>",
                     ifelse(is.na(fcap[Fig==imgx,]$characters),"", gsub("(\\s)*\\,(\\s)*", " ", paste0(" ",fcap[Fig==imgx,]$characters))))#,
                     #ifelse(is.na(fcap[Fig==imgx,]$ext),"", paste0("<br>",fcap[Fig==imgx,]$citation, ", ", webCite)))
+          ))
           ctx <- ifelse(is.na(fcap[Fig==imgx,]$ext),"", paste0(fcap[Fig==imgx,]$citation, ", ", webCite))
           citex <- ifelse(ctx=="", "", paste0("Fig. ", imgx, ". ", ctx))
 
