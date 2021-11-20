@@ -111,7 +111,11 @@ input[type="submit"] {
 [aria-label]:hover:after, [aria-label]:focus:after {
   display: inline-block;
 }
-
+/*
+.tag[aria-label] {
+  position: unset;
+}
+*/
 @media screen and (max-width: 680px) {
   [aria-label]:after {
     line-height: 12px;

@@ -54,6 +54,11 @@
 */
 }
 
+.fbox > img { 
+  width:100%;
+  border-radius: 0.75rem;
+}
+
 @media screen and (max-width: 680px) { 
   h1.title { margin-top: 1rem; font-size: 1.6rem; }
   h3.subtitle { font-size: 1.2rem; }

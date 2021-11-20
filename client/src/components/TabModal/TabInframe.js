@@ -11,12 +11,14 @@ class TabInframe extends React.Component {
     const ctent =
       "<iframe id='" +
       idx +
-      "' loading='lazy' width='100%' height='100%' scrolling='auto' data-src='' src=" +
+      "' loading='lazy' width='100%' height='100%' src=" +
       urlx +
       " sandbox='allow-modals allow-forms allow-popups allow-scripts allow-same-origin'></iframe>";
 
     return (
+      <div style="overflow-y:auto;-webkit-overflow-scrolling:touch;max-height:100%;">
         <div dangerouslySetInnerHTML={{ __html: ctent }} />
+      </div>
     );
   }
 }

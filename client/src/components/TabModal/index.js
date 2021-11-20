@@ -44,13 +44,14 @@ const TabModal = (props) => {
           if(this.checked) {
             let width = window.innerWidth;
             let height = window.innerHeight;
-            width = width - 100;
-            height= height - 180;
+            width = ((width - 100) >= 960 ? 960 : width - 1000);
+            //height= height - 20;
             elo.style.maxWidth = "66em";
             elo.style.width = width + "px";
-            elo.style.height= height+ "px";
             el.style.width  = width + "px";
             el.style.height = height+ "px";
+            elo.style.height= "auto"; //height+ "px";
+
           } else {
             el.style.width  = "100%";
             el.style.height = "100%";
@@ -127,7 +128,7 @@ const TabModal = (props) => {
               <div class={style.ctrlwrapper}>
                   <section class={style.ctrlsect}>
                     <div class={colClass}>
-                      {loaded && <TabInframe ifrid="tab2ifr" enable={loaded} srcurl="https://bio.odb.ntu.edu.tw/copbook"/>}
+                      {loaded && <TabInframe ifrid="tab2ifr" enable={loaded} srcurl="https://bio.odb.ntu.edu.tw/pub/copkey"/>}
                     </div>
                   </section>
               </div>

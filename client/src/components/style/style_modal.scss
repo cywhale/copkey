@@ -40,7 +40,7 @@
    border-radius:8px;
    width: auto;
    min-width: 24.5em;
-   height: auto;
+   /*height: auto;*/
    min-height: 250px;
    left:6%;
    position:absolute;
@@ -64,14 +64,11 @@
   .modal{
     color:white;
     width: 100%;
-    height: auto;
     min-height: 250px;
     margin:0 auto;
     padding:0 2px;
-    /*overflow: auto;*/
     -webkit-overflow-scrolling: touch;
     @media (min-width: 60em) {
-      height:100%;
       max-width:66em;
       width:100%;
     }

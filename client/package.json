@@ -74,14 +74,14 @@
     "xmlhttprequest": "^1.8.0"
   },
   "dependencies": {
-    "@fancyapps/ui": "^4.0.8",
+    "@fancyapps/ui": "^4.0.9",
     "preact": "^10.5.15",
     "preact-router": "^3.2.1",
     "react-draggable": "^4.4.4",
     "react-dropdown-tree-select": "^2.5.1",
-    "react-query": "^3.32.1",
+    "react-query": "^3.33.2",
     "react-xarrows": "^2.0.2",
-    "zustand": "^3.6.4"
+    "zustand": "^3.6.5"
   },
   "jest": {
     "preset": "jest-preset-preact",

@@ -120,13 +120,21 @@ const resolvers = {
             ctx.reply.log.info("Perform genus search: " + key)
             spqry= genqstr
         } else {
-          spqry = {$or:[
+          if (mode && mode.toLowerCase() === 'all') {
+            spqry = {$or:[
+                {"taxon": {$regex: spx + '|Calanoida', $options: "ix"} },
+                {"fullname": {$regex: spx, $options: "ix"} },
+                {"genus": {$regex: spx, $options: "ix"} },
+                {"family": {$regex: spx, $options: "ix"} }
+            ]}
+          } else {
+            spqry = {$or:[
                 {"taxon": {$regex: spx, $options: "ix"} },
                 {"fullname": {$regex: spx, $options: "ix"} },
                 {"genus": {$regex: spx, $options: "ix"} },
                 {"family": {$regex: spx, $options: "ix"} }
-          ]}
-
+            ]}
+          }
           if (keystr && spx !== '') { //if checkbox of keystr is enabled, then search input (as taxon) will be treated as string to be keystr-searching
             spqry = //{$or:[
                     {$text: {$search: spt}} //, //All OR operation

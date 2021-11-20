@@ -91,6 +91,8 @@ const UserSearch = (props) => {
         console.log('Error: Network response was not ok when searching... ');
         queryClient.resetQueries([taxon, keyParam],
           { exact: true, ResetOptions: {throwOnError: false, cancelRefetch: true} })
+        history.pushState(null, null, '#error');
+        window.dispatchEvent(new HashChangeEvent('hashchange'));
       }
       return res.json()
   };
@@ -201,6 +203,8 @@ const UserSearch = (props) => {
             searched: false,
             isLoading: false,
         }))
+        history.pushState(null, null, '#error');
+        window.dispatchEvent(new HashChangeEvent('hashchange'));
       }
   };
 

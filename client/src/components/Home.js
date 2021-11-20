@@ -117,6 +117,7 @@ const Home = () => {
       setHashState((prev) => ({
         ...prev,
         handling: false,
+        handlend: true,
         hash: '',
       }))
     )
@@ -191,7 +192,14 @@ const Home = () => {
         loaded: true,
       }));
     } else {
-      if (hashstate.hash === '#complete' && !hashstate.handling) {
+      if (hashstate.hash === '#error') {
+        clear_uri();
+        setSearch((prev) => ({
+          ...prev,
+          searched: false,
+          isLoading: false,
+        }));
+      } else if (hashstate.hash === '#complete' && !hashstate.handling) {
         //console.log("Search complete and handle el, hash: ", hashstate.elem, search.isLoading);
         setHashState((prev) => ({
           ...prev,
@@ -199,7 +207,7 @@ const Home = () => {
           handlend: false,
         }));
       } else if (!hashstate.handling && !search.isLoading) {
-/*      if (hashstate.hash.substring(0,8) == '#search=') {
+        if (hashstate.hash.substring(0,8) == '#search=') {
             setHashState((prev) => ({
               ...prev,
               elem: '',
@@ -210,11 +218,11 @@ const Home = () => {
               ...prev,
               str: hashstate.hash.substring(8).replace(/\_/g, ' '),
               isLoading: true,
-              param: { keystr: search.keycheck,
+              param: { keystr: false,
+                       modex: 'All',
                        first: search.getsize },
             }));
-        } else*/
-        if (hashstate.hash !== '') {
+        } else if (hashstate.hash !== '') {
           let el = document.querySelector(hashstate.hash);
           if (el) {
             setHashState((prev) => ({
@@ -225,8 +233,6 @@ const Home = () => {
               //scrollTop: false,
               scrollPos: -1, // el.getBoundingClientRect().top + window.pageYOffset
             }));
-            // Note 20211117 genus fig has the same span name as key, so when it's found, it will only scroll, not open, need handle it
-            openPopup();
           } else {
             let parx, ukey, spx;
             //let scrollTop = false;
@@ -260,7 +266,7 @@ const Home = () => {
               //parx = {taxon: spt[1], first: search.getsize, after: ukey};
               //scrollTop = true; // new query will be on top
             } else if ((keyx === "#tax" && spt[2]) || keyx === "#fig") {
-              if (keyx === '#fig' && spt.length == 2 && !isNaN(nkey)) { //2021115 for genus
+              if (keyx === '#fig' && spt.length >= 2 && !isNaN(nkey)) { //2021115 for genus
                 ukey = padZero(nkey, '00a_genus.*figs.*', 2) + '.*'     //mode do not change
                 spx = ''
               } else {
@@ -294,10 +300,21 @@ const Home = () => {
         if (!hashstate.handlend & hashstate.elem !== '') {
           if (hashstate.scrollPos != 0) {
             el = document.querySelector(hashstate.elem)
-            if (hashstate.elem.substring(0,5) === "#fig_") {
-              fig_offset = 440; //330 is the height of thumb by imagemagick;// carousel + padding + margin > 400 pixel
+            if (el) {
+              if (hashstate.elem.substring(0,5) === "#fig_") {
+                fig_offset = 440; //330 is the height of thumb by imagemagick;// carousel + padding + margin > 400 pixel
+              }
+              to_pos = el.getBoundingClientRect().top + window.pageYOffset - fig_offset;
+            } else {
+              console.log("Warning: cannot find elem: ", hashstate.elem);
+              if (hashstate.elem.substring(0,5) === "#fig_") { //fig item hide behind Carousel, just scroll to it
+                el = document.querySelectorAll('[id^="figs_"][id*="' + hashstate.elem.substring(5)  + '"]');
+                if (el) {
+                  console.log("Warning: scroll to alternatives: ", el[0]);
+                  to_pos = el[0].getBoundingClientRect().top + window.pageYOffset;
+                }
+              }
             }
-            to_pos = el.getBoundingClientRect().top + window.pageYOffset - fig_offset;
           } else {
             to_pos = 0
           }
@@ -311,8 +328,8 @@ const Home = () => {
             handlend: true,
             scrollPos: to_pos,
         }));
-        clear_uri();
         openPopup();
+        clear_uri();
       }
     }
   },[appstate.loaded, hashstate.hash, hashstate.handling]); //, prefetchInit
