@@ -1,6 +1,8 @@
 import { Fragment } from 'preact';
 import { useEffect, useState, useCallback } from 'preact/hooks';
 import TabInframe from 'async!./TabInframe';
+import AboutUs from 'async!./AboutUs';
+import Guides from 'async!./Guides';
 import useHelp from '../Helper/useHelp';
 //import Draggable from 'react-draggable';
 import draggable_element from '../Compo/draggable_element';
@@ -74,8 +76,8 @@ const TabModal = (props) => {
       document.getElementById('tab-1').checked = true; // give a default
       tabCheckListenx('tab-1', false);
       tabCheckListenx('tab-2');
-      tabCheckListenx('tab-3', false);
-      tabCheckListenx('tab-4', false);
+      tabCheckListenx('tab-3');
+    //tabCheckListenx('tab-4', false);
 /*    document.addEventListener("DOMContentLoaded", (e) => {
          loadIframex();
       });*/
@@ -115,10 +117,7 @@ const TabModal = (props) => {
               <div class={style.ctrlwrapper}>
                   <section class={style.ctrlsect}>
                     <div class={colClass}>
-                      <div id="regionsectdiv">Test 1-1
-                      </div>
-                      <div id="ctrlsectdiv2">Test 1-2
-                      </div>
+                      <Guides />
                     </div>
                   </section>
               </div>
@@ -134,21 +133,11 @@ const TabModal = (props) => {
               </div>
             <label class={tabClass} for="tab-3" tabindex="2" />
             <input id="tab-3" type="radio" name="tabs" aria-hidden="true" />
-            <h2 data-toggle="tab">Others</h2>
-              <div class={style.ctrlwrapper}>
-                  <section class={style.ctrlsect}>
-                    <div class={colClass}>
-                      <div id="resultxdiv"> Test 3-1</div>
-                    </div>
-                  </section>
-              </div>
-            <label class={tabClass} for="tab-4" tabindex="3" />
-            <input id="tab-4" type="radio" name="tabs" aria-hidden="true" />
             <h2 data-toggle="tab">About</h2>
               <div class={style.ctrlwrapper}>
                   <section class={style.ctrlsect}>
                     <div class={colClass}>
-                      <div> Author page (to be conti.)</div>
+                      <AboutUs />
                     </div>
                   </section>
               </div>

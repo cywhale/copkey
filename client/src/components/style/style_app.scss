@@ -17,3 +17,12 @@
   width:27.5%;
   margin:10px;
 }
+
+@media screen and (max-width: 680px) {
+  .home {
+    h1 {
+      width: 75%;
+      font-size: 1.5em;
+    }
+  }
+}

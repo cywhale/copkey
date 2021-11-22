@@ -44,3 +44,7 @@
    background-size: 100% auto;
   }
 }
+
+@media screen and (max-width: 680px) {
+  .helpToggle { right:0px; }
+}

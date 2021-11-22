@@ -18,7 +18,7 @@ const App = (props) => {
           <div style="display:flex;">
             <div class={style.right_area} id="rightarea" />
             <TabModal />
-            <h1>Copkey App</h1>
+            <h1 style="font-family: Georgia, serif;font-weight:600;">KEY TO THE CALANOID COPEPODS</h1>
           </div>
           <QueryClientProvider client={queryClient}>
             <Home />

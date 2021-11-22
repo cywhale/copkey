@@ -118,6 +118,16 @@ input:checked + h2 + div {
     min-width: 20.5em !important;
 }
 
+.ssyellow {
+  font-size:80%;
+  color:#f3eacb;
+}
+.smgrey {
+  font-size:90%;
+  color:#c0c0c0;
+  li {display:block;}
+}
+
 @media screen and (max-width: 680px) {
   :root {
     --base-tab-width: 4.95em;
