@@ -12,7 +12,7 @@ import(/* webpackMode: "lazy" */
        '../../style/style_modal_tab.scss');
 
 const TabModal = (props) => {
-  const [ isOpen, setIsOpen ] = useState(false);
+  const [ isOpen, setIsOpen ] = useState(true);
   const [ loaded, setLoaded ] = useState(false);
 
   const iniHelp= useHelp(useCallback(state => state.iniHelp, []));
@@ -44,9 +44,9 @@ const TabModal = (props) => {
         let elo= document.getElementById("ctrl");
         if (el && elo) {
           if(this.checked) {
-            let width = window.innerWidth;
+            let width = parseInt(window.innerWidth * 0.9);
             let height = window.innerHeight;
-            width = ((width - 100) >= 960 ? 960 : width - 1000);
+            width = width >= 960 ? 960 : width;
             //height= height - 20;
             elo.style.maxWidth = "66em";
             elo.style.width = width + "px";

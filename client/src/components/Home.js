@@ -357,7 +357,7 @@ const Home = () => {
                 </label>
               </p>
               { iniHelp &&
-                <p style="text-indent:0;" class="triangle-right top" id="search_tooltips">Search taxon for its identification key<br/>搜尋物種分類檢索，輸入物種名</p>
+                <p style="text-indent:0;z-index:1101;" class="triangle-right top" id="search_tooltips">Search taxon for its identification key, or search<br/>classification traits by enable the right checkbox<br/>搜尋物種分類檢索，輸入屬或種名<br/>或勾選右方欄，搜尋分類特徵</p>
               }
           </div>
           <MultiSelectSort />

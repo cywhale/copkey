@@ -1,14 +1,35 @@
 .helpbox {
   border: 1px #999 solid;
-  borderRadius: 10px;
+  border-radius: 10px;
+  margin: 1px;
+}
+
+.myarrow {
+  visibility: hidden;
+}
+
+.helpbox:hover + .myarrow {
+  visibility: visible;
+  z-index: 1005;
 }
 
 .column-right {
+  color: #c0c0c0;
+  background: white;
   padding: 1rem;
-  display: inline-block;
-  color: white;
+  margin: 1px;
+  font-size: 90%;
   border-radius: 8px;
+  z-index: -1;
+}
+
+.column-right:hover {
+  color: white;
   background: linear-gradient(135deg, rgba(7,42,126,1) 0%, rgba(6,31,107,0.55) 100%)
 }
 
-
+@media screen and (max-width: 480px) {
+  .column-right {
+    padding: 4px;
+  }
+}
