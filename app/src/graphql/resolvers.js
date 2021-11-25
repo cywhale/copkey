@@ -93,7 +93,7 @@ const resolvers = {
         let totalCount = 0
         let hasNextPage = false
         let hasPreviousPage = false
-        let modex = mode? mode.toLowerCase() : 'all'
+        let modex = mode??'all' //now with sameTaxon:taxon, cannot use toLowerCase()
         //first with after, last with before. if only first(no after)/ last(no before) get 1st/last page
         //const emptyx = {}
         if (!first && !last) {
@@ -116,37 +116,54 @@ const resolvers = {
         let chk_if_keystr = false
         let gkeymode = key? key.substring(0,3) === '00a' : false
 
-        if (mode === "genus" || gkeymode) {
-            ctx.reply.log.info("Perform genus search: " + key)
+        if (gkeymode) {
             spqry= genqstr
         } else {
-          if (mode && mode.toLowerCase() === 'all') {
-            spqry = {$or:[
+          if (keystr && spx !== '') { //if checkbox of keystr is enabled, then search input (as taxon) will be treated as string to be keystr-searching
+            //ctx.reply.log.info("Perform keystr search: " + spt + " mode: " + modex)
+            //exact match; //fuzzy match just use spt
+            if (modex.match(/fuzzy/ig)) {
+              spqry = {$text: {$search: spt}}
+            } else {
+              spqry = //{$or:[
+                    {$text: {$search: `\"${spt}\"`}} //, //All OR operation
+                    //{"unikey": /genus/g}]}
+            }
+            if (modex.match(/sameTaxon/ig)) {
+              let sptt = modex.substring(modex.indexOf('sameTaxon:') + 10)
+              ctx.reply.log.info("Perform sameTaxon search: " + spt + " taxon: " + sptt)
+              if (sptt !== '') {
+                let qryt = {$or:[
+                             {"taxon": {$regex: sptt, $options: "ix"} },
+                             {"fullname": {$regex: sptt, $options: "ix"} },
+                             {"genus": {$regex: sptt, $options: "ix"} },
+                             {"family": {$regex: sptt, $options: "ix"} }
+                           ]}
+                spqry={...spqry, ...qryt}
+              }
+            }
+          } else {
+            if (spx === '') {
+              spqry= {} //query all
+            } else if (modex.match(/all/ig)) {
+              spqry = {$or:[
                 {"taxon": {$regex: spx + '|Calanoida', $options: "ix"} },
                 {"fullname": {$regex: spx, $options: "ix"} },
                 {"genus": {$regex: spx, $options: "ix"} },
                 {"family": {$regex: spx, $options: "ix"} }
-            ]}
-          } else {
-            spqry = {$or:[
+              ]}
+            } else {
+              spqry = {$or:[
                 {"taxon": {$regex: spx, $options: "ix"} },
                 {"fullname": {$regex: spx, $options: "ix"} },
                 {"genus": {$regex: spx, $options: "ix"} },
                 {"family": {$regex: spx, $options: "ix"} }
-            ]}
+              ]}
+            }
           }
-          if (keystr && spx !== '') { //if checkbox of keystr is enabled, then search input (as taxon) will be treated as string to be keystr-searching
-            spqry = //{$or:[
-                    {$text: {$search: spt}} //, //All OR operation
-                    //{"unikey": /genus/g}]}
-            //ctx.reply.log.info("Perform keystr search: " + spt)
-          } else if (spx === '') {
-            spqry= {} //query all
-          }
-
-          if (mode === 'genus') {
+          if (modex.match(/genus/ig)) {
             spqry= {...spqry, ...genqstr}
-          } else if (mode === 'species') {
+          } else if (modex.match(/species/ig)) {
             //ctx.reply.log.info("Perform only species search: " + spx)
             spqry= {...spqry, ...spqstr}
           }
@@ -167,7 +184,7 @@ const resolvers = {
             } else if (fig_flag) {
               if (key.substring(0,3) === 'fig') {
                 let kt = key.split(/\_/)
-                let spt= kt[1] + " " + kt[2]
+                spt= kt[1] + " " + kt[2]
                 curidx = data.findIndex(item => item.taxon === spt && item.type === 2)
               } else {
                 let kt = new RegExp(key, 'gi')

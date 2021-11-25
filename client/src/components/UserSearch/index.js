@@ -1,7 +1,7 @@
 import { Fragment } from 'preact';
 import { useState, useEffect, useCallback, useRef } from 'preact/hooks';
 import { useQueryClient } from 'react-query'; //useQuery
-//import useHelp from '../Helper/useHelp';
+import useOpts from '../TabModal/useOpts';
 import Copkey from 'async!../Copkey';
 import SvgLoading from 'async!../Compo/SvgLoading';
 import (/* webpackMode: "lazy" */
@@ -10,7 +10,9 @@ import (/* webpackMode: "lazy" */
 
 const UserSearch = (props) => {
   const { query, search, onSearch } = props; //searched only trigger when str is set;
-  //const def_pageSize = 30;                 //isLoading when any search start and wait for result written
+                                             //isLoading when any search start and wait for result written
+  const sameTaxon= useOpts(useCallback(state => state.sameTaxon, []));
+  const pageSize= useOpts(useCallback(state => state.pageSize, [])); //30
   const failRetry= 3;
 /*const [state, setState] = useState({
     init: false, //initial searching (move upper, because useHelp need elements after first search)
@@ -105,10 +107,11 @@ const UserSearch = (props) => {
         console.log("No data but fetched from queryClient, get nodes: ", dt.edges.node.length, " for ",taxon, " with ", keyParam);
       }*/
       const ctxt = trans_htmltxt(dt.edges, "node"); //data.data['infq'].edges
+      let taxonx = search.param.keystr? result.taxon: taxon; //if keystr search, don't overwrite result.taxon to do sameTaxon search 20211125
       setResult((prev) => ({
           ...prev,
           spkey: ctxt,
-          taxon: taxon,
+          taxon: taxonx,
           keyParam: keyParam, //store keyParam for this result, but not used yet
           totalCount: dt.totalCount,
           cursor: dt.edges.cursor,
@@ -145,6 +148,9 @@ const UserSearch = (props) => {
 
   //useQuery hook must used inside component, here use fetchQuery //note: prefetchQuery will never return data
   const fetchingQuery = async (taxon, keyParam) => {
+      if (search.keycheck && sameTaxon) {
+        keyParam["mode"] = keyParam["mode"] + ":" + result.taxon; //limited to search current taxon 20211125
+      }
       const pageParam = { taxon: taxon, ...keyParam };
       let searchtxt = taxon === ''? 'All' : taxon;
       let qstr = 'page?' + //if you use 'GET' method
@@ -165,7 +171,6 @@ const UserSearch = (props) => {
       };*/
       const pfetch = async () => {
         const controller = new AbortController(); //cancel request contorller
-
         const res = await queryClient.fetchQuery([searchtxt, keyParam], async () => {
             const data = await pageFetch(pageParam, controller.signal);
             await onSearch((prev) => ({
@@ -219,17 +224,17 @@ const UserSearch = (props) => {
     let kobj = {};
     if (query && (query.first || query.last)) {
         kobj["taxon"] = query.taxon??'';
-        kobj["mode"] = (query.mode? query.mode : (forceGenus? 'genus' : (forceSpecies? 'species' : 'All')));
-        if (typeof query.first !== 'undefined') { kobj["first"] = parseInt(query.first)??search.getsize }
-        if (typeof query.last !== 'undefined')  { kobj["last"] = parseInt(query.last??search.getsize) }
+        kobj["mode"] = query.mode? query.mode : 'All';
+        if (typeof query.first !== 'undefined') { kobj["first"] = parseInt(query.first)??pageSize }
+        if (typeof query.last !== 'undefined')  { kobj["last"] = parseInt(query.last??pageSize) }
         if (typeof query.after !== 'undefined') { kobj["after"] = query.after }
         if (typeof query.before !== 'undefined'){ kobj["before"] = query.before }
         if (typeof query.key !== 'undefined'){ kobj["key"] = query.key }
     } else {
         if (query && query.taxon) {
-          kobj = { "taxon": query.taxon, "mode": "All", "first": search.getsize }
+          kobj = { "taxon": query.taxon, "mode": "All", "first": pageSize }
         } else {
-          kobj = { "taxon": "", "keystr": false, "mode": search.param.mode, "first": search.getsize } //'init', change "Acatia" to genus 20211118
+          kobj = { "taxon": "", "keystr": false, "mode": search.param.mode, "first": pageSize } //'init', change "Acatia" to genus 20211118
         }
     } // '?page=' + query.page : '?page=1'); //old, will be deprecated
     // 'GET', and now changed to use 'POST'
@@ -258,7 +263,7 @@ const UserSearch = (props) => {
       param: {
         keystr: search.keycheck,
         mode: search.param.mode,
-        last: search.getsize,
+        last: pageSize,
         before: result.cursor
       },
       isLoading: true
@@ -272,7 +277,7 @@ const UserSearch = (props) => {
       param: {
         keystr: search.keycheck,
         mode: search.param.mode,
-        first: search.getsize,
+        first: pageSize,
         after: result.endCursor
       },
       isLoading: true

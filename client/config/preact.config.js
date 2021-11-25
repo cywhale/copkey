@@ -166,8 +166,9 @@ const client_other_config = (config, env) => {
       extensions: ['.js', '.jsx'], //'.json', ''
       mainFields: ['module', 'main'],
       alias: {
-        "react": "preact-compat",
-        "react-dom": "preact-compat",
+        "react": "preact/compat",
+        "react-dom": "preact/compat",
+        "react-dom/test-utils": "preact/test-utils",
         //'lodash-es': 'lodash', // our internal tests showed that lodash is a little bit smaller as lodash-es
         'lodash.get': 'lodash/get',
         'lodash.isfunction': 'lodash/isFunction',

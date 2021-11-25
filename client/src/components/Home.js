@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'preact/hooks';
 import { Fragment } from 'preact'; //options
 //import { useQueryClient } from 'react-query'
 import useHelp from './Helper/useHelp';
+import useOpts from './TabModal/useOpts';
 import MultiSelectSort from 'async!./MultiSelectSort';
 import UserSearch from 'async!./UserSearch';
 import Helper from 'async!./Helper';
@@ -15,6 +16,12 @@ import(/* webpackMode: "lazy" */
 
 const Home = () => {
   const searchx = process.env.NODE_ENV === 'production'? 'species/' : 'specieskey/';
+  const lang= useHelp(useCallback(state => state.lang, []));
+  const fuzzy= useOpts(useCallback(state => state.fuzzy, []));         //only for keystr search
+  const sameTaxon= useOpts(useCallback(state => state.sameTaxon, [])); //only for keystr search
+  const forceGenus= useOpts(useCallback(state => state.forceGenus, []));     //false
+  const forceSpecies= useOpts(useCallback(state => state.forceSpecies, [])); //false
+  const pageSize= useOpts(useCallback(state => state.pageSize, []));         //30
 
   const [appstate, setAppState] = useState({
     loaded: false,
@@ -37,18 +44,14 @@ const Home = () => {
     par: {},
   });
 
-  const def_pageSize = 30;
-  const forceGenus = false;
-  const forceSpecies = false;
-
   const [search, setSearch] = useState({
     str: '',
     init: false,
     searched: false,
     keycheck: false,
     isLoading: false,
-    getsize: def_pageSize,
-    param: { keystr: false, mode: 'genus', first: def_pageSize }, //mode: 'genus', 'species', 'All'
+    //getsize: pageSize,
+    param: { keystr: false, mode: 'genus', first: pageSize }, //mode: 'genus', 'species', 'All'
   });
   const [searchSpkey, setSearchSpkey] = useState('');
 
@@ -58,7 +61,10 @@ const Home = () => {
   const iniHelp= useHelp(useCallback(state => state.iniHelp, []));
 
   const trigSearch = () => {
-    if (searchSpkey && searchSpkey.trim() !== '' && searchSpkey !== search.str) {
+    let modex = (search.keycheck && sameTaxon? (fuzzy? ('fuzzy,' + searchmodex('All') + ',sameTaxon'): (searchmodex('All') + ',sameTaxon')):
+                (fuzzy? ('fuzzy,' + searchmodex('All')): searchmodex('All')));
+    if (searchSpkey && searchSpkey.trim() !== '' && (searchSpkey !== search.str || search.param.keystr != search.keycheck ||
+                                                     search.param.mode !== modex|| search.param.first != pageSize)) {
       return(
         setSearch((prev) => ({
           ...prev,
@@ -66,8 +72,8 @@ const Home = () => {
           searched: true,
           isLoading: true,
           param: { keystr: search.keycheck,
-                   mode: searchmodex('All'),
-                   first: search.getsize },
+                   mode: modex,
+                   first: pageSize },
         }))
       )
     } //console.log("Repeated search, dismiss it..")
@@ -219,8 +225,8 @@ const Home = () => {
               str: hashstate.hash.substring(8).replace(/\_/g, ' '),
               isLoading: true,
               param: { keystr: false,
-                       modex: 'All',
-                       first: search.getsize },
+                       mode: searchmodex('All'),
+                       first: pageSize },
             }));
         } else if (hashstate.hash !== '') {
           let el = document.querySelector(hashstate.hash);
@@ -254,12 +260,12 @@ const Home = () => {
                   modex= 'species';
                   spx = spt[1];
                 }
-                parx = { key: ukey, keystr: false, mode: modex, first: search.getsize };
+                parx = { key: ukey, keystr: false, mode: modex, first: pageSize };
               } else {
                 //ukey = spt[1] + '_00a_genus' //if just search taxon, can be removed
                 modex= keyx === '#tax' && spt.length === 2? 'genus' : 'species';
                 spx = spt[1]
-                parx = { keystr: false, mode: modex, first: search.getsize };
+                parx = { keystr: false, mode: modex, first: pageSize };
               }
               //console.log("Hash change: try search ukey: ", ukey, " and taxon: ", spx, " in mode: ", modex);
               //it's not really a 'after' key because it should search keys which >= ukey (not > ukey))
@@ -273,7 +279,7 @@ const Home = () => {
                 ukey = 'fig_' +  spt[1] + (spt[2]? '_'+spt[2] : ''); //fig key is not really fig_xxx_xxx in mongo, need re-index
                 spx = spt[1] + (spt[2]? ' '+spt[2] : '');
               }
-              parx = { key: ukey, keystr: false, mode: modex, first: search.getsize };
+              parx = { key: ukey, keystr: false, mode: modex, first: pageSize };
             }
             // NOT search ok would cause el is null and cannot scroll, so setting handling must wait seach completed!!
             setHashState((prev) => ({
@@ -341,6 +347,9 @@ const Home = () => {
     return null;
   };
 
+  const searchlabel = lang === 'EN'? 'search': '搜尋'
+  const searchplace = (lang === 'EN'? (search.keycheck? 'Search characteristics':'Search taxon'):
+                                      (search.keycheck? '搜尋分類特徵':'搜尋屬、種名'));
   return(
     <Fragment>
       <div id="homediv" onClick={kickInitHelper}>
@@ -348,11 +357,11 @@ const Home = () => {
           <div class="float-left-div">
               <p class="flexpspan">
                 <label for="spkeysearch" style="color:grey;" />
-                <input type="search" id="spkeysearch" name="spkeysearch" placeholder="Search species key"
+                <input type="search" id="spkeysearch" name="spkeysearch" placeholder={searchplace}
                    onInput={(e) => { setSearchSpkey(e.target.value) }} />
-                <button class="ctrlbutn" id="keysearchbutn" onClick={trigSearch}>Search</button>
+                <button class="ctrlbutn" id="keysearchbutn" onClick={trigSearch}>{searchlabel}</button>
                 <label for="keystrsearch" style="margin-top:10px;">
-                  <input type="checkbox" id="keystrsearch" aria-label="Enable searching identification key string"
+                  <input type="checkbox" id="keystrsearch" aria-label="搜尋分類特徵; Enable searching characteristics"
                          checked={search.keycheck} onClick={toggleKeystrSearch} />
                 </label>
               </p>

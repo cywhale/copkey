@@ -10,11 +10,11 @@ export const helpdata = [
     },
     {to: '[id^="spkeysearch"]',
      TW: '搜尋物種分類檢索，輸入屬或種名；或勾選右方欄，搜尋分類特徵',
-     EN: 'Search taxon for its identification key, or search classification traits by enable the right checkbox'
+     EN: 'Search taxon, or search classification characteristics by enable the right checkbox'
     },
     {to: '[id^="key_"]',
      TW: '跟著主鍵值(括號中為前鍵值)，為物種群往下分類的鑑定索引',
-     EN: 'Track primary key (previous key in parentheses) to find each identification key in classification'
+     EN: 'Track primary key (previous key in parentheses) to find how these copepods are classified'
     }
   ];
 

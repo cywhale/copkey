@@ -4,17 +4,20 @@ import TabInframe from 'async!./TabInframe';
 import AboutUs from 'async!./AboutUs';
 import Guides from 'async!./Guides';
 import useHelp from '../Helper/useHelp';
+import useOpts from './useOpts';
 //import Draggable from 'react-draggable';
 import draggable_element from '../Compo/draggable_element';
 import style from '../style/style_modal.scss';
 import(/* webpackMode: "lazy" */
        /* webpackPrefetch: true */
        '../../style/style_modal_tab.scss');
+const { optsdata } = require('./optsinfo.js');
 
 const TabModal = (props) => {
   const [ isOpen, setIsOpen ] = useState(true);
   const [ loaded, setLoaded ] = useState(false);
 
+  const lang= useHelp(useCallback(state => state.lang, []));
   const iniHelp= useHelp(useCallback(state => state.iniHelp, []));
   const toggleBtnx = () => {
     if (isOpen && iniHelp) {
@@ -28,6 +31,36 @@ const TabModal = (props) => {
       useHelp.getState().closeHelp();
     }
   };
+
+  const fuzzy= useOpts(useCallback(state => state.fuzzy, []));
+  const sameTaxon= useOpts(useCallback(state => state.sameTaxon, []));
+  const forceGenus= useOpts(useCallback(state => state.forceGenus, []));
+  const forceSpecies= useOpts(useCallback(state => state.forceSpecies, []));
+  const pageSize= useOpts(useCallback(state => state.pageSize, []));
+  const toggleFuzzy = e => {
+    let checked = !fuzzy;
+    useOpts.getState().setOpts({fuzzy: checked});
+  };
+  const toggleSameTaxon = e => {
+    let checked = !sameTaxon;
+    useOpts.getState().setOpts({sameTaxon: checked});
+  };
+  const toggleForceGenus = e => {
+    let checked = !forceGenus;
+    useOpts.getState().setOpts({forceGenus: checked});
+  };
+  const toggleForceSpecies = e => {
+    let checked = !forceSpecies;
+    useOpts.getState().setOpts({forceSpecies: checked});
+  };
+  const setPageSize = e => {
+    let val = parseInt(e.target.value);
+    if (isNaN(val) || (val && val<= 0)) {
+      alert("Error: Not valid input, should be number > 0\n錯誤：應為大於零之整數")
+    } else {
+      useOpts.getState().setOpts({pageSize: val});
+    }
+  }
 /*const loadIframex = () => {
     let vidDefer = document.getElementsByTagName('iframe');
     for (let i=0; i<vidDefer.length; i++) {
@@ -93,7 +126,12 @@ const TabModal = (props) => {
   }
   const colClass = `${style.ctrlcolumn}` //.not-draggable
   const tabClass = 'tablab'; //.not-draggable
-/*const startDrag= { x: 40, y: 30 };
+  const xlang = lang === 'EN'? 'TW': 'EN';
+/*const label1 = lang === 'EN'? 'Guides': '簡介'
+  const label2 = lang === 'EN'? 'Overview': '綜述'
+  const label3 = lang === 'EN'? 'About': '關於'
+  const label4 = lang === 'EN'? 'Options': '選項'
+  const startDrag= { x: 40, y: 30 };
   <Draggable cancel=".not-draggable" defaultPosition={startDrag}>
 */
   return (
@@ -113,7 +151,7 @@ const TabModal = (props) => {
           <div class="nav-tabs">
             <label class={tabClass} for="tab-1" tabindex="0" />
             <input id="tab-1" type="radio" name="tabs" aria-hidden="true" />
-            <h2 data-toggle="tab">Guides</h2>
+            <h2 data-toggle="tab">{optsdata["label1"][lang]}</h2>
               <div class={style.ctrlwrapper}>
                   <section class={style.ctrlsect}>
                     <div class={colClass}>
@@ -123,7 +161,7 @@ const TabModal = (props) => {
               </div>
             <label class={tabClass} for="tab-2" tabindex="1" />
             <input id="tab-2" type="radio" name="tabs" aria-hidden="true" />
-            <h2 data-toggle="tab">Overview</h2>
+            <h2 data-toggle="tab">{optsdata["label2"][lang]}</h2>
               <div class={style.ctrlwrapper}>
                   <section class={style.ctrlsect}>
                     <div class={colClass}>
@@ -133,11 +171,42 @@ const TabModal = (props) => {
               </div>
             <label class={tabClass} for="tab-3" tabindex="2" />
             <input id="tab-3" type="radio" name="tabs" aria-hidden="true" />
-            <h2 data-toggle="tab">About</h2>
+            <h2 data-toggle="tab">{optsdata["label3"][lang]}</h2>
               <div class={style.ctrlwrapper}>
                   <section class={style.ctrlsect}>
                     <div class={colClass}>
                       <AboutUs />
+                    </div>
+                  </section>
+              </div>
+            <label class={tabClass} for="tab-4" tabindex="3" />
+            <input id="tab-4" type="radio" name="tabs" aria-hidden="true" />
+            <h2 data-toggle="tab">{optsdata["label4"][lang]}</h2>
+              <div class={style.ctrlwrapper}>
+                  <section class={style.ctrlsect}>
+                    <div class={colClass}>
+                      <div class='guideinfo'>
+                      <p><label for="fuzzysearch" style="margin-top:10px;">
+                        <input type="checkbox" id="fuzzysearch" aria-label={optsdata["fuzzysearch"][xlang]}
+                          checked={fuzzy} onClick={toggleFuzzy} />{optsdata["fuzzysearch"][lang]}
+                      </label></p>
+                      <p><label for="sametaxon" style="margin-top:10px;">
+                        <input type="checkbox" id="sametaxon" aria-label={optsdata["sametaxon"][xlang]}
+                          checked={sameTaxon} onClick={toggleSameTaxon} />{optsdata["sametaxon"][lang]}
+                      </label></p>
+                      <p><label for="forcegenus" style="margin-top:10px;">
+                        <input type="checkbox" id="forcegenus" aria-label={optsdata["forcegenus"][xlang]}
+                          checked={forceGenus} onClick={toggleForceGenus} />{optsdata["forcegenus"][lang]}
+                      </label></p>
+                      <p><label for="forcespecies" style="margin-top:10px;">
+                        <input type="checkbox" id="forcespecies" aria-label={optsdata["forcespecies"][xlang]}
+                          checked={forceSpecies} onClick={toggleForceSpecies} />{optsdata["forcespecies"][lang]}
+                      </label></p>
+                      <p><label for="pagesize" style="margin-top:10px;">{optsdata["pagesize"][lang]}
+                        <input type="text" id="pagesize" aria-label={optsdata["pagesize"][xlang]}
+                          value={pageSize} onInput={setPageSize} />
+                      </label></p>
+                      </div>
                     </div>
                   </section>
               </div>
