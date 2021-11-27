@@ -20,6 +20,7 @@ const Xarr2 = (props) => {
 }
 
 const Helper = (props) => {
+  const { reload } = props;
   const toHelp = useHelp(useCallback(state => state.toHelp, []));
   const iniHelp= useHelp(useCallback(state => state.iniHelp, []));
   const lang= useHelp(useCallback(state => state.lang, []));
@@ -63,39 +64,88 @@ const Helper = (props) => {
 
   const render_info = (props) => {
     const { id, info } = props; //use <p> to escape rules #helpContainer div
-    return(
+    return(                     //try iOS seems not accept using touch as hover //onClick={e=>e.preventDefault()}
       <p class="helpbox">
           <p id={id} class="column-right">{info}</p>
       </p>
     )
   };
 
+  const find_closest = (el, attr='span') => (el? (el.closest(attr)? (el.closest(attr).firstChild??null) : null): null);
+  const find_elemx = (id,self=true,nth='first') => {
+    let el = document.querySelector(id);
+    if (el) {
+      if (self && nth === 'first') return el
+      if (!self && nth ==='first') return find_closest(el)
+
+      let els = document.querySelectorAll(id);
+    //if (els) {
+      if (els.length <= 2) {
+        if (self) return els[1]
+        return find_closest(els[1]);
+      }
+      let nx = parseInt(nth);
+      if (!isNaN(nx)) {
+        if (els.length >= nx) {
+          if (self) return els[nx-1]
+          return find_closest(els[nx-1])
+        } else {
+          if (self) return els[els.length-1]
+          return find_closest(els[els.length-1])
+        }
+      } else if (nth=='last') {
+        if (self) return els[els.length-1]
+        return find_closest(els[els.length-1])
+      }
+      let mid = parseInt(els.length/3);
+      if (self) return els[mid]
+      return find_closest(els[mid])
+    } else {
+      return null
+    }
+  };
+
   const render_xarrows = (props) => {
     const { helpclass } = props;
 
     const hboxs = helpdata.map((hx, idx) => {
-      let el = document.querySelector(hx['to']);
-      let hxid_e0 = '';
-      if (el) {
-        hxid_e0 = el.id; //iniHelp? "key_Acartia_35a": document.querySelector('[id^="key_"]').id;
-      } else {
-        console.log("Warning: check not found and dom with key id", hx['to'], idx);
-      }
-      let hxid_start = "help_" + (idx >= 10? idx: ('0' + idx));
-      let helpx0 = {id: hxid_start, info: hx[lang]};
-      let help_enable = toHelp && hxid_e0 !== '';
-      const linex = arrline2x(hxid_start, hxid_start, hxid_e0, hxid_e0, 0.5, 0); //repeat lines to make it more fancy?
+      if (!reload) {
+        let el;
+        let self= hx['to'].match(/href/g)? false: true;
+        let nth = (idx < 3? 'first': (idx === 5? 'mid' : (idx < 6? (idx-1).toString(): 'first')));
+/*      if (hx['to'].match(/href/g)) {
+          el = document.querySelector(hx['to']).closest('span').firstChild;
+        } else {
+          el = document.querySelector(hx['to']);
+        }*/
+        el = find_elemx(hx['to'], self, nth);
+        let hxid_e0 = '';
+        if (el) {
+          hxid_e0 = el.id; //iniHelp? "key_Acartia_35a": document.querySelector('[id^="key_"]').id;
+        } else {
+          console.log("Warning: check not found and dom with key id", hx['to'], idx);
+        }
+        let hxid_start = "help_" + (idx >= 10? idx: ('0' + idx));
+        let helpx0 = {id: hxid_start, info: hx[lang]};
+        let help_enable = toHelp && hxid_e0 !== '';
+        const linex = arrline2x(hxid_start, hxid_start, hxid_e0, hxid_e0, 0.5, 0); //repeat lines to make it more fancy?
 
-      return(
-        <div class={helpclass} id="helpContainer">
-          { help_enable &&
-            <Xwrapper>
-              { render_info(helpx0) }
-              <Xarr2 {...linex} />
-            </Xwrapper>
-          }
-        </div>
-      )
+        return(
+          <div class={helpclass} id="helpContainer">
+            { help_enable &&
+              <Xwrapper>
+                { render_info(helpx0) }
+                <Xarr2 {...linex} />
+              </Xwrapper>
+            }
+          </div>
+        )
+      } else {
+        if (toHelp) {
+          useHelp.getState().closeHelp();
+        }
+        return null;
+      }
     });
 
     return(

@@ -342,7 +342,7 @@ const Home = () => {
 
   const render_userhelper = () => {
     if (appstate.loaded && search.init) {
-      return <Helper />
+      return <Helper reload={search.isLoading} />
     }
     return null;
   };
@@ -350,6 +350,11 @@ const Home = () => {
   const searchlabel = lang === 'EN'? 'search': '搜尋'
   const searchplace = (lang === 'EN'? (search.keycheck? 'Search characteristics':'Search taxon'):
                                       (search.keycheck? '搜尋分類特徵':'搜尋屬、種名'));
+  /*        { iniHelp &&
+                <p style="text-indent:0;z-index:1101;" class="triangle-right top" id="search_tooltips">
+                   Search taxon for its identification key, or search<br/>classification traits by enable the right checkbox<br/>搜尋物種分類檢索，輸入屬或種名<br/>或勾選右方欄，搜尋分類特徵
+                </p>
+            }*/
   return(
     <Fragment>
       <div id="homediv" onClick={kickInitHelper}>
@@ -365,9 +370,6 @@ const Home = () => {
                          checked={search.keycheck} onClick={toggleKeystrSearch} />
                 </label>
               </p>
-              { iniHelp &&
-                <p style="text-indent:0;z-index:1101;" class="triangle-right top" id="search_tooltips">Search taxon for its identification key, or search<br/>classification traits by enable the right checkbox<br/>搜尋物種分類檢索，輸入屬或種名<br/>或勾選右方欄，搜尋分類特徵</p>
-              }
           </div>
           <MultiSelectSort />
         </div>

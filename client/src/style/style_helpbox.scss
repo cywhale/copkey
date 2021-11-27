@@ -2,6 +2,7 @@
   border: 1px #999 solid;
   border-radius: 10px;
   margin: 1px;
+  cursor: pointer;
 }
 
 .myarrow {
@@ -21,6 +22,7 @@
   font-size: 90%;
   border-radius: 8px;
   z-index: -1;
+  cursor: pointer;
 }
 
 .column-right:hover {
@@ -30,6 +32,8 @@
 
 @media screen and (max-width: 480px) {
   .column-right {
-    padding: 4px;
+    padding: 3px;
+    font-size: 11px;
+    line-height: 1.1rem;
   }
 }

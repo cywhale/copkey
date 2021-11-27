@@ -110,7 +110,7 @@ const TabModal = (props) => {
       tabCheckListenx('tab-1', false);
       tabCheckListenx('tab-2');
       tabCheckListenx('tab-3');
-    //tabCheckListenx('tab-4', false);
+      tabCheckListenx('tab-4', false);
 /*    document.addEventListener("DOMContentLoaded", (e) => {
          loadIframex();
       });*/
@@ -164,7 +164,7 @@ const TabModal = (props) => {
             <h2 data-toggle="tab">{optsdata["label2"][lang]}</h2>
               <div class={style.ctrlwrapper}>
                   <section class={style.ctrlsect}>
-                    <div class={colClass}>
+                    <div class={colClass} style="padding:0;">
                       {loaded && <TabInframe ifrid="tab2ifr" enable={loaded} srcurl="https://bio.odb.ntu.edu.tw/pub/copkey"/>}
                     </div>
                   </section>

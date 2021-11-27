@@ -76,6 +76,9 @@
       justify-content: flex-start;
     }
   }
+@media screen and (max-width: 480px) {
+  .leader { font-size: 1.0rem; }
+}
 /*
   .carousel_div {
     span { 
