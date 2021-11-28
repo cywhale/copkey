@@ -989,6 +989,9 @@ while (i<=tstL) { #nrow(ctent)) {
   }
 
   xf[, fidx:=NULL] #20191014 modified
+  if (nxttype==1 & !is.na(nsp)) { #20211128 modified, let genus taxon_xxx has a unique key so that when search sp go back to genus, can find this key
+    ukeyx <- paste0(ukeyx, "_00x_",nsp)  
+  }
   if (blkflush_flag & length(insRow)>0 & nrow(gtk)>1) {
     gtk <- rbindlist(list(gtk,data.table(rid=i, unikey=ukeyx, ckey=keyx, 
                                      subkey= letters[subkeyx], pkey= prekeyx,

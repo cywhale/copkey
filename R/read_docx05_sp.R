@@ -473,7 +473,7 @@ for (docfile in doclst[1:81]) {
               gsub("(?![^\\,\\.])\\s*(?!^\\()(?![a-zA-Z]{1,})\\((?=[^0-9])", ", (",
               gsub("(?![a-zA-Z]{1,})\\)(?=[^\\,\\.])", ") ",     
               gsub("(?![a-zA-Z]{1,})\\,", ", ",xt, perl=T), perl=T), perl=T))))
-  epithets <- unlist(tstrsplit(gsub("\\(\\*(?:.*)\\)|\\*", "", ##(trim remark by *)
+  epithets <- unlist(tstrsplit(gsub("\\(\\*(?:.*)\\)|\\(f\\)|\\*", "", ##(trim remark by *)
                                     epi_list), "(\\,|\\.)\\s*"), use.names = F) %>%
     sapply(function(x) {trimx(gsub("\\,$","",gsub("\\([0-9]+(?:.*)\\)(\\.|\\,|\\s|$)", ",", 
                               gsub(paste0("(?!\\()", gen_name, "(?!\\))"), "", x, perl = T)))) 
@@ -485,10 +485,10 @@ for (docfile in doclst[1:81]) {
                         gsub("\\)\\s", "\\\\)\\\\s\\)\\*",
                         gsub("\\,\\s", "|", epithets))), ")") #"(crassus|dentatus|longiceps....)"
   
-  titletxt <- gsub(paste0(gen_name,"<\\/em>"),
+  titletxt <- gsub(paste0(gen_name,"<\\/em>\\soccur"),
                    paste0(gen_name, '</em> ', '<a aria-label=', dQuote('back to the genus key'),
                           ' href=', dQuote(paste0('#taxon_',gen_name)),
-                          '>&#9754;</a>'),
+                          '>&#9754;</a> occur'), ## add a posix 'occur' to ensure this paste-gsub only do once, (i.e don't do it twice) 
               paste0("<div id=", dQuote(paste0("genus_",gen_name))," class=", dQuote("kblk"), "><p class=", dQuote("doc_title"), ">", 
                 italics_spname(gsub("(in\\sChina\\ssea(s)*|\\(China\\ssea(s)*\\))(\\:)*", "occurring in the China seas", ctent[1,]$text), gen_name, gen_name), "</p></div><br><br><br>")
               )
@@ -1267,7 +1267,7 @@ for (docfile in doclst[1:81]) {
                   if (sattr!="") { #has Size: female ; male:..)
                     fig_main = paste0(full_name, " ", sattr)
                     fig_mtxt = paste0(full_name, " ",
-                                      gsub("(\\;\\s*|\\s)(M|m)ale\\:*\\,*\\s*", 
+                                      gsub("(\\.*\\,*\\;\\s*|\\s)(M|m)ale\\:*\\,*\\s*", 
                                         ifelse(is.na(malekey) || malekey=="", "; male, ", paste0("; <a href=", dQuote(paste0("#key_",gen_name,"_",malekey)), ">male</a>, ")), 
                                         gsub("\\s*(F|f)emale\\:*\\,*\\s*", 
                                           ifelse(is.na(femalekey) || femalekey=="", " female, ", paste0(" <a href=", dQuote(paste0("#key_",gen_name,"_",femalekey)), ">female</a>, ")), sattr)))
