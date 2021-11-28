@@ -277,7 +277,7 @@ const client_other_config = (config, env) => {
         index: '/',
         disableDotRule: true
       },
-      //public : 'ecodata.odb.ntu.edu.tw',
+      //public : 'bio.odb.ntu.edu.tw',
       publicPath: '/',
       disableHostCheck: true,
       quiet: true,
@@ -288,7 +288,7 @@ const client_other_config = (config, env) => {
       sockPath: '/serve/sockjs-node',
       proxy: {
         "/serve": {
-            target: "https://ecodata.odb.ntu.edu.tw/",
+            target: "https://bio.odb.ntu.edu.tw/",
             pathRewrite: { "^/serve": "/sockjs-node" },
             changeOrigin: true,
         },

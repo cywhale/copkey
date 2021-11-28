@@ -149,7 +149,7 @@ const TabModal = (props) => {
         </div>
         <div class={style.modal}>
           <div class="nav-tabs">
-            <label class={tabClass} for="tab-1" tabindex="0" />
+            <label class={tabClass} for="tab-1" />
             <input id="tab-1" type="radio" name="tabs" aria-hidden="true" />
             <h2 data-toggle="tab">{optsdata["label1"][lang]}</h2>
               <div class={style.ctrlwrapper}>
@@ -159,7 +159,7 @@ const TabModal = (props) => {
                     </div>
                   </section>
               </div>
-            <label class={tabClass} for="tab-2" tabindex="1" />
+            <label class={tabClass} for="tab-2" />
             <input id="tab-2" type="radio" name="tabs" aria-hidden="true" />
             <h2 data-toggle="tab">{optsdata["label2"][lang]}</h2>
               <div class={style.ctrlwrapper}>
@@ -169,7 +169,7 @@ const TabModal = (props) => {
                     </div>
                   </section>
               </div>
-            <label class={tabClass} for="tab-3" tabindex="2" />
+            <label class={tabClass} for="tab-3" />
             <input id="tab-3" type="radio" name="tabs" aria-hidden="true" />
             <h2 data-toggle="tab">{optsdata["label3"][lang]}</h2>
               <div class={style.ctrlwrapper}>
@@ -179,7 +179,7 @@ const TabModal = (props) => {
                     </div>
                   </section>
               </div>
-            <label class={tabClass} for="tab-4" tabindex="3" />
+            <label class={tabClass} for="tab-4" />
             <input id="tab-4" type="radio" name="tabs" aria-hidden="true" />
             <h2 data-toggle="tab">{optsdata["label4"][lang]}</h2>
               <div class={style.ctrlwrapper}>

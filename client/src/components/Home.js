@@ -342,7 +342,7 @@ const Home = () => {
 
   const render_userhelper = () => {
     if (appstate.loaded && search.init) {
-      return <Helper reload={search.isLoading} />
+      return <Helper reload={!iniHelp && search.isLoading} />
     }
     return null;
   };
