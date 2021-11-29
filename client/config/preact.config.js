@@ -167,8 +167,9 @@ const client_other_config = (config, env) => {
       mainFields: ['module', 'main'],
       alias: {
         "react": "preact/compat",
-        "react-dom": "preact/compat",
         "react-dom/test-utils": "preact/test-utils",
+        "react-dom": "preact/compat",     // Must be below test-utils
+        "react/jsx-runtime": "preact/jsx-runtime",
         //'lodash-es': 'lodash', // our internal tests showed that lodash is a little bit smaller as lodash-es
         'lodash.get': 'lodash/get',
         'lodash.isfunction': 'lodash/isFunction',
@@ -518,5 +519,19 @@ export default (config, env, helpers) => {
     baseConfig(config, env, helpers),
     client_other_config(config, env)
   );
+//https://github.com/preactjs/preact-cli/issues/1625
+  config.resolve.alias = {
+    ...config.resolve.alias,
+    react: "preact/compat",
+    "react-dom": "preact/compat",
+  };
+/*try in package.json
+  "alias": {
+    "react": "preact/compat",
+    "react-dom/test-utils": "preact/test-utils",
+    "react-dom": "preact/compat",
+    "react/jsx-runtime": "preact/jsx-runtime"
+  },
+*/
   return config;
 };
