@@ -1,0 +1,65 @@
+.bluebox {
+  border: 1px #999 solid;
+  border-radius: 10px;
+  margin: 1px;
+  padding: 1rem;
+  line-height: 1.4rem;
+  overflow: hidden;
+  color: white;
+  background: linear-gradient(135deg, rgba(7,42,126,1) 0%, rgba(6,31,107,0.55) 100%);
+  a {color: darkcyan;}
+  a:visited {
+    color: azure;
+  }
+
+}
+
+.snyellow {
+  color: #f3eacb;
+}
+
+.slyellow {
+  font-size: larger;
+  color: #f3eacb;
+}
+
+.helpctrl {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  span {
+    margin: 2rem 0;
+  }
+}
+
+.helpctrlbutn {
+    background: #d9e6fc;
+    color: #1f2e47;
+    padding: 3px 12px;
+    border-radius: 6px;
+    margin: 2rem 1rem;
+    box-shadow: 0px 17px 10px -10px rgba(0,0,0,0.4);
+    cursor: pointer;
+    transition: all ease-in-out 300ms;
+
+    &:hover {
+      box-shadow: 0px 37px 20px -20px rgba(0,0,0,0.2);
+      transform: translate(0px, -10px) scale(1.2);
+    }
+}
+
+@media screen and (max-width: 560px) {
+  .bluebox {
+    padding: 3px;
+    font-size: 11px;
+    line-height: 1.1rem;
+  }
+  .helpctrlbutn {
+    font-size: 90%;
+    margin: 5px;
+    padding: 3px 5px;
+  }
+  .helpctrl { span { margin:5px 0; font-size: 90%;} }
+}
+
+

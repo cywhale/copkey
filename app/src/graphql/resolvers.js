@@ -191,7 +191,16 @@ const resolvers = {
                 curidx = data.findIndex(item => item.unikey.match(kt)? true : false)
               }
             } else {
-              curidx = data.findIndex(item => item.unikey === key)
+              if (gkeymode) {
+                if (key.match(/00x/g)) {
+                  let kt = new RegExp(key, 'gi')
+                  curidx = data.findIndex(item => item.unikey.match(kt)? true : false)
+                } else {
+                  curidx = data.findIndex(item => item.unikey.substring(0,14) === key.substring(0,14))
+                }
+              } else {
+                curidx = data.findIndex(item => item.unikey === key)
+              }
             }
             totalCount = data.length
             page = Math.floor((curidx+1)/pgsize) + (((curidx+1) % pgsize === 0) ? 0 : 1)

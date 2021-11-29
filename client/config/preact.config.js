@@ -288,7 +288,7 @@ const client_other_config = (config, env) => {
       sockPath: '/serve/sockjs-node',
       proxy: {
         "/serve": {
-            target: "https://bio.odb.ntu.edu.tw/",
+            target: "https://0.0.0.0/",
             pathRewrite: { "^/serve": "/sockjs-node" },
             changeOrigin: true,
         },

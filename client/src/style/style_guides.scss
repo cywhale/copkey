@@ -3,7 +3,6 @@
   padding: 1.5em;
   text-align: center;
   border-radius: 8px;
-  line-height: 1.1rem;
   label { color:#f3eacb; }
   input { color:black; }
 }
@@ -65,3 +64,6 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+@media screen and (max-width: 560px) {
+  .guideinfo {  line-height: 1.1rem; }
+}

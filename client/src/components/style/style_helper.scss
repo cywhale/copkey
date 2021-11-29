@@ -1,12 +1,12 @@
-.helpContainer.notshown{
+.helper.notshown{
   display: none;
   z-index:-1;
 }
-.helpContainer{
+.helper{
   display: flex;
   overflow: hidden;
   margin-left: 5px;
-  flex-flow: column-reverse wrap;
+  flex-flow: wrap;
 }
 
 .helpToggle {
@@ -49,3 +49,8 @@
 @media screen and (max-width: 680px) {
   .helpToggle { right:0px; }
 }
+
+@media screen and (max-width: 480px) {
+  .helper { margin-left:-25px; }
+}
+

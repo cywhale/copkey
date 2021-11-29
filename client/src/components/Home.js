@@ -264,8 +264,14 @@ const Home = () => {
               } else {
                 //ukey = spt[1] + '_00a_genus' //if just search taxon, can be removed
                 modex= keyx === '#tax' && spt.length === 2? 'genus' : 'species';
-                spx = spt[1]
-                parx = { keystr: false, mode: modex, first: pageSize };
+                if (modex=='genus') {
+                  ukey = '00a_genus_.*00x_' + spt[1];
+                  spx = 'All'
+                  parx = { key: ukey, keystr: false, mode: modex, first: pageSize };
+                } else {
+                  spx = spt[1]
+                  parx = { keystr: false, mode: modex, first: pageSize };
+                }
               }
               //console.log("Hash change: try search ukey: ", ukey, " and taxon: ", spx, " in mode: ", modex);
               //it's not really a 'after' key because it should search keys which >= ukey (not > ukey))
@@ -273,11 +279,13 @@ const Home = () => {
               //scrollTop = true; // new query will be on top
             } else if ((keyx === "#tax" && spt[2]) || keyx === "#fig") {
               if (keyx === '#fig' && spt.length >= 2 && !isNaN(nkey)) { //2021115 for genus
-                ukey = padZero(nkey, '00a_genus.*figs.*', 2) + '.*'     //mode do not change
-                spx = ''
+                ukey = padZero(nkey, '00a_genus.*figs.*', 2) + '.*';
+                spx = '';
+                modex = 'genus';
               } else {
                 ukey = 'fig_' +  spt[1] + (spt[2]? '_'+spt[2] : ''); //fig key is not really fig_xxx_xxx in mongo, need re-index
                 spx = spt[1] + (spt[2]? ' '+spt[2] : '');
+                modex = 'species';
               }
               parx = { key: ukey, keystr: false, mode: modex, first: pageSize };
             }
@@ -339,14 +347,12 @@ const Home = () => {
       }
     }
   },[appstate.loaded, hashstate.hash, hashstate.handling]); //, prefetchInit
-
-  const render_userhelper = () => {
+/*const render_userhelper = () => {
     if (appstate.loaded && search.init) {
       return <Helper reload={!iniHelp && search.isLoading} />
     }
     return null;
-  };
-
+  };*/
   const searchlabel = lang === 'EN'? 'search': '搜尋'
   const searchplace = (lang === 'EN'? (search.keycheck? 'Search characteristics':'Search taxon'):
                                       (search.keycheck? '搜尋分類特徵':'搜尋屬、種名'));
@@ -355,6 +361,7 @@ const Home = () => {
                    Search taxon for its identification key, or search<br/>classification traits by enable the right checkbox<br/>搜尋物種分類檢索，輸入屬或種名<br/>或勾選右方欄，搜尋分類特徵
                 </p>
             }*/
+  //{ render_userhelper() }
   return(
     <Fragment>
       <div id="homediv" onClick={kickInitHelper}>
@@ -374,7 +381,7 @@ const Home = () => {
           <MultiSelectSort />
         </div>
         <UserSearch query={querystr.par} search={search} onSearch={setSearch} />
-        { render_userhelper() }
+        <Helper enable={appstate.loaded && search.init} reload={!iniHelp && search.isLoading} />
       </div>
       { figx.popup && <Popup ctxt={figx.html} onClose={closePopup} /> }
     </Fragment>
