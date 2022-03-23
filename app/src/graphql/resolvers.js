@@ -168,6 +168,7 @@ const resolvers = {
             spqry= {...spqry, ...spqstr}
           }
         }
+        ctx.reply.log.info("Perform spqry: " + JSON.stringify(spqry))
 
         //20211012 modified: if has a key index to find, then it must be firstly re-index, then can get correct page
         if (key) {
