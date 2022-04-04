@@ -6,7 +6,8 @@
 # find . -name "*.docx" -print0 | xargs -0 rename 's/.docx/.zip/g'
 
 # $documents = "D:\ODB\Data\shih\shih_5_202107\key_zip\"
-$documents = "D:\proj\copkey\doc\sp_key_zip\"
+# $documents = "D:\proj\copkey\doc\sp_key_zip\"
+$documents = "D:\ODB\Data\shih\shih_5_202107\key_20220311_new_update_img"
 
 $images = "D:\proj\copkey\www_sp\img\"
 

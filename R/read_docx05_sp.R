@@ -12,7 +12,7 @@ web_img <- paste0(web_dir, "assets/img/species/")
 doc_imgdir <- "doc/sp_key_zip/"
 #skipLine <- 4L
 page_length_def <- 30L
-Traits <- c("(H|h)abitus","(M|m)outh(\\spart(s)*)*", "(L|l)eg(s)*[0-9\\-\\/]*", #Euaugaptilus magnus #match Legs 4/5, Undinula vulgaris 
+Traits <- c("(A|a)ppendages", "(H|h)abitus","(M|m)outh(\\spart(s)*)*", "(L|l)eg(s)*[0-9\\-\\/]*", #Euaugaptilus magnus #match Legs 4/5, Undinula vulgaris 
             "(A|a)ntenna(\\s(\\&|\\/)\\s(M|m)andible)*", "(M|m)axillule(\\,|\\/)*\\s*|(M|m)axilla((\\s)*(\\&|\\/)(\\s)*(M|m)axilliped)*", #,Legs 1-3 #Mesocalanus tenuicornis
             #Antenna/Mandible, Maxillule/Maxilla/Maxilliped, Legs 1-3, Legs 4/5 #Undinula vulgaris
             "(H|h)abitus(\\((F|f)emale|(M|male)\\))*") #Nullosetigera auctiseta #Centropages gracilis 
@@ -21,7 +21,9 @@ Extra_epi <- C("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis")  
 Fig_exclude_word <- "\\(F\\,\\s*M\\)|\\(1\\,f\\)" #exclude pattern in title/main: (F,M), (1/f)
 Special_genus <- c("Euaetideus", "Euchirella", "Euchaeta", "Forma", "Pachyptilus",
                    "Euaugaptilus", "Pseudochirella", "Phyllopus", "Paracalanus",
-                   "Acrocalanus", "Schmackeria", "Oothrix")
+                   "Acrocalanus", "Schmackeria", "Oothrix", "Paraeuchaeta", "Pontella", 
+                   "Scolecithricella", "Amallothrix", "Amallophora", "Racovitzanus", 
+                   "Oothrix", "Spinocalanus")
 Species_groups<- c("malayensis", "pavlovskii", "norvegica", "hebes", "galacialis", #Paraeuchaetas spp.
                    "spinifrons", "papilliger", "fistulosus", "abyssalis", #Heterorhabdus spp. 
                    "Schmackera" #Pseudodiaptomus spp.
@@ -417,7 +419,7 @@ pre_kcnt<- 0L
 keycnt <- 0L
 #docfile <- doclst[1]
 
-for (docfile in doclst[1:81]) {
+for (docfile in doclst) {
   dc0 <- read_docx(docfile) ######################## 20191014 modified
   ctent <- docx_summary(dc0)
   key_chk_flag <- TRUE ## FALSE: means no key, only figs in this doc by means of 
@@ -579,6 +581,14 @@ for (docfile in doclst[1:81]) {
   xsex_flag <- FALSE #during sex decision key splitting, don't decide sex
   #init_flag <- TRUE #just a flag to initially <div> to replace skipLine+1
   doc_fign<- 0 ## cntg_fig is counter of all fig num in total docs (stored in fig_num), doc_fign just for one doc file
+  docfn <- unlist(tstrsplit(docfile, "\\/"), use.names = F) %>% .[length(.)]
+  imgdir <- paste0(doc_imgdir, 
+                   gsub("\\s", "_", gsub("Key to the species of\\s|\\s\\(China sea([s]*)\\s*[2]*\\)\\.docx", "", docfn)),
+                   "/word/media")
+  imgfiles <- list.files(imgdir, pattern="jpeg$", full.names = TRUE, recursive = FALSE)
+  imgfileL <- length(imgfiles) #modified 2022/4/2 for checking if fig_num == imgfileL, to check if any one lost
+  if (imgfileL==0) {stop(paste0("Error: No img files existed for this genus: ", gen_name))} 
+  cur_key_cnt <- 0 ## current key number counter (not include epitext, so less 1 than actual total key)
   
   while (i<=tstL) {
     x <- read_docx_row(ctent$text[i], nocheck = TRUE)
@@ -621,7 +631,8 @@ for (docfile in doclst[1:81]) {
         if (attributes(wl)$match.length>0) {
           keyx <- substr(x,wl,wl+attributes(wl)$match.length-1)
           stopifnot(!any(is.na(keyx))) ## because HTML no more support <a name...> for anchor, we use font id to be catched
-        
+          
+          cur_key_cnt <- cur_key_cnt + 1L
           if (grepl("\\/", keyx)) {
             prekeyx <- tstrsplit(keyx, "/")[[2]]
             keyx <- tstrsplit(keyx, "/")[[1]]
@@ -959,7 +970,7 @@ for (docfile in doclst[1:81]) {
     } 
   }
   
-  if (key_chk_flag) {
+  if (key_chk_flag & cur_key_cnt>0) {
     #20211102 added a female/male only flag
     if (length(Female_only_sp) & female_start < 0 & !both_sexflag) {
       print(paste0("Warning! Sex info will be changed. Check it: We find Female_only comment for genus: ", gen_name))
@@ -979,11 +990,14 @@ for (docfile in doclst[1:81]) {
                    " after importing genus: ", gen_name))
     }
   } else {
-    print(paste0("No key mode, and check fig_mode: ", fig_mode))
+    print(paste0("No key mode, and check cur_key_cnt & fig_mode: ", cur_key_cnt, " & ", fig_mode))
+    #fig_num <- c()    
   }
   with_thesame_sp <- FALSE #some sp will have two different block for title, subfig, img, may due to too many figs that cannot be within a single row.
   Blk_condi <- 0 #"Normal" condition, #block(blk) belong to differnet species
   pre_imgj <- 0L 
+  cur_fig_cnt <- 0L
+  
   #i <- 195L #just when test first doc file #i<=232L before p.12 #i<=tstL #245L p13 #292L before p19 #351L p25
   while (fig_mode & nrow(dtk)>0 & i<=tstL) {
     x <- read_docx_row(ctent$text[i], nocheck = TRUE)
@@ -1108,10 +1122,11 @@ for (docfile in doclst[1:81]) {
                     cntg_fig <- cntg_fig + 1L
                     doc_fign <- doc_fign + 1L
                     fig_num[imgj+1] <- cntg_fig
-                    docfn <- unlist(tstrsplit(docfile, "\\/"), use.names = F) %>% .[length(.)]
-                    imgsrc <- paste0(doc_imgdir, 
-                                     gsub("\\s", "_", gsub("Key to the species of\\s|\\s\\(China sea([s]*)\\s*[2]*\\)\\.docx", "", docfn)),
-                                     "/word/media/image", doc_fign, ".jpeg")
+                    #docfn <- unlist(tstrsplit(docfile, "\\/"), use.names = F) %>% .[length(.)]
+                    imgsrc <- paste0(#doc_imgdir, 
+                                     #gsub("\\s", "_", gsub("Key to the species of\\s|\\s\\(China sea([s]*)\\s*[2]*\\)\\.docx", "", docfn)),
+                                     #"/word/media/image",
+                                     imgdir, "/image", doc_fign, ".jpeg")
                     if (!file.exists(imgsrc)) {
                       stop("Error: Cannot get the the image file: ", imgsrc, "  Check it at i:",  i)
                     }
@@ -1642,6 +1657,7 @@ for (docfile in doclst[1:81]) {
                     cntg_fig <- cntg_fig + 1L
                     doc_fign <- doc_fign + 1L
                     fig_num[imgj+1] <- cntg_fig
+                    cur_fig_cnt <- cur_fig_cnt + 1L
                     docfn <- unlist(tstrsplit(docfile, "\\/"), use.names = F) %>% .[length(.)]
                     imgsrc <- paste0(doc_imgdir, 
                                      gsub("\\s", "_", gsub("Key to the species of\\s|\\s\\(China sea([s]*)\\s*[2]*\\)\\.docx", "", docfn)),
@@ -1720,6 +1736,13 @@ for (docfile in doclst[1:81]) {
       } #end of while within_xsp_flag
     } 
   } #end of while fig_mode
+  ## modified 20220402, check fig_num
+  if (cur_fig_cnt!=imgfileL) {
+    stop(paste0("Error: Fetch Figs Number not correct! fetched: ", cur_fig_cnt,
+                "; and total this genus: ", gen_name, " have images: ", imgfileL))
+  } else {
+    print(paste0("Correct fetch image number: ", cur_fig_cnt, " in genus: ", gen_name))
+  }
   ######### Start Pagination #####
   ################################
   page_length_def <- 30
