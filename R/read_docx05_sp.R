@@ -999,7 +999,7 @@ for (docfile in doclst) {
   cur_fig_cnt <- 0L
   
   #i <- 195L #just when test first doc file #i<=232L before p.12 #i<=tstL #245L p13 #292L before p19 #351L p25
-  while (fig_mode & nrow(dtk)>0 & i<=tstL) {
+  while (fig_mode & nrow(dtk)>0 & i<=tstL) { #doclst[1:35], tstL<=140L to test subfig error for 2nd Version 202204
     x <- read_docx_row(ctent$text[i], nocheck = TRUE)
     wa <- regexpr("\\((S|s)ize",x)
     if (wa>0) {
@@ -1071,7 +1071,8 @@ for (docfile in doclst) {
           } else if (fig_title=="") { #!is.na(x) &
             #DONT change x in subfig, or elsewhere, then NO need to read it again! #20211024 modified
             #x <- trimx(gsub("\\\t", "", gsub("\\’", "\'", gsub("^\\s+|\\s+$", "", gsub("\\s{1,}", " ", gsub("\u00A0{1,}", " ", as.character(ctent$text[i])))))))
-            if (length(subfig)>0) {
+            xt <- gsub(Fig_exclude_word, "", x) ##DONT change x in subfig, or elsewhere
+            if (xt!=spname & length(subfig)>0) {
               xc <- find_subfigx(x, subfig, 1L, print_info = FALSE)
               if (length(xc)>0 & xc[1]>0) {
                 print(paste0("Note particularily: No fig title provided but detect subfig, use default spname in sp: ", spname))
@@ -1079,7 +1080,6 @@ for (docfile in doclst) {
                 next #Note i cannot add 1 and let it go to fig_caption detection
               }
             }
-            xt <- gsub(Fig_exclude_word, "", x) ##DONT change x in subfig, or elsewhere
             if (xt!=spname) {
               print(paste0("Warning: Not equal fig title with spname: ", spname, " check it fig_titile: ", xt, "  at i:",  i))
               tt <- sp2namex(xt)
