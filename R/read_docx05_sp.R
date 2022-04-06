@@ -417,6 +417,7 @@ blk_cnt <- 0L
 page_cnt<- 1L
 pre_kcnt<- 0L
 keycnt <- 0L
+handle_xx_fig <- c() ## Handled lost link xx_fig sp, which had been handled by replace ctxt by epitxt_new with figure link
 #docfile <- doclst[1]
 
 for (docfile in doclst) {
@@ -1031,6 +1032,7 @@ for (docfile in doclst) {
       fig_citation <- c()
       imgf <- c()
       imgj <- 0L
+      fig_xx_flag <- FALSE #202204 added, xx_flag for sp only have figs, no keys, and now add a link in epitxt to connect to xx_fig
       if (!with_thesame_sp) pre_imgj <- 0L #20211019 modified fix the same sp but index of fig not added up
       while (within_xsp_flag) {
         x <- read_docx_row(ctent$text[i])
@@ -1240,6 +1242,7 @@ for (docfile in doclst) {
                   fukey <- paste0(fukey, "_", trimx(gsub(gen_name, "", xsp2)), "_fig") # make unikey in order
                 } else {
                   fukey <- paste0(gsub("\\s", "_", xsp2), "_xx_fig")
+                  fig_xx_flag <- TRUE
                 }
 
                 if (length(fig_num)>=4) {
@@ -1443,7 +1446,34 @@ for (docfile in doclst) {
                     }, simplify = TRUE, USE.NAMES = FALSE)
                   )]
                 }
-                
+
+                #202204 added, xx_flag for sp only have figs, no keys, and 
+                #       now add a link in epitxt to connect to xx_fig
+                if (fig_xx_flag & !xsp2 %chin% handle_xx_fig) { #Cannot handle it twice
+                  print(paste0("Handle xx_fig lost link for: ", xsp2, " at i: ", i))
+                  epit <- trimx(gsub(gen_name, "", xsp2)) #epithets
+                  #wepit<-regexpr(paste0("<em>", paste0(gen_name,"\\s",epit), "\\s*<\\/em>"), epitxt)
+                  wepit<- regexpr(paste0(gen_name,"\\s",epit), epitxt)
+                  xt <- xsp2
+                  if (all(wepit<0)) {
+                    #wepit<-regexpr(paste0("<em>\\s*", epit, "\\s*<\\/em>"), epitxt)
+                    wepit<- regexpr(epit, epitxt)
+                    if (all(wepit<0)) {
+                      fig_xx_flag <- FALSE   
+                      stop(paste0("Error: But its link cannot recover, check it:", epitxt))
+                    }
+                    xt <- epit
+                  }
+                  epitxt_new <- paste0(substr(epitxt,1,wepit[1]-1),
+                                       '<a href=', dQuote(paste0("#figs_",gen_name,"_",epit)), '>', xt, '</a>',
+                                       substr(epitxt, wepit[1]+attributes(wepit)$match.length[1], nchar(epitxt)))
+                  
+                  dtk[unikey == paste0(gen_name, "_00a_genus"), 
+                      ctxt:=epitxt_new]
+                  handle_xx_fig <- c(handle_xx_fig, xsp2)
+                }
+                fig_xx_flag <- FALSE   
+                                
                 if (!with_thesame_sp & with_thesame_sp_flag) {
                   with_thesame_sp <- TRUE  #Next turn will be Append_Blk condition
                   with_thesame_sp_flag <- FALSE
@@ -1831,7 +1861,9 @@ which(duplicated(dfk$fidx) | duplicated(dfk$fidx, fromLast = T))
 tt <- dfk[,.(taxon, fidx, subfig, fsex, caption)][, cap:=substr(dfk$caption,1,20)][, caption:=NULL]
 # tt[(nrow(tt)-50):nrow(tt),]
 tt1 <- unique(dtk$unikey)
-tt1[grepl("xx",tt1)]
+tt2 <- gsub("_", " ", gsub("_xx_fig", "", tt1[grepl("xx",tt1)]))
+tt2[which(!tt2 %chin% handle_xx_fig)]
+
 cat(na.omit(dtk$ctxt), file=paste0(web_dir, "web_tmp.txt"))
 
 ## output source html_txt, fig file
