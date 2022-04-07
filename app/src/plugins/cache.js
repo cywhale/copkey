@@ -11,9 +11,9 @@ async function cacheHandler (fastify, opts) {
         infq: true
       }
     },
-    ttl: 60 * 60,
+    ttl: 60 * 60 * 24,
     storage: {
-      type: 'redis', options: { client: fastify.redis, invalidation: true }
+      type: 'redis', options: { client: fastify.redis, invalidation: false }
 /*  get: async function (key) {
         try {
           return JSON.parse(await fastify.redis.get(key))
@@ -43,7 +43,7 @@ async function cacheHandler (fastify, opts) {
       fastify.log.info({ msg: 'skip cache', type, fieldName })
     },
     // caching stats
-    logInterval: 120, //secs
+    logInterval: 300, //secs
     logReport: (report) => {
       fastify.log.info({ msg: 'cache stats' })
       console.table(report)
