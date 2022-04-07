@@ -6,7 +6,8 @@ const resolvers = {
         const keyx = await Spkey
                            .aggregate([
                              { $match: {$and:[{"taxon": {"$nin": [null, ""]}}, //{"$ne": ""}
-                                              {"genus": {"$nin": [null, ""]}}]} },
+                                              {"genus": {"$nin": [null, ""]}},
+                                              {"unikey": {"$regex": /^(?!00a_genus).*/i}}]} },
                              { $group: {
                                /*_id: { //null
                                    family: "$family", //{$addToSet: "$family"}

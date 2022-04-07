@@ -7,7 +7,7 @@ export default async function apirest (fastify, opts, next) {
     fastify.get('/taxonomy', async (req, reply) => {
         const keyx = await Spkey
                            .aggregate([
-                             { $match: {taxon: {"$ne": ""}} },
+                             { $match: {taxon: {"$ne": ""}, unikey: {"$regex": /^(?!00a_genus).*/i}} },
                              { $group: {
                                    _id: {
                                      family: "$family",
