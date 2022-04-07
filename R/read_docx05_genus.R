@@ -39,7 +39,8 @@ termList <- data.table(name=c("A([1-9])?","(R|L)?P", "Mx(p)?", "Md",
 
 ##### Note manually edit doc/Table of key... -> Fig_key_tbl.csv for first column Fig. 8,9 to two rows
   imglst <- list.files("doc/img2/", pattern="\\.jpg$",full.names = T)
-  dc0 <- read_docx("doc/New_Version_Key.docx") ######################## 20191014 modified
+  #dc0<- read_docx("doc/New_Version_Key.docx") ######################## 20191014 modified
+  dc0 <- read_docx("doc/New_Version02_GenusKey.docx") ################# 20220407 modified, for version02 add key187
   ftent <- rbindlist(list(tstrsplit(imglst, "_", names=TRUE)))[,3:7] %>%
     setnames(1:5, c("figx","genus","spp","sext","cht")) %>%
     .[,`:=`(Fig=as.integer(substr(figx,4,6)),
