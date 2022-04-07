@@ -1,9 +1,9 @@
 //import Mongodb from 'fastify-mongodb'
 import AutoLoad from 'fastify-autoload'
 import { join } from 'desm'
-import redis from 'fastify-redis'
+//import redis from 'fastify-redis'
 import mercurius from 'mercurius'
-import cache from 'mercurius-cache'
+//import cache from 'mercurius-cache'
 import db from './config/db'
 import schema from './graphql/schema'
 import resolvers from './graphql/resolvers'
@@ -32,9 +32,13 @@ export default async function (fastify, opts) {
         graphiql: true, //'playground', //has been removed from mercuius issue #453
         jit: 1
   })
-
-  fastify.register(redis)
-
+/* move to plugins/redis.js
+  fastify.register(redis, {
+    host: '127.0.0.1',
+    port: 6379,
+  }, { name: 'redis' })
+*/
+/* move to plugins/cache.js
   const ttl = 60 * 60
 
   fastify.register(cache, {
@@ -44,8 +48,10 @@ export default async function (fastify, opts) {
         infq: true
       }
     },
+    ttl: ttl,
     storage: {
-      get: async function (key) {
+      type: 'redis', options: { client: fastify.redis, invalidation: true }
+    get: async function (key) {
         try {
           return JSON.parse(await fastify.redis.get(key))
         } catch (err) {
@@ -59,7 +65,7 @@ export default async function (fastify, opts) {
         } catch (err) {
           fastify.log.error({ msg: 'error on set into redis', err, key })
         }
-      }
+      } //before mercurius-cache version 0.11
     },
     onHit: function (type, fieldName) {
       fastify.log.info({ msg: 'hit from cache', type, fieldName })
@@ -67,6 +73,11 @@ export default async function (fastify, opts) {
     onMiss: function (type, fieldName) {
       fastify.log.info({ msg: 'miss from cache', type, fieldName })
     }
+  })
+*/
+  fastify.register(AutoLoad, {
+    dir: join(import.meta.url, 'plugins'),
+    options: Object.assign({}, opts)
   })
 
   fastify.register(AutoLoad, {
