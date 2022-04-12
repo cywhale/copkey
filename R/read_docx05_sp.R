@@ -400,8 +400,10 @@ dfk <- data.table(fidx=integer(),
                   genus=character(), family=character()) #rid link to dtk, xdtk link to key of dtk
 
 #Note: figs is type=2 ## 20211109 try convert keystr to json
+#20220412 modified for tree lookup: convert pkey to json {unikey: previous_unikey}
+
 dtk <- data.table(rid=integer(), unikey=character(), ckey=character(), 
-                  subkey=character(), pkey=character(),
+                  subkey=character(), pkey=toJSON(character()),
                   figs=character(), type=integer(), nkey=integer(), 
                   taxon=character(), abbrev_taxon=character(), fullname=character(),
                   subgen=character(), genus=character(), family=character(), 
@@ -545,7 +547,7 @@ for (docfile in doclst) {
   keycnt <- keycnt + 1L
   
   dtk <- rbindlist(list(dtk,data.table(rid=0, unikey= paste0(gen_name, "_00a_genus"), #to make its order in the first, #paste0("genus_", gen_name), 
-                              ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
+                              ckey= NA_character_, subkey= NA_character_, pkey=toJSON({}), #NA_character_,
                               figs=NA_character_, type=-1, nkey=NA_integer_, 
                               taxon=NA_character_, abbrev_taxon=NA_character_, fullname=NA_character_,
                               subgen=NA_character_, genus=gen_name, family=fam_name, epithets=epithets, 
@@ -933,9 +935,16 @@ for (docfile in doclst) {
                          trimx(paste0(substr(gen_name, 1,1), ".",
                                 ifelse(!is.na(subgenk) & subgenk!="", paste0(" (",substr(subgenk, 1, 1),".) "), ""),
                                 gsub(gen_name, "", xsp))), nsp) #nsp, 
-        
+        #20220412 modified for tree lookup
+        if (is.na(prekeyx) | prekeyx=="") {
+          pkeyt <- toJSON({})
+        } else {
+          pkeyn <- as.integer(gsub("[a-z]", "", prekeyx))
+          pkeys <- gsub("[0-9]", "", prekeyx)
+          pkeyt <- toJSON(list(unikey=paste0(gen_name, "_", padzerox(pkeyn, 2), pkeys)))
+        }
         dtk <- rbindlist(list(dtk,data.table(rid=i, unikey=ukey, #paste0(gen_name, "_", keyx),
-                                             ckey= keyx, subkey= subkeyx, pkey= prekeyx,
+                                             ckey= keyx, subkey= subkeyx, pkey= pkeyt, #prekeyx,
                                              figs=NA_character_, type=nxttype, nkey=nxtk, 
                                              taxon=xsp, 
                                              abbrev_taxon=ataxon,
@@ -1364,7 +1373,7 @@ for (docfile in doclst) {
                   
                   dtk <- rbindlist(list(dtk, 
                       data.table(rid=i, unikey=fukey, #fdlink,
-                        ckey= NA_character_, subkey= NA_character_, pkey= NA_character_,
+                        ckey= NA_character_, subkey= NA_character_, pkey= toJSON({}), #NA_character_,
                         figs=paste(fig_num, collapse = ","), type=2L, nkey=NA_integer_, 
                         taxon=xsp2, 
                         abbrev_taxon=ifelse(any(x_dtk),dtk[x_dtk[1],]$abbrev_taxon, paste0(substr(gen_name, 1,1), ".", gsub(gen_name, "", xsp2))), 
