@@ -27,6 +27,10 @@ const spkeyschema = new Schema({
                 required: false,
                 text : true //$text:$seach need it (and create text index in mongoDB)
         },
+        pkey: {
+                type: String,
+                required: false
+        },
         sex: {
                 type: String,
                 required: false

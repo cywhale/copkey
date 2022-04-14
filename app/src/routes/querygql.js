@@ -40,6 +40,23 @@ export default async function querygql (fastify, opts, next) {
                           value
                         }
                       }`
+    const ktreeqry =`query($sp: String!) {
+      keytree(sp: $sp)
+      {
+        unikey
+        edges {
+          node {
+            unikey
+            node {
+              unikey
+              node {
+                unikey
+              }
+            }
+          }
+        }
+      }
+    }`
     const pageSchema = {
               taxon: { type: 'string' },
               keystr:{ type: 'boolean'},
@@ -163,13 +180,14 @@ export default async function querygql (fastify, opts, next) {
           await reply.send([...key]); // use mongoose
         }
       })*/
-      let name = req.params.name
+      let name = decodeURIComponent(req.params.name)
       //if (name==="init") {
       //  return reply.graphql('{ init {ctxt} }')
       //}
       //const query = `query ($name: String!) { key(sp: $name) {ctxt} }` //{unikey ctxt}
       //req.log.info("Query use graphql: "+ query + " with sp: " + name)
-      return reply.graphql(infqry, null, {taxon: name, keystr: false, mode: 'all', first: def_pageSize})
+      //return reply.graphql(infqry, null, {taxon: name, keystr: false, mode: 'all', first: def_pageSize}) //20220413 modified to KeyTree
+      return reply.graphql(ktreeqry, null, {sp: name})
     })
 
   next()
