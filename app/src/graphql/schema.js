@@ -3,22 +3,28 @@ type Query {
      taxontree: [TreeNode]!
      infq(taxon: String, keystr: Boolean, mode: String, first: Int, last: Int, after: String, before: String, key: String): SpkeyConn
      keys(sp: String!): [Spkeyq]!
-     keytree(sp: String!): [KeyTree]!
+     keytree(sp: String!): [KeyNode]!
 }
 
 type KeyTree {
-     unikey: ID!
-     edges: KeyNode
+     _id: ID!
+     children: [KeyNode]
 }
 
 type KeyNode {
-  unikey: ID!
+  _id: ID!
+  unikey: String
+  pkey: String
+  taxon: String
+  level: Int
+  type: Int
   ctxt: String
-  node: KeyNode
+  children: [KeyNode]
 }
 
 type Spkeyq {
      unikey: String
+     pkey: String
      taxon: String
      fullname: String
      genus: String

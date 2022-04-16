@@ -43,14 +43,35 @@ export default async function querygql (fastify, opts, next) {
     const ktreeqry =`query($sp: String!) {
       keytree(sp: $sp)
       {
-        unikey
-        edges {
-          node {
+        _id
+        children {
+          unikey
+          pkey
+          taxon
+          level
+          type
+          ctxt
+          children {
             unikey
-            node {
+            pkey
+            taxon
+            level
+            type
+            ctxt
+            children {
               unikey
-              node {
+              pkey
+              taxon
+              level
+              type
+              ctxt
+              children {
                 unikey
+                pkey
+                taxon
+                level
+                type
+                ctxt
               }
             }
           }
@@ -184,7 +205,15 @@ export default async function querygql (fastify, opts, next) {
       //if (name==="init") {
       //  return reply.graphql('{ init {ctxt} }')
       //}
-      //const query = `query ($name: String!) { key(sp: $name) {ctxt} }` //{unikey ctxt}
+/* for test
+      const kqry = `query ($sp: String!) { keys(sp: $sp) {
+                        unikey
+                        pkey
+                        genus
+                        taxon
+                        type} }` //{unikey ctxt}
+      return reply.graphql(kqry, null, {sp: name})
+*/
       //req.log.info("Query use graphql: "+ query + " with sp: " + name)
       //return reply.graphql(infqry, null, {taxon: name, keystr: false, mode: 'all', first: def_pageSize}) //20220413 modified to KeyTree
       return reply.graphql(ktreeqry, null, {sp: name})

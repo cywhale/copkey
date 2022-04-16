@@ -1,4 +1,5 @@
 import Spkey from '../models/spkey_mongoose';
+import keytree from './keytree';
 
 const resolvers = {
     Query: {
@@ -77,26 +78,33 @@ const resolvers = {
                 {"fullname": {$regex: spx, $options: "ix"} },
                 {"genus": {$regex: spx, $options: "ix"} },
                 {"family": {$regex: spx, $options: "ix"} }
-              ]}) //, {limit: 100}) //.sort({"rid":1})
+              ]},
+              {unikey:1, pkey:1, genus:1, taxon:1, type:1, ctxt:1},
+              {sort: {unikey: 1}}) //, {limit: 100}) //.sort({"rid":1})
         return keyx
       },
+
       keytree: async (_, obj, ctx) => {
         const { sp } = obj
-        let genus = sp.split(/\s/)[0];
-        const keyx = await Spkey.aggregate([
+      //let genus = sp.split(/\s/)[0];
+        const keyx = await keytree(sp)
+/* move to keytree.js
+                     await Spkey.aggregate([
 //Temporarily modified from https://mongoplayground.net/p/PkbIeZDrs92 202204
 //(Not yet) For recursively fetch prekey(pkey) of idenfication key to get whole tree of keys
-  {
-    $match: {
-      pkey: null
-    }
-  },
+          { $match: {$or:[
+                       {pkey: {"$in": [null,""]}},
+                       {$or:[{"taxon": sp},
+                             {$and:[{"type": 0}, {"genus": genus}]}
+                       ]}
+                    ]}
+          },
   {
     $graphLookup: {
       from: "spkey",
       startWith: "$unikey",
       connectFromField: "unikey",
-      connectToField: "pkey.unikey",
+      connectToField: "pkey",
       depthField: "level",
       as: "node"
     }
@@ -107,154 +115,9 @@ const resolvers = {
       preserveNullAndEmptyArrays: true
     }
   },
-  {
-    $sort: {
-      "node.level": -1
-    }
-  },
-  {
-    $group: {
-      _id: "$unikey",
-      pkey: {
-        $first: "$pkey.unikey"
-      },/*
-      name: {
-        $first: "$name"
-      },
-      type: {
-        $first: "$type"
-      },
-      category: {
-        $first: 1
-      },*/
-      node: {
-        $push: "$node"
-      }
-    }
-  },
-  {
-    $addFields: {
-      node: {
-        $reduce: {
-          input: "$node",
-          initialValue: {
-            level: -1,
-            presentChild: [],
-            prevChild: []
-          },
-          in: {
-            $let: {
-              vars: {
-                prev: {
-                  $cond: [
-                    {
-                      $eq: [
-                        "$$value.level",
-                        "$$this.level"
-                      ]
-                    },
-                    "$$value.prevChild",
-                    "$$value.presentChild"
-                  ]
-                },
-                current: {
-                  $cond: [
-                    {
-                      $eq: [
-                        "$$value.level",
-                        "$$this.level"
-                      ]
-                    },
-                    "$$value.presentChild",
-                    []
-                  ]
-                }
-              },
-              in: {
-                level: "$$this.level",
-                prevChild: "$$prev",
-                presentChild: {
-                  $concatArrays: [
-                    "$$current",
-                    [
-                      {
-                        $mergeObjects: [
-                          "$$this",
-                          {
-                            node: {
-                              $filter: {
-                                input: "$$prev",
-                                as: "e",
-                                cond: {
-                                  $eq: [
-                                    "$$e.pkey",
-                                    "$$this.unikey"
-                                  ]
-                                }
-                              }
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  {
-    $addFields: {
-      node: "$node.presentChild"
-    }
-  }
-
-/*
-          { $match: {$or:[{"taxon": sp},
-                          {$and:[{"type": 0}, {"genus": genus}]}
-                         ]}
-          },
-          { $project: {unikey:1, pkey:1} },
-          { $graphLookup: {
-              from: "spkey",
-              startWith: "$unikey",
-              connectFromField: "pkey.unikey",
-              connectToField: "unikey",
-              depthField: "level",
-              as: "node"
-            }
-          },
-          { $group: {
-            _id: { unikey: "$unikey" },
-            edges: { $addToSet: {
-                       node: "$node"
-                     }
-                   }
-            }
-          },
-          { $unwind: {
-              path: "$node",
-              preserveNullAndEmptyArrays: true
-            }
-          },
-          { $sort: {"node.level": -1} },*/
-        /*{ $project: {_id:1, edges:1, unikey:1, pkey:1} },
-          { $group: {
-              _id: { unikey: "$unikey" },
-              edges: { $push: {
-                  ctxt: "$ctxt",
-                  node: "$node"
-                }
-              }
-            }
-          },
-          { $match: {$or:[{"taxon": taxon},
-                          {"type": 0}]} },
-          */
+//...
         ]).exec()
+*/
         ctx.reply.log.info("keytree search: " + sp + " result: " + JSON.stringify(keyx))
         return keyx
       },
