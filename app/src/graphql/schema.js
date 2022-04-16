@@ -13,6 +13,8 @@ type KeyTree {
 
 type KeyNode {
   _id: ID!
+  taxonarr: [String]
+  isAnyTaxon: Boolean
   unikey: String
   pkey: String
   taxon: String

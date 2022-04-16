@@ -44,6 +44,8 @@ export default async function querygql (fastify, opts, next) {
       keytree(sp: $sp)
       {
         _id
+        taxonarr
+        isAnyTaxon
         children {
           unikey
           pkey

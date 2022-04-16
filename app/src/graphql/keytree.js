@@ -12,11 +12,12 @@ let result = await Spkey.aggregate([
         {
           "type": {
             "$nin": [
-              2, //Not figures
-              -1 //Not genus
+              2,
+              -1
             ]
           }
         },
+        //Not figures (2), and not genus (-1)
         {
           "pkey": {
             "$in": [
@@ -25,8 +26,9 @@ let result = await Spkey.aggregate([
             ]
           }
         },
+        //genus for testing: "Acartia"
         {
-          "genus": genus //"Acartia"
+          "genus": genus
         }
       ]
     }
@@ -83,13 +85,14 @@ let result = await Spkey.aggregate([
         $push: {
           $convert: {
             input: {
-              $ne: [
+              $eq: [
                 "$children.taxon",
-                ""
+                taxon
               ]
-            },
-            to: "bool" //if taxon=="" get false (to filter all "" of taxon in children/tree-branch
+            }, //previous $ne: ["$children.taxon", ""]
+            to: "bool"
           }
+          //if taxon=="" get false (to filter all "" of taxon in children/tree-branch
         }
       }
     }
@@ -112,9 +115,10 @@ let result = await Spkey.aggregate([
               {
                 $eq: [
                   "$$child.taxon",
-                  taxon //"Acartia hongi"
+                  taxon
                 ]
               },
+              //taxon for testing: "Acartia hongi"
               {
                 $and: [
                   {
@@ -139,9 +143,10 @@ let result = await Spkey.aggregate([
   },
   {
     $match: {
-      "isAnyTaxon": true //to filter all "" of taxon in children/tree-branch
+      "isAnyTaxon": true
     }
   },
+ //to filter all "" of taxon in children/tree-branch
   {
     $addFields: {
       children: {
@@ -240,10 +245,11 @@ let result = await Spkey.aggregate([
                 $and: [
                   {
                     $ne: [
-                      "$child.children",
+                      "$$child.children",
                       []
                     ]
                   },
+                  // empty leaf will be removed
                   {
                     $eq: [
                       "$$child.type",
