@@ -37,6 +37,8 @@ const TabModal = (props) => {
   const forceGenus= useOpts(useCallback(state => state.forceGenus, []));
   const forceSpecies= useOpts(useCallback(state => state.forceSpecies, []));
   const pageSize= useOpts(useCallback(state => state.pageSize, []));
+  const keyTree= useOpts(useCallback(state => state.keyTree, []));
+
   const toggleFuzzy = e => {
     let checked = !fuzzy;
     useOpts.getState().setOpts({fuzzy: checked});
@@ -48,6 +50,11 @@ const TabModal = (props) => {
   const toggleForceGenus = e => {
     let checked = !forceGenus;
     useOpts.getState().setOpts({forceGenus: checked});
+
+    if (checked && keyTree) { //forceGenus and keyTree options cannot be both enabled
+      let keytree_checked = !keyTree;
+      useOpts.getState().setOpts({keyTree: keyTree_checked});
+    }
   };
   const toggleForceSpecies = e => {
     let checked = !forceSpecies;

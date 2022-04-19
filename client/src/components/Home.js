@@ -22,6 +22,7 @@ const Home = () => {
   const forceGenus= useOpts(useCallback(state => state.forceGenus, []));     //false
   const forceSpecies= useOpts(useCallback(state => state.forceSpecies, [])); //false
   const pageSize= useOpts(useCallback(state => state.pageSize, []));         //30
+  const keyTree= useOpts(useCallback(state => state.keyTree, [])); //get tree of keys 202204
 
   const [appstate, setAppState] = useState({
     loaded: false,
@@ -61,8 +62,9 @@ const Home = () => {
   const iniHelp= useHelp(useCallback(state => state.iniHelp, []));
 
   const trigSearch = () => {
-    let modex = (search.keycheck && sameTaxon? (fuzzy? ('fuzzy,' + searchmodex('All') + ',sameTaxon'): (searchmodex('All') + ',sameTaxon')):
+    let mode0 = (search.keycheck && sameTaxon? (fuzzy? ('fuzzy,' + searchmodex('All') + ',sameTaxon'): (searchmodex('All') + ',sameTaxon')):
                 (fuzzy? ('fuzzy,' + searchmodex('All')): searchmodex('All')));
+    let modex = keyTree? 'keytree': mode0; //20220419 added: list key-tree mode by option keyTree
     if (searchSpkey && searchSpkey.trim() !== '' && (searchSpkey !== search.str || search.param.keystr != search.keycheck ||
                                                      search.param.mode !== modex|| search.param.first != pageSize)) {
       return(
@@ -79,12 +81,41 @@ const Home = () => {
     } //console.log("Repeated search, dismiss it..")
   };
 
+  const toggleKeyTree = e => {
+    let checked = !keyTree;
+    useOpts.getState().setOpts({keyTree: checked}); //Note get keyTree if only for species, so forceGenus, and keycheck, will be omitted
+
+    if (checked && (search.keycheck || forceGenus)) {
+      alert("The option 'List nested identification keys of searched taxon' can only work for species searching. The options 'Enable searching characteristics' or 'Limit searching at only genus-level' would be disabled.\n" +
+            "Please check your input of search box is the scientific names of species\n\n"  +
+            "'列出所搜尋物種巢狀分類檢索'功能只可用於物種搜尋上，所以若勾選'搜尋分類特徵'或'僅在屬層級中搜尋'功能將被取消\n" +
+            "並請確定在搜尋欄中所搜尋的文字為物種學名\n"
+      if (checked && search.keycheck) {
+        let keychk_checked = !search.keycheck;
+        setSearch((prev) => ({
+          ...prev,
+          keycheck: keychk_checked,
+        }))
+      }
+
+      if (checked && forceGenus) {
+        let forcegenus_checked = !forceGenus;
+        useOpts.getState().setOpts({forceGenus: forcegenus_checked});
+      }
+    }
+  };
+
   const toggleKeystrSearch = e => { //use search input as key string to be searched
     let checked = !search.keycheck;
     setSearch((prev) => ({
         ...prev,
         keycheck: checked,
     }))
+
+    if (checked && keyTree) { //keycheck (key string search) and keyTree options cannot be both enabled
+      let keytree_checked = !keyTree;
+      useOpts.getState().setOpts({keyTree: keyTree_checked});
+    }
   };
 
   const kickInitHelper = () => {
@@ -356,6 +387,9 @@ const Home = () => {
   const searchlabel = lang === 'EN'? 'search': '搜尋'
   const searchplace = (lang === 'EN'? (search.keycheck? 'Search characteristics':'Search taxon'):
                                       (search.keycheck? '搜尋分類特徵':'搜尋屬、種名'));
+  const keytreelabel = lang === 'EN'? 'Key-tree': '檢索樹';
+  const keytreeinfo = lang === 'EN'? 'List nested identification keys of searched taxon': '列出所搜尋物種巢狀分類檢索';
+  const keystrinfo = lang === 'EN'? 'Enable searching characteristics': '搜尋分類特徵';
   /*        { iniHelp &&
                 <p style="text-indent:0;z-index:1101;" class="triangle-right top" id="search_tooltips">
                    Search taxon for its identification key, or search<br/>classification traits by enable the right checkbox<br/>搜尋物種分類檢索，輸入屬或種名<br/>或勾選右方欄，搜尋分類特徵
@@ -373,8 +407,13 @@ const Home = () => {
                    onInput={(e) => { setSearchSpkey(e.target.value) }} />
                 <button class="ctrlbutn" id="keysearchbutn" onClick={trigSearch}>{searchlabel}</button>
                 <label for="keystrsearch" style="margin-top:10px;">
-                  <input type="checkbox" id="keystrsearch" aria-label="搜尋分類特徵; Enable searching characteristics"
+                  <input type="checkbox" id="keystrsearch" aria-label={keystrinfo}
                          checked={search.keycheck} onClick={toggleKeystrSearch} />
+                </label>
+                <span> {keytreelabel}&#9654;</span>
+                <label for="keytreelist" style="margin-top:10px;">
+                  <input type="checkbox" id="keytreelist" aria-label={keytreeinfo}
+                         checked={keyTree} onClick={toggleKeyTree} />
                 </label>
               </p>
           </div>

@@ -73,7 +73,9 @@ const UserSearch = (props) => {
   };
 
   const pageFetch = async (pageParam, signal) => {
-      const res = await fetch(searchPrefix + 'page', {
+      const gql = pageParam.mode === 'keytree'? 'keytree': 'page';
+      console.log('Fetch graphQL: ', gql, ' for mode: ', pageParam.mode);
+      const res = await fetch(searchPrefix + gql, {
             method: 'POST',
             body: JSON.stringify(pageParam),
             credentials: 'same-origin',

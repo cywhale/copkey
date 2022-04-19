@@ -39,7 +39,8 @@ let result = await Spkey.aggregate([
       "pkey": 1,
       "taxon": 1,
       "type": 1,
-      "ctxt": 1
+      "ctxt": 1,
+      "sex": 1
     }
   },
   {
@@ -78,6 +79,9 @@ let result = await Spkey.aggregate([
       ctxt: {
         $first: "$ctxt"
       },
+      sex: {
+        $first: "$sex"
+      },
       children: {
         $push: "$children"
       },
@@ -101,6 +105,9 @@ let result = await Spkey.aggregate([
     $project: {
       "_id": 1,
       "pkey": 1,
+      "taxon": 1,
+      "ctxt": 1,
+      "sex": 1,
       isAnyTaxon: {
         $anyElementTrue: [
           "$taxonarr"
@@ -229,6 +236,11 @@ let result = await Spkey.aggregate([
   {
     $project: {
       "_id": 1,
+      "unikey": "$_id",
+      "pkey": 1,
+      "taxon": 1,
+      "ctxt": 1,
+      "sex": 1,
       "children": {
         $filter: {
           input: "$children",

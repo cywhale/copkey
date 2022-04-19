@@ -6,6 +6,7 @@ const useOpts = create(set => ({
   forceGenus: false,
   forceSpecies: false,
   pageSize: 30,
+  keyTree: false,
   setOpts: (opt) => set(opt)
 /*setFuzzy: (opt) => set({fuzzy: opt}),
   setSameTaxon: (opt) => set({sameTaxon: opt}),

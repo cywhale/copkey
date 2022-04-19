@@ -44,6 +44,11 @@ export default async function querygql (fastify, opts, next) {
       keytree(sp: $sp)
       {
         _id
+        unikey
+        pkey
+        taxon
+        ctxt
+        sex
         taxonarr
         isAnyTaxon
         children {
@@ -53,6 +58,7 @@ export default async function querygql (fastify, opts, next) {
           level
           type
           ctxt
+          sex
           children {
             unikey
             pkey
@@ -60,6 +66,7 @@ export default async function querygql (fastify, opts, next) {
             level
             type
             ctxt
+            sex
             children {
               unikey
               pkey
@@ -67,6 +74,7 @@ export default async function querygql (fastify, opts, next) {
               level
               type
               ctxt
+              sex
               children {
                 unikey
                 pkey
@@ -74,6 +82,7 @@ export default async function querygql (fastify, opts, next) {
                 level
                 type
                 ctxt
+                sex
               }
             }
           }
@@ -219,6 +228,18 @@ export default async function querygql (fastify, opts, next) {
       //req.log.info("Query use graphql: "+ query + " with sp: " + name)
       //return reply.graphql(infqry, null, {taxon: name, keystr: false, mode: 'all', first: def_pageSize}) //20220413 modified to KeyTree
       return reply.graphql(ktreeqry, null, {sp: name})
+    })
+
+    fastify.post('/keytree',
+      (req, reply) => {
+        let parm = req.body
+        let taxon = parm.taxon??''
+
+        if (taxon !== "" && taxon.toLowerCase() !== "all") {
+          return reply.graphql(keytreeqry, null, {sp: decodeURIComponent(taxon)})
+        } else {
+          return
+        }
     })
 
   next()

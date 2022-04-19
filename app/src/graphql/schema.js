@@ -6,11 +6,6 @@ type Query {
      keytree(sp: String!): [KeyNode]!
 }
 
-type KeyTree {
-     _id: ID!
-     children: [KeyNode]
-}
-
 type KeyNode {
   _id: ID!
   taxonarr: [String]
@@ -21,6 +16,7 @@ type KeyNode {
   level: Int
   type: Int
   ctxt: String
+  sex: String
   children: [KeyNode]
 }
 
