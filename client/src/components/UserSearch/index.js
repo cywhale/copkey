@@ -4,6 +4,7 @@ import { useQueryClient } from 'react-query'; //useQuery
 import useOpts from '../TabModal/useOpts';
 import Copkey from 'async!../Copkey';
 import SvgLoading from 'async!../Compo/SvgLoading';
+import deKeytree from './deKeytree';
 import (/* webpackMode: "lazy" */
         /* webpackPrefetch: true */
         "../../style/style_usersearch.scss");
@@ -108,7 +109,12 @@ const UserSearch = (props) => {
         dt = queryClient.getQueryData([taxon, keyParam]).data['infq'];
         console.log("No data but fetched from queryClient, get nodes: ", dt.edges.node.length, " for ",taxon, " with ", keyParam);
       }*/
-      const ctxt = trans_htmltxt(dt.edges, "node"); //data.data['infq'].edges
+      let ctxt;
+      if (keyParam.mode === 'keytree') {
+        ctxt = deKeytree(dt.data['keytree'][0])
+      } else {
+        ctxt = trans_htmltxt(dt.data['infq'].edges, "node"); //data.data['infq'].edges
+      }
       let taxonx = search.param.keystr? result.taxon: taxon; //if keystr search, don't overwrite result.taxon to do sameTaxon search 20211125
       setResult((prev) => ({
           ...prev,
@@ -192,8 +198,8 @@ const UserSearch = (props) => {
         await Promise.resolve(pfetch())
         .then((data) => {
           if (data) {
-            let dtk=data.data['infq'];
-            searchWrite(dtk, taxon, keyParam);
+            //let dtk=keyParam.mode==='keytree'? data.data['keytree'][0]: data.data['infq'];
+            searchWrite(data, taxon, keyParam); //dtk
 
             if (!search.init) {
               onSearch((prev) => ({

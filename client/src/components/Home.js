@@ -89,7 +89,7 @@ const Home = () => {
       alert("The option 'List nested identification keys of searched taxon' can only work for species searching. The options 'Enable searching characteristics' or 'Limit searching at only genus-level' would be disabled.\n" +
             "Please check your input of search box is the scientific names of species\n\n"  +
             "'列出所搜尋物種巢狀分類檢索'功能只可用於物種搜尋上，所以若勾選'搜尋分類特徵'或'僅在屬層級中搜尋'功能將被取消\n" +
-            "並請確定在搜尋欄中所搜尋的文字為物種學名\n"
+            "並請確定在搜尋欄中所搜尋的文字為物種學名\n");
       if (checked && search.keycheck) {
         let keychk_checked = !search.keycheck;
         setSearch((prev) => ({
