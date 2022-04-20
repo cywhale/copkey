@@ -74,7 +74,7 @@ const UserSearch = (props) => {
   };
 
   const pageFetch = async (pageParam, signal) => {
-      const gql = pageParam.mode === 'keytree'? 'keytree': 'page';
+      let gql = pageParam.mode === 'keytree'? 'keytree': 'page';
       console.log('Fetch graphQL: ', gql, ' for mode: ', pageParam.mode);
       const res = await fetch(searchPrefix + gql, {
             method: 'POST',
@@ -109,14 +109,19 @@ const UserSearch = (props) => {
         dt = queryClient.getQueryData([taxon, keyParam]).data['infq'];
         console.log("No data but fetched from queryClient, get nodes: ", dt.edges.node.length, " for ",taxon, " with ", keyParam);
       }*/
+      let taxonx = search.param.keystr? result.taxon: taxon; //if keystr search, don't overwrite result.taxon to do sameTaxon search 20211125
       let ctxt;
       if (keyParam.mode === 'keytree') {
-        ctxt = deKeytree(dt.data['keytree'][0])
+        ctxt = deKeytree(dt, taxon)
+        setResult((prev) => ({
+          ...prev,
+          spkey: ctxt,
+          taxon: taxonx,
+          keyParam: keyParam, //store keyParam for this result, but not used yet
+        }));
       } else {
-        ctxt = trans_htmltxt(dt.data['infq'].edges, "node"); //data.data['infq'].edges
-      }
-      let taxonx = search.param.keystr? result.taxon: taxon; //if keystr search, don't overwrite result.taxon to do sameTaxon search 20211125
-      setResult((prev) => ({
+        ctxt = trans_htmltxt(dt.edges, "node"); //data.data['infq'].edges
+        setResult((prev) => ({
           ...prev,
           spkey: ctxt,
           taxon: taxonx,
@@ -125,7 +130,8 @@ const UserSearch = (props) => {
           cursor: dt.edges.cursor,
           endCursor: dt.edges.endCursor,
           pageInfo: dt.pageInfo
-      }));
+        }));
+      }
       //console.log("Writing result: ", dt.edges.node.length," of ", taxon, " for cursor: ", dt.edges.cursor, dt.edges.endCursor);
     //}
     onSearch((prev) => ({
@@ -133,7 +139,7 @@ const UserSearch = (props) => {
         isLoading: false
     }))
 
-    if (butnPrevRef.current) {
+    if (butnPrevRef.current && keyParam.mode !== 'keytree') {
       if (data.pageInfo.hasPreviousPage) {
         //document.getElementById('butn_prev').disabled = false;
         butnPrevRef.current.removeAttribute('disabled');
@@ -141,7 +147,7 @@ const UserSearch = (props) => {
         butnPrevRef.current.setAttribute('disabled', 'disabled');
       }
     }
-    if (butnNextRef.current) {
+    if (butnNextRef.current && keyParam.mode !== 'keytree') {
       if (data.pageInfo.hasNextPage) {
         butnNextRef.current.removeAttribute('disabled');
       } else {
@@ -198,8 +204,8 @@ const UserSearch = (props) => {
         await Promise.resolve(pfetch())
         .then((data) => {
           if (data) {
-            //let dtk=keyParam.mode==='keytree'? data.data['keytree'][0]: data.data['infq'];
-            searchWrite(data, taxon, keyParam); //dtk
+            let dtk=keyParam.mode==='keytree'? data.data['keytree'][0]: data.data['infq'];
+            searchWrite(dtk, taxon, keyParam);
 
             if (!search.init) {
               onSearch((prev) => ({

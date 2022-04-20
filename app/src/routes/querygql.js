@@ -236,7 +236,7 @@ export default async function querygql (fastify, opts, next) {
         let taxon = parm.taxon??''
 
         if (taxon !== "" && taxon.toLowerCase() !== "all") {
-          return reply.graphql(keytreeqry, null, {sp: decodeURIComponent(taxon)})
+          return reply.graphql(ktreeqry, null, {sp: decodeURIComponent(taxon)})
         } else {
           return
         }

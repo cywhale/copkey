@@ -1,4 +1,4 @@
-export default function deKeytree (data, countMax = 10000) {
+export default function deKeytree (data, taxon, countMax = 10000) {
 
 let keys = { "node":[],
            /*"female": [],
