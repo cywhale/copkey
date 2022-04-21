@@ -410,7 +410,7 @@ const Home = () => {
                   <input type="checkbox" id="keystrsearch" aria-label={keystrinfo}
                          checked={search.keycheck} onClick={toggleKeystrSearch} />
                 </label>
-                <span> {keytreelabel}&#9654;</span>
+                <span style="margin-top:10px;margin-left:10px;"> {keytreelabel}&nbsp;&#9755;</span>
                 <label for="keytreelist" style="margin-top:10px;">
                   <input type="checkbox" id="keytreelist" aria-label={keytreeinfo}
                          checked={keyTree} onClick={toggleKeyTree} />

@@ -2,6 +2,8 @@ import Spkey from '../models/spkey_mongoose';
 // https://stackoverflow.com/questions/65139097/make-node-tree-with-recursive-table-with-express-and-mongo/65166480#65166480
 // playgound: https://mongoplayground.net/p/JPZzbb2Cb7x 20220415 update
 // https://mongoplayground.net/p/OwK6WICgyG_ 20220416 update
+// https://mongoplayground.net/p/m7IRnntI6jg 20220420 modified for keeping taxon figures
+// https://mongoplayground.net/p/I-fwuusIO7I 20220421 for Labidocera detruncata temp (not code err, but data err from docx, a branch prior(prev key) to 27b and typo to 27a
 export default async function keytree(taxon) {
 
 let genus = taxon.split(/\s/)[0];
@@ -10,13 +12,21 @@ let result = await Spkey.aggregate([
     $match: {
       $and: [
         {
-          "type": {
-            "$nin": [
-              2,
-              -1
-            ]
-          }
-        },
+          $or: [
+            {
+              "type": {
+                "$nin": [
+                  -1,
+                  2
+                ]
+              }
+            },
+            {
+              "type": 2,
+              "taxon": taxon
+            }
+          ]
+        }, // 20220420 modified with figure(2)
         //Not figures (2), and not genus (-1)
         {
           "pkey": {
@@ -56,9 +66,9 @@ let result = await Spkey.aggregate([
   {
     $unwind: {
       path: "$children",
-      preserveNullAndEmptyArrays: false
+      preserveNullAndEmptyArrays: true
     }
-  },
+  }, //to keep figure(type=2) must preserveNullAndEmptyArrays: true (otherwise can be false)
   {
     $sort: {
       "children.level": -1
@@ -89,9 +99,19 @@ let result = await Spkey.aggregate([
         $push: {
           $convert: {
             input: {
-              $eq: [
-                "$children.taxon",
-                taxon
+              $or: [
+                {
+                  $eq: [
+                    "$children.taxon",
+                    taxon
+                  ]
+                },
+                {
+                  $eq: [
+                    "$taxon",
+                    taxon
+                  ]
+                } //20220420 modified: for figures of taxon
               ]
             }, //previous $ne: ["$children.taxon", ""]
             to: "bool"

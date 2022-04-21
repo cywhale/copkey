@@ -31,7 +31,7 @@ export default async function (fastify, opts) {
         resolvers: resolvers,
         graphiql: true, //'playground', //has been removed from mercuius issue #453
         jit: 1,
-        queryDepth: 6
+        queryDepth: 11
   })
 /* move to plugins/redis.js
   fastify.register(redis, {

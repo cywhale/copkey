@@ -204,7 +204,8 @@ const UserSearch = (props) => {
         await Promise.resolve(pfetch())
         .then((data) => {
           if (data) {
-            let dtk=keyParam.mode==='keytree'? data.data['keytree'][0]: data.data['infq'];
+            let gql = keyParam.mode === 'keytree'? 'keytree': 'infq';
+            let dtk = data.data[gql];
             searchWrite(dtk, taxon, keyParam);
 
             if (!search.init) {
