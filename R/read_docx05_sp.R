@@ -922,8 +922,8 @@ for (docfile in doclst) {
           xc <- gsub("<p class(.*?)><span", paste0('<p class=',dQuote(paste0('leader ', indentx)),'><span'), xc)
         }
         
-        if (is.na(xsex)) {
-          if (grepl("(I|i)n female|(F|f)emale\\:\\,", keystr)) {
+        if (is.na(xsex) && nxttype==1L) {
+          if (grepl("(I|i)n female|(F|f)emale(\\:|\\,)", keystr)) {
             xsex <- "female"
           }
           if (grepl("(I|i)n male|(\\s|\\.|^)(M|m)ale(\\:|\\,)", keystr)) {
