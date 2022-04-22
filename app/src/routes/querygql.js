@@ -267,6 +267,7 @@ export default async function querygql (fastify, opts, next) {
                         pkey
                         genus
                         taxon
+                        sex
                         type} }` //{unikey ctxt}
       return reply.graphql(kqry, null, {sp: name})
 //

@@ -79,7 +79,7 @@ const resolvers = {
                 {"genus": {$regex: spx, $options: "ix"} },
                 {"family": {$regex: spx, $options: "ix"} }
               ]},
-              {unikey:1, pkey:1, genus:1, taxon:1, type:1, ctxt:1},
+              {unikey:1, pkey:1, genus:1, taxon:1, type:1, sex:1, ctxt:1},
               {sort: {unikey: 1}}) //, {limit: 100}) //.sort({"rid":1})
         return keyx
       },

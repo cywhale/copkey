@@ -10,7 +10,9 @@ let keys = { "node":[],
              "spidx": -1,
              "level": 0,
              "sex": "",
-             "tokey": "" };
+             "tokey": "",
+             "ances": "",
+             "presex": "" };
 let count = 0;
 let genus = taxon.split(/\s/)[0];
 
@@ -41,6 +43,10 @@ const node_reduce = (node, keyx) => {
           "male": [],
           "malekey": []
         };
+      } else if (keyx.sex!=="" && keyx.sex!==attr.sex) {
+        //console.log("2nd sex found when previous sex not resolved: ", keyx.sex, " will be coverd by: ", attr.sex)
+        //console.log("!!Note: Now if find ancestor: ", keyx.ances, " will record in both sexes");
+        keyx.presex = keyx.sex //will have common ancestors
       }
       keyx.sex = attr.sex;
       keyx.tokey = attr.pkey;
@@ -52,6 +58,12 @@ const node_reduce = (node, keyx) => {
         keyx.tokey = attr.pkey;
         keyx.node[keyx.spidx][keyx.sex].unshift(attr.ctxt);
         keyx.node[keyx.spidx][keyx.sex+'key'].unshift(attr.unikey);
+      }
+      if (keyx.presex!=="" && attr.unikey===keyx.ances) {
+        //console.log("!!Note: Must record common ancestor at: ", attr.unikey)
+        keyx.node[keyx.spidx][keyx.presex].unshift(attr.ctxt);
+        keyx.node[keyx.spidx][keyx.presex+'key'].unshift(attr.unikey);
+        keyx.ances = attr.pkey;
       }
     } /*else {
       console.log("Reduce Not handle: ", attr.unikey);
@@ -94,11 +106,15 @@ const node_reduce = (node, keyx) => {
     //Note: because jump to (i+1)th branch, this root will be only recorded in latest branch (when last branch finally ended and upward)
     //But then the 0th - ith branch lost this root connection, so must be recorded here
     if (keyx.sex!=="" && keyx.node[keyx.spidx][keyx.sex].length && keyx.tokey==root.unikey &&
-        keyx.level==0 && keyx.last != (root.unikey + keyx.sex)) { //means its a recorded path
-      //console.log("Record root in pre-handled path for: ", keyx.node[keyx.spidx][keyx.sex+'key'][0]);
+        keyx.last !== (root.unikey + keyx.sex)) { //means its a recorded path
+      //console.log("Record root in pre-handled path for: ", keyx.node[keyx.spidx][keyx.sex+'key'][0], " and may have common ancestor: ", root.pkey);
       keyx.node[keyx.spidx][keyx.sex].unshift(root.ctxt);
       keyx.node[keyx.spidx][keyx.sex+'key'].unshift(root.unikey);
       keyx.last = root.unikey + keyx.sex;
+      keyx.ances = root.pkey; //if sexes have common ancestor, from this tokey to start
+    } else if (keyx.last === (root.unikey + keyx.sex)) {
+      keyx.last = "";
+      keyx.ances = root.pkey;
     }
     if (keyx.level==0 && keyx.sex!=="") {
       //console.log("Had back to level-0, clear sex and tokey info: ", keyx.sex);
@@ -132,6 +148,8 @@ data.forEach((node, index) => {
   } else {
     keys.last=""; //reset some states, otherwise cause error
     keys.level=0;
+    keys.ances="";
+    keys.presex="";
     //console.log("Before next node starting:", keys);
     keys = node_reduce(node, keys);
     //console.log("Count this time: ", count)
