@@ -1,18 +1,19 @@
-export default function deKeytree (data, taxon, countMax = 300) {
+export default function deKeytree (data, taxon, countMax = 200) {
 
-let keys = { "node":[],
-           /*"female": [],
+let keys = {/*"female": [],
              "femalekey": [],
              "male": [],
              "malekey": [],*/
-             "root": [],
-             "nchild": [],
+             "node":[],
+             //"root": [],   //no need if b2t reversal
+             "nchild": -1,   //[] if b2t reversal
              "spidx": -1,
              "level": 0,
              "sex": "",
              "tokey": "",
-             "ances": "",
-             "presex": "" };
+             //"ances": "",  //no need if b2t reversal
+             //"presex": "", //no need if b2t reversal
+             };
 let count = 0;
 let genus = taxon.split(/\s/)[0];
 
@@ -21,137 +22,92 @@ const getStack = (node, skey="unikey") => {
   return node.map((elem) => {return elem[skey]})
 };*/
 
-const node_reduce = (node, keyx) => {
+const node_bot2top = (node, keyx) => {
   let { children, ...attr} = node;
-  if (!!children && !!children.length) {
-    count = count + 1;
-    keyx.root.push(node);
-    keyx.nchild.push(children.length-1);
-    keyx.level = keyx.level + 1;
-    //console.log("Recursively child-0 to level: ", keyx.level, " root inside length: ", keyx.root.length, " and at this level still had child-1: ", children.length-1, " node unikey: ", node.unikey, " and child0 unikey: ", children[0].unikey);
-    return node_reduce(children[0], keyx);
-  } else {
-    //console.log("After Reduce reaching leaf, in level: ", keyx.level, " Stack: ", getStack(keyx.root).join(", "));
-    if (attr.taxon == taxon) {
-      //console.log("Reduce Leaf now: ", attr.taxon, " with sex: ", attr.sex, " in key: ", attr.unikey, " heading for: ", attr.pkey);
-      if (keyx.spidx<0 || (keyx.spidx>=0 && attr.taxon!==keyx.node[keyx.spidx].taxon)) {
-        keyx.spidx = keyx.spidx + 1;
-        keyx.node[keyx.spidx]={
+  if (attr.taxon !== "") {
+    //console.log("b2t taxon:", attr.taxon, " with sex: ", attr.sex);
+    if (keyx.spidx<0 || (keyx.spidx>=0 && keyx.node.length && attr.taxon!==keyx.node[keyx.spidx].taxon)) {
+      //console.log("Initialize node..")
+      keyx.spidx = keyx.spidx + 1;
+      keyx.node[keyx.spidx]={
           "taxon": attr.taxon,
           "female": [],
           "femalekey": [],
           "male": [],
-          "malekey": []
-        };
-      } else if (keyx.sex!=="" && keyx.sex!==attr.sex) {
-        //console.log("2nd sex found when previous sex not resolved: ", keyx.sex, " will be coverd by: ", attr.sex)
-        //console.log("!!Note: Now if find ancestor: ", keyx.ances, " will record in both sexes");
-        keyx.presex = keyx.sex //will have common ancestors
-      }
-      keyx.sex = attr.sex;
-      keyx.tokey = attr.pkey;
-      keyx.node[keyx.spidx][attr.sex].push(attr.ctxt);
-      keyx.node[keyx.spidx][attr.sex+'key'].push(attr.unikey);
-    } else if (keyx.tokey == attr.unikey) {
-      //console.log("Reduce Reach key: ", attr.unikey, " heading for: ", attr.pkey, " (sex):", keyx.sex);
-      if (keyx.last != (attr.unikey + keyx.sex)) {
-        keyx.tokey = attr.pkey;
-        keyx.node[keyx.spidx][keyx.sex].unshift(attr.ctxt);
-        keyx.node[keyx.spidx][keyx.sex+'key'].unshift(attr.unikey);
-      }
-      if (keyx.presex!=="" && attr.unikey===keyx.ances) {
-        //console.log("!!Note: Must record common ancestor at: ", attr.unikey)
-        keyx.node[keyx.spidx][keyx.presex].unshift(attr.ctxt);
-        keyx.node[keyx.spidx][keyx.presex+'key'].unshift(attr.unikey);
-        keyx.ances = attr.pkey;
-      }
-    } /*else {
-      console.log("Reduce Not handle: ", attr.unikey);
-      console.log("want to key: ", keyx.tokey, ", and now recorded sex: ", keyx.sex)
-    }*/
-    count = count + 1;
-    if (count >= countMax) {
-      console.log("Error! Traversal exceeds max_limit, and break...")
-      return keyx;
+          "malekey": [],
+          "both":[],
+          "bothkey":[],
+          "uknown":[],
+          "unknownkey":[]
+      };
     }
-    keyx.level = keyx.level-1;
-    if (keyx.level < 0) {
-      return keyx;
-    }
-    let root = keyx.root[keyx.level];
-    let nchild = keyx.nchild[keyx.level];
-    //console.log("Now in level: ", keyx.level, " with root: ", root.unikey, " with remaining child: ", nchild, " and tokey: ", keyx.tokey);
-    if (nchild == 0) {
-      keyx.root.pop();
-      keyx.nchild.pop();
-      //console.log("Delete children in root: ", root.unikey);
-      delete root["children"];
-// cannot further backword because cause the upper keyx.root[keyx.level] be push twice
-/*      if (keyx.tokey == root.unikey && keyx.level>=1) {
-        console.log("Current root just the key: ", root.unikey, " heading for: ", root.pkey, " (sex):", keyx.sex);
-        keyx.tokey = root.pkey;
-        keyx.node[keyx.spidx][keyx.sex].unshift(root.ctxt);
-        keyx.node[keyx.spidx][keyx.sex+'key'].unshift(root.unikey);
-        keyx.level = keyx.level-1;
-        console.log("Back further to level: ", keyx.level, " Stack: ", getStack(keyx.root).join(", "), " go to root: ", keyx.root[keyx.level]);
-        return node_reduce(keyx.root[keyx.level], keyx)
-      }
-      else {*/
-      //console.log("and now in level: ", keyx.level, " Stack: ", getStack(keyx.root).join(", "), " go to root: ", root.unikey);
-      return node_reduce(root, keyx);
-      //}
-    }
-    let idx = root.children.length - nchild;
-    //console.log("Handle nth-child: ", idx, root);
-    //Note: because jump to (i+1)th branch, this root will be only recorded in latest branch (when last branch finally ended and upward)
-    //But then the 0th - ith branch lost this root connection, so must be recorded here
-    if (keyx.sex!=="" && keyx.node[keyx.spidx][keyx.sex].length && keyx.tokey==root.unikey &&
-        keyx.last !== (root.unikey + keyx.sex)) { //means its a recorded path
-      //console.log("Record root in pre-handled path for: ", keyx.node[keyx.spidx][keyx.sex+'key'][0], " and may have common ancestor: ", root.pkey);
-      keyx.node[keyx.spidx][keyx.sex].unshift(root.ctxt);
-      keyx.node[keyx.spidx][keyx.sex+'key'].unshift(root.unikey);
-      keyx.last = root.unikey + keyx.sex;
-      keyx.ances = root.pkey; //if sexes have common ancestor, from this tokey to start
-    } else if (keyx.last === (root.unikey + keyx.sex)) {
-      keyx.last = "";
-      keyx.ances = root.pkey;
-    }
-    if (keyx.level==0 && keyx.sex!=="") {
-      //console.log("Had back to level-0, clear sex and tokey info: ", keyx.sex);
-      keyx.sex="";
-      keyx.tokey="";
-    }
-    keyx.nchild[keyx.level] = keyx.nchild[keyx.level] - 1;
-    if (root.children[idx]) {
-      keyx.level = keyx.level + 1;
-      return node_reduce(root.children[idx], keyx);
+    keyx.nodeflag = true;
+    if (attr.sex==="") {
+      keyx.sex="unknown";
+    } else if (attr.sex.indexOf("/")>=0) {
+      keyx.sex="both";
     } else {
-      console.log("Error: Jump to next branch but no this child, and break...")
+      keyx.sex=attr.sex;
+    }
+  }
+  if (keyx.nodeflag) {
+    keyx.tokey = attr.pkey; //now is bottom2top
+    keyx.node[keyx.spidx][keyx.sex].unshift(attr.ctxt);
+    keyx.node[keyx.spidx][keyx.sex+'key'].unshift(attr.unikey);
+    //console.log("Push node in level: ", keyx.level, " in current: ", keyx)
+  }
+  if (!!children && !!children.length && keyx.nodeflag) {
+    count = count + 1;
+    //keyx.root.push(node); //no need in b2t
+    let rchildflag = false;
+    for (let i = 0; i < children.length; i++) {
+      //console.log("Check child: ", i, " with pkey: ", children[i].unikey, " and current tokey: ", keyx.tokey);
+      if (children[i].unikey === keyx.tokey) {//b2t: find upper node
+        //keyx.nchild.push(children.length-i-1); //no need comeback in b2t
+        keyx.nchild = i // instead, in b2t, record this index
+        rchildflag = true;
+        break;
+      }
+    }
+    if (!rchildflag) {
+      console.log("Error: No correct path under taxon node, just return..") // in bottom2top reversal (b2t)
+      keyx.nodeflag = false;
       return keyx;
     }
+    keyx.level = keyx.level + 1;
+
+    //console.log("Recursively child-0 to level: ", keyx.level, " node unikey: ", node.unikey, " and child0 unikey: ", children[keyx.nchild].unikey);
+    return node_bot2top(children[keyx.nchild], keyx);
+  } else {
+    //console.log("After Reduce reaching leaf, in level: ", keyx.level, " Stack: ", getStack(keyx.root).join(", "));
+    //console.log("Reaching leaf, return keyx: ", keyx);
+    keyx.nodeflag = false;
+    return keyx;
   }
 };
 // 20220420 add taxon figs in keytree graphql //https://jsfiddle.net/cywhale/u83vbj46/609/
-// 20200421 testing taxon: "Lucicutia gemina", fix two sex infor at outer node and states not reset bug: https://jsfiddle.net/cywhale/u83vbj46/775/
+// 20220421 testing taxon: "Lucicutia gemina", fix two sex info at outer node and states not reset bug: https://jsfiddle.net/cywhale/u83vbj46/775/
+// 20220425 Big change to bottom2top mode (bottom: means from leaf = taxon node; top: means key_1a, 1b that has empty pkey: https://jsfiddle.net/cywhale/u83vbj46/960/
 let figs = {};
 data.forEach((node, index) => {
-  if (node.unikey.indexOf('fig') !== -1) {
-    if (node.taxon === taxon) {
-      console.log("Fig found for taxon!")
-      figs[node.taxon] = [];
-      figs[node.taxon].push(
+  if (node.unikey.indexOf('fig')>=0) {
+    if (node.taxon !== "") {
+      //console.log("Fig found for taxon!")
+      figs[0] = []; //node.taxon, now only handle 1 taxon at a time
+      figs[0].push(
         node.ctxt
         .replace(/(\\n)+/g,'\\n') //needed in Copimg.js, and some additional fig append to the same figs_xxx div need separate it with \\n
         .replace(/\<\/div\>(\<br\>){2,4}\<div class=\"blkfigure/g, '</div><br><br>\\n<div class="blkfigure')
       );
     }
   } else {
-    keys.last=""; //reset some states, otherwise cause error
+    //keys.last=""; //reset some states, otherwise cause error
     keys.level=0;
-    keys.ances="";
-    keys.presex="";
+    keys.nodeflag=false //bottom2top: means in the same taxon(first node) to find its farest pkey(last node) recursive path
+    //keys.ances="";  //no need in b2t mode
+    //keys.presex=""; //no need in b2t mode
     //console.log("Before next node starting:", keys);
-    keys = node_reduce(node, keys);
+    keys = node_bot2top(node, keys);
     //console.log("Count this time: ", count)
     count = 0;
   }
@@ -162,6 +118,10 @@ let ctxt = '';
 keys.node.forEach((node) => {
   ctxt = '<div class="kblk"><p class="doc_title"><em>' + node.taxon + '</em>&nbsp;<a aria-label="back to the genus key" href="#taxon_' +
          genus +'">☚</a></p></div>'
+  if (node.unknown && node.unknown.length) {
+    ctxt = ctxt + '<div class="kblk"><p class="doc_epithets">Key (uncertain gender):</p></div>' +
+    node.unknown.join("") + '<br><br>';
+  }
   if (node.both && node.both.length) {
     ctxt = ctxt + '<div class="kblk"><p class="doc_epithets"><strong>Female/male</strong> key:</p></div>' +
     node.both.join("") + '<br><br>';
@@ -178,6 +138,6 @@ keys.node.forEach((node) => {
 //console.log("Debug ctxt: ", ctxt);
 
 return {"key": ctxt,
-        "fig": figs[taxon].join('\\n')
+        "fig": figs[0].join('\\n') //figs[taxon]
        };
 };

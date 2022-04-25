@@ -40,6 +40,7 @@ export default async function querygql (fastify, opts, next) {
                           value
                         }
                       }`
+    //can add { taxonarr isAnyTaxon } in schema to test old top2bottom
     const ktreeqry =`query($sp: String!) {
       keytree(sp: $sp)
       {
@@ -49,8 +50,6 @@ export default async function querygql (fastify, opts, next) {
         taxon
         ctxt
         sex
-        taxonarr
-        isAnyTaxon
         children {
           unikey
           pkey
@@ -261,7 +260,7 @@ export default async function querygql (fastify, opts, next) {
       //if (name==="init") {
       //  return reply.graphql('{ init {ctxt} }')
       //}
-// for test
+/* for test
       const kqry = `query ($sp: String!) { keys(sp: $sp) {
                         unikey
                         pkey
@@ -270,10 +269,10 @@ export default async function querygql (fastify, opts, next) {
                         sex
                         type} }` //{unikey ctxt}
       return reply.graphql(kqry, null, {sp: name})
-//
+*/
       //req.log.info("Query use graphql: "+ query + " with sp: " + name)
       //return reply.graphql(infqry, null, {taxon: name, keystr: false, mode: 'all', first: def_pageSize}) //20220413 modified to KeyTree
-      //return reply.graphql(ktreeqry, null, {sp: name})
+      return reply.graphql(ktreeqry, null, {sp: name})
     })
 
     fastify.post('/keytree',

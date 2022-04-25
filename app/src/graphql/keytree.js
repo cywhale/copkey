@@ -5,6 +5,8 @@ import Spkey from '../models/spkey_mongoose';
 // https://mongoplayground.net/p/m7IRnntI6jg 20220420 modified for keeping taxon figures
 // https://mongoplayground.net/p/I-fwuusIO7I 20220421 for Labidocera detruncata temp (not code err, but data err from docx, a branch prior(prev key) to 27b and typo to 27a
 // https://mongoplayground.net/p/5h-uhSuyidr 20220422 (temp) for Acartia bifilosa
+// 20220425 change strategy from top2bottom(t2b) to bottom2top(b2t) (so make the initial point is certain)
+// 20220425 playground https://mongoplayground.net/p/a13CZxjTGN3
 export default async function keytree(taxon) {
 
 let genus = taxon.split(/\s/)[0];
@@ -13,23 +15,23 @@ let result = await Spkey.aggregate([
     $match: {
       $and: [
         {
-          $or: [
-            {
+          //$or: [
+          //  {
               "type": {
-                "$nin": [
-                  -1,
+                "$in": [
+                  1,
                   2
                 ]
               }
-            },
+          /*},//$"nin": [-1, 2] if t2b in older version
             {
               "type": 2,
               "taxon": taxon
-            }
-          ]
+            } // no need when b2t because initial point is certain with specific taxon
+          ]*/
         }, // 20220420 modified with figure(2)
         //Not figures (2), and not genus (-1)
-        {
+        /*{
           "pkey": {
             "$in": [
               null,
@@ -40,6 +42,9 @@ let result = await Spkey.aggregate([
         //genus for testing: "Acartia"
         {
           "genus": genus
+        }*/ //t2b needs initial point is pkey==null, and restrict possibility to specific genus
+        {
+          "taxon": taxon
         }
       ]
     }
@@ -57,9 +62,9 @@ let result = await Spkey.aggregate([
   {
     $graphLookup: {
       from: "spkey",
-      startWith: "$unikey",
-      connectFromField: "unikey",
-      connectToField: "pkey",
+      startWith: "$pkey", //"$unikey", //old t2b
+      connectFromField: "pkey", //"unikey",
+      connectToField: "unikey", //"pkey",
       depthField: "level",
       as: "children"
     }
@@ -95,7 +100,7 @@ let result = await Spkey.aggregate([
       },
       children: {
         $push: "$children"
-      },
+      }/*, //old t2b, no need in b2t
       taxonarr: {
         $push: {
           $convert: {
@@ -119,21 +124,22 @@ let result = await Spkey.aggregate([
           }
           //if taxon=="" get false (to filter all "" of taxon in children/tree-branch
         }
-      }
+      }*/
     }
   },
   {
     $project: {
       "_id": 1,
+      "unikey": "$_id",
       "pkey": 1,
       "taxon": 1,
       "ctxt": 1,
       "sex": 1,
-      isAnyTaxon: {
+/*      isAnyTaxon: {
         $anyElementTrue: [
           "$taxonarr"
         ]
-      },
+      },*/ // old t2b
       "children": {
         $filter: {
           input: "$children",
@@ -169,11 +175,11 @@ let result = await Spkey.aggregate([
       }
     }
   },
-  {
+/*{
     $match: {
       "isAnyTaxon": true
     }
-  },
+  },*/ //old t2b
  //to filter all "" of taxon in children/tree-branch
   {
     $addFields: {
@@ -230,8 +236,8 @@ let result = await Spkey.aggregate([
                                 as: "e",
                                 cond: {
                                   $eq: [
-                                    "$$e.pkey",
-                                    "$$this.unikey"
+                                    "$$e.unikey", //"$$e.pkey", //old t2b
+                                    "$$this.pkey" //"$$this.unikey"
                                   ]
                                 }
                               }
@@ -253,7 +259,7 @@ let result = await Spkey.aggregate([
     $addFields: {
       children: "$children.presentChild"
     }
-  },
+  } /*,
   {
     $project: {
       "_id": 1,
@@ -302,7 +308,7 @@ let result = await Spkey.aggregate([
         }
       }
     }
-  }
+  } */ //old t2b
 ]).exec()
 
 return result
