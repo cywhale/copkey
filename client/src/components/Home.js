@@ -389,6 +389,7 @@ const Home = () => {
                                       (search.keycheck? '搜尋分類特徵':'搜尋屬、種名'));
   const keytreelabel = lang === 'EN'? 'Key-tree': '檢索樹';
   const keytreeinfo = lang === 'EN'? 'List nested identification keys of searched taxon': '列出所搜尋物種巢狀分類檢索';
+  const keystrlabel = lang === 'EN'? 'Trait': '特徵';
   const keystrinfo = lang === 'EN'? 'Enable searching characteristics': '搜尋分類特徵';
   /*        { iniHelp &&
                 <p style="text-indent:0;z-index:1101;" class="triangle-right top" id="search_tooltips">
@@ -406,15 +407,20 @@ const Home = () => {
                 <input type="search" id="spkeysearch" name="spkeysearch" placeholder={searchplace}
                    onInput={(e) => { setSearchSpkey(e.target.value) }} />
                 <button class="ctrlbutn" id="keysearchbutn" onClick={trigSearch}>{searchlabel}</button>
-                <label for="keystrsearch" style="margin-top:10px;">
-                  <input type="checkbox" id="keystrsearch" aria-label={keystrinfo}
-                         checked={search.keycheck} onClick={toggleKeystrSearch} />
-                </label>
-                <span style="margin-top:10px;margin-left:10px;"> {keytreelabel}&nbsp;&#9755;</span>
-                <label for="keytreelist" style="margin-top:10px;">
-                  <input type="checkbox" id="keytreelist" aria-label={keytreeinfo}
-                         checked={keyTree} onClick={toggleKeyTree} />
-                </label>
+                <span style="margin-top:10px;margin-left:10px;"> 
+                <span>{keytreelabel}&nbsp;&#9755;
+                    <label for="keytreelist">
+                      <input type="checkbox" id="keytreelist" aria-label={keytreeinfo}
+                           checked={keyTree} onClick={toggleKeyTree} />
+                    </label>
+                </span>
+                <span> {keystrlabel}&nbsp;&#9755;
+                    <label for="keystrsearch">
+                      <input type="checkbox" id="keystrsearch" aria-label={keystrinfo}
+                           checked={search.keycheck} onClick={toggleKeystrSearch} />
+                    </label>
+                </span>
+                </span>
               </p>
           </div>
           <MultiSelectSort />

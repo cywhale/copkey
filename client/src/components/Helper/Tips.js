@@ -41,9 +41,11 @@ const Tips = (props) => {
       render(
         <div class='helpctrl'>
           <span class='smyellow'>{tipx}</span>
-          <button class='helpctrlbutn' id='step_go' onClick={toggleTips} aria-label={tipstate}>&#9757;</button>
-          <button class='helpctrlbutn' id='tip_prev' onClick={goPrevTip} aria-label='上個 Previous tip'>&#60;</button>
-          <button class='helpctrlbutn' id='tip_next' onClick={goNextTip} aria-label='下個 Next tip'>&#62;</button>
+          <button class='helpctrlbutn' id='step_go' style="height: fit-content;" onClick={toggleTips} aria-label={tipstate}>&#9757;</button>
+          <span style="display:flex;margin:0;">
+            <button class='helpctrlbutn' id='tip_prev' onClick={goPrevTip} aria-label='上個 Previous tip'>&#60;</button>
+            <button class='helpctrlbutn' id='tip_next' onClick={goNextTip} aria-label='下個 Next tip'>&#62;</button>
+          </span>
         </div>,
         document.getElementById('helpctrldiv')
       )

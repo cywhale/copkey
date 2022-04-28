@@ -8,6 +8,10 @@ export const helpdata = [
      TW: '左上角按鈕可打開功能選單，可切換語言或查找其他介紹資訊',
      EN: 'Open menu at the upper-left to find menu dialog, e.g. Language selection, or other info.'
     },
+    {to: '[id^="keytreelist"]',
+     TW: '列出單一物種分類檢索樹，輸入種名並勾選此欄後按搜尋，會將該物種分類檢索樹分層、分性別列出',
+     EN: 'List the tree of identification keys for one species. Input the scientific name, enable the checkbox, and then search it. The key-tree for that species, subdivided by its gender, would be listed.'
+    },
     {to: '[id^="keystrsearch"]',
      TW: "搜尋物種分類檢索，輸入屬或種名；或勾選右方欄，搜尋分類特徵。比如在搜尋欄中輸入'Leg 5'，並勾選右側核選方框後搜尋，便可迅速列出檢索中所有相關第五對足的索引。如果你需要更複雜的搜尋功能，按左上角並打開功能選單中的'選項'分頁",
      EN: "Search taxon, or search classification characteristics by enabling the right checkbox. For example, input 'Leg 5' in search bar, enable the right checkbox, search, and then get the results of keys about Leg 5. If you need advanced search, just open the menu dialog at the upper-left and check the 'Options' tab."

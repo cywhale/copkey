@@ -1,8 +1,12 @@
 
 export const tipdata = [
     {
-     TW: "<span class='slyellow'>&#9788;</span> 搜尋物種時以學名為主，但若學名不確定，可以使用 .* 做模糊搜尋，比如輸入 <span class='snyellow'>Centropages.*long.*</span> 會找到 <em>C. longicornis</em>, <em>elongatus</em>。<br><br><span class='slyellow'>&#9788;</span> 如果要找全部物種，可以輸入 * 或 All。<br><br><span class='slyellow'>&#9788;</span> 找多個物種，用 | 分隔，比如 <span class='snyellow'>Acartia hongi|Acartia clausi</span>. 當然也可以使用右上角下拉選單的物種列表複選",
-     EN: "<span class='slyellow'>&#9788;</span> Search taxon by scientific name. But for uncertainty, use .* to do fuzzy matching, e.g., <span class='snyellow'>Centropages.*long.*</span> will match <em>C. longicornis</em>, and <em>elongatus</em>.<br><br><span class='slyellow'>&#9788;</span> To find all taxons, use * or All.<br><br><span class='slyellow'>&#9788;</span> To find multiple taxons, separate them by |, e.g., <span class='snyellow'>Acartia hongi|Acartia clausi</span>. Of course it can be done by multi-selection from upper-right dropdown list of taxonomy."
+     TW: "<span class='slyellow'>&#9788;</span> 搜尋物種時以學名為主，但若學名不確定，可以使用 .* 做模糊搜尋，比如輸入 <span class='snyellow'>Centropages.*long.*</span> 會找到 <em>C. longicornis</em>, <em>elongatus</em>。<br><br>" +
+         "<span class='slyellow'>&#9788;</span> 搜尋單一物種時若勾選【檢索樹(Key-tree)】，可將該物種特徵檢索樹，分層、分性別列出。<br><br>" +
+         "<span class='slyellow'>&#9788;</span> 如果要找全部物種，可以輸入 * 或 All。<br><br><span class='slyellow'>&#9788;</span> 找多個物種，用 | 分隔，比如 <span class='snyellow'>Acartia hongi|Acartia clausi</span>. 當然也可以使用右上角下拉選單的物種列表複選",
+     EN: "<span class='slyellow'>&#9788;</span> Search taxon by scientific name. But for uncertainty, use .* to do fuzzy matching, e.g., <span class='snyellow'>Centropages.*long.*</span> will match <em>C. longicornis</em>, and <em>elongatus</em>.<br><br>" +
+         "<span class='slyellow'>&#9788;</span> Search one species and enable【Key-tree】check box, then the identification tree of this species, subdivided by its gender, would be listed.<br><br>" +
+         "<span class='slyellow'>&#9788;</span> To find all taxons, use * or All.<br><br><span class='slyellow'>&#9788;</span> To find multiple taxons, separate them by |, e.g., <span class='snyellow'>Acartia hongi|Acartia clausi</span>. Of course it can be done by multi-selection from upper-right dropdown list of taxonomy."
     },
     {
      TW: "<span class='slyellow'>&#9788;</span> 搜尋物種(群)比如找到 <span class='snyellow'><em>Centropages</em></span> 之後，若要進一步對該物種(群)搜尋分類特徵，可打開左上角選單'選項'分頁，勾選【<span class='snyellow'>僅在目前物種類群內搜尋</span>】<br><br><span class='slyellow'>&#9788;</span> 接著勾選搜尋欄右側之核選方框後輸入特徵，比如 <span class='snyellow'>Leg 5</span>，便可搜尋在 <em>Centropages</em> 檢索中所有相關第五對足的索引。<br><br><span class='slyellow'>&#9788;</span> '選項'分頁中的搜尋功能組合可做到複雜的搜尋功能，不妨試試！",

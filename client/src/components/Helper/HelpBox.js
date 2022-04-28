@@ -102,7 +102,7 @@ const HelpBox = (props) => {
       if (!reload) {
         let el;
         let self= hx['to'].match(/href/g)? false: true;
-        let nth = (idx < 3? 'first': (idx === 5? 'mid' : (idx < 6? (idx-1).toString(): 'first')));
+        let nth = (idx < 4? 'first': (idx === 6? 'mid' : (idx < 7? (idx-1).toString(): 'first')));
 /*      if (hx['to'].match(/href/g)) {
           el = document.querySelector(hx['to']).closest('span').firstChild;
         } else {

@@ -2,6 +2,7 @@
   padding:6px 6px;
   margin:6px;
   font-size:0.8em;
+  width: fit-content;
 }
 
 .headdiv {
@@ -79,4 +80,10 @@
   border-width:20px 20px 0 0;
   border-color:transparent #075698;
 }
+/*
+@media (max-width:480px) {
+  .flexpspan { flex-direction:column; }
+}
+*/
+
 

@@ -8,7 +8,8 @@ async function cacheHandler (fastify, opts) {
     policy: {
       Query: {
         taxontree: true,
-        infq: true
+        infq: true,
+        keytree: true
       }
     },
     ttl: 60 * 60 * 24,
