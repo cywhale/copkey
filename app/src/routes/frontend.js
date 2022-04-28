@@ -32,6 +32,7 @@ export default async function (fastify, opts) {
   //fastify.addHook('onRequest', authorize)
 
   fastify.register(Helmet, {
+    crossOriginEmbedderPolicy: false,
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'", "https:"],
