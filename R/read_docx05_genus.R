@@ -121,7 +121,7 @@ find_Figfilex <- function (figxt, ftent, imglst, Vers=IndexVers) {
 tstL <- nrow(ctent)
 inTesting <- FALSE  ### please change it to FALSE when generate HTML finally
 
-#tstL <- 308L #key 90(89) #150L #(chk Fig63) #before 107L #key25 93L #key22 #79L #key18 #60L #Calanidae 65L Sinocalanus  #50L #fig.11
+#tstL <- 447L #key 132(131) #381L: #fig_152-158 #308L #key 90(89) #150L #(chk Fig63) #before 107L #key25 93L #key22 #79L #key18 #60L #Calanidae 65L Sinocalanus  #50L #fig.11
 
 #page lcnt, fcnt No need use dynamic pagination, BUT, change to reset after every align with text and fig 20190126
 lcnt <- 0L; fcnt <- 0L; page <- 1L #word count and line count (text:lcnt, fig:fcnt) 
@@ -292,7 +292,7 @@ while (i<=tstL) { #nrow(ctent)) {
         fdivx <- paste0("#figs_", 
                  paste0(sapply(figx, function(x) {padzerox(x,3)}, simplify = T, USE.NAMES = F), collapse="_"))
         pret<- paste0('<a href=', dQuote(fdivx),'>', fnt,'</a>')
-        insBlkId <- c(insBlkId, fdivx) #paste0('figblk_',fnt)
+        insBlkId <- c(insBlkId, substr(fdivx, 2, nchar(fdivx))) #paste0('figblk_',fnt) #modified 20220718: remove "#"
       } else {
         pret<- do.call(function(x) {paste0('<a href=', dQuote(paste0('#fig_',x)), '>',x, '</a>')}, list(figt)) %>% paste(collapse=", ")
         #pret<- do.call(function(x) {
@@ -448,7 +448,8 @@ while (i<=tstL) { #nrow(ctent)) {
     }
   } 
   xc <- paste0(xc,'</div>')
-  
+
+  #if (i==381) { print("Test break"); break} #### just Testing...
   if ((i==tstL & !inTesting) | (kflag & !st_conti_flag & WaitFlush[1])) {
     if (is.na(x) | x=="") {
       xc <- ""
@@ -472,7 +473,6 @@ while (i<=tstL) { #nrow(ctent)) {
     ########################################### Ver3: all figs in sidebar, so insRow will be earlier when figx found
     }
   }  
-
 
 #  if (nxttype==0L & any(is.na(xsp)) & any(!is.na(figx)) & length(figx)>=1) { # Have figs link but no taxa info
 #  20180126 : st_keep change to keep figs in order to keep figs in block with 2-columns
@@ -519,7 +519,7 @@ while (i<=tstL) { #nrow(ctent)) {
          gfk[fidx %in% st_keep[case==0L,]$xfig, blkx:=0L]
        }
      }
-     if (!WaitFlush[1]) {
+     if (!WaitFlush[1] | nrow(st_keep)==0) { #20220718 modified when st_keep is null cause max(blkx) become Inf
        tt <- nrow(st_keep) + length(figx)
        st_keep <- rbindlist(list(
                     st_keep, 
