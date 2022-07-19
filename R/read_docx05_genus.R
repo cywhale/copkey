@@ -289,6 +289,14 @@ while (i<=tstL) { #nrow(ctent)) {
       # #}
       
       if (pret_case == 1L) { #means e.g., fig. 5-8 in key string, that link to <div figs_005_006_007_008
+        ##Test
+        if (nrow(st_keep)>0) {# | st_conti_flag) {
+        #  print("Test break!!") #so i=382 st_keep has fig153, then meet fig154-158 is the only case!
+        #  break
+          figx <- c(st_keep$xfig, figx)
+          print(paste("Note: Now st_keep$xfig: ", paste(st_keep$xfig, collapse=","), " has combined with figx: ",
+                paste(figx, collapse=","), ". So they must pipe-out in the same blk."))
+        }
         fdivx <- paste0("#figs_", 
                  paste0(sapply(figx, function(x) {padzerox(x,3)}, simplify = T, USE.NAMES = F), collapse="_"))
         pret<- paste0('<a href=', dQuote(fdivx),'>', fnt,'</a>')
@@ -488,8 +496,8 @@ while (i<=tstL) { #nrow(ctent)) {
   if (!any(is.na(figx)) & nrow(gfk)>0) {
     chkfx <- sapply(figx, function(x) match(x, gfk[!is.na(imgf),]$fidx))
     if (any(!is.na(chkfx))) { ## already mapping gfk, no need to query again
-      figx <- figx[-which(!is.na(chkfx))]
-    } 
+      figx <- figx[-which(!is.na(chkfx))] #### Note here, figx will delete the same fig in st_keep, so
+    }                                     ##in case i=381 fig153 combined with figs154-158, 153 will be removed here
     if (length(figx)==0) figx <- NA_integer_
   }
   
@@ -520,6 +528,11 @@ while (i<=tstL) { #nrow(ctent)) {
        }
      }
      if (!WaitFlush[1] | nrow(st_keep)==0) { #20220718 modified when st_keep is null cause max(blkx) become Inf
+       ##Testing to check it forms a blk_of_images to pipe out
+       #   print(paste0("Test when st_keep null, and get into this blk: ", gblk_cnt, " with figs: ",
+       #                paste(figx, collapse=",")))
+       #   print(st_keep); break;
+       ## In case fig153, the come block 154-158 that will still form blk [153,154-158] (i=381, break;)
        tt <- nrow(st_keep) + length(figx)
        st_keep <- rbindlist(list(
                     st_keep, 
