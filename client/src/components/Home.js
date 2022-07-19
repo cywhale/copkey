@@ -181,13 +181,17 @@ const Home = () => {
       let spt = spx.split(/\_/);
       let dir = 'species';
       let nkey = parseInt(spt[0]);
+      let multiFig = false;
+      if (spt.length > 1 && Number.isInteger(Number(spt[1]))) {
+        multiFig = true; //modified 20220719: e.g. figs.154-158 may got #figs_153_154_155_156_157_158 don't open them, just scroll
+      }
       if (spt.length == 1 && !isNaN(nkey)) {
         spx = padZero(nkey, 'fig');
         dir = 'genus';
-      } else if (spt.length == 2) {
+      } else if (spt.length == 2 && !multiFig) {
         spx = spx + '_01'; //add a number fo species, but we don't validate species yet
       }
-      if (spt.length) {
+      if (spt.length && !multiFig) {
         //let hstr='<a data-fancybox="gallery" href="/assets/img/species/' + spx + '.jpg" target="_blank"' +
         //         '><img src="/assets/img/species/' + spx + '.jpg" border="0" /></a>';
         let hstr='<a data-fancybox="gallery" href="https://bio.odb.ntu.edu.tw/pub/copkey/' +
