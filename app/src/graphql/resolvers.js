@@ -1,5 +1,6 @@
 import Spkey from '../models/spkey_mongoose';
 import keytree from './keytree';
+import keystrx from './keystrx';
 
 const resolvers = {
     Query: {
@@ -72,6 +73,8 @@ const resolvers = {
       },*/
       keys: async (_, obj, ctx) => {
         const { sp } = obj
+        const keyx = await keystrx(sp)
+/*
         let spt = decodeURIComponent(sp)
         let sp2 = spt.replace(/ \([\s\S]*?\)/g, '').replace(/(\s|\_)/g, "\\\s") //"Acartia (Acartiura) longiremis|Acartia (Euacartia) southwelli" -> Acartia longiremis|Acartia southwelli
         let spx = spt.replace(/(\s|\_)/g, "\\\s")
@@ -83,6 +86,7 @@ const resolvers = {
               ]},
               {unikey:1, pkey:1, genus:1, taxon:1, type:1, sex:1, ctxt:1},
               {sort: {unikey: 1}}) //, {limit: 100}) //.sort({"rid":1})
+*/
         return keyx
       },
 

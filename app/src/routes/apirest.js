@@ -85,14 +85,16 @@ export default async function apirest (fastify, opts, next) {
         }
       },
       async (req, reply) => {
-        const { name } = req.params
+        //const { name } = req.params
+        let name = decodeURIComponent(req.params.name)
+        let spx = name.replace(/ \([\s\S]*?\)/g, '') //"Acartia (Acartiura) longiremis" -> "Acartia longiremis"
         const keyx = await Spkey
                            .aggregate([
                              { $match: {taxon: {"$ne": ""},
                                $or: [
-                                {taxon: { "$eq": name }},
-                                {genus: { "$eq": name }},
-                                {family:{ "$eq": name }}
+                                {taxon: { "$eq": spx }},
+                                {genus: { "$eq": spx }},
+                                {family:{ "$eq": spx }}
                                ],
                                unikey: {"$regex": /^(?!00a_genus).*/i}} },
                              { $group: {
@@ -127,6 +129,69 @@ export default async function apirest (fastify, opts, next) {
                              { $sort: {family:1} }
                            ]).exec()
         await reply.send(keyx)
+    })
+    //slightly diff with ktreeqry in querygl.js (get keystr)
+    const kstrxqry =`query($sp: String!) {
+      keys(sp: $sp)
+      {
+        _id
+        unikey
+        taxon
+        sex
+        keystr
+        parent {
+          unikey
+          keystr
+          parent {
+            unikey
+            keystr
+            parent {
+              unikey
+              keystr
+              parent {
+                unikey
+                keystr
+                parent {
+                  unikey
+                  keystr
+                  parent {
+                    unikey
+                    keystr
+                    parent {
+                      unikey
+                      keystr
+                      parent {
+                        unikey
+                        keystr
+                        parent {
+                          unikey
+                          keystr
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }`
+    fastify.get('/taxon/:name/key',
+      {
+        schema: {
+          description: 'Classification key to the Calanoid Copepods',
+          tags: ['copkey'],
+          params: scinameSchemaObj,
+          //response: {
+          //  200: S.array().items(taxonomySchema)
+          //},
+        }
+      },
+      (req, reply) => {
+        let name = decodeURIComponent(req.params.name)
+        let spx = name.replace(/\([\s\S]*?\)/g, '')
+        return reply.graphql(kstrxqry, null, {sp: spx})
     })
 
     next()

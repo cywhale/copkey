@@ -1,8 +1,9 @@
+// old keys(sp: String!): [Spkeyq]!
 const schema = `
 type Query {
      taxontree: [TreeNode]!
      infq(taxon: String, keystr: Boolean, mode: String, first: Int, last: Int, after: String, before: String, key: String): SpkeyConn
-     keys(sp: String!): [Spkeyq]!
+     keys(sp: String!): [KeyNode]!
      keytree(sp: String!): [KeyNode]!
 }
 
@@ -16,8 +17,10 @@ type KeyNode {
   level: Int
   type: Int
   ctxt: String
+  keystr: String
   sex: String
   children: [KeyNode]
+  parent: [KeyNode]
 }
 
 type Spkeyq {

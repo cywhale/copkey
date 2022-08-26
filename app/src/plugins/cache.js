@@ -15,7 +15,10 @@ async function cacheHandler (fastify, opts) {
           storage: { type: 'memory' }
         },
         keytree: {
-          ttl: 60 * 60 * 24
+          ttl: 60 * 60 * 5
+        },
+        keys: {
+          ttl: 60 * 60 * 5
         }
       }
     },
