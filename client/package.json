@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@babel/plugin-syntax-dynamic-import": "7.8.3",
-    "babel-loader": "^8.2.2",
+    "babel-loader": "8.2.5",
     "babel-plugin-lodash": "3.3.4",
     "babel-plugin-transform-imports": "2.0.0",
     "compression-webpack-plugin": "6.1.1",
@@ -55,12 +55,12 @@
     "json-minimizer-webpack-plugin": "2.1.0",
     "lodash-webpack-plugin": "0.11.6",
     "mini-svg-data-uri": "1.2.3",
-    "node-sass": "5.0.0",
+    "node-sass": "7.0.1",
     "optimize-plugin": "^1.0.0",
     "path": "^0.12.7",
-    "preact-cli": "3.3.5",
-    "preact-render-to-string": "5.1.19",
-    "sass-loader": "10.1.1",
+    "preact-cli": "^3.4.1",
+    "preact-render-to-string": "^5.2.2",
+    "sass-loader": "10.3.1",
     "sirv": "^1.0.7",
     "sirv-cli": "^1.0.8",
     "strip-pragma-loader": "1.0.0",
@@ -82,14 +82,14 @@
     "xmlhttprequest": "^1.8.0"
   },
   "dependencies": {
-    "@fancyapps/ui": "4.0.26",
-    "preact": "10.7.1",
-    "preact-router": "4.0.1",
-    "react-draggable": "^4.4.4",
+    "@fancyapps/ui": "^4.0.31",
+    "preact": "^10.10.6",
+    "preact-router": "^4.1.0",
+    "react-draggable": "^4.4.5",
     "react-dropdown-tree-select": "2.7.1",
-    "react-query": "3.34.19",
+    "react-query": "3.39.2",
     "react-xarrows": "^2.0.2",
-    "zustand": "3.7.1"
+    "zustand": "^4.1.1"
   },
   "jest": {
     "preset": "jest-preset-preact",
