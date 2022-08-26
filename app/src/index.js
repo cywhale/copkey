@@ -5,6 +5,8 @@ import Env from '@fastify/env'
 import S from 'fluent-json-schema'
 import { join } from 'desm'
 import srvapp from './srvapp.js'
+import Swagger from '@fastify/swagger'
+import apiConf from './config/swagger_config.js'
 
 const configSecServ = async (certDir='config') => {
   const readCertFile = (filename) => {
@@ -28,7 +30,12 @@ const startServer = async () => {
       trustProxy: true,
       https: {key, cert, allowHTTP1},
       requestTimeout: 5000,
-      logger: true
+      logger: true,
+      ajv: { //https://github.com/fastify/fastify/issues/2841
+        customOptions: {
+          coerceTypes: 'array'
+        }
+      }
   })
 
   fastify.register(Env, {
@@ -46,6 +53,7 @@ const startServer = async () => {
     if (err) console.error(err) //console.log(fastify.config)
   })
 
+  fastify.register(Swagger, apiConf)
   fastify.register(srvapp) //old: use fastify-mongodb, but not work used in graphql resolvers
 
   fastify.listen({ port: PORT }, function (err, address) {
@@ -53,7 +61,7 @@ const startServer = async () => {
       fastify.log.error(err)
       process.exit(1)
     }
-    //fastify.swagger()
+    fastify.swagger()
     fastify.log.info(`server listening on ${address}`)
   })
 }
