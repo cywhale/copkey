@@ -1,5 +1,5 @@
-import Static from 'fastify-static'
-import Helmet from 'fastify-helmet'
+import Static from '@fastify/static'
+import Helmet from '@fastify/helmet'
 //import path from 'path';
 import { join } from 'desm'
 
@@ -64,7 +64,8 @@ export default async function (fastify, opts) {
 
 //fastify.get(url, opts={schema:{...}}, handler) ==> fastify.route({method:, url:, schemal:, handler:...})
 //https://web.dev/codelab-text-compression-brotli
-
+//Error: After fastify 4.5(?) not work: TypeError: currentNode.createStaticChild is not a function
+/*
   fastify.get('*.(js|json)', fopts, (req, res, next) => {
       if (req.header('Accept-Encoding').includes('br')) {
         req.url = req.url + '.br';
@@ -79,7 +80,7 @@ export default async function (fastify, opts) {
       }
       next();
   })
-
+*/
   if (fastify.conf.port !== fastify.conf.devTestPort) {
       //fastify.conf.port !== fastify.conf.srvTestPort) { // for testing
     fastify.register(Static, {

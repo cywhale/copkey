@@ -41,6 +41,7 @@ export default async function apirest (fastify, opts, next) {
                            ]).exec()
         await reply.send(keyx)
     })
+    //https://mongoplayground.net/p/mMjvMyEajhT
     next()
 }
 

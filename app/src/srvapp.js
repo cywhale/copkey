@@ -1,5 +1,7 @@
 //import Mongodb from 'fastify-mongodb'
-import AutoLoad from 'fastify-autoload'
+import AutoLoad from '@fastify/autoload'
+import Cors from '@fastify/cors'
+import Favicon from 'fastify-favicon'
 import { join } from 'desm'
 //import redis from 'fastify-redis'
 import mercurius from 'mercurius'
@@ -33,6 +35,9 @@ export default async function (fastify, opts) {
         jit: 1,
         queryDepth: 11
   })
+
+fastify.register(Favicon, { path: join(import.meta.url, '..', 'client'), name: 'favicon.ico' })
+
 /* move to plugins/redis.js
   fastify.register(redis, {
     host: '127.0.0.1',
@@ -76,6 +81,27 @@ export default async function (fastify, opts) {
     }
   })
 */
+  fastify.register(Cors, (instance) => {
+    return (req, callback) => {
+      const corsOptions = {
+        origin: true,
+        credentials: true,
+        preflight: true,
+        preflightContinue: true,
+        methods: ['GET', 'POST', 'OPTIONS'],
+        allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Keep-Alive', 'User-Agent',
+                         'Cache-Control', 'Authorization', 'DNT', 'X-PINGOTHER', 'Range'],
+        exposedHeaders: ['Content-Range'],
+        maxAge: 86400,
+      };
+      // do not include CORS headers for requests from localhost
+      if (/^localhost$/m.test(req.headers.origin)) {
+        corsOptions.origin = false
+      }
+      callback(null, corsOptions)
+    }
+  })
+
   fastify.register(AutoLoad, {
     dir: join(import.meta.url, 'plugins'),
     options: Object.assign({}, opts)

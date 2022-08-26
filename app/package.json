@@ -1,8 +1,8 @@
 {
 	"name": "Copkey",
 	"type": "module",
-	"version": "1.1.0",
-	"description": "",
+	"version": "1.2.0",
+	"description": "Key to the Calanoid Copepods",
 	"main": "index.js",
 	"scripts": {
 		"start": "node --es-module-specifier-resolution=node ./src/index.js",
@@ -10,25 +10,32 @@
 		"prod": "export NODE_ENV=production && export PORT=3000 && nodemon --es-module-specifier-resolution=node ./src/index.js",
 		"dev-client": "export NODE_ENV=development && export PORT=3003 && nodemon --es-module-specifier-resolution=node ./src/index.js"
 	},
-	"keywords": [],
-	"author": "",
+	"keywords": [
+		"fastify",
+		"graphql",
+		"taxonomy",
+		"copepods"
+	],
+	"author": "cywhale",
 	"license": "MIT",
 	"dependencies": {
-		"desm": "^1.2.0",
-		"fastify": "^3.28.0",
-		"fastify-autoload": "^3.11.0",
-		"fastify-env": "^2.1.1",
-		"fastify-helmet": "^7.0.1",
-		"fastify-plugin": "^3.0.1",
-		"fastify-redis": "^4.3.3",
-		"fastify-static": "^4.6.1",
+		"@fastify/autoload": "^5.2.0",
+		"@fastify/cors": "^8.1.0",
+		"@fastify/env": "^4.1.0",
+		"@fastify/helmet": "^9.1.0",
+		"@fastify/redis": "^6.0.0",
+		"@fastify/static": "^6.5.0",
+		"desm": "^1.3.0",
+		"fastify": "^4.5.2",
+		"fastify-favicon": "^4.2.0",
+		"fastify-plugin": "^4.2.0",
 		"fluent-json-schema": "^3.1.0",
 		"fs": "^0.0.2",
-		"mercurius": "^9.3.6",
-		"mercurius-cache": "^1.7.0",
-		"mongoose": "^6.2.10"
+		"mercurius": "^10.2.0",
+		"mercurius-cache": "^2.0.0",
+		"mongoose": "^6.5.3"
 	},
 	"devDependencies": {
-		"nodemon": "^2.0.12"
+		"nodemon": "^2.0.19"
 	}
 }

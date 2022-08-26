@@ -1,7 +1,7 @@
 'use strict'
 import Fastify from 'fastify';
 import { readFileSync } from 'fs'
-import Env from 'fastify-env'
+import Env from '@fastify/env'
 import S from 'fluent-json-schema'
 import { join } from 'desm'
 import srvapp from './srvapp.js'
@@ -48,16 +48,14 @@ const startServer = async () => {
 
   fastify.register(srvapp) //old: use fastify-mongodb, but not work used in graphql resolvers
 
-  const start = async () => {
-	try {
-	    await fastify.listen(PORT)
-            fastify.log.info(`server listening on ${fastify.server.address().port}`)
-	} catch (err) {
-	    fastify.log.error(err)
-	    process.exit(1)
-	}
-  }
-  start()
+  fastify.listen({ port: PORT }, function (err, address) {
+    if (err) {
+      fastify.log.error(err)
+      process.exit(1)
+    }
+    //fastify.swagger()
+    fastify.log.info(`server listening on ${address}`)
+  })
 }
 
 startServer()
