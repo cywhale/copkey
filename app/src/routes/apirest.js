@@ -66,7 +66,7 @@ export default async function apirest (fastify, opts, next) {
       type: 'object',
       properties: {
         name: { type: 'string',
-                description: 'Use scientific name (family/genus/species)'
+                description: 'Use scientific name (family/genus/species);\nBut for /key, available only by querying species'
         }
       },
       required: ['name']

@@ -83,13 +83,13 @@
   },
   "dependencies": {
     "@fancyapps/ui": "^4.0.31",
-    "preact": "^10.10.6",
+    "preact": "^10.11.1",
     "preact-router": "^4.1.0",
     "react-draggable": "^4.4.5",
     "react-dropdown-tree-select": "2.7.1",
     "react-query": "3.39.2",
     "react-xarrows": "^2.0.2",
-    "zustand": "^4.1.1"
+    "zustand": "^4.1.2"
   },
   "jest": {
     "preset": "jest-preset-preact",
