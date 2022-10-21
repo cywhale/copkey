@@ -18,7 +18,7 @@ export default async function apirest (fastify, opts, next) {
       {
         schema: {
           description: 'Key to the Calanoid Copepods(Copkey) taxon collections',
-          tags: ['copkey'],
+          tags: ['Copkey'],
           response: {
             200: S.array().items(taxonomySchema)
           },
@@ -77,7 +77,7 @@ export default async function apirest (fastify, opts, next) {
       {
         schema: {
           description: 'Key to the Calanoid Copepods(Copkey) taxon data',
-          tags: ['copkey'],
+          tags: ['Copkey'],
           params: scinameSchemaObj,
           response: {
             200: S.array().items(taxonomySchema)
@@ -181,7 +181,7 @@ export default async function apirest (fastify, opts, next) {
       {
         schema: {
           description: 'Classification key to the Calanoid Copepods',
-          tags: ['copkey'],
+          tags: ['Copkey'],
           params: scinameSchemaObj,
           //response: {
           //  200: S.array().items(taxonomySchema)

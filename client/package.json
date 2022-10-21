@@ -59,7 +59,7 @@
     "optimize-plugin": "^1.0.0",
     "path": "^0.12.7",
     "preact-cli": "^3.4.1",
-    "preact-render-to-string": "^5.2.2",
+    "preact-render-to-string": "^5.2.5",
     "sass-loader": "10.3.1",
     "sirv": "^1.0.7",
     "sirv-cli": "^1.0.8",
@@ -83,11 +83,11 @@
   },
   "dependencies": {
     "@fancyapps/ui": "^4.0.31",
-    "preact": "^10.11.1",
+    "preact": "^10.11.2",
     "preact-router": "^4.1.0",
     "react-draggable": "^4.4.5",
     "react-dropdown-tree-select": "2.7.1",
-    "react-query": "3.39.2",
+    "react-query": "^3.39.2",
     "react-xarrows": "^2.0.2",
     "zustand": "^4.1.2"
   },

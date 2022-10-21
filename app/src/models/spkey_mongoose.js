@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-const { Schema } = mongoose;
+import mongoose from 'mongoose'
+const { Schema } = mongoose
 
 const spkeyschema = new Schema({
 	unikey: { //default:
@@ -51,7 +51,36 @@ const spkeyschema = new Schema({
                 type: Number,
                 required: false
         }
-});
+})
 
-const Spkey = mongoose.model('spkey', spkeyschema, 'spkey');
-export default Spkey;
+const spfigschema = new Schema({
+        fkey: {
+                type: String,
+                required: false
+        },
+        taxon: {
+                type: String,
+                required: false
+        },
+        fsex: {
+                type: String,
+                required: false
+        },
+        ckey: {
+                type: String,
+                required: false
+        },
+        caption: {
+                type: String,
+                required: false,
+                text : true
+        },
+        citation: {
+                type: String,
+                required: false
+        }
+})
+export const Spfig = mongoose.model('spfig', spfigschema, 'spfig')
+
+const Spkey = mongoose.model('spkey', spkeyschema, 'spkey')
+export default Spkey

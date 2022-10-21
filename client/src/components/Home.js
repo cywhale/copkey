@@ -355,11 +355,21 @@ const Home = () => {
               }
               to_pos = el.getBoundingClientRect().top + window.pageYOffset - fig_offset;
             } else {
-              console.log("Warning: cannot find elem: ", hashstate.elem);
+              //console.log("Warning: cannot find elem: ", hashstate.elem);
               if (hashstate.elem.substring(0,5) === "#fig_") { //fig item hide behind Carousel, just scroll to it
-                el = document.querySelectorAll('[id^="figs_"][id*="' + hashstate.elem.substring(5)  + '"]');
+                // but we may have #fig_Calanus_sinicus_09 that specify the number, so cannot just use has hashstate.elem.substring(5)
+                let tmpspx = hashstate.elem.substring(5);
+                let tmpspt = tmpspx.split(/\_/);
+                let tmptosp;
+                if (tmpspt.length <= 2) {
+                  tmptosp = hashstate.elem.substring(5)
+                } else {
+                  tmptosp = tmpspt[0] + "_" + tmpspt[1]
+                }
+
+                el = document.querySelectorAll('[id^="figs_"][id*="' + tmptosp  + '"]');
                 if (el) {
-                  console.log("Warning: scroll to alternatives: ", el[0]);
+                  //console.log("Warning: scroll to alternatives: ", el[0]);
                   to_pos = el[0].getBoundingClientRect().top + window.pageYOffset;
                 }
               }
