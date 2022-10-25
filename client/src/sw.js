@@ -39,7 +39,6 @@ registerRoute(
     }),
   );
 
-
 registerRoute(
   ({ url }) => url.pathname.startsWith("/species/"),
   new NetworkOnly({ //NetworkFirst
@@ -47,6 +46,12 @@ registerRoute(
   })
 );
 
+registerRoute(
+  ({ url }) => url.pathname.startsWith("/taxon/"),
+  new NetworkOnly({ //NetworkFirst
+        plugins: [bgSyncPlugin]
+  })
+);
 
 /** Preact CLI setup */
 setupRouting();

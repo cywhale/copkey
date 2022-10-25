@@ -2210,7 +2210,7 @@ CALANIDAE
     <td>E</td>
   </tr>
   <tr>
-    <td>*Cosmoclanlus* *darwini* (Lubbock, 1860)</td>
+    <td>*Cosmoclanlus* *darwinii* (Lubbock, 1860)</td>
     <td>1.60-2.58</td>
     <td>1.60-2.35</td>
     <td></td>
