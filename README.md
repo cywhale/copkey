@@ -3,6 +3,8 @@
 * Web App for species-level taxonomic key of Calanoid copepods by Dr. Chang-tai Shih
 
   - https://bio.odb.ntu.edu.tw
+
+  [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.8250265.svg)](https://doi.org/10.5281/zenodo.8250265)
   
   ![C](https://bio.odb.ntu.edu.tw/assets/icons/favicon_512.png)
   
