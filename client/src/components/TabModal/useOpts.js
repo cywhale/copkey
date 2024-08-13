@@ -1,6 +1,7 @@
 import create from 'zustand';
 
 const useOpts = create(set => ({
+  pageLoaded: false,
   fuzzy: false,
   sameTaxon: false,
   forceGenus: false,

@@ -17,8 +17,9 @@ import(/* webpackMode: "lazy" */
 const Home = () => {
   const searchx = process.env.NODE_ENV === 'production'? 'species/' : 'specieskey/';
   const lang= useHelp(useCallback(state => state.lang, []));
-  const fuzzy= useOpts(useCallback(state => state.fuzzy, []));         //only for keystr search
-  const sameTaxon= useOpts(useCallback(state => state.sameTaxon, [])); //only for keystr search
+  const pageLoaded = useOpts(useCallback(state => state.pageLoaded, []));
+  const fuzzy = useOpts(useCallback(state => state.fuzzy, []));         //only for keystr search
+  const sameTaxon= useOpts(useCallback(state => state.sameTaxon, []));  //only for keystr search
   const forceGenus= useOpts(useCallback(state => state.forceGenus, []));     //false
   const forceSpecies= useOpts(useCallback(state => state.forceSpecies, [])); //false
   const pageSize= useOpts(useCallback(state => state.pageSize, []));         //30
@@ -26,6 +27,7 @@ const Home = () => {
 
   const [appstate, setAppState] = useState({
     loaded: false,
+    iniHash: '',
   });
 
   const [figx, setFigx] = useState({
@@ -208,9 +210,43 @@ const Home = () => {
   }
 
   useEffect(() => {
+    //const handleLoad = () => {
+      //console.log("DOMContent load: ", window.location.hash);
+      if (window.location.hash) {
+        //history.pushState(null, null, window.location.hash); //Cannot do it because initial page search/load not yet done
+        //window.dispatchEvent(new HashChangeEvent('hashchange'));
+        setAppState((preState) => ({
+          ...preState,
+          iniHash: window.location.hash,
+        }));
+      }
+    //};
+    //window.addEventListener('DOMContentLoaded', handleLoad)
+
+    // Clean up event listeners on unmount
+    //return () => {
+    //  window.removeEventListener('DOMContentLoaded', handleLoad);
+    //};
+  }, []);
+
+  useEffect(() => {
+    if (pageLoaded && appstate.iniHash) {
+        let inihashx = appstate.iniHash;
+        //console.log("Hash keep after page loaded: ", inihashx);
+        setAppState((preState) => ({
+          ...preState,
+          iniHash: '',
+        }));
+        history.pushState(null, null, inihashx);
+        window.dispatchEvent(new HashChangeEvent('hashchange'));
+    }
+  }, [pageLoaded, appstate.iniHash])
+
+  useEffect(() => {
 //  prefetchInit();
     if (!appstate.loaded) {
       window.addEventListener("hashchange", (e) => {
+        //console.log("Hash change:", window.location.hash)
         setHashState((prev) => ({
           ...prev,
           hash: window.location.hash,
@@ -233,6 +269,7 @@ const Home = () => {
         loaded: true,
       }));
     } else {
+      //console.log("Debug-1 hash change: ", hashstate.hash, hashstate.handling)
       if (hashstate.hash === '#error') {
         clear_uri();
         setSearch((prev) => ({
@@ -248,6 +285,7 @@ const Home = () => {
           handlend: false,
         }));
       } else if (!hashstate.handling && !search.isLoading) {
+        //console.log("Debug-2 hash change: ", hashstate.hash, hashstate.handling)
         if (hashstate.hash.substring(0,8) == '#search=') {
             setHashState((prev) => ({
               ...prev,
@@ -382,10 +420,14 @@ const Home = () => {
               behavior: 'smooth' // smooth scroll
           })
         }
+        if (hashstate.hash === '#complete' && !pageLoaded) {
+          useOpts.getState().setOpts({pageLoaded: true}) //to make sure initial page loaded
+        }
         setHashState((prev) => ({
             ...prev,
             handlend: true,
             scrollPos: to_pos,
+            hash: '',
         }));
         openPopup();
         clear_uri();
