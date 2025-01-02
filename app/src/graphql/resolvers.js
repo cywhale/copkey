@@ -1,6 +1,6 @@
-import Spkey from '../models/spkey_mongoose';
-import keytree from './keytree';
-import keystrx from './keystrx';
+import Spkey from '../models/spkey_mongoose.js';
+import keytree from './keytree.js';
+import keystrx from './keystrx.js';
 
 const resolvers = {
     Query: {

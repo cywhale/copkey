@@ -1,5 +1,5 @@
 import S from 'fluent-json-schema'
-import { Spfig } from '../models/spkey_mongoose'
+import { Spfig } from '../models/spkey_mongoose.js'
 
 export default async function spfig (fastify, opts, next) {
 

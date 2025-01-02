@@ -6,9 +6,9 @@ import { join } from 'desm'
 //import redis from 'fastify-redis'
 import mercurius from 'mercurius'
 //import cache from 'mercurius-cache'
-import db from './config/db'
-import schema from './graphql/schema'
-import resolvers from './graphql/resolvers'
+import db from './config/db.js'
+import schema from './graphql/schema.js'
+import resolvers from './graphql/resolvers.js'
 
 export default async function (fastify, opts) {
   fastify.decorate('conf', {

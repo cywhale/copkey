@@ -1,4 +1,4 @@
-import Spkey from '../models/spkey_mongoose';
+import Spkey from '../models/spkey_mongoose.js';
 // Basicaly follow keytree.js, but output keystr, not ctxt; and do not output figs
 // But change "children", which originally used in top2bottom(t2b), to "parent" as in b2t
 // Playground add replaceAll to convert JSON [\" into normal string: https://mongoplayground.net/p/v_lKWR9bcOb

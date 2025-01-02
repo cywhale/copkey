@@ -1,5 +1,5 @@
 import S from 'fluent-json-schema'
-import Spkey from '../models/spkey_mongoose'
+import Spkey from '../models/spkey_mongoose.js'
 
 //export const autoPrefix = process.env.NODE_ENV === 'production'? '/species' : '/specieskey'
 

@@ -1,4 +1,4 @@
-import Spkey from '../models/spkey_mongoose';
+import Spkey from '../models/spkey_mongoose.js';
 // https://stackoverflow.com/questions/65139097/make-node-tree-with-recursive-table-with-express-and-mongo/65166480#65166480
 // playgound: https://mongoplayground.net/p/JPZzbb2Cb7x 20220415 update
 // https://mongoplayground.net/p/OwK6WICgyG_ 20220416 update
