@@ -134,21 +134,34 @@ export default async function querygql (fastify, opts, next) {
       }
     }`
     const pageSchema = {
-              taxon: { type: 'string' },
-              keystr:{ type: 'boolean'},
-              mode: { type: 'string' },
-              first: { type: 'number' },
-              last: { type: 'number' },
-              after: { type: 'string' },
-              last: { type: 'string' },
-              key: { type: 'string' },
-              //ctxt: { type: 'string' }
-            }; // if not use graphql
-    fastify.route({ //.get('/page', (req, reply) => {
-      method: ['GET', 'POST'],
-      url: '/page',
-      schema: pageSchema,
-      handler: (req, reply) => {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        taxon: { type: 'string' },
+        keystr: { type: 'boolean' },
+        mode: { type: 'string' },
+        first: { type: 'integer' },
+        last: { type: 'integer' },
+        after: { type: 'string' },
+        before: { type: 'string' },
+        key: { type: 'string' }
+      }
+    }
+    const rejectUnknownPageProperties = async (req) => {
+      const payload = req.method === 'POST' ? req.body : req.query
+      const allowedProperties = pageSchema.properties
+      const unknownProperties = Object.keys(payload ?? {})
+        .filter((property) => !Object.hasOwn(allowedProperties, property))
+
+      if (unknownProperties.length > 0) {
+        const error = new Error(
+          `Unsupported properties: ${unknownProperties.join(', ')}`
+        )
+        error.statusCode = 400
+        throw error
+      }
+    }
+    const pageHandler = (req, reply) => {
     /*const get_parx = (qstr) => {
           let withq = qstr.indexOf('?');
           if (withq>=0) {
@@ -183,7 +196,20 @@ export default async function querygql (fastify, opts, next) {
           return //{}
         }
       }
-    })
+
+    fastify.get('/page', {
+      schema: {
+        querystring: pageSchema
+      },
+      preValidation: rejectUnknownPageProperties
+    }, pageHandler)
+
+    fastify.post('/page', {
+      schema: {
+        body: pageSchema
+      },
+      preValidation: rejectUnknownPageProperties
+    }, pageHandler)
 
     fastify.get('/', {
       schema: {
@@ -296,5 +322,3 @@ export default fp(querygql, {
   name: 'querygql'
 })
 */
-
-

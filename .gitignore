@@ -97,3 +97,9 @@ doc/new*_fig_extract.csv
 doc/New*.docx
 doc/img
 doc/img2
+
+# Version-controlled security regression tests
+!app/tests/
+!app/tests/*.test.js
+!script/tests/
+!script/tests/*.sh
