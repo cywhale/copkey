@@ -7,6 +7,7 @@ import { join } from 'desm'
 import mercurius from 'mercurius'
 //import cache from 'mercurius-cache'
 import db from './config/db.js'
+import { createCorsOptions } from './config/cors.js'
 import schema from './graphql/schema.js'
 import resolvers from './graphql/resolvers.js'
 
@@ -83,22 +84,7 @@ fastify.register(Favicon, { path: join(import.meta.url, '..', 'client'), name: '
 */
   fastify.register(Cors, (instance) => {
     return (req, callback) => {
-      const corsOptions = {
-        origin: true,
-        credentials: true,
-        preflight: true,
-        preflightContinue: true,
-        methods: ['GET', 'POST', 'OPTIONS'],
-        allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Keep-Alive', 'User-Agent',
-                         'Cache-Control', 'Authorization', 'DNT', 'X-PINGOTHER', 'Range'],
-        exposedHeaders: ['Content-Range'],
-        maxAge: 86400,
-      };
-      // do not include CORS headers for requests from localhost
-      if (/^localhost$/m.test(req.headers.origin)) {
-        corsOptions.origin = false
-      }
-      callback(null, corsOptions)
+      callback(null, createCorsOptions(req, fastify.conf.node_env))
     }
   })
 
