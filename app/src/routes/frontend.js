@@ -3,6 +3,31 @@ import Helmet from '@fastify/helmet'
 //import path from 'path';
 import { join } from 'desm'
 
+export const helmetOptions = {
+  crossOriginEmbedderPolicy: {
+    policy: 'require-corp'
+  },
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'", 'https:'],
+      frameSrc: [
+        "'self'",
+        'https://ecodata.odb.ntu.edu.tw',
+        'https://bio.odb.ntu.edu.tw',
+        'https://odbsso.oc.ntu.edu.tw/'
+      ],
+      scriptSrc: ["'self'", 'https:', "'unsafe-eval'"],
+      connectSrc: ["'self'", 'https:'],
+      imgSrc: ["'self'", 'https:', 'data:'],
+      styleSrc: [
+        "'self'",
+        'https://ecodata.odb.ntu.edu.tw',
+        "'unsafe-inline'"
+      ]
+    }
+  }
+}
+
 export default async function (fastify, opts) {
 /*const {
     verifyToken,
@@ -31,36 +56,7 @@ export default async function (fastify, opts) {
 
   //fastify.addHook('onRequest', authorize)
 
-  fastify.register(Helmet, {
-    crossOriginEmbedderPolicy: false,
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'", "https:"],
-        frameSrc: [
-          "'self'",
-          'https://ecodata.odb.ntu.edu.tw',
-          'https://bio.odb.ntu.edu.tw',
-          'https://odbsso.oc.ntu.edu.tw/'
-        ],
-        scriptSrc: ["'self'", "https:", "'unsafe-eval'"],
-        //'https://bio.odb.ntu.edu.tw',
-        //'https://ecodata.odb.ntu.edu.tw',
-        //'https://odbsso.oc.ntu.edu.tw/',
-        //],
-        connectSrc: ["'self'", "https:"],
-        //'https://bio.odb.ntu.edu.tw',
-        //'https://ecodata.odb.ntu.edu.tw',
-        //'https://odbsso.oc.ntu.edu.tw/'
-        //],
-        imgSrc: ["'self'", "https:", "data:"],
-        styleSrc: [
-          "'self'",
-          'https://ecodata.odb.ntu.edu.tw',
-          "'unsafe-inline'"
-        ]
-      }
-    }
-  })
+  fastify.register(Helmet, helmetOptions)
 
 //fastify.get(url, opts={schema:{...}}, handler) ==> fastify.route({method:, url:, schemal:, handler:...})
 //https://web.dev/codelab-text-compression-brotli
@@ -145,4 +141,3 @@ export default async function (fastify, opts) {
       }
   }) */
 }
-
