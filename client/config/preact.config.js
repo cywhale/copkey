@@ -1,4 +1,5 @@
 import webpack from 'webpack';
+import fs from 'fs';
 import path from 'path';
 //import CopyWebpackPlugin from 'copy-webpack-plugin'; //"6.4.1"
 const { merge } = require('webpack-merge');
@@ -21,6 +22,26 @@ const tryOptimize = false;
 
 // mode
 const testenv = {NODE_ENV: process.env.NODE_ENV};
+const devPort = Number.parseInt(process.env.PORT || '3004', 10);
+const createDevServerConfig = () => ({
+  host: '0.0.0.0',
+  port: devPort,
+  server: {
+    type: 'https',
+    options: {
+      key: fs.readFileSync(path.resolve(__dirname, '..', 'privkey.pem')),
+      cert: fs.readFileSync(path.resolve(__dirname, '..', 'fullchain.pem'))
+    }
+  },
+  proxy: [
+    {
+      context: ['/specieskey', '/sessioninfo'],
+      target: 'https://127.0.0.1:3003',
+      secure: false,
+      changeOrigin: false
+    }
+  ]
+});
 const publicPath= "./";
 const publicUrl = publicPath.slice(0, -1);
 const globOptions = {};
@@ -262,44 +283,6 @@ const client_other_config = (config, env) => {
         }
         ]
     },
-    devServer: {
-      contentBase: path.join(__dirname, 'assets'),
-      https: true,
-      host : '0.0.0.0',
-      //host: 'localhost',
-      port: 3000,
-      hot: true,
-      //sockjsPrefix: '/assets',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
-      },
-      historyApiFallback: {
-        index: '/',
-        disableDotRule: true
-      },
-      //public : 'bio.odb.ntu.edu.tw',
-      publicPath: '/',
-      disableHostCheck: true,
-      quiet: true,
-      inline: true,
-      compress: true,
-      sockHost: '0.0.0.0',
-      sockPort: 3004,
-      sockPath: '/serve/sockjs-node',
-      proxy: {
-        "/serve": {
-            target: "https://0.0.0.0/",
-            pathRewrite: { "^/serve": "/sockjs-node" },
-            changeOrigin: true,
-        },
-        '**': {
-          target: 'https://0.0.0.0/',
-          // context: () => true, //https://webpack.js.org/configuration/dev-server/#devserverproxy
-          changeOrigin: true
-        }
-      }
-    },
     optimization: {
       ...optzx,
       splitChunks: {
@@ -515,10 +498,14 @@ const baseConfig = (config, env, helpers) => {
 
 //module exports = {
 export default (config, env, helpers) => {
+  const otherConfig = client_other_config(config, env);
   merge(
     baseConfig(config, env, helpers),
-    client_other_config(config, env)
+    otherConfig
   );
+  if (testenv.NODE_ENV !== 'production') {
+    config.devServer = merge(config.devServer || {}, createDevServerConfig());
+  }
 //https://github.com/preactjs/preact-cli/issues/1625
   config.resolve.alias = {
     ...config.resolve.alias,
