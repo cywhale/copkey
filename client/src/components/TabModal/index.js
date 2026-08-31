@@ -172,7 +172,7 @@ const TabModal = (props) => {
               <div class={style.ctrlwrapper}>
                   <section class={style.ctrlsect}>
                     <div class={colClass} style="padding:0;">
-                      {loaded && <TabInframe ifrid="tab2ifr" enable={loaded} srcurl="https://bio.odb.ntu.edu.tw/pub/copkey"/>}
+                      {loaded && <TabInframe ifrid="tab2ifr" enable={loaded} srcurl="https://bio.odb.ntu.edu.tw/pub/copkey/"/>}
                     </div>
                   </section>
               </div>
