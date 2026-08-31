@@ -19,6 +19,11 @@ after(async () => {
   await app.close()
 })
 
+function assertPageSecurityHeaders (response) {
+  assert.equal(response.headers['cross-origin-opener-policy'], 'same-origin')
+  assert.equal(response.headers['cross-origin-resource-policy'], 'same-origin')
+}
+
 test('POST /species/page accepts the existing payload', async () => {
   const response = await app.inject({
     method: 'POST',
@@ -32,6 +37,7 @@ test('POST /species/page accepts the existing payload', async () => {
   })
 
   assert.equal(response.statusCode, 200)
+  assertPageSecurityHeaders(response)
   assert.deepEqual(response.json(), {
     taxon: '',
     keystr: false,
@@ -56,6 +62,7 @@ test('POST /species/page rejects mass-assignment fields', async () => {
   })
 
   assert.equal(response.statusCode, 400)
+  assertPageSecurityHeaders(response)
   assert.match(response.json().message, /Unsupported properties: is_admin, is_sso, role/)
 })
 
@@ -66,6 +73,7 @@ test('GET /species/page accepts and coerces the existing query parameters', asyn
   })
 
   assert.equal(response.statusCode, 200)
+  assertPageSecurityHeaders(response)
   assert.deepEqual(response.json(), {
     taxon: 'Calanus',
     keystr: false,
@@ -81,6 +89,7 @@ test('GET /species/page rejects unknown query parameters', async () => {
   })
 
   assert.equal(response.statusCode, 400)
+  assertPageSecurityHeaders(response)
   assert.match(response.json().message, /Unsupported properties: role/)
 })
 
@@ -95,5 +104,6 @@ test('POST /species/page rejects invalid parameter types', async () => {
   })
 
   assert.equal(response.statusCode, 400)
+  assertPageSecurityHeaders(response)
   assert.match(response.json().message, /first must be integer/)
 })

@@ -161,6 +161,11 @@ export default async function querygql (fastify, opts, next) {
         throw error
       }
     }
+    const setPageSecurityHeaders = async (_req, reply, payload) => {
+      reply.header('Cross-Origin-Opener-Policy', 'same-origin')
+      reply.header('Cross-Origin-Resource-Policy', 'same-origin')
+      return payload
+    }
     const pageHandler = (req, reply) => {
     /*const get_parx = (qstr) => {
           let withq = qstr.indexOf('?');
@@ -201,14 +206,16 @@ export default async function querygql (fastify, opts, next) {
       schema: {
         querystring: pageSchema
       },
-      preValidation: rejectUnknownPageProperties
+      preValidation: rejectUnknownPageProperties,
+      onSend: setPageSecurityHeaders
     }, pageHandler)
 
     fastify.post('/page', {
       schema: {
         body: pageSchema
       },
-      preValidation: rejectUnknownPageProperties
+      preValidation: rejectUnknownPageProperties,
+      onSend: setPageSecurityHeaders
     }, pageHandler)
 
     fastify.get('/', {
