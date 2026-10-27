@@ -1,12 +1,16 @@
 {
   "name": "Copkey",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "license": "MIT",
+  "engines": {
+    "node": ">=24.22.1 <25"
+  },
   "sideEffects": false,
   "main": "./src/index.js",
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run -s serve || npm run -s dev",
     "build": "cp config/template.html src/ && export NODE_ENV=production && export ENABLE_BROTLI=true && export NODE_OPTIONS='--openssl-legacy-provider' && preact build --config config/preact.config.js --no-esm --preload --sw --brotli true --template ./src/template.html",
+    "postinstall": "patch-package",
     "serve": "sirv build --cors --single --port 3000 --http2 --cert ./fullchain.pem --key ./privkey.pem",
     "dev": "preact watch",
     "lint": "eslint src",
@@ -55,11 +59,12 @@
     "json-minimizer-webpack-plugin": "2.1.0",
     "lodash-webpack-plugin": "0.11.6",
     "mini-svg-data-uri": "1.2.3",
-    "node-sass": "7.0.1",
+    "patch-package": "8.0.1",
     "optimize-plugin": "^1.0.0",
     "path": "^0.12.7",
-    "preact-cli": "^3.4.1",
+    "preact-cli": "3.5.1",
     "preact-render-to-string": "^5.2.5",
+    "sass": "1.106.1",
     "sass-loader": "10.3.1",
     "sirv": "^1.0.7",
     "sirv-cli": "^1.0.8",
