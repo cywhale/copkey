@@ -1,0 +1,23 @@
+[Unit]
+Description=PM2 process manager for copkey
+Documentation=https://pm2.keymetrics.io/
+After=network.target
+
+[Service]
+Type=forking
+User=odbadmin
+# Provisioned with: nvm exec 24.22.1 npm install --global pm2@7.1.1
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+Environment=PATH=/home/odbadmin/.nvm/versions/node/v24.22.1/bin:/home/odbadmin/.npm-global/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+Environment=PM2_HOME=/home/odbadmin/.pm2
+PIDFile=/home/odbadmin/.pm2/pm2.pid
+Restart=on-failure
+
+ExecStart=/home/odbadmin/.nvm/versions/node/v24.22.1/bin/node /home/odbadmin/.nvm/versions/node/v24.22.1/lib/node_modules/pm2/bin/pm2 resurrect
+ExecReload=/home/odbadmin/.nvm/versions/node/v24.22.1/bin/node /home/odbadmin/.nvm/versions/node/v24.22.1/lib/node_modules/pm2/bin/pm2 reload all
+ExecStop=/home/odbadmin/.nvm/versions/node/v24.22.1/bin/node /home/odbadmin/.nvm/versions/node/v24.22.1/lib/node_modules/pm2/bin/pm2 kill
+
+[Install]
+WantedBy=multi-user.target
