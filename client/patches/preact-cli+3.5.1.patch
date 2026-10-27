@@ -1,0 +1,33 @@
+diff --git a/node_modules/preact-cli/src/lib/webpack/transform-config.js b/node_modules/preact-cli/src/lib/webpack/transform-config.js
+index a36ae64..1c058ae 100644
+--- a/node_modules/preact-cli/src/lib/webpack/transform-config.js
++++ b/node_modules/preact-cli/src/lib/webpack/transform-config.js
+@@ -1,7 +1,7 @@
+ const { resolve } = require('path');
+ const webpack = require('webpack');
+ const { stat } = require('fs').promises;
+-const { error, esmImport, tryResolveConfig, warn } = require('../../util');
++const { error, tryResolveConfig, warn } = require('../../util');
+ 
+ const FILE = 'preact.config';
+ const EXTENSIONS = ['js', 'json'];
+@@ -107,12 +107,13 @@ module.exports = async function (env, webpackConfig, isServer = false) {
+ 
+ 	let m;
+ 	try {
+-		m = esmImport(cliConfig);
+-	} catch (error) {
+-		warn(
+-			`Failed to load preact-cli config file, using default!\n${
+-				env.verbose ? error.stack : error.message
+-			}`
++		m = require(cliConfig);
++	} catch (err) {
++		error(
++			`Failed to load preact-cli config file!\n${
++				env.verbose ? err.stack : err.message
++			}`,
++			1
+ 		);
+ 		return;
+ 	}

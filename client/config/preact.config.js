@@ -1,6 +1,6 @@
-import webpack from 'webpack';
-import fs from 'fs';
-import path from 'path';
+const webpack = require('webpack');
+const fs = require('fs');
+const path = require('path');
 //import CopyWebpackPlugin from 'copy-webpack-plugin'; //"6.4.1"
 const { merge } = require('webpack-merge');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -497,7 +497,7 @@ const baseConfig = (config, env, helpers) => {
 
 
 //module exports = {
-export default (config, env, helpers) => {
+module.exports = (config, env, helpers) => {
   const otherConfig = client_other_config(config, env);
   merge(
     baseConfig(config, env, helpers),
